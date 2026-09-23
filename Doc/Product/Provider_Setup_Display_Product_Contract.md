@@ -152,6 +152,12 @@ replacement invalidates outstanding results. Credential writes have a separate
 serialized local store, so simultaneous account edits do not overwrite each
 other's keys.
 
+In an installed extension, a missing or invalidated background transport fails
+with a localized error. UI pages never replay that mutation through an in-page
+background implementation, which would create an independent write queue. The
+in-page fallback exists only for ordinary web previews, not Chrome or Firefox
+extension pages.
+
 ### Capture Freshness (Unreleased Work Branch)
 
 Provider snapshots store nullable ISO `lastAttemptAt` and `lastSuccessAt`

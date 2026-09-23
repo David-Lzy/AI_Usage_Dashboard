@@ -75,6 +75,12 @@ and dark themes, and 320/430px widths:
 Evidence lives in `tmp/output/playwright/shared-ui/keyboard/`. The visual matrix
 also accepts `--source` for checks without touching a loaded extension build.
 Source-mode checks do not replace final extension-mode validation.
+Each source QA server has an isolated Vite dependency cache under ignored `tmp/`;
+fixture imports use QA-only module paths rather than a shared optimizer output.
+The extension fixture loaders also isolate their caches and disable watchers.
+This keeps simultaneous checks from invalidating each other's React imports.
+The source QA server removes only its own cache when it closes; prior run caches
+and retained browser evidence are not part of that automatic cleanup.
 
 `node scripts/check-ui-module-boundaries.mjs` exercises deployment selection,
 keyboard focus, metering collapse/ranges, and progress-editor number/gradient
@@ -82,7 +88,17 @@ controls at 320px dark and 1280px light in English, German and Arabic. It uses
 synthetic inputs and unique output directories. A refactor can pass
 `--compare=/absolute/path/to/previous/run` to require pixel-identical captures
 of the traditional editor, gradient editor and deployment menu. This focused
-check supplements the full locale and Popup-mode matrix.
+check supplements the full locale and Popup-mode matrix. Add `--all-locales`
+to cover all 14 languages, including gradient selector bounds after translation.
+
+`node scripts/check-popup-modes.mjs --extension=<isolated-build>` exercises all
+four browsing modes in a real extension, using a fresh offline profile and an
+explicit synthetic preset. All 14 locales run at 320px compact/dark and 430px
+balanced/light. It verifies card/header bounds, nonblank faded glide, natural
+movement, last-to-first order, hover/focus pause, mouse wheel, keyboard switching
+and stable top controls. Evidence is under `tmp/output/playwright/popup-modes/`;
+`--locales=en,de,ar` selects a smoke subset. It rejects the normal loaded `dist/`
+path and never mutates a user profile.
 
 The production-state regression requires an explicitly selected isolated build
 and creates a new offline browser profile. It checks blank provider data, no
@@ -163,6 +179,11 @@ The visual checker covers Popup, Sidebar, full-page Dashboard, Provider detail,
 and Settings. Settings captures include the open application-language menu.
 Use `--themes light,dark` for changes that affect theme tokens or contrast; the
 default run intentionally uses the light theme to keep routine QA bounded.
+Its default Popup preset has a 360px minimum width; use 360px or wider there.
+Use the actual-extension mode checker above for the supported 320px compact
+Popup, and `--routes sidebar,dashboard,provider-detail,settings --widths 320`
+for narrow source surfaces. Testing a default 360px Popup in a 320px viewport
+does not select the compact preset.
 
 Before release-oriented localization or layout changes, run the full matrix and
 fail on detected layout issues:
@@ -173,6 +194,12 @@ npm run i18n:visual-check -- --fail-on-issues
 
 The visual matrix writes screenshots and JSON reports under ignored
 `.local/visual-checks/i18n/` paths.
+
+Dependency updates should start with `npm audit fix --dry-run --ignore-scripts`
+and a lockfile review. Prefer compatible fixes, never an unreviewed `--force`
+upgrade. Repeat full tests, types, browser/build checks and both `npm audit` and
+`npm audit --omit=dev` after accepting an update. Audit results are point-in-time
+evidence, not a permanent claim that a dependency is vulnerability-free.
 
 Surface browser QA that writes local JSON artifacts should use the aggregate
 command so privacy scanning runs immediately after capture:

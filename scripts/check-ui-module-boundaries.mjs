@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 import { startSourceQaServer } from "./lib/source-qa-server.mjs";
+import { SUPPORTED_RDP_CAPTURE_LOCALES } from "./lib/rdp-extension-locale-route.mjs";
 
 const outputRoot = path.resolve("tmp/output/playwright/ui-module-boundaries");
 await mkdir(outputRoot, { recursive: true });
@@ -18,15 +19,16 @@ try {
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
       : { channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome" }),
   });
-  for (const locale of ["en", "de", "ar"]) for (const [width, theme] of [[320, "dark"], [1280, "light"]]) {
+  const locales = process.argv.includes("--all-locales") ? SUPPORTED_RDP_CAPTURE_LOCALES : ["en", "de", "ar"];
+  for (const locale of locales) for (const [width, theme] of [[320, "dark"], [1280, "light"]]) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: "reduce", colorScheme: theme });
     page.on("pageerror", (error) => errors.push(error.message));
     try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
       await page.locator("#settings-appearance").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
-        const { default: React } = await import("/node_modules/.vite/deps/react.js");
-        const { default: ReactDOM } = await import("/node_modules/.vite/deps/react-dom_client.js");
+        const { default: React } = await import("/__qa/react.js");
+        const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
         const { ApiGatewayMeteringSummary } = await import("/src/shared/components/ApiGatewayMeteringSummary.tsx");
         const { ProgressAppearancePreferenceControls } = await import("/src/sidepanel/components/ProgressAppearancePreferenceControls.tsx");
         const { buildApiGatewayMeteringLocalizedCopy } = await import("/src/shared/api-gateway-metering-localized-copy.ts");
@@ -73,6 +75,8 @@ try {
       await page.evaluate(() => document.fonts.ready);
       await holder.screenshot({ path: path.join(output, `${locale}-${width}-traditional.png`), animations: "disabled" });
       const selector = holder.getByRole("combobox");
+      assert.equal(await selector.getAttribute("title"), "Primary gateway");
+      assert((await selector.getAttribute("aria-label")).includes("Primary gateway"));
       await selector.focus();
       await page.keyboard.press("Enter");
       const menu = page.locator(".api-gateway-metering-deployment__menu");
@@ -84,6 +88,7 @@ try {
       await page.screenshot({ path: path.join(output, `${locale}-${width}-deployment-menu.png`) });
       await page.keyboard.press("Enter");
       await page.waitForFunction(() => window.__moduleQa.account === "account_qatwo002");
+      assert.equal(await selector.getAttribute("title"), "A deliberately long second deployment label");
       assert(await selector.evaluate((element) => element === document.activeElement));
       await page.keyboard.press("Enter");
       await page.keyboard.press("Home");
@@ -115,6 +120,9 @@ try {
       await page.keyboard.press("ArrowRight");
       assert.notEqual(Number(await stop.getAttribute("aria-valuenow")), initial);
       await holder.screenshot({ path: path.join(output, `${locale}-${width}-gradient.png`), animations: "disabled" });
+      const gradientLayout = await holder.evaluate((element) => ({ overflow: element.scrollWidth - element.clientWidth,
+        clipped: [...element.querySelectorAll("button,input")].filter((control) => control.getBoundingClientRect().width > 0 && control.scrollWidth > control.clientWidth + 2).map((control) => ({ className: control.className, text: control.textContent })) }));
+      assert(gradientLayout.overflow <= 2 && gradientLayout.clipped.length === 0, JSON.stringify(gradientLayout));
       const otherHandle = holder.locator('[data-progress-gradient-editor] [role="slider"][aria-valuenow="49"]');
       await otherHandle.focus();
       await page.keyboard.press("ArrowRight");

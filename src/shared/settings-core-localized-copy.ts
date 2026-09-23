@@ -353,7 +353,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   ko: {
     layout: {
-      sectionsAria: "Settings 섹션",
+      sectionsAria: "설정 섹션",
       sections: {
         overview: "개요",
         quickSetup: "Quick Setup",
@@ -361,8 +361,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "고급",
       },
       overview: {
-        aria: "Settings 개요",
-        eyebrow: "Settings 개요",
+        aria: "설정 개요",
+        eyebrow: "설정 개요",
         title: "개인 계정 경로부터 시작",
         detail:
           "대부분의 개인 사용자는 Quick Setup, 언어/테마, sync controls만 필요합니다. 아래 mode로 team/API setup과 diagnostics 표시 범위를 정할 수 있습니다.",
@@ -473,7 +473,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   "es-419": {
     layout: {
-      sectionsAria: "Secciones de Settings",
+      sectionsAria: "Secciones de configuración",
       sections: {
         overview: "Resumen",
         quickSetup: "Quick Setup",
@@ -481,8 +481,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Avanzado",
       },
       overview: {
-        aria: "Resumen de Settings",
-        eyebrow: "Resumen de Settings",
+        aria: "Resumen de configuración",
+        eyebrow: "Resumen de configuración",
         title: "Empieza con la ruta de cuenta personal",
         detail:
           "La mayoría de usuarios personales solo necesita Quick Setup, idioma/tema y controles de sync. Cambia el modo abajo para decidir cuánto setup team/API y diagnostics se muestran.",
@@ -595,7 +595,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   "pt-BR": {
     layout: {
-      sectionsAria: "Seções de Settings",
+      sectionsAria: "Seções de configurações",
       sections: {
         overview: "Visão geral",
         quickSetup: "Quick Setup",
@@ -603,8 +603,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Avançado",
       },
       overview: {
-        aria: "Visão geral de Settings",
-        eyebrow: "Visão geral de Settings",
+        aria: "Visão geral das configurações",
+        eyebrow: "Visão geral das configurações",
         title: "Comece pela rota de conta pessoal",
         detail:
           "A maioria dos usuários pessoais só precisa de Quick Setup, idioma/tema e controles de sync. Troque o modo abaixo para decidir quanto setup team/API e diagnostics aparecem.",
@@ -717,7 +717,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   fr: {
     layout: {
-      sectionsAria: "Sections Settings",
+      sectionsAria: "Sections de paramètres",
       sections: {
         overview: "Aperçu",
         quickSetup: "Quick Setup",
@@ -725,8 +725,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Avancé",
       },
       overview: {
-        aria: "Aperçu Settings",
-        eyebrow: "Aperçu Settings",
+        aria: "Vue d'ensemble des paramètres",
+        eyebrow: "Vue d'ensemble des paramètres",
         title: "Commencer par le chemin du compte personnel",
         detail:
           "La plupart des utilisateurs personnels n'ont besoin que de Quick Setup, langue/thème et contrôles de sync. Le mode ci-dessous décide combien de setup team/API et diagnostics sont affichés.",
@@ -839,7 +839,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   de: {
     layout: {
-      sectionsAria: "Settings-Bereiche",
+      sectionsAria: "Einstellungsabschnitte",
       sections: {
         overview: "Übersicht",
         quickSetup: "Quick Setup",
@@ -847,8 +847,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Erweitert",
       },
       overview: {
-        aria: "Settings-Übersicht",
-        eyebrow: "Settings-Übersicht",
+        aria: "Einstellungsübersicht",
+        eyebrow: "Einstellungsübersicht",
         title: "Mit dem persönlichen Konto-Pfad starten",
         detail:
           "Die meisten persönlichen Nutzer brauchen nur Quick Setup, Sprache/Theme und sync controls. Der Modus unten steuert, wie viel team/API setup und diagnostics sichtbar sind.",
@@ -961,7 +961,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   it: {
     layout: {
-      sectionsAria: "Sezioni Settings",
+      sectionsAria: "Sezioni impostazioni",
       sections: {
         overview: "Panoramica",
         quickSetup: "Quick Setup",
@@ -969,8 +969,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Avanzate",
       },
       overview: {
-        aria: "Panoramica Settings",
-        eyebrow: "Panoramica Settings",
+        aria: "Panoramica impostazioni",
+        eyebrow: "Panoramica impostazioni",
         title: "Inizia dal percorso account personale",
         detail:
           "La maggior parte degli utenti personali usa solo Quick Setup, lingua/tema e controlli di sync. Il mode sotto decide quanto setup team/API e diagnostics mostrare.",
@@ -1083,7 +1083,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   ru: {
     layout: {
-      sectionsAria: "Разделы Settings",
+      sectionsAria: "Разделы настроек",
       sections: {
         overview: "Обзор",
         quickSetup: "Quick Setup",
@@ -1091,8 +1091,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Расширенно",
       },
       overview: {
-        aria: "Обзор Settings",
-        eyebrow: "Обзор Settings",
+        aria: "Обзор настроек",
+        eyebrow: "Обзор настроек",
         title: "Начните с пути личного аккаунта",
         detail:
           "Большинству личных пользователей нужны только Quick Setup, язык/тема и sync controls. Режим ниже задает, сколько team/API setup и diagnostics показывать.",
@@ -1205,7 +1205,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   ar: {
     layout: {
-      sectionsAria: "أقسام Settings",
+      sectionsAria: "أقسام الإعدادات",
       sections: {
         overview: "نظرة عامة",
         quickSetup: "Quick Setup",
@@ -1213,8 +1213,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "متقدم",
       },
       overview: {
-        aria: "نظرة عامة على Settings",
-        eyebrow: "نظرة عامة على Settings",
+        aria: "نظرة عامة على الإعدادات",
+        eyebrow: "نظرة عامة على الإعدادات",
         title: "ابدأ بمسار الحساب الشخصي",
         detail:
           "معظم المستخدمين الشخصيين يحتاجون فقط Quick Setup واللغة/الثيم و sync controls. غيّر الوضع أدناه لتحديد مقدار team/API setup و diagnostics المعروض.",
@@ -1326,7 +1326,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   hi: {
     layout: {
-      sectionsAria: "Settings sections",
+      sectionsAria: "सेटिंग्स अनुभाग",
       sections: {
         overview: "Overview",
         quickSetup: "Quick Setup",
@@ -1334,8 +1334,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Advanced",
       },
       overview: {
-        aria: "Settings overview",
-        eyebrow: "Settings overview",
+        aria: "सेटिंग्स अवलोकन",
+        eyebrow: "सेटिंग्स अवलोकन",
         title: "personal-account path से शुरू करें",
         detail:
           "अधिकांश personal users को सिर्फ Quick Setup, language/theme और sync controls चाहिए। नीचे mode बदलकर तय करें कि कितना team/API setup और diagnostics दिखे।",
@@ -1448,7 +1448,7 @@ export const SETTINGS_CORE_COPY: Record<
   },
   id: {
     layout: {
-      sectionsAria: "Bagian Settings",
+      sectionsAria: "Bagian pengaturan",
       sections: {
         overview: "Ringkasan",
         quickSetup: "Quick Setup",
@@ -1456,8 +1456,8 @@ export const SETTINGS_CORE_COPY: Record<
         advanced: "Advanced",
       },
       overview: {
-        aria: "Ringkasan Settings",
-        eyebrow: "Ringkasan Settings",
+        aria: "Ringkasan pengaturan",
+        eyebrow: "Ringkasan pengaturan",
         title: "Mulai dari jalur akun personal",
         detail:
           "Sebagian besar pengguna personal hanya perlu Quick Setup, bahasa/tema, dan sync controls. Ubah mode di bawah untuk menentukan seberapa banyak team/API setup dan diagnostics ditampilkan.",

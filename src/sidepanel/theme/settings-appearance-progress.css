@@ -789,6 +789,16 @@
 }
 
 @media (max-width: 640px) {
+  .progress-gradient-scheme-dropdown--inline {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--app-space-1);
+  }
+
+  .progress-gradient-scheme-dropdown--inline > .form-field__label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .progress-gradient-scheme-dropdown--inline
     .progress-gradient-scheme-dropdown__button {
     grid-template-columns: minmax(72px, 1fr) 32px;

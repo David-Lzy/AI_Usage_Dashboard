@@ -102,6 +102,9 @@ try {
       await control.waitFor();
       const url = control.locator('[data-companion-input="base-url"]');
       const code = control.locator('[data-companion-input="pairing-code"]');
+      const inputHeights = [await url.boundingBox(), await code.boundingBox()].map((box) => box?.height ?? 0);
+      assert(inputHeights.every((height) => height > 0) && Math.abs(inputHeights[0] - inputHeights[1]) <= 1,
+        `Local companion inputs have different heights: ${inputHeights.join(", ")}`);
       const action = (name) => control.locator(`[data-companion-action="${name}"]`);
       await url.fill(address.baseUrl);
       if (locale === locales[0] && width === 320) {

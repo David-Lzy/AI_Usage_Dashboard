@@ -105,6 +105,9 @@ describe("buildSettingsLocalizedCopy", () => {
     )) {
       const copy = buildSettingsLocalizedCopy(createRuntimeI18n(locale));
 
+      expect(copy.layout.sectionsAria).not.toMatch(/\bSettings\b/);
+      expect(copy.layout.overview.aria).not.toMatch(/\bSettings\b/);
+      expect(copy.layout.overview.eyebrow).not.toMatch(/\bSettings\b/);
       expect(copy.layout.overview.title).not.toBe(
         englishCopy.layout.overview.title,
       );
@@ -169,6 +172,86 @@ describe("buildSettingsLocalizedCopy", () => {
       expect(copy.progressAppearance.colorBands.validationError).not.toBe(
         englishCopy.progressAppearance.colorBands.validationError,
       );
+      expect(copy.progressAppearance.mode.label).not.toBe(
+        englishCopy.progressAppearance.mode.label,
+      );
+      expect(copy.progressAppearance.mode.traditional).not.toBe(
+        englishCopy.progressAppearance.mode.traditional,
+      );
+      expect(copy.progressAppearance.mode.gradient).not.toBe(
+        englishCopy.progressAppearance.mode.gradient,
+      );
+      expect(copy.progressAppearance.gradient.label).not.toBe(
+        englishCopy.progressAppearance.gradient.label,
+      );
+      expect(copy.progressAppearance.gradient.detail).not.toBe(
+        englishCopy.progressAppearance.gradient.detail,
+      );
+      expect(copy.progressAppearance.gradient.trackHelp).not.toBe(
+        englishCopy.progressAppearance.gradient.trackHelp,
+      );
+      expect(copy.progressAppearance.gradient.stopHelp).not.toBe(
+        englishCopy.progressAppearance.gradient.stopHelp,
+      );
+      expect(copy.progressAppearance.gradient.deleteStop).not.toBe(
+        englishCopy.progressAppearance.gradient.deleteStop,
+      );
+      expect(copy.progressAppearance.gradient.resetToDefault).not.toBe(
+        englishCopy.progressAppearance.gradient.resetToDefault,
+      );
+      expect(copy.progressAppearance.gradient.endpointLocked).not.toBe(
+        englishCopy.progressAppearance.gradient.endpointLocked,
+      );
+      expect(copy.progressAppearance.gradient.minimumStopHelp).not.toBe(
+        englishCopy.progressAppearance.gradient.minimumStopHelp,
+      );
+      expect(copy.progressAppearance.gradient.presetsLabel).not.toBe(
+        englishCopy.progressAppearance.gradient.presetsLabel,
+      );
+      expect(copy.progressAppearance.gradient.presetsHelp).not.toBe(
+        englishCopy.progressAppearance.gradient.presetsHelp,
+      );
+      expect(copy.progressAppearance.gradient.customSchemeLabel).not.toBe(
+        englishCopy.progressAppearance.gradient.customSchemeLabel,
+      );
+      expect(copy.progressAppearance.gradient.imageGeneratedSchemeLabel).not.toBe(
+        englishCopy.progressAppearance.gradient.imageGeneratedSchemeLabel,
+      );
+      expect(copy.progressAppearance.gradient.imageImportLabel).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportLabel,
+      );
+      expect(copy.progressAppearance.gradient.imageImportHelp).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportHelp,
+      );
+      expect(copy.progressAppearance.gradient.imageImportAction).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportAction,
+      );
+      expect(copy.progressAppearance.gradient.imageImportBusy).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportBusy,
+      );
+      expect(copy.progressAppearance.gradient.imageImportUnsupported).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportUnsupported,
+      );
+      expect(copy.progressAppearance.gradient.imageImportTooLarge).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportTooLarge,
+      );
+      expect(copy.progressAppearance.gradient.imageImportDecodeFailed).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportDecodeFailed,
+      );
+      expect(copy.progressAppearance.gradient.imageImportCanvasUnavailable).not.toBe(
+        englishCopy.progressAppearance.gradient.imageImportCanvasUnavailable,
+      );
+      expect(copy.progressAppearance.gradient.stopAriaLabel(2, 25)).not.toBe(
+        englishCopy.progressAppearance.gradient.stopAriaLabel(2, 25),
+      );
+      expect(copy.progressAppearance.gradient.presetNames.warning).not.toBe(
+        englishCopy.progressAppearance.gradient.presetNames.warning,
+      );
+      expect(
+        Object.keys(copy.progressAppearance.gradient.presetNames),
+      ).toEqual(
+        Object.keys(englishCopy.progressAppearance.gradient.presetNames),
+      );
       expect(copy.colorChoices.customLabel).not.toBe(
         englishCopy.colorChoices.customLabel,
       );
@@ -176,6 +259,13 @@ describe("buildSettingsLocalizedCopy", () => {
         englishCopy.preferenceGroups.uiMoreShow,
       );
     }
+  });
+
+  it("uses the Arabic settings overview wording already present in the runtime catalog", () => {
+    const i18n = createRuntimeI18n("ar");
+    const copy = buildSettingsLocalizedCopy(i18n);
+    expect(copy.layout.overview.eyebrow).toBe(i18n.t("settings.overview.eyebrow"));
+    expect(copy.layout.sectionsAria).toBe(i18n.t("settings.sections.aria"));
   });
 
   it("preserves the legacy localized-copy export path", () => {

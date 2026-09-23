@@ -28,6 +28,7 @@ describe("deployment selector module", () => {
     expect(html).toContain('aria-haspopup="listbox"');
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-label="Summary: Secondary"');
+    expect(html).toContain('title="Secondary"');
     expect(html).not.toContain('role="listbox"');
   });
 });

@@ -24,8 +24,8 @@ try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
       await page.locator("#settings-appearance").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
-        const { default: React } = await import("/node_modules/.vite/deps/react.js");
-        const { default: ReactDOM } = await import("/node_modules/.vite/deps/react-dom_client.js");
+        const { default: React } = await import("/__qa/react.js");
+        const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
         const { UsageExport } = await import("/src/sidepanel/components/UsageExport.tsx");
         const { createRuntimeI18n } = await import("/src/shared/i18n.ts");
         const { createDefaultAppState } = await import("/src/shared/production-state.ts");
@@ -151,6 +151,13 @@ try {
       assert(layout.scroll <= layout.width + 2 && layout.viewport <= width + 2 && layout.clippedButtons === 0, JSON.stringify(layout));
       assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
       await control.screenshot({ path: path.join(output, `${locale}-${width}.png`) });
+      if (width === 320) {
+        const currentRegion = preview.getByRole("region");
+        assert.equal(await currentRegion.evaluate((element) => getComputedStyle(element).scrollbarWidth), "thin");
+        await currentRegion.focus();
+        await page.keyboard.press(locale === "ar" ? "ArrowLeft" : "ArrowRight");
+        await page.waitForFunction(() => Math.abs(document.querySelector(".usage-export__table-region")?.scrollLeft ?? 0) > 2);
+      }
       await page.evaluate(() => { window.__exportQa.objectURL = URL.createObjectURL; URL.createObjectURL = () => { throw new Error("synthetic blocked download"); }; });
       await downloadButton.click(); await control.getByRole("alert").waitFor();
       await page.evaluate(() => { URL.createObjectURL = window.__exportQa.objectURL; });

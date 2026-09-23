@@ -71,21 +71,21 @@ const LOCALIZED_METRICS: Record<ResolvedAppLocale, Record<UsageExportMetric, str
   id: { requests: "Permintaan", input_tokens: "Token masukan", output_tokens: "Token keluaran", cache_creation_tokens: "Token pembuatan cache", cache_read_tokens: "Token pembacaan cache", total_tokens: "Total token", actual_cost: "Biaya aktual", reference_cost: "Biaya referensi", turns: "Giliran", usage_percent: "Persentase penggunaan" },
 };
 
-const PRESENTATION: Record<ResolvedAppLocale, Pick<UsageExportLocalizedCopy, "coverageValue" | "sourceTimezone" | "timezoneKnown" | "timezoneUnknown" | "unitLabels">> = {
-  en: { coverageValue: (observed, selected) => `${observed} of ${selected} days`, sourceTimezone: "Source timezone", timezoneKnown: (timezone) => `Timezone: ${timezone}`, timezoneUnknown: "Timezone: unknown", unitLabels: { requests: "Requests", tokens: "Tokens", turns: "Turns", percent: "Percent", currency: "Currency" } },
-  "zh-CN": { coverageValue: (observed, selected) => `${selected} 天中的 ${observed} 天`, sourceTimezone: "来源时区", timezoneKnown: (timezone) => `时区：${timezone}`, timezoneUnknown: "时区：未知", unitLabels: { requests: "请求", tokens: "令牌", turns: "轮次", percent: "百分比", currency: "货币" } },
-  "zh-TW": { coverageValue: (observed, selected) => `${selected} 天中的 ${observed} 天`, sourceTimezone: "來源時區", timezoneKnown: (timezone) => `時區：${timezone}`, timezoneUnknown: "時區：未知", unitLabels: { requests: "請求", tokens: "權杖", turns: "回合", percent: "百分比", currency: "貨幣" } },
-  ja: { coverageValue: (observed, selected) => `${selected} 日中 ${observed} 日`, sourceTimezone: "ソースのタイムゾーン", timezoneKnown: (timezone) => `タイムゾーン: ${timezone}`, timezoneUnknown: "タイムゾーン: 不明", unitLabels: { requests: "リクエスト", tokens: "トークン", turns: "ターン", percent: "パーセント", currency: "通貨" } },
-  ko: { coverageValue: (observed, selected) => `${selected}일 중 ${observed}일`, sourceTimezone: "소스 시간대", timezoneKnown: (timezone) => `시간대: ${timezone}`, timezoneUnknown: "시간대: 알 수 없음", unitLabels: { requests: "요청", tokens: "토큰", turns: "턴", percent: "백분율", currency: "통화" } },
-  "es-419": { coverageValue: (observed, selected) => `${observed} de ${selected} días`, sourceTimezone: "Zona horaria de origen", timezoneKnown: (timezone) => `Zona horaria: ${timezone}`, timezoneUnknown: "Zona horaria: desconocida", unitLabels: { requests: "Solicitudes", tokens: "Tokens", turns: "Turnos", percent: "Porcentaje", currency: "Moneda" } },
-  "pt-BR": { coverageValue: (observed, selected) => `${observed} de ${selected} dias`, sourceTimezone: "Fuso horário da origem", timezoneKnown: (timezone) => `Fuso horário: ${timezone}`, timezoneUnknown: "Fuso horário: desconhecido", unitLabels: { requests: "Solicitações", tokens: "Tokens", turns: "Turnos", percent: "Porcentagem", currency: "Moeda" } },
-  fr: { coverageValue: (observed, selected) => `${observed} jours sur ${selected}`, sourceTimezone: "Fuseau horaire source", timezoneKnown: (timezone) => `Fuseau horaire : ${timezone}`, timezoneUnknown: "Fuseau horaire : inconnu", unitLabels: { requests: "Requêtes", tokens: "Jetons", turns: "Tours", percent: "Pourcentage", currency: "Devise" } },
-  de: { coverageValue: (observed, selected) => `${observed} von ${selected} Tagen`, sourceTimezone: "Quellzeitzone", timezoneKnown: (timezone) => `Zeitzone: ${timezone}`, timezoneUnknown: "Zeitzone: unbekannt", unitLabels: { requests: "Anfragen", tokens: "Token", turns: "Turns", percent: "Prozent", currency: "Währung" } },
-  it: { coverageValue: (observed, selected) => `${observed} di ${selected} giorni`, sourceTimezone: "Fuso orario origine", timezoneKnown: (timezone) => `Fuso orario: ${timezone}`, timezoneUnknown: "Fuso orario: sconosciuto", unitLabels: { requests: "Richieste", tokens: "Token", turns: "Turni", percent: "Percentuale", currency: "Valuta" } },
-  ru: { coverageValue: (observed, selected) => `${observed} из ${selected} дней`, sourceTimezone: "Часовой пояс источника", timezoneKnown: (timezone) => `Часовой пояс: ${timezone}`, timezoneUnknown: "Часовой пояс: неизвестен", unitLabels: { requests: "Запросы", tokens: "Токены", turns: "Ходы", percent: "Процент", currency: "Валюта" } },
-  ar: { coverageValue: (observed, selected) => `${observed} من ${selected} يومًا`, sourceTimezone: "المنطقة الزمنية للمصدر", timezoneKnown: (timezone) => `المنطقة الزمنية: ${timezone}`, timezoneUnknown: "المنطقة الزمنية: غير معروفة", unitLabels: { requests: "الطلبات", tokens: "الرموز", turns: "الجولات", percent: "النسبة المئوية", currency: "العملة" } },
-  hi: { coverageValue: (observed, selected) => `${selected} में से ${observed} दिन`, sourceTimezone: "स्रोत समय क्षेत्र", timezoneKnown: (timezone) => `समय क्षेत्र: ${timezone}`, timezoneUnknown: "समय क्षेत्र: अज्ञात", unitLabels: { requests: "अनुरोध", tokens: "टोकन", turns: "टर्न", percent: "प्रतिशत", currency: "मुद्रा" } },
-  id: { coverageValue: (observed, selected) => `${observed} dari ${selected} hari`, sourceTimezone: "Zona waktu sumber", timezoneKnown: (timezone) => `Zona waktu: ${timezone}`, timezoneUnknown: "Zona waktu: tidak diketahui", unitLabels: { requests: "Permintaan", tokens: "Token", turns: "Giliran", percent: "Persen", currency: "Mata uang" } },
+const PRESENTATION: Record<ResolvedAppLocale, Pick<UsageExportLocalizedCopy, "coverageValue" | "sourceTimezone" | "unitLabels">> = {
+  en: { coverageValue: (observed, selected) => `${observed} of ${selected} days`, sourceTimezone: "Source timezone", unitLabels: { requests: "Requests", tokens: "Tokens", turns: "Turns", percent: "Percent", currency: "Currency" } },
+  "zh-CN": { coverageValue: (observed, selected) => `${selected} 天中的 ${observed} 天`, sourceTimezone: "来源时区", unitLabels: { requests: "请求", tokens: "令牌", turns: "轮次", percent: "百分比", currency: "货币" } },
+  "zh-TW": { coverageValue: (observed, selected) => `${selected} 天中的 ${observed} 天`, sourceTimezone: "來源時區", unitLabels: { requests: "請求", tokens: "權杖", turns: "回合", percent: "百分比", currency: "貨幣" } },
+  ja: { coverageValue: (observed, selected) => `${selected} 日中 ${observed} 日`, sourceTimezone: "ソースのタイムゾーン", unitLabels: { requests: "リクエスト", tokens: "トークン", turns: "ターン", percent: "パーセント", currency: "通貨" } },
+  ko: { coverageValue: (observed, selected) => `${selected}일 중 ${observed}일`, sourceTimezone: "소스 시간대", unitLabels: { requests: "요청", tokens: "토큰", turns: "턴", percent: "백분율", currency: "통화" } },
+  "es-419": { coverageValue: (observed, selected) => `${observed} de ${selected} días`, sourceTimezone: "Zona horaria de origen", unitLabels: { requests: "Solicitudes", tokens: "Tokens", turns: "Turnos", percent: "Porcentaje", currency: "Moneda" } },
+  "pt-BR": { coverageValue: (observed, selected) => `${observed} de ${selected} dias`, sourceTimezone: "Fuso horário da origem", unitLabels: { requests: "Solicitações", tokens: "Tokens", turns: "Turnos", percent: "Porcentagem", currency: "Moeda" } },
+  fr: { coverageValue: (observed, selected) => `${observed} jours sur ${selected}`, sourceTimezone: "Fuseau horaire source", unitLabels: { requests: "Requêtes", tokens: "Jetons", turns: "Tours", percent: "Pourcentage", currency: "Devise" } },
+  de: { coverageValue: (observed, selected) => `${observed} von ${selected} Tagen`, sourceTimezone: "Quellzeitzone", unitLabels: { requests: "Anfragen", tokens: "Token", turns: "Turns", percent: "Prozent", currency: "Währung" } },
+  it: { coverageValue: (observed, selected) => `${observed} di ${selected} giorni`, sourceTimezone: "Fuso orario origine", unitLabels: { requests: "Richieste", tokens: "Token", turns: "Turni", percent: "Percentuale", currency: "Valuta" } },
+  ru: { coverageValue: (observed, selected) => `${observed} из ${selected} дней`, sourceTimezone: "Часовой пояс источника", unitLabels: { requests: "Запросы", tokens: "Токены", turns: "Ходы", percent: "Процент", currency: "Валюта" } },
+  ar: { coverageValue: (observed, selected) => `${observed} من ${selected} يومًا`, sourceTimezone: "المنطقة الزمنية للمصدر", unitLabels: { requests: "الطلبات", tokens: "الرموز", turns: "الجولات", percent: "النسبة المئوية", currency: "العملة" } },
+  hi: { coverageValue: (observed, selected) => `${selected} में से ${observed} दिन`, sourceTimezone: "स्रोत समय क्षेत्र", unitLabels: { requests: "अनुरोध", tokens: "टोकन", turns: "टर्न", percent: "प्रतिशत", currency: "मुद्रा" } },
+  id: { coverageValue: (observed, selected) => `${observed} dari ${selected} hari`, sourceTimezone: "Zona waktu sumber", unitLabels: { requests: "Permintaan", tokens: "Token", turns: "Giliran", percent: "Persen", currency: "Mata uang" } },
 };
 
 const COPY: Record<ResolvedAppLocale, CopySeed> = {
@@ -108,5 +108,11 @@ const COPY: Record<ResolvedAppLocale, CopySeed> = {
 export function buildUsageExportLocalizedCopy(
   locale: ResolvedAppLocale,
 ): UsageExportLocalizedCopy {
-  return { ...COPY[locale], ...PRESENTATION[locale], metricLabels: LOCALIZED_METRICS[locale] };
+  return {
+    ...COPY[locale],
+    ...PRESENTATION[locale],
+    timezoneKnown: (timezone) => timezone,
+    timezoneUnknown: COPY[locale].freshnessLabels.unknown,
+    metricLabels: LOCALIZED_METRICS[locale],
+  };
 }

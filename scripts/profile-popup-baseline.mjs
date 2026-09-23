@@ -31,7 +31,8 @@ let browserVersion;
 
 // Load the existing explicit synthetic preset without loading frontend bundles in
 // the measured browser. Vite's app config is disabled to avoid build side effects.
-const loader = await createServer({ configFile: false, server: { middlewareMode: true }, appType: "custom" });
+const loader = await createServer({ configFile: false, cacheDir: path.join(output, "vite-cache"),
+  optimizeDeps: { noDiscovery: true, include: [] }, server: { middlewareMode: true, watch: null }, appType: "custom" });
 let baseFixture;
 try {
   const seed = await loader.ssrLoadModule("/src/sidepanel/store-screenshot-seed.ts");

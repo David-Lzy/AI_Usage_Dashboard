@@ -93,8 +93,8 @@ try {
         await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#dashboard`);
         await page.locator(".dashboard-section").waitFor();
         const expectedCopy = await page.evaluate(async ({ locale, theme }) => {
-          const { default: React } = await import("/node_modules/.vite/deps/react.js");
-          const { default: ReactDOM } = await import("/node_modules/.vite/deps/react-dom_client.js");
+          const { default: React } = await import("/__qa/react.js");
+          const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
           const { createRuntimeI18n } = await import("/src/shared/i18n.ts");
           const { UsageProgress } = await import("/src/shared/components/UsageProgress.tsx");
           const { CustomSourceProgressItemList } = await import("/src/shared/components/CustomSourceProgressItemList.tsx");

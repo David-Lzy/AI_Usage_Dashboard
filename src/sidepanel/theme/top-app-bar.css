@@ -132,3 +132,15 @@
     padding: var(--app-space-4);
   }
 }
+
+@media (max-width: 360px) {
+  .top-app-bar__actions {
+    gap: var(--app-space-1);
+  }
+
+  .top-app-bar__actions .icon-button {
+    gap: var(--app-space-1);
+    padding-inline: var(--app-space-2);
+    font-size: var(--md-sys-typescale-label-medium-size);
+  }
+}

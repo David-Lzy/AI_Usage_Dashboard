@@ -14,6 +14,9 @@ describe("usage export localized copy", () => {
     expect(copy.freshnessLabels.unknown.length).toBeGreaterThan(0);
     expect(copy.metricLabels.total_tokens.length).toBeGreaterThan(0);
     expect(copy.metricLabels.cache_read_tokens.length).toBeGreaterThan(0);
+    expect(copy.timezoneKnown("UTC")).toBe("UTC");
+    expect(copy.timezoneUnknown).toBe(copy.freshnessLabels.unknown);
+    expect(copy.timezoneUnknown.length).toBeGreaterThan(0);
     const english = buildUsageExportLocalizedCopy("en");
     expect(Object.keys(copy.metricLabels).sort()).toEqual(Object.keys(english.metricLabels).sort());
     expect(Object.keys(copy.unitLabels).sort()).toEqual(Object.keys(english.unitLabels).sort());
@@ -27,5 +30,11 @@ describe("usage export localized copy", () => {
   it("uses localized cache and cost metric labels outside English", () => {
     expect(buildUsageExportLocalizedCopy("de").metricLabels.cache_read_tokens).toBe("Cache-Lese-Token");
     expect(buildUsageExportLocalizedCopy("zh-CN").metricLabels.actual_cost).toBe("实际成本");
+  });
+
+  it("does not repeat the source timezone label in metadata values", () => {
+    const copy = buildUsageExportLocalizedCopy("en");
+    expect(`${copy.sourceTimezone} ${copy.timezoneUnknown}`).toBe("Source timezone Unknown");
+    expect(`${copy.sourceTimezone} ${copy.timezoneKnown("UTC")}`).toBe("Source timezone UTC");
   });
 });

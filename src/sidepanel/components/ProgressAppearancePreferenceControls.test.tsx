@@ -70,8 +70,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     expect(html).toContain("Rot");
     expect(html).toContain("#B3261E");
     expect(html).toContain("Farben zurucksetzen");
-    expect(html).toContain("Traditional");
-    expect(html).toContain("Gradient");
+    expect(html).toContain("Traditionell");
+    expect(html).toContain("Farbverlauf");
+    expect(html).not.toContain(">Traditional<");
     expect(html).not.toContain("color-choice-dropdown__hex");
     expect(html).not.toContain('type="color"');
   });
@@ -279,6 +280,9 @@ describe("ProgressAppearancePreferenceControls", () => {
     );
     expect(settingsAppearanceCss).toContain(
       ".progress-gradient-scheme-dropdown--inline {",
+    );
+    expect(settingsAppearanceCss).toContain(
+      ".progress-gradient-scheme-dropdown--inline {\n    grid-template-columns: minmax(0, 1fr);",
     );
     expect(settingsAppearanceCss).toContain("min-height: 40px;");
     expect(settingsAppearanceCss).toContain(

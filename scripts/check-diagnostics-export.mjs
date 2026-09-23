@@ -22,8 +22,8 @@ try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
       await page.locator("#settings-appearance").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
-        const { default: React } = await import("/node_modules/.vite/deps/react.js");
-        const { default: ReactDOM } = await import("/node_modules/.vite/deps/react-dom_client.js");
+        const { default: React } = await import("/__qa/react.js");
+        const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
         const { DiagnosticsExportControl } = await import("/src/sidepanel/components/DiagnosticsExportControl.tsx");
         const { createRuntimeI18n } = await import("/src/shared/i18n.ts");
         const { createDefaultAppState } = await import("/src/shared/production-state.ts");

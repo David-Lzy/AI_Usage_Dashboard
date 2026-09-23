@@ -67,13 +67,8 @@ assertEqual(
 );
 assertIncludes(
   readme,
-  `- Current local package version: \`${packageVersion}\`.`,
-  "README current local package version",
-);
-assertIncludes(
-  readme,
-  `- Current local Chrome manifest version: \`${expectedManifestVersion}\`.`,
-  "README current local Chrome manifest version",
+  `- Source package version: \`${packageVersion}\`; Chrome manifest version: \`${expectedManifestVersion}\`.`,
+  "README source package and Chrome manifest versions",
 );
 
 console.log(

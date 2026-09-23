@@ -22,8 +22,8 @@ try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
       await page.locator("#settings-appearance").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
-        const { default: React } = await import("/node_modules/.vite/deps/react.js");
-        const { default: ReactDOM } = await import("/node_modules/.vite/deps/react-dom_client.js");
+        const { default: React } = await import("/__qa/react.js");
+        const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
         const { QuotaNotificationSettings } = await import("/src/sidepanel/components/QuotaNotificationSettings.tsx");
         const { createRuntimeI18n } = await import("/src/shared/i18n.ts");
         const { createDefaultAppState } = await import("/src/shared/production-state.ts");
@@ -99,16 +99,22 @@ try {
       assert.equal(trace.events.filter((event) => event.kind === "low").length, 1);
       assert(trace.requests.every((request) => request.active));
       assert(trace.requests.every((request) => JSON.stringify(request.request) === '{"permissions":["notifications"]}'));
-      const layout = await control.evaluate((element) => ({ width: element.clientWidth, scroll: element.scrollWidth,
-        clipped: [...element.querySelectorAll("button")].filter((button) => button.scrollWidth > button.clientWidth + 2).length,
-        outside: [...element.querySelectorAll("input,button,h2,label")].filter((child) => {
-          const box = child.getBoundingClientRect(), parent = element.getBoundingClientRect();
-          return box.left < parent.left - 1 || box.right > parent.right + 1;
-        }).length,
-        unitWidth: element.querySelector(".quota-notification-settings__unit").getBoundingClientRect().width,
-        direction: document.documentElement.dir }));
+      const layout = await control.evaluate((element) => {
+        const switchTitle = element.querySelector(".quota-notification-settings__switch .switch-row__title").getBoundingClientRect();
+        const switchInput = element.querySelector(".quota-notification-settings__switch .switch-row__control").getBoundingClientRect();
+        return { width: element.clientWidth, scroll: element.scrollWidth,
+          clipped: [...element.querySelectorAll("button")].filter((button) => button.scrollWidth > button.clientWidth + 2).length,
+          outside: [...element.querySelectorAll("input,button,h2,label")].filter((child) => {
+            const box = child.getBoundingClientRect(), parent = element.getBoundingClientRect();
+            return box.left < parent.left - 1 || box.right > parent.right + 1;
+          }).length,
+          switchRowAligned: Math.abs((switchTitle.top + switchTitle.bottom) / 2 - (switchInput.top + switchInput.bottom) / 2) <= Math.max(switchTitle.height, switchInput.height) / 2,
+          unitWidth: element.querySelector(".quota-notification-settings__unit").getBoundingClientRect().width,
+          direction: document.documentElement.dir };
+      });
       assert(layout.scroll <= layout.width + 2 && layout.clipped === 0, JSON.stringify(layout));
       assert.equal(layout.outside, 0, JSON.stringify(layout));
+      assert(layout.switchRowAligned, `Notification switch label and checkbox split across rows: ${JSON.stringify(layout)}`);
       assert(layout.unitWidth < 50, "Percent unit must not stretch into a page-wide chip");
       assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
       await control.screenshot({ path: path.join(output, `${locale}-${width}.png`) });

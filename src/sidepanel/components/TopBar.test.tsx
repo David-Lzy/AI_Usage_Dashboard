@@ -94,5 +94,7 @@ describe("TopBar", () => {
     expect(topAppBarCss).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
     );
+    expect(topAppBarCss).toContain("@media (max-width: 360px)");
+    expect(topAppBarCss).toContain("font-size: var(--md-sys-typescale-label-medium-size);");
   });
 });

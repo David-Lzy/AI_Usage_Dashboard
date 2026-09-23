@@ -47,6 +47,8 @@
   max-inline-size: 100%;
   min-inline-size: 0;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--md-sys-color-outline) transparent;
   outline: none;
 }
 

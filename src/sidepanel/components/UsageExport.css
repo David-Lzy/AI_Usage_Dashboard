@@ -35,7 +35,7 @@
 .usage-export__metadata dt { color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-small-weight) var(--md-sys-typescale-label-small-size) / var(--md-sys-typescale-label-small-line-height) var(--md-sys-typescale-label-small-font); }
 .usage-export__metadata dd { margin: var(--app-space-1) 0 0; color: var(--md-sys-color-on-surface); overflow-wrap: anywhere; }
 
-.usage-export__table-region { position: relative; inline-size: 100%; max-block-size: 24rem; min-inline-size: 0; overflow: auto; outline: none; }
+.usage-export__table-region { position: relative; inline-size: 100%; max-block-size: 24rem; min-inline-size: 0; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--md-sys-color-outline) transparent; outline: none; }
 .usage-export__table-region:focus-visible { box-shadow: var(--app-focus-ring-shadow); }
 .usage-export__table-region .sr-only { position: absolute; }
 .usage-export table { inline-size: 100%; min-inline-size: 46rem; border-collapse: collapse; color: var(--md-sys-color-on-surface); font-variant-numeric: tabular-nums; }

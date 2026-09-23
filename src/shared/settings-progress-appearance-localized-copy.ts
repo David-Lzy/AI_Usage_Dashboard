@@ -10,7 +10,7 @@ type SettingsProgressAppearanceCopyText = {
     unit: string;
     help: string;
   };
-  mode?: {
+  mode: {
     label: string;
     traditional: string;
     gradient: string;
@@ -29,7 +29,7 @@ type SettingsProgressAppearanceCopyText = {
     validationError: string;
     rangeLabel: (minimumLabel: string, maximumLabel: string) => string;
   };
-  gradient?: {
+  gradient: {
     label: string;
     detail: string;
     trackHelp: string;
@@ -40,19 +40,19 @@ type SettingsProgressAppearanceCopyText = {
     resetToDefault: string;
     endpointLocked: string;
     minimumStopHelp: string;
-    presetsLabel?: string;
-    presetsHelp?: string;
-    presetNames?: Partial<Record<ProgressGradientPresetId, string>>;
-    customSchemeLabel?: string;
-    imageGeneratedSchemeLabel?: string;
-    imageImportLabel?: string;
-    imageImportHelp?: string;
-    imageImportAction?: string;
-    imageImportBusy?: string;
-    imageImportUnsupported?: string;
-    imageImportTooLarge?: string;
-    imageImportDecodeFailed?: string;
-    imageImportCanvasUnavailable?: string;
+    presetsLabel: string;
+    presetsHelp: string;
+    presetNames: Record<ProgressGradientPresetId, string>;
+    customSchemeLabel: string;
+    imageGeneratedSchemeLabel: string;
+    imageImportLabel: string;
+    imageImportHelp: string;
+    imageImportAction: string;
+    imageImportBusy: string;
+    imageImportUnsupported: string;
+    imageImportTooLarge: string;
+    imageImportDecodeFailed: string;
+    imageImportCanvasUnavailable: string;
     stopAriaLabel: (stopNumberLabel: string, positionLabel: string) => string;
   };
 };
@@ -71,16 +71,10 @@ export type SettingsProgressAppearanceCopy = Omit<
   gradient: Omit<
     NonNullable<SettingsProgressAppearanceCopyText["gradient"]>,
     "presetNames" | "presetsHelp" | "presetsLabel" | "stopAriaLabel"
-    | "customSchemeLabel"
-    | "imageGeneratedSchemeLabel"
-    | "imageImportAction"
-    | "imageImportBusy"
-    | "imageImportCanvasUnavailable"
-    | "imageImportDecodeFailed"
-    | "imageImportHelp"
-    | "imageImportLabel"
-    | "imageImportTooLarge"
-    | "imageImportUnsupported"
+    | "customSchemeLabel" | "imageGeneratedSchemeLabel" | "imageImportAction"
+    | "imageImportBusy" | "imageImportCanvasUnavailable"
+    | "imageImportDecodeFailed" | "imageImportHelp" | "imageImportLabel"
+    | "imageImportTooLarge" | "imageImportUnsupported"
   > & {
     presetsLabel: string;
     presetsHelp: string;
@@ -353,6 +347,11 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "ラインとリングの進捗スタイルで共通のストローク幅を使います。",
     },
+    mode: {
+      label: "カラーモード",
+      traditional: "従来",
+      gradient: "グラデーション",
+    },
     colorBands: {
       label: "残量カラー帯",
       detail:
@@ -370,6 +369,38 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `残量 ${minimumLabel}-${maximumLabel}%`,
     },
+    gradient: {
+      label: "残量グラデーション",
+      detail: "バーをクリックして停止点を追加します。停止点を選ぶと位置と色を編集できます。",
+      trackHelp: "クリックした残量パーセントにグラデーション停止点を追加します。",
+      stopHelp: "この停止点を選択します。端点以外は左右の矢印キーで移動できます。",
+      positionLabel: "位置",
+      colorLabel: "色",
+      deleteStop: "停止点を削除",
+      resetToDefault: "グラデーションをリセット",
+      endpointLocked: "端点の停止点は 0% と 100% に固定されます。",
+      minimumStopHelp: "0% と 100% の停止点を少なくとも残してください。",
+      presetsLabel: "グラデーションスキーム",
+      presetsHelp: "ローカルスキームを選択した後も、停止点を通常どおり調整できます。",
+      presetNames: {
+        warning: "警告", ocean: "海", sunset: "夕日", meadow: "草原", aurora: "オーロラ",
+        "calm-blue": "穏やかな青", fire: "炎", glacier: "氷河", forest: "森",
+        "rose-gold": "ローズゴールド", violet: "紫", neon: "ネオン", lake: "湖",
+        citrus: "シトラス", berry: "ベリー", slate: "スレート",
+      },
+      customSchemeLabel: "カスタムグラデーション",
+      imageGeneratedSchemeLabel: "画像から生成",
+      imageImportLabel: "画像をインポート",
+      imageImportHelp: "PNG、JPEG、WebP はこのブラウザ内でローカル処理されます。元の画像はアップロードも保存もされず、生成されたグラデーション停止点だけが保存されます。",
+      imageImportAction: "画像から生成",
+      imageImportBusy: "画像を処理しています...",
+      imageImportUnsupported: "PNG、JPEG、または WebP 画像を選択してください。",
+      imageImportTooLarge: "5 MB 未満の画像を選択してください。",
+      imageImportDecodeFailed: "画像をデコードできませんでした。",
+      imageImportCanvasUnavailable: "ここでは画像処理を利用できません。",
+      stopAriaLabel: (stopNumberLabel, positionLabel) =>
+        `グラデーション停止点 ${stopNumberLabel}、残量 ${positionLabel}%`,
+    },
   },
   ko: {
     sectionLabel: "진행률 모양",
@@ -380,6 +411,11 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       label: "진행률 두께",
       unit: "px",
       help: "선형 및 원형 진행률 스타일이 하나의 전역 스트로크 두께를 공유합니다.",
+    },
+    mode: {
+      label: "색상 모드",
+      traditional: "기본",
+      gradient: "그라데이션",
     },
     colorBands: {
       label: "남은 비율 색상 구간",
@@ -398,6 +434,38 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `남은 비율 ${minimumLabel}-${maximumLabel}%`,
     },
+    gradient: {
+      label: "남은 비율 그라데이션",
+      detail: "막대를 클릭해 중지점을 추가하세요. 중지점을 선택하면 위치와 색상을 편집할 수 있습니다.",
+      trackHelp: "클릭한 남은 비율에 그라데이션 중지점을 추가합니다.",
+      stopHelp: "이 중지점을 선택합니다. 끝점이 아닌 중지점은 왼쪽과 오른쪽 화살표 키로 이동할 수 있습니다.",
+      positionLabel: "위치",
+      colorLabel: "색상",
+      deleteStop: "중지점 삭제",
+      resetToDefault: "그라데이션 초기화",
+      endpointLocked: "끝점 중지점은 0%와 100%에 고정됩니다.",
+      minimumStopHelp: "0%와 100% 중지점을 최소한 유지하세요.",
+      presetsLabel: "그라데이션 구성",
+      presetsHelp: "로컬 구성을 선택한 뒤에도 중지점을 일반적으로 조정할 수 있습니다.",
+      presetNames: {
+        warning: "경고", ocean: "바다", sunset: "노을", meadow: "초원", aurora: "오로라",
+        "calm-blue": "차분한 파랑", fire: "불꽃", glacier: "빙하", forest: "숲",
+        "rose-gold": "로즈 골드", violet: "보라", neon: "네온", lake: "호수",
+        citrus: "시트러스", berry: "베리", slate: "슬레이트",
+      },
+      customSchemeLabel: "사용자 지정 그라데이션",
+      imageGeneratedSchemeLabel: "이미지에서 생성됨",
+      imageImportLabel: "이미지 가져오기",
+      imageImportHelp: "PNG, JPEG, WebP 파일은 이 브라우저에서 로컬로 처리됩니다. 원본 이미지는 업로드하거나 저장하지 않으며 생성된 그라데이션 중지점만 저장됩니다.",
+      imageImportAction: "이미지에서 생성",
+      imageImportBusy: "이미지 처리 중...",
+      imageImportUnsupported: "PNG, JPEG 또는 WebP 이미지를 선택하세요.",
+      imageImportTooLarge: "5 MB 미만의 이미지를 선택하세요.",
+      imageImportDecodeFailed: "이미지를 디코드할 수 없습니다.",
+      imageImportCanvasUnavailable: "여기에서는 이미지 처리를 사용할 수 없습니다.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) =>
+        `그라데이션 중지점 ${stopNumberLabel}, 남은 비율 ${positionLabel}%`,
+    },
   },
   "es-419": {
     sectionLabel: "Apariencia del progreso",
@@ -409,6 +477,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Los estilos de línea y anillo comparten un grosor global.",
     },
+    mode: { label: "Modo de color", traditional: "Tradicional", gradient: "Degradado" },
     colorBands: {
       label: "Bandas de color restante",
       detail:
@@ -426,6 +495,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% restante`,
     },
+    gradient: {
+      label: "Degradado restante", detail: "Haz clic en la barra para agregar un punto. Selecciona un punto para editar su posición y color.",
+      trackHelp: "Haz clic para agregar un punto de degradado en ese porcentaje restante.",
+      stopHelp: "Selecciona este punto. Usa las flechas izquierda y derecha para mover puntos que no sean extremos.",
+      positionLabel: "Posición", colorLabel: "Color", deleteStop: "Eliminar punto", resetToDefault: "Restablecer degradado",
+      endpointLocked: "Los puntos de los extremos permanecen fijos en 0% y 100%.", minimumStopHelp: "Mantén al menos los puntos de 0% y 100%.",
+      presetsLabel: "Esquema de degradado", presetsHelp: "Elige un esquema local y luego ajusta los puntos normalmente.",
+      presetNames: { warning: "Advertencia", ocean: "Océano", sunset: "Atardecer", meadow: "Pradera", aurora: "Aurora", "calm-blue": "Azul sereno", fire: "Fuego", glacier: "Glaciar", forest: "Bosque", "rose-gold": "Oro rosa", violet: "Violeta", neon: "Neón", lake: "Lago", citrus: "Cítrico", berry: "Baya", slate: "Pizarra" },
+      customSchemeLabel: "Degradado personalizado", imageGeneratedSchemeLabel: "Generado desde imagen", imageImportLabel: "Importar imagen",
+      imageImportHelp: "Los archivos PNG, JPEG y WebP se procesan localmente en este navegador. La imagen de origen no se carga ni se guarda; solo se guardan los puntos de degradado generados.",
+      imageImportAction: "Generar desde imagen", imageImportBusy: "Procesando imagen...", imageImportUnsupported: "Elige una imagen PNG, JPEG o WebP.", imageImportTooLarge: "Elige una imagen de menos de 5 MB.", imageImportDecodeFailed: "No se pudo decodificar la imagen.", imageImportCanvasUnavailable: "El procesamiento de imágenes no está disponible aquí.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Punto de degradado ${stopNumberLabel}, ${positionLabel}% restante`,
+    },
   },
   "pt-BR": {
     sectionLabel: "Aparência do progresso",
@@ -437,6 +519,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Os estilos de linha e anel compartilham uma espessura global.",
     },
+    mode: { label: "Modo de cor", traditional: "Tradicional", gradient: "Gradiente" },
     colorBands: {
       label: "Faixas de cor restante",
       detail:
@@ -454,6 +537,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% restante`,
     },
+    gradient: {
+      label: "Gradiente restante", detail: "Clique na barra para adicionar uma parada. Selecione uma parada para editar sua posição e cor.",
+      trackHelp: "Clique para adicionar uma parada de gradiente nessa porcentagem restante.",
+      stopHelp: "Selecione esta parada. Use as setas para a esquerda e direita para mover paradas que não sejam extremidades.",
+      positionLabel: "Posição", colorLabel: "Cor", deleteStop: "Excluir parada", resetToDefault: "Redefinir gradiente",
+      endpointLocked: "As paradas das extremidades permanecem fixas em 0% e 100%.", minimumStopHelp: "Mantenha pelo menos as paradas de 0% e 100%.",
+      presetsLabel: "Esquema de gradiente", presetsHelp: "Escolha um esquema local e ajuste as paradas normalmente.",
+      presetNames: { warning: "Aviso", ocean: "Oceano", sunset: "Pôr do sol", meadow: "Prado", aurora: "Aurora", "calm-blue": "Azul calmo", fire: "Fogo", glacier: "Geleira", forest: "Floresta", "rose-gold": "Ouro rosé", violet: "Violeta", neon: "Néon", lake: "Lago", citrus: "Cítrico", berry: "Fruta vermelha", slate: "Ardósia" },
+      customSchemeLabel: "Gradiente personalizado", imageGeneratedSchemeLabel: "Gerado da imagem", imageImportLabel: "Importar imagem",
+      imageImportHelp: "Arquivos PNG, JPEG e WebP são processados localmente neste navegador. A imagem de origem não é enviada nem salva; apenas as paradas de gradiente geradas são armazenadas.",
+      imageImportAction: "Gerar da imagem", imageImportBusy: "Processando imagem...", imageImportUnsupported: "Escolha uma imagem PNG, JPEG ou WebP.", imageImportTooLarge: "Escolha uma imagem com menos de 5 MB.", imageImportDecodeFailed: "Não foi possível decodificar a imagem.", imageImportCanvasUnavailable: "O processamento de imagens não está disponível aqui.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Parada de gradiente ${stopNumberLabel}, ${positionLabel}% restante`,
+    },
   },
   fr: {
     sectionLabel: "Apparence de la progression",
@@ -465,6 +561,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Les styles ligne et anneau partagent une epaisseur globale.",
     },
+    mode: { label: "Mode de couleur", traditional: "Traditionnel", gradient: "Dégradé" },
     colorBands: {
       label: "Plages de couleur restante",
       detail:
@@ -482,6 +579,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% restant`,
     },
+    gradient: {
+      label: "Dégradé restant", detail: "Cliquez sur la barre pour ajouter un point d'arrêt. Sélectionnez un point pour modifier sa position et sa couleur.",
+      trackHelp: "Cliquez pour ajouter un point d'arrêt au pourcentage restant indiqué.",
+      stopHelp: "Sélectionnez ce point d'arrêt. Utilisez les flèches gauche et droite pour déplacer les points non terminaux.",
+      positionLabel: "Position", colorLabel: "Couleur", deleteStop: "Supprimer le point", resetToDefault: "Réinitialiser le dégradé",
+      endpointLocked: "Les points d'extrémité restent verrouillés à 0 % et 100 %.", minimumStopHelp: "Conservez au moins les points à 0 % et 100 %.",
+      presetsLabel: "Palette de dégradé", presetsHelp: "Choisissez une palette locale, puis ajustez les points normalement.",
+      presetNames: { warning: "Avertissement", ocean: "Océan", sunset: "Coucher de soleil", meadow: "Prairie", aurora: "Aurore", "calm-blue": "Bleu calme", fire: "Feu", glacier: "Glacier", forest: "Forêt", "rose-gold": "Or rose", violet: "Violet", neon: "Néon", lake: "Lac", citrus: "Agrumes", berry: "Baie", slate: "Ardoise" },
+      customSchemeLabel: "Dégradé personnalisé", imageGeneratedSchemeLabel: "Généré depuis l'image", imageImportLabel: "Importer une image",
+      imageImportHelp: "Les fichiers PNG, JPEG et WebP sont traités localement dans ce navigateur. L'image source n'est ni envoyée ni enregistrée ; seuls les points de dégradé générés sont stockés.",
+      imageImportAction: "Générer depuis l'image", imageImportBusy: "Traitement de l'image...", imageImportUnsupported: "Choisissez une image PNG, JPEG ou WebP.", imageImportTooLarge: "Choisissez une image de moins de 5 Mo.", imageImportDecodeFailed: "L'image n'a pas pu être décodée.", imageImportCanvasUnavailable: "Le traitement d'image n'est pas disponible ici.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Point d'arrêt ${stopNumberLabel}, ${positionLabel}% restant`,
+    },
   },
   de: {
     sectionLabel: "Fortschrittsdarstellung",
@@ -493,6 +603,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Linien- und Ringstile teilen sich eine globale Strichdicke.",
     },
+    mode: { label: "Farbmodus", traditional: "Traditionell", gradient: "Farbverlauf" },
     colorBands: {
       label: "Restfarben-Bereiche",
       detail:
@@ -510,6 +621,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% verbleibend`,
     },
+    gradient: {
+      label: "Verbleibender Farbverlauf", detail: "Klicken Sie auf die Leiste, um einen Stopp hinzuzufügen. Wählen Sie einen Stopp, um Position und Farbe zu bearbeiten.",
+      trackHelp: "Klicken Sie, um bei diesem verbleibenden Prozentsatz einen Farbverlaufsstopp hinzuzufügen.",
+      stopHelp: "Wählen Sie diesen Stopp. Nicht-Endpunkte lassen sich mit der linken und rechten Pfeiltaste verschieben.",
+      positionLabel: "Position", colorLabel: "Farbe", deleteStop: "Stopp löschen", resetToDefault: "Farbverlauf zurücksetzen",
+      endpointLocked: "Endpunktstopps bleiben bei 0 % und 100 % gesperrt.", minimumStopHelp: "Behalten Sie mindestens die Stopps bei 0 % und 100 %.",
+      presetsLabel: "Farbverlaufschema", presetsHelp: "Wählen Sie ein lokales Schema und passen Sie die Stopps anschließend normal an.",
+      presetNames: { warning: "Warnung", ocean: "Ozean", sunset: "Sonnenuntergang", meadow: "Wiese", aurora: "Aurora", "calm-blue": "Ruhiges Blau", fire: "Feuer", glacier: "Gletscher", forest: "Wald", "rose-gold": "Roségold", violet: "Violett", neon: "Neon", lake: "See", citrus: "Zitrus", berry: "Beere", slate: "Schiefer" },
+      customSchemeLabel: "Benutzerdefinierter Farbverlauf", imageGeneratedSchemeLabel: "Aus Bild generiert", imageImportLabel: "Bild importieren",
+      imageImportHelp: "PNG-, JPEG- und WebP-Dateien werden lokal in diesem Browser verarbeitet. Das Quellbild wird weder hochgeladen noch gespeichert; nur die erzeugten Farbverlaufsstopps werden gespeichert.",
+      imageImportAction: "Aus Bild generieren", imageImportBusy: "Bild wird verarbeitet...", imageImportUnsupported: "Wählen Sie ein PNG-, JPEG- oder WebP-Bild.", imageImportTooLarge: "Wählen Sie ein Bild unter 5 MB.", imageImportDecodeFailed: "Das Bild konnte nicht decodiert werden.", imageImportCanvasUnavailable: "Die Bildverarbeitung ist hier nicht verfügbar.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Farbverlaufsstopp ${stopNumberLabel}, ${positionLabel}% verbleibend`,
+    },
   },
   it: {
     sectionLabel: "Aspetto avanzamento",
@@ -521,6 +645,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Gli stili linea e anello condividono uno spessore globale.",
     },
+    mode: { label: "Modalità colore", traditional: "Tradizionale", gradient: "Sfumatura" },
     colorBands: {
       label: "Fasce colore residuo",
       detail:
@@ -538,6 +663,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% residuo`,
     },
+    gradient: {
+      label: "Sfumatura rimanente", detail: "Fai clic sulla barra per aggiungere un punto. Seleziona un punto per modificarne posizione e colore.",
+      trackHelp: "Fai clic per aggiungere un punto della sfumatura a quella percentuale rimanente.",
+      stopHelp: "Seleziona questo punto. Usa i tasti freccia sinistra e destra per spostare i punti non terminali.",
+      positionLabel: "Posizione", colorLabel: "Colore", deleteStop: "Elimina punto", resetToDefault: "Reimposta sfumatura",
+      endpointLocked: "I punti terminali restano bloccati a 0% e 100%.", minimumStopHelp: "Mantieni almeno i punti a 0% e 100%.",
+      presetsLabel: "Schema sfumatura", presetsHelp: "Scegli uno schema locale, quindi regola normalmente i punti.",
+      presetNames: { warning: "Avviso", ocean: "Oceano", sunset: "Tramonto", meadow: "Prato", aurora: "Aurora", "calm-blue": "Blu calmo", fire: "Fuoco", glacier: "Ghiacciaio", forest: "Foresta", "rose-gold": "Oro rosa", violet: "Viola", neon: "Neon", lake: "Lago", citrus: "Agrumi", berry: "Bacca", slate: "Ardesia" },
+      customSchemeLabel: "Sfumatura personalizzata", imageGeneratedSchemeLabel: "Generata dall'immagine", imageImportLabel: "Importa immagine",
+      imageImportHelp: "I file PNG, JPEG e WebP vengono elaborati localmente in questo browser. L'immagine di origine non viene caricata né salvata; vengono memorizzati solo i punti della sfumatura generati.",
+      imageImportAction: "Genera dall'immagine", imageImportBusy: "Elaborazione immagine...", imageImportUnsupported: "Scegli un'immagine PNG, JPEG o WebP.", imageImportTooLarge: "Scegli un'immagine inferiore a 5 MB.", imageImportDecodeFailed: "Non è stato possibile decodificare l'immagine.", imageImportCanvasUnavailable: "L'elaborazione delle immagini non è disponibile qui.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Punto della sfumatura ${stopNumberLabel}, ${positionLabel}% residuo`,
+    },
   },
   ru: {
     sectionLabel: "Вид прогресса",
@@ -549,6 +687,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Линейный и кольцевой стили используют одну общую толщину.",
     },
+    mode: { label: "Режим цвета", traditional: "Обычный", gradient: "Градиент" },
     colorBands: {
       label: "Цветовые диапазоны остатка",
       detail:
@@ -566,6 +705,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% осталось`,
     },
+    gradient: {
+      label: "Градиент остатка", detail: "Нажмите на полосу, чтобы добавить точку. Выберите точку для изменения ее позиции и цвета.",
+      trackHelp: "Нажмите, чтобы добавить точку градиента на этом проценте остатка.",
+      stopHelp: "Выберите эту точку. Используйте клавиши со стрелками влево и вправо для перемещения точек, не являющихся конечными.",
+      positionLabel: "Позиция", colorLabel: "Цвет", deleteStop: "Удалить точку", resetToDefault: "Сбросить градиент",
+      endpointLocked: "Конечные точки остаются заблокированными на 0% и 100%.", minimumStopHelp: "Сохраните как минимум точки 0% и 100%.",
+      presetsLabel: "Схема градиента", presetsHelp: "Выберите локальную схему, затем обычным образом настройте точки.",
+      presetNames: { warning: "Предупреждение", ocean: "Океан", sunset: "Закат", meadow: "Луг", aurora: "Аврора", "calm-blue": "Спокойный синий", fire: "Огонь", glacier: "Ледник", forest: "Лес", "rose-gold": "Розовое золото", violet: "Фиолетовый", neon: "Неон", lake: "Озеро", citrus: "Цитрус", berry: "Ягода", slate: "Сланец" },
+      customSchemeLabel: "Пользовательский градиент", imageGeneratedSchemeLabel: "Создано из изображения", imageImportLabel: "Импортировать изображение",
+      imageImportHelp: "Файлы PNG, JPEG и WebP обрабатываются локально в этом браузере. Исходное изображение не загружается и не сохраняется; сохраняются только созданные точки градиента.",
+      imageImportAction: "Создать из изображения", imageImportBusy: "Обработка изображения...", imageImportUnsupported: "Выберите изображение PNG, JPEG или WebP.", imageImportTooLarge: "Выберите изображение меньше 5 МБ.", imageImportDecodeFailed: "Не удалось декодировать изображение.", imageImportCanvasUnavailable: "Обработка изображений здесь недоступна.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Точка градиента ${stopNumberLabel}, осталось ${positionLabel}%`,
+    },
   },
   ar: {
     sectionLabel: "مظهر التقدم",
@@ -577,6 +729,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "أنماط الخط والحلقة تستخدم سماكة عامة واحدة.",
     },
+    mode: { label: "وضع اللون", traditional: "تقليدي", gradient: "تدرج" },
     colorBands: {
       label: "نطاقات لون المتبقي",
       detail:
@@ -594,6 +747,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% متبق`,
     },
+    gradient: {
+      label: "تدرج المتبقي", detail: "انقر على الشريط لإضافة نقطة توقف. حدد نقطة توقف لتعديل موضعها ولونها.",
+      trackHelp: "انقر لإضافة نقطة توقف للتدرج عند نسبة المتبقي هذه.",
+      stopHelp: "حدد نقطة التوقف هذه. استخدم مفتاحي السهمين الأيسر والأيمن لتحريك نقاط التوقف غير الطرفية.",
+      positionLabel: "الموضع", colorLabel: "اللون", deleteStop: "حذف نقطة التوقف", resetToDefault: "إعادة ضبط التدرج",
+      endpointLocked: "تبقى نقاط التوقف الطرفية مقفلة عند 0% و100%.", minimumStopHelp: "احتفظ على الأقل بنقطتي التوقف 0% و100%.",
+      presetsLabel: "نظام التدرج", presetsHelp: "اختر نظاماً محلياً ثم اضبط نقاط التوقف كالمعتاد.",
+      presetNames: { warning: "تحذير", ocean: "محيط", sunset: "غروب", meadow: "مرج", aurora: "شفق", "calm-blue": "أزرق هادئ", fire: "نار", glacier: "نهر جليدي", forest: "غابة", "rose-gold": "ذهب وردي", violet: "بنفسجي", neon: "نيون", lake: "بحيرة", citrus: "حمضيات", berry: "توت", slate: "أردواز" },
+      customSchemeLabel: "تدرج مخصص", imageGeneratedSchemeLabel: "مولد من صورة", imageImportLabel: "استيراد صورة",
+      imageImportHelp: "تتم معالجة ملفات PNG وJPEG وWebP محلياً في هذا المتصفح. لا يتم رفع الصورة المصدر أو حفظها؛ لا تُحفظ سوى نقاط التدرج المُنشأة.",
+      imageImportAction: "إنشاء من صورة", imageImportBusy: "تجري معالجة الصورة...", imageImportUnsupported: "اختر صورة PNG أو JPEG أو WebP.", imageImportTooLarge: "اختر صورة أصغر من 5 ميغابايت.", imageImportDecodeFailed: "تعذر فك ترميز الصورة.", imageImportCanvasUnavailable: "معالجة الصور غير متاحة هنا.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `نقطة توقف التدرج ${stopNumberLabel}، المتبقي ${positionLabel}%`,
+    },
   },
   hi: {
     sectionLabel: "प्रगति रूप",
@@ -605,6 +771,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "लाइन और रिंग प्रगति शैली एक वैश्विक स्ट्रोक मोटाई साझा करती हैं।",
     },
+    mode: { label: "रंग मोड", traditional: "पारंपरिक", gradient: "ग्रेडिएंट" },
     colorBands: {
       label: "शेष रंग बैंड",
       detail:
@@ -622,6 +789,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% शेष`,
     },
+    gradient: {
+      label: "शेष ग्रेडिएंट", detail: "स्टॉप जोड़ने के लिए बार पर क्लिक करें। उसकी स्थिति और रंग संपादित करने के लिए स्टॉप चुनें।",
+      trackHelp: "उस शेष प्रतिशत पर ग्रेडिएंट स्टॉप जोड़ने के लिए क्लिक करें।",
+      stopHelp: "यह स्टॉप चुनें। गैर-छोर स्टॉप को स्थानांतरित करने के लिए बाएं और दाएं तीर कुंजियों का उपयोग करें।",
+      positionLabel: "स्थिति", colorLabel: "रंग", deleteStop: "स्टॉप हटाएं", resetToDefault: "ग्रेडिएंट रीसेट करें",
+      endpointLocked: "छोर वाले स्टॉप 0% और 100% पर लॉक रहते हैं।", minimumStopHelp: "कम से कम 0% और 100% वाले स्टॉप रखें।",
+      presetsLabel: "ग्रेडिएंट योजना", presetsHelp: "स्थानीय योजना चुनें, फिर स्टॉप को सामान्य रूप से समायोजित करें।",
+      presetNames: { warning: "चेतावनी", ocean: "महासागर", sunset: "सूर्यास्त", meadow: "घास का मैदान", aurora: "ऑरोरा", "calm-blue": "शांत नीला", fire: "अग्नि", glacier: "हिमनद", forest: "जंगल", "rose-gold": "रोज़ गोल्ड", violet: "बैंगनी", neon: "नियॉन", lake: "झील", citrus: "खट्टे फल", berry: "बेरी", slate: "स्लेट" },
+      customSchemeLabel: "कस्टम ग्रेडिएंट", imageGeneratedSchemeLabel: "छवि से बनाया गया", imageImportLabel: "छवि आयात करें",
+      imageImportHelp: "PNG, JPEG और WebP फ़ाइलें इस ब्राउज़र में स्थानीय रूप से संसाधित होती हैं। स्रोत छवि अपलोड या सहेजी नहीं जाती; केवल बनाए गए ग्रेडिएंट स्टॉप सहेजे जाते हैं।",
+      imageImportAction: "छवि से बनाएं", imageImportBusy: "छवि संसाधित हो रही है...", imageImportUnsupported: "PNG, JPEG या WebP छवि चुनें।", imageImportTooLarge: "5 MB से छोटी छवि चुनें।", imageImportDecodeFailed: "छवि को डिकोड नहीं किया जा सका।", imageImportCanvasUnavailable: "यहां छवि संसाधन उपलब्ध नहीं है।",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `ग्रेडिएंट स्टॉप ${stopNumberLabel}, ${positionLabel}% शेष`,
+    },
   },
   id: {
     sectionLabel: "Tampilan progres",
@@ -633,6 +813,7 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       unit: "px",
       help: "Gaya garis dan cincin memakai satu ketebalan global.",
     },
+    mode: { label: "Mode warna", traditional: "Tradisional", gradient: "Gradien" },
     colorBands: {
       label: "Pita warna sisa",
       detail:
@@ -650,6 +831,19 @@ export const SETTINGS_PROGRESS_APPEARANCE_COPY: Record<
       rangeLabel: (minimumLabel, maximumLabel) =>
         `${minimumLabel}-${maximumLabel}% tersisa`,
     },
+    gradient: {
+      label: "Gradien tersisa", detail: "Klik bilah untuk menambahkan titik henti. Pilih titik henti untuk mengubah posisi dan warnanya.",
+      trackHelp: "Klik untuk menambahkan titik henti gradien pada persentase tersisa tersebut.",
+      stopHelp: "Pilih titik henti ini. Gunakan tombol panah kiri dan kanan untuk memindahkan titik henti yang bukan ujung.",
+      positionLabel: "Posisi", colorLabel: "Warna", deleteStop: "Hapus titik henti", resetToDefault: "Atur ulang gradien",
+      endpointLocked: "Titik henti ujung tetap terkunci pada 0% dan 100%.", minimumStopHelp: "Pertahankan setidaknya titik henti 0% dan 100%.",
+      presetsLabel: "Skema gradien", presetsHelp: "Pilih skema lokal, lalu sesuaikan titik henti seperti biasa.",
+      presetNames: { warning: "Peringatan", ocean: "Samudra", sunset: "Matahari terbenam", meadow: "Padang rumput", aurora: "Aurora", "calm-blue": "Biru tenang", fire: "Api", glacier: "Gletser", forest: "Hutan", "rose-gold": "Emas mawar", violet: "Ungu", neon: "Neon", lake: "Danau", citrus: "Jeruk", berry: "Beri", slate: "Batu tulis" },
+      customSchemeLabel: "Gradien kustom", imageGeneratedSchemeLabel: "Dihasilkan dari gambar", imageImportLabel: "Impor gambar",
+      imageImportHelp: "File PNG, JPEG, dan WebP diproses secara lokal di browser ini. Gambar sumber tidak diunggah atau disimpan; hanya titik henti gradien yang dihasilkan yang disimpan.",
+      imageImportAction: "Buat dari gambar", imageImportBusy: "Memproses gambar...", imageImportUnsupported: "Pilih gambar PNG, JPEG, atau WebP.", imageImportTooLarge: "Pilih gambar di bawah 5 MB.", imageImportDecodeFailed: "Gambar tidak dapat didekode.", imageImportCanvasUnavailable: "Pemrosesan gambar tidak tersedia di sini.",
+      stopAriaLabel: (stopNumberLabel, positionLabel) => `Titik henti gradien ${stopNumberLabel}, ${positionLabel}% tersisa`,
+    },
   },
 };
 
@@ -662,10 +856,7 @@ export function buildLocalizedSettingsProgressAppearanceSection(
     title: copy.title,
     detail: copy.detail,
     thickness: copy.thickness,
-    mode: {
-      ...DEFAULT_PROGRESS_APPEARANCE_MODE_COPY,
-      ...copy.mode,
-    },
+    mode: copy.mode,
     colorBands: {
       ...copy.colorBands,
       rangeLabel: (minimumPercent, maximumPercent) =>
@@ -675,17 +866,9 @@ export function buildLocalizedSettingsProgressAppearanceSection(
         ),
     },
     gradient: {
-      ...DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY,
       ...copy.gradient,
-      presetNames: {
-        ...DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY.presetNames,
-        ...copy.gradient?.presetNames,
-      },
       stopAriaLabel: (stopNumber, positionPercent) =>
-        (
-          copy.gradient?.stopAriaLabel ??
-          DEFAULT_PROGRESS_APPEARANCE_GRADIENT_COPY.stopAriaLabel
-        )(
+        copy.gradient.stopAriaLabel(
           i18n.formatNumber(stopNumber),
           i18n.formatNumber(positionPercent),
         ),

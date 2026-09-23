@@ -24,12 +24,19 @@
   border: 0;
 }
 
-.quota-notification-settings__switch {
+.switch-row.quota-notification-settings__switch {
+  flex-direction: row;
+  align-items: center;
   padding-block: var(--app-space-3);
   padding-inline: 0;
   border-inline: 0;
   border-radius: 0;
   background: transparent;
+}
+
+.quota-notification-settings__switch .switch-row__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .quota-notification-settings__number-control {
