@@ -7,7 +7,10 @@ const cacheRoot = path.join(process.cwd(), "tmp", "source-qa-cache");
 
 describe("source QA server", () => {
   it("removes only its own Vite cache after closing", async () => {
-    const before = new Set(await readdir(cacheRoot));
+    const before = new Set(await readdir(cacheRoot).catch((error) => {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    }));
     const server = await startSourceQaServer();
     const created = (await readdir(cacheRoot)).filter((name) => !before.has(name));
 
