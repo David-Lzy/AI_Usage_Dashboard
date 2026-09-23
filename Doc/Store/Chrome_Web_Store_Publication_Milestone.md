@@ -15,9 +15,10 @@ Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
 - the public listing displays `0.2.0-rc.13`, checked on 2026-09-22 UTC
-- GitHub Release `v0.2.0-rc.13` provides browser-specific packages and checksums
-- source `0.2.0-rc.14` / manifest `0.2.0.14` is being prepared for a separately
-  authorized release; it is not the Store package shown on the public listing
+- GitHub Release `v0.2.0-rc.14` provides verified browser-specific packages
+  and checksums; its Chrome manifest is `0.2.0.14`
+- the RC14 Chrome Web Store job skipped submission because publisher
+  credentials are not configured; the public Store build remains RC13
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
 
@@ -25,12 +26,15 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page checked on 2026-09-22 UTC: reachable, displaying `0.2.0-rc.13`,
+- Public page checked on 2026-09-23 UTC: reachable, displaying `0.2.0-rc.13`,
   updated July 28, 2026, with 14 languages. This is a public-page observation,
   not a fresh authenticated API or rollout-percentage report.
-- [GitHub Release v0.2.0-rc.13](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
-  was also rechecked on 2026-09-22 UTC. It is marked prerelease and contains
-  the named Chrome/Firefox zips and `SHA256SUMS.txt`.
+- [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
+  was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
+  were downloaded and verified against its published `SHA256SUMS.txt`.
+- The RC14 tag workflow passed build/test/package and created the GitHub
+  Release. Its Store upload steps were skipped after the credential check;
+  no RC14 Store upload or review request is recorded.
 
 ## Historical Submission Observations
 
@@ -100,7 +104,7 @@ At this milestone, the project has the following public-facing baseline:
 ## Quality Gate State
 
 Store availability is not a guarantee that every provider or environment is
-working. The RC14 source candidate hardens account-isolated sync, concurrent
+working. The GitHub RC14 candidate hardens account-isolated sync, concurrent
 state writes, capture freshness, shared controls and production initialization.
 Those changes are not claimed as shipped in the public rc.13 listing. Ongoing
 risks include:
@@ -122,9 +126,9 @@ risks include:
 
 ## Next Store Work
 
-- Keep RC14 source behavior separate from the currently available Store
-  version. This release is authorized, but a tag or Store submission still
-  requires verified build and publisher results before its status changes.
+- Keep GitHub RC14 behavior separate from the currently available Store
+  version. The tag and Release are verified; Store submission still requires
+  a verified publisher credential or authenticated developer session.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.

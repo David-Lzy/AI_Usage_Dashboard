@@ -187,15 +187,14 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 ## Current Release State
 
 - The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
-  displays `0.2.0-rc.13`, verified on 2026-09-22 UTC. The listing's update date
+  displays `0.2.0-rc.13`, verified on 2026-09-23 UTC. The listing's update date
   is July 28, 2026.
 - Source package version: `0.2.0-rc.14`; Chrome manifest version: `0.2.0.14`.
-- GitHub Release [`v0.2.0-rc.13`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
-  provides separately named Chrome and Firefox packages plus
-  `SHA256SUMS.txt`.
-- RC14 source includes the accepted sync, diagnostics, notification, comparison,
-  export, and local-bridge changes. It is a release candidate, not evidence
-  that the newer package is already installed from the Store.
+- GitHub Release [`v0.2.0-rc.14`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
+  provides verified Chrome and Firefox packages plus `SHA256SUMS.txt`.
+- RC14 includes the accepted sync, diagnostics, notification, comparison,
+  export, and local-bridge changes. The Chrome Web Store submission has not
+  run; the public Store build remains RC13.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 
