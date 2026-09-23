@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-09-23
+Date: 2026-09-24
 
 Document class:
 
@@ -14,12 +14,14 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- the public listing displays `0.2.0-rc.13`, checked on 2026-09-23 UTC
+- a direct public-page fetch displayed `0.2.0-rc.14` on 2026-09-23 UTC;
+  authenticated Store API status reports manifest `0.2.0.14` as `PUBLISHED`
+  at 100%
 - GitHub Release `v0.2.0-rc.14` provides verified browser-specific packages
   and checksums; its Chrome manifest is `0.2.0.14`
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
-  submission succeeded. RC14 is pending review while RC13 remains public
+  submission succeeded, and RC14 has since been published
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
 
@@ -27,9 +29,9 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
-- Public page checked on 2026-09-23 UTC: reachable, displaying `0.2.0-rc.13`,
-  updated July 28, 2026, with 14 languages. This is a public-page observation,
-  not a fresh authenticated API or rollout-percentage report.
+- A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
+  `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
+  manifest `0.2.0.14` as `PUBLISHED` at 100%.
 - [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
   were downloaded and verified against its published `SHA256SUMS.txt`.
@@ -41,14 +43,17 @@ Status note:
   optional `notifications` permission. After that field was completed and the
   draft saved, the Dashboard accepted the review submission with automatic
   publication after approval selected.
-- Authenticated Store API status on 2026-09-23 reports manifest `0.2.0.14`
-  as `PENDING_REVIEW` at 100%, while manifest `0.2.0.13` remains `PUBLISHED`
-  at 100%. RC14 is not yet claimed as publicly available.
+- Before approval, authenticated Store API status reported manifest
+  `0.2.0.14` as `PENDING_REVIEW` while `0.2.0.13` remained published. That
+  review checkpoint is historical; RC14 is now the published version.
 
 ## Historical Submission Observations
 
 These dated observations explain the handoff history, not the current listing:
 
+- An earlier public-page check on 2026-09-23 UTC displayed `0.2.0-rc.13`,
+  updated July 28, 2026. Later direct-page and authenticated API checks above
+  supersede that observation.
 - Chrome Web Store API status observed on 2026-07-29 showed manifest version
   `0.2.0.12` published at 100%.
 - The `v0.2.0-rc.10` tag workflow published Chrome and Firefox GitHub Release
@@ -113,10 +118,9 @@ At this milestone, the project has the following public-facing baseline:
 ## Quality Gate State
 
 Store availability is not a guarantee that every provider or environment is
-working. The GitHub RC14 candidate hardens account-isolated sync, concurrent
+working. The published RC14 build hardens account-isolated sync, concurrent
 state writes, capture freshness, shared controls and production initialization.
-Those changes are not claimed as shipped in the public rc.13 listing. Ongoing
-risks include:
+Ongoing risks include:
 
 - provider dashboards, API fields, usage wording, and quota policy can change
 - Chrome Web Store metadata can lag after upload or resubmission
@@ -135,10 +139,9 @@ risks include:
 
 ## Next Store Work
 
-- Keep GitHub RC14 behavior separate from the currently available Store
-  version. The tag, Release, upload, and review submission are verified; wait
-  for approval and confirm the authenticated published version and public
-  listing before calling RC14 publicly available.
+- Refresh Store screenshots and branding from the current extension UI before
+  the next version. Keep future uploaded, submitted, and published states
+  distinct as RC14 is now the public baseline.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
