@@ -193,8 +193,9 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 - GitHub Release [`v0.2.0-rc.14`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   provides verified Chrome and Firefox packages plus `SHA256SUMS.txt`.
 - RC14 includes the accepted sync, diagnostics, notification, comparison,
-  export, and local-bridge changes. The Chrome Web Store submission has not
-  run; the public Store build remains RC13.
+  export, and local-bridge changes. Its Chrome package was uploaded to the
+  Store, but review submission is blocked by item metadata validation; the
+  public Store build remains RC13.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

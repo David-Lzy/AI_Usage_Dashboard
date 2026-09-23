@@ -14,11 +14,12 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- the public listing displays `0.2.0-rc.13`, checked on 2026-09-22 UTC
+- the public listing displays `0.2.0-rc.13`, checked on 2026-09-23 UTC
 - GitHub Release `v0.2.0-rc.14` provides verified browser-specific packages
   and checksums; its Chrome manifest is `0.2.0.14`
-- the RC14 Chrome Web Store job skipped submission because publisher
-  credentials are not configured; the public Store build remains RC13
+- the RC14 tag workflow skipped Store handoff because repository credentials
+  are not configured; a later authenticated local upload succeeded, but review
+  submission is blocked by item metadata validation. RC13 remains public
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
 
@@ -34,7 +35,12 @@ Status note:
   were downloaded and verified against its published `SHA256SUMS.txt`.
 - The RC14 tag workflow passed build/test/package and created the GitHub
   Release. Its Store upload steps were skipped after the credential check;
-  no RC14 Store upload or review request is recorded.
+  an authenticated local API upload then accepted manifest `0.2.0.14`.
+- The Store API reported manifest `0.2.0.13` as `PUBLISHED` at 100% before
+  upload. Its RC14 review-submission request returned
+  `INVALID_ITEM_METADATA`, directing the publisher to resolve requirements in
+  the Developer Dashboard. No RC14 review submission or publication is
+  claimed.
 
 ## Historical Submission Observations
 
@@ -127,8 +133,9 @@ risks include:
 ## Next Store Work
 
 - Keep GitHub RC14 behavior separate from the currently available Store
-  version. The tag and Release are verified; Store submission still requires
-  a verified publisher credential or authenticated developer session.
+  version. The tag, Release, and local Store upload are verified; resolve the
+  Dashboard's item-metadata requirements, then submit RC14 for review and
+  verify the authenticated status.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
