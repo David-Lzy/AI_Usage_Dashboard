@@ -15,15 +15,16 @@ Status note:
 - reference CLI plus an experimental Settings connection for the authenticated
   CodexBar dashboard snapshot
 - local companion rows remain Custom Sources and are not built-in Providers
-- generic pairing and ccusage conversion described below are work-branch
-  changes, not part of the published `0.2.0-rc.13` store package
+- generic pairing and ccusage conversion are part of the `0.2.0-rc.14`
+  source candidate; the public Store listing remains `0.2.0-rc.13` until a
+  newer version is confirmed published
 
 ## Status
 
 The repository includes an experimental Node reference bridge for development
 and protocol testing. The extension does not install, start, download, or
 update this process, and the generic reference CLI is not presented as a
-built-in Provider connection. Developer/Debug Settings on the work branch
+built-in Provider connection. Developer/Debug Settings in the RC14 candidate
 exposes generic pairing and selected-source refresh in addition to the bounded
 CodexBar dashboard adapter described below.
 
@@ -97,7 +98,7 @@ Supported options:
 There is deliberately no directory scan, command, executable, browser-profile,
 cookie, Keychain, or environment-discovery option.
 
-## ccusage Daily Export (Unreleased)
+## ccusage Daily Export (Experimental)
 
 For a daily JSON export you have already produced, start the reference bridge
 yourself with the exact file path:

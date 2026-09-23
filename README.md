@@ -29,6 +29,8 @@ _Real extension surfaces are shown. No credentials are included in the media._
   them, while keeping raw page and request bodies out of extension storage.
 - **Actionable sync health:** distinguish fresh data, retained last-successful
   data, missing access, partial contracts, and unsupported values.
+- **Optional follow-through:** set quota/reset alerts, inspect a sanitized
+  diagnostic report, and export supported aggregate usage as CSV.
 - **A surface for the moment:** use a collapsible list, single-card switcher,
   auto-gliding popup, side panel, or full-page dashboard.
 
@@ -187,13 +189,13 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 - The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
   displays `0.2.0-rc.13`, verified on 2026-09-22 UTC. The listing's update date
   is July 28, 2026.
-- Source package version: `0.2.0-rc.13`; Chrome manifest version: `0.2.0.13`.
+- Source package version: `0.2.0-rc.14`; Chrome manifest version: `0.2.0.14`.
 - GitHub Release [`v0.2.0-rc.13`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.13)
   provides separately named Chrome and Firefox packages plus
   `SHA256SUMS.txt`.
-- The [improvements branch](https://github.com/David-Lzy/AI_Usage_Dashboard/tree/codex/usage-dashboard-improvements-20260922)
-  contains unreleased work. Its source version has not been bumped; the matching
-  version string does not mean those changes are already in the Store package.
+- RC14 source includes the accepted sync, diagnostics, notification, comparison,
+  export, and local-bridge changes. It is a release candidate, not evidence
+  that the newer package is already installed from the Store.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

@@ -146,7 +146,7 @@ explicit runtime translation coverage are both enforced for managed runtime ids.
 keeping user-defined labels, endpoint URLs, fetched summaries, and raw
 response-derived values unchanged.
 
-Unreleased work-branch shared controls use dedicated typed builders in
+RC14 source-candidate shared controls use dedicated typed builders in
 `usage-progress-localized-copy.ts` and `navigation-localized-copy.ts` for all
 14 locales. Unknown/value-only quota copy, progress accessibility text, toast
 dismissal, and carousel navigation/position labels use the application's

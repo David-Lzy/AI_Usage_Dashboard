@@ -291,7 +291,7 @@ Display eligibility plus dashboard display visibility determines whether a provi
 - Missing first-run, legacy, imported, or newly added provider records must be
   completed from the empty production baseline. Development and store-screenshot
   sample values must never seed a real provider snapshot or toolbar badge.
-- On the unreleased improvements branch, `production-state.ts` builds each
+- In the `0.2.0-rc.14` source candidate, `production-state.ts` builds each
   empty snapshot from explicit production metadata, not by clearing a demo.
   Fresh install, missing-storage fallback and configuration reset share that
   source. Demo snapshots live in `demo-state.ts` for tests and the explicitly
@@ -351,7 +351,7 @@ Rules:
 - usage facts, raw diagnostic bodies, provider evidence, and archive/export payloads stay source-truth data, not configurable progress bars
 - hidden-provider quota item settings must not affect visible popup, sidebar, or full-page rendering
 
-Unreleased work-branch UI hardening: circular quota reset captions retain their
+RC14 source-candidate UI hardening: circular quota reset captions retain their
 full localized text on one line and fit within their own column. Long RTL dates
 must not widen a compact Popup or overlap the neighboring quota. The full text
 remains in the progress accessibility label and the caption's hover title.

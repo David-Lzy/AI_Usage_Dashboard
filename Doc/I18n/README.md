@@ -67,8 +67,8 @@ bounds and option text are checked rather than relying on closed controls only.
 Use `--themes light,dark` when both themes are in scope; the default remains
 `light` to keep routine runs bounded.
 
-On the unreleased work branch, `--source` runs the same matrix from an isolated
-plain Vite server without replacing a browser-loaded extension directory:
+`--source` runs the same matrix from an isolated plain Vite server without
+replacing a browser-loaded extension directory:
 
 ```sh
 npm run i18n:visual-check -- --source --themes light,dark --fail-on-issues

@@ -15,10 +15,9 @@ Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
 - the public listing displays `0.2.0-rc.13`, checked on 2026-09-22 UTC
-- source `0.2.0-rc.13` / manifest `0.2.0.13` is available from GitHub with
-  browser-specific packages and checksums
-- the improvements work branch is unreleased and retains the same source
-  version until a separately authorized release; it is not the Store package
+- GitHub Release `v0.2.0-rc.13` provides browser-specific packages and checksums
+- source `0.2.0-rc.14` / manifest `0.2.0.14` is being prepared for a separately
+  authorized release; it is not the Store package shown on the public listing
 - private upload receipts, package hashes, screenshots-in-progress, and
   submission handoff notes stay in ignored `.local/` material
 
@@ -101,9 +100,10 @@ At this milestone, the project has the following public-facing baseline:
 ## Quality Gate State
 
 Store availability is not a guarantee that every provider or environment is
-working. The unreleased work branch hardens account-isolated sync, concurrent
+working. The RC14 source candidate hardens account-isolated sync, concurrent
 state writes, capture freshness, shared controls and production initialization.
-Those changes are not claimed as shipped in rc.13. Ongoing risks include:
+Those changes are not claimed as shipped in the public rc.13 listing. Ongoing
+risks include:
 
 - provider dashboards, API fields, usage wording, and quota policy can change
 - Chrome Web Store metadata can lag after upload or resubmission
@@ -122,9 +122,9 @@ Those changes are not claimed as shipped in rc.13. Ongoing risks include:
 
 ## Next Store Work
 
-- Keep development-branch behavior separate from the currently available
-  Store version. A new tag, GitHub Release or Store submission requires a
-  separately authorized release; none is implied by updating this document.
+- Keep RC14 source behavior separate from the currently available Store
+  version. This release is authorized, but a tag or Store submission still
+  requires verified build and publisher results before its status changes.
 - Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
   when the publisher account can complete Google's interactive re-verification.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.

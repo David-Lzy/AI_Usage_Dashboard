@@ -602,7 +602,7 @@ This section supersedes the older page-first timing assumptions above. Page
 hydration remains a compatibility fallback, but it is no longer the primary
 current-quota transport when local session authentication succeeds.
 
-Unreleased work-branch freshness correction: current quota and each history
+RC14 source-candidate freshness correction: current quota and each history
 module now retain the time of their own successful response. Cached quota
 fallback, a failed page refresh, or a fresh history response cannot advance the
 quota capture time. Partial history refreshes and page hydration retries retain

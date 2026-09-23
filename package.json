@@ -1,6 +1,6 @@
 {
   "name": "ai-usage-dashboard",
-  "version": "0.2.0-rc.13",
+  "version": "0.2.0-rc.14",
   "license": "AGPL-3.0-only",
   "author": "David-Lzy (https://github.com/David-Lzy)",
   "homepage": "https://github.com/David-Lzy/AI_Usage_Dashboard",
@@ -54,7 +54,7 @@
     "test": "./scripts/with-preferred-node.sh vitest run",
     "release:version:check": "./scripts/with-preferred-node.sh node ./scripts/check-release-version-contract.mjs",
     "release:workflow:check": "./scripts/with-preferred-node.sh node ./scripts/check-release-workflow-contract.mjs",
-    "release:check": "npm run release:version:check && npm run release:workflow:check && npm run i18n:check && npm run typecheck && npm run test && npm run build",
+    "release:check": "npm run release:version:check && npm run release:workflow:check && npm run i18n:check && npm run docs:check && npm run provider:quality && npm run typecheck && npm run test && npm run build",
     "release:package": "./scripts/with-preferred-node.sh node ./scripts/package-release.mjs",
     "release:cws:status": "./scripts/with-preferred-node.sh node ./scripts/chrome-web-store-submit.mjs --status",
     "release:cws:submit": "./scripts/with-preferred-node.sh node ./scripts/chrome-web-store-submit.mjs --publish",

@@ -195,9 +195,9 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Prevents bundled sample quota values from appearing in a new user profile and preserves Provider visibility while switching configured accounts.
-          - Adds clearer Sub2API connection-test feedback and configurable multi-deployment presentation without exposing stored credentials.
-          - Polishes the compact Material deployment selector and keeps its menu inside narrow popup viewports.
+          - Hardens account-isolated sync, concurrent settings updates, capture freshness, and production empty states.
+          - Adds optional quota/reset notifications, sanitized diagnostics export, and aggregate CSV/period summaries.
+          - Adds bounded multi-deployment comparison and an experimental, explicitly paired local companion bridge.
           NOTES
 
       - name: Prepare release assets

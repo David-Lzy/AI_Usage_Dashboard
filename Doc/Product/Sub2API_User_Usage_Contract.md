@@ -15,8 +15,8 @@ Status note:
 - this document records discovery evidence and the shipped API-key contract
 - account-dashboard enrichment was reviewed and is intentionally unsupported in
   the first release
-- the full-page comparison section below describes the unreleased improvement
-  branch, not an additional Chrome Web Store release
+- the full-page comparison section below describes the `0.2.0-rc.14`
+  source candidate, not a confirmed Chrome Web Store publication
 
 ## Identity And Trust Boundary
 

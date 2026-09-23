@@ -23,7 +23,7 @@ read-only token. They also run the documentation, design, Provider, localization
 type and test gates. They never run release/store jobs, use store credentials or
 persist checkout credentials. No `pull_request_target` contributor-code path is
 used. Fork runs may need approval under the repository's GitHub settings.
-The work-branch workflow change is not a published extension feature.
+These checks validate repository changes; they do not publish an extension.
 
 Pushes to `main` are for continuous validation. They run tests, build Chrome
 and Firefox packages, and upload temporary workflow artifacts. These artifacts
@@ -35,12 +35,13 @@ is ready to publish:
 
 ```sh
 git push origin main
-git tag v0.1.0-rc.26
-git push origin v0.1.0-rc.26
+version="$(node -p "require('./package.json').version")"
+git tag -a "v${version}" -m "AI Usage Dashboard ${version}"
+git push origin "v${version}"
 ```
 
 The tag must match `package.json` exactly after removing the leading `v`. For
-example, `package.json` version `0.1.0-rc.26` must use tag `v0.1.0-rc.26`.
+example, `package.json` version `0.2.0-rc.14` must use tag `v0.2.0-rc.14`.
 If they do not match, the release workflow must fail rather than publishing a
 misnamed package.
 
