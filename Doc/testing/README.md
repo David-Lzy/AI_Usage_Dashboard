@@ -228,6 +228,18 @@ npm run firefox:lint:baseline
 npm run firefox:package
 ```
 
+The Firefox add-on linter reports two `UNSAFE_VAR_ASSIGNMENT` warnings inside
+React DOM's built-in `dangerouslySetInnerHTML` implementation, even though the
+extension does not use that prop. The baseline check reads the generated bundle
+and verifies each reported warning's exact React DOM context; any different
+reported HTML assignment fails. A source test also forbids raw HTML insertion
+APIs in production application code. Neither check suppresses the warnings or
+skips linting the bundle.
+The runtime message catalog is built as a separate synchronous chunk so the
+shared application chunk stays below Vite's 500 kB warning limit. This changes
+chunk boundaries, not total downloaded code; do not infer a speedup from the
+absence of a size warning.
+
 Extension CPU profiling uses an ignored local artifact directory:
 
 ```sh

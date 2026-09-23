@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
 import { resolveBuildPaths } from "./lib/build-paths.mjs";
+import { isKnownReactDomInnerHtmlWarning } from "./lib/firefox-react-dom-warning.mjs";
 
 const projectRoot = process.cwd();
 const { firefoxDir } = resolveBuildPaths({ projectRoot });
@@ -15,20 +17,7 @@ const webExtBin = path.join(
   process.platform === "win32" ? "web-ext.cmd" : "web-ext",
 );
 
-const knownWarningSignature = {
-  code: "UNSAFE_VAR_ASSIGNMENT",
-  file: "assets/usage-progress.js",
-  message: "Unsafe assignment to innerHTML",
-};
 const expectedKnownWarningCount = 2;
-
-function warningMatchesBaseline(warning) {
-  return (
-    warning?.code === knownWarningSignature.code &&
-    warning?.file === knownWarningSignature.file &&
-    warning?.message === knownWarningSignature.message
-  );
-}
 
 const result = spawnSync(
   webExtBin,
@@ -63,9 +52,15 @@ try {
 const errors = lintResult.errors ?? [];
 const notices = lintResult.notices ?? [];
 const warnings = lintResult.warnings ?? [];
-const knownWarnings = warnings.filter(warningMatchesBaseline);
+const reactDomBundle = await readFile(
+  path.join(firefoxDir, "assets/usage-progress.js"),
+  "utf8",
+);
+const knownWarnings = warnings.filter((warning) =>
+  isKnownReactDomInnerHtmlWarning(warning, reactDomBundle),
+);
 const unexpectedWarnings = warnings.filter(
-  (warning) => !warningMatchesBaseline(warning),
+  (warning) => !isKnownReactDomInnerHtmlWarning(warning, reactDomBundle),
 );
 
 if (
@@ -98,5 +93,5 @@ if (
 }
 
 console.log(
-  `firefox lint baseline passed: 0 errors, 0 notices, ${knownWarnings.length} known React runtime warnings.`,
+  `firefox lint baseline passed: 0 errors, 0 notices, ${knownWarnings.length} verified React DOM warnings.`,
 );

@@ -170,6 +170,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         chunkFileNames: "assets/[name].js",
+        manualChunks(id) {
+          const moduleId = normalizeRollupId(id);
+          if (
+            moduleId.includes("/src/shared/runtime-message-catalog-data/") ||
+            moduleId.endsWith("/src/shared/runtime-message-catalogs.ts")
+          ) {
+            return "runtime-message-catalogs";
+          }
+        },
         assetFileNames(assetInfo) {
           const names = [
             ...(assetInfo.names ?? []),
