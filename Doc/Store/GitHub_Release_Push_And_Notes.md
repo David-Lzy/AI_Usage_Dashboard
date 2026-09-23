@@ -75,6 +75,14 @@ the Chrome Web Store handoff with an Actions notice. The GitHub Release and its
 browser packages still complete successfully; the missing store configuration
 must be fixed before a later automated submission can run.
 
+An owner with a service account already linked to the Store publisher may use
+`npm run release:cws:status` and `npm run release:cws:submit` with an explicit
+`--package` path as a local fallback. Verify the tag-scoped GitHub asset and
+its checksum first. The submit command uploads before requesting review; if
+upload succeeds but review submission fails, check the Developer Dashboard's
+item-metadata requirements and do not blindly re-upload the same ZIP. A draft
+upload, a pending review, and a publicly available version are different states.
+
 Optional GitHub Actions repository variable values:
 
 - `CWS_PUBLISH_TYPE`: `DEFAULT_PUBLISH` by default. Use `STAGED_PUBLISH` when
