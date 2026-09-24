@@ -29,6 +29,7 @@ describe("SettingsProviderDisplaySection", () => {
 
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.providerDisplay}"`);
     expect(html).toContain('data-settings-provider-display-section=""');
+    expect(html).toContain('data-codex-local-settings=""');
     expect(html).toContain(">Provider display settings<");
     expect(html).toContain("Manage provider order and visible quota progress items");
     expect(html).toContain('data-provider-order-preferences=""');

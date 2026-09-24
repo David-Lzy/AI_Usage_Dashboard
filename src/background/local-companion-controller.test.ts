@@ -43,11 +43,43 @@ function setup() {
 }
 
 describe("authenticated local companion lifecycle", () => {
+  it("lets ordinary users pair Codex only after a readable local quota, then defaults to local-only", async () => {
+    const test = setup();
+    test.state.settings.userLevel = "basic";
+    test.setRoute((url) => {
+      if (url.endsWith("/pair")) return json({ schema, token });
+      if (url.endsWith("/health")) return json({ schema, status: "ok", bridgeVersion: "test", sourceCount: 0, codexAvailable: true });
+      if (url.endsWith("/codex/summary")) return json({
+        schema: "ai-usage-dashboard.codex-local.v1",
+        observedAt: now.toISOString(), accountDigest: "a".repeat(64),
+        windows: [{ id: "primary", kind: "weekly", durationMinutes: 10080, usedPercent: 25, resetAt: "2026-09-30T10:00:00.000Z" }],
+        availableResetCount: 0, estimates: [{ windowId: "primary", status: "learning" }],
+      });
+      if (url.endsWith("/revoke")) return json({ schema, status: "revoked" });
+      return json({ error: "not_found" }, 404);
+    });
+    const result = await test.controller.handle({ action: "pair-codex", baseUrl, pairingCode: "ABCD-EFGH" });
+    expect(result.localCompanion).toMatchObject({ status: "connected", codexMode: "local", codexAvailable: true, sources: [] });
+    expect(test.pairing?.codexMode).toBe("local");
+    expect(JSON.stringify(result)).not.toContain(token);
+    expect(JSON.stringify(buildConfigurationBackup(result.state))).not.toContain(token);
+    test.setRoute((url) => url.endsWith("/health") ? json({ error: "expired" }, 401) : json({ error: "not_found" }, 404));
+    const expired = await test.controller.handle({ action: "codex-status" });
+    expect(expired.localCompanion).toMatchObject({ status: "expired", codexMode: "local", failure: "unauthorized" });
+    expect(test.pairing?.token).toBeNull();
+    const switched = await test.controller.handle({ action: "set-codex-mode", mode: "browser" });
+    expect(switched.localCompanion.codexMode).toBe("browser");
+    expect((await test.controller.handle({ action: "disconnect-codex" })).localCompanion.status).toBe("disconnected");
+  });
   it("pairs, indexes, refreshes only the selected source and keeps old file age and credentials private", async () => {
     const test = setup();
+    const codex = test.state.providers.find((provider) => provider.providerId === "codex-personal-page")!;
+    codex.syncStatus = "ok";
+    codex.remaining = 73;
     expect((await test.controller.handle({ action: "status" })).localCompanion.status).toBe("disconnected");
     expect(test.fetchImpl).not.toHaveBeenCalled();
     expect((await test.pair()).localCompanion.sources).toEqual([{ sourceId, label: "ccusage daily", managedId: null }]);
+    expect(test.state.providers.find((provider) => provider.providerId === "codex-personal-page")).toMatchObject({ syncStatus: "ok", remaining: 73 });
     expect(test.state.customSources).toEqual([]);
     const response = await test.controller.handle({ action: "refresh-source", sourceId });
     const setting = response.state.customSources![0]!;

@@ -192,6 +192,22 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBluepr
     manualCookieImport: "forbidden",
     sources: [
       {
+        kind: "local_companion",
+        rolloutStage: "shipped",
+        connectionMode: "credential",
+        contractKind: "shipped_personal_partial",
+        priority: 3,
+        label: "Codex CLI local companion",
+        routeHints: [],
+        usedAvailability: "window_only",
+        remainingAvailability: "exact",
+        resetAvailability: "exact",
+        contractDetail: "The paired local Codex CLI app-server reports account usage windows and reset times. API-equivalent dollars, when available, are separate local estimates.",
+        graduationGateLabel: null,
+        graduationGateDetail: null,
+        note: "Optional same-device companion. Browser page access is not required in local-only mode.",
+      },
+      {
         kind: "session_page",
         rolloutStage: "shipped",
         connectionMode: "page_session",

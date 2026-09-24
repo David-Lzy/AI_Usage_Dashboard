@@ -49,7 +49,7 @@ function projectAccount(
     sourcePreference: enumValue(source?.sourcePreference, ["auto", "official_api", "session_page"]),
     pageBindingStatus: enumValue(source?.pageBinding?.status, ["unbound", "bound", "stale"]),
     snapshotPresent: Boolean(data),
-    syncSource: enumValue(data?.syncSource, ["official", "page_parse"]),
+    syncSource: enumValue(data?.syncSource, ["official", "page_parse", "local_companion"]),
     syncStatus: enumValue(data?.syncStatus, ["ok", "warning", "error"]),
     lastAttemptAt: normalizeSnapshotTimestamp(data?.lastAttemptAt),
     lastSuccessAt: normalizeSnapshotTimestamp(data?.lastSuccessAt),

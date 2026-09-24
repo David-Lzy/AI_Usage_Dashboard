@@ -247,6 +247,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         sourceKindLabels: {
           official_api: "官方 API",
           session_page: "会话页面",
+          local_companion: "本地 Codex CLI",
           policy_only: "仅策略",
         } as Record<ProviderSourceKind, string>,
         cardLabels: {
@@ -504,6 +505,7 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       sourceKindLabels: {
         official_api: "Official API",
         session_page: "Session page",
+        local_companion: "Local Codex CLI",
         policy_only: "Policy only",
       } as Record<ProviderSourceKind, string>,
       cardLabels: {

@@ -40,11 +40,12 @@ export type QuotaUnit = "requests" | "credits" | "sessions" | "percent";
 
 export type QuotaWindow = "monthly" | "rolling" | "daily" | "workspace";
 
-export type SyncSource = "official" | "page_parse";
+export type SyncSource = "official" | "page_parse" | "local_companion";
 
 export type ProviderSourceKind =
   | "official_api"
   | "session_page"
+  | "local_companion"
   | "policy_only";
 
 export type ProviderSourcePreference =
@@ -358,7 +359,26 @@ export type ProviderSnapshot = {
   usageHistory?: ProviderUsageHistory;
   cursorUsage?: CursorUsageBilling;
   apiGatewayMetering?: ApiGatewayMeteringSnapshot;
+  codexLocal?: CodexLocalTelemetry;
   tone: ProviderTone;
+};
+
+export type CodexLocalTelemetry = {
+  availableResetCount: number | null;
+  accountVerified: boolean;
+  estimates: CodexObservedEstimate[];
+};
+
+export type CodexObservedEstimate = {
+  windowId: "primary" | "secondary";
+  status: "learning" | "ready" | "unpriced" | "account_unknown";
+  fullUsd: number | null;
+  fullLowerUsd: number | null;
+  fullUpperUsd: number | null;
+  currentUsd: number | null;
+  sampleCount: number;
+  confidence: "low" | "medium" | null;
+  priceDate: string | null;
 };
 
 export type ApiGatewayMeteringScope = "api_key" | "account";

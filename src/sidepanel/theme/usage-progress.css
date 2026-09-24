@@ -444,6 +444,26 @@
   gap: var(--app-space-3);
 }
 
+.codex-progress-group { container-type: inline-size; min-width: 0; }
+.codex-progress-group__inner { display: grid; gap: var(--app-space-3); min-width: 0; }
+.codex-estimate-strip { min-width: 0; border-top: 1px solid var(--app-supporting-surface-border); padding-top: var(--app-space-3); }
+.codex-estimate-strip__metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--app-space-2); }
+.codex-estimate-strip__metric { display: grid; align-content: start; gap: var(--app-space-1); min-width: 0; }
+.codex-estimate-strip__metric span { color: var(--md-sys-color-on-surface-variant); font-size: 0.75rem; line-height: 1.3; overflow-wrap: anywhere; }
+.codex-estimate-strip__metric strong { font-size: 0.9rem; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.codex-estimate-strip__detail { color: var(--md-sys-color-on-surface-variant); font-size: 0.75rem; line-height: 1.5; margin: var(--app-space-2) 0 0; }
+.codex-estimate-strip__tabs { display: flex; gap: var(--app-space-1); margin-bottom: var(--app-space-2); }
+.codex-estimate-strip__tab { border: 0; border-bottom: 2px solid transparent; background: transparent; color: inherit; padding: var(--app-space-2); cursor: pointer; }
+.codex-estimate-strip__tab[aria-pressed="true"] { border-bottom-color: var(--md-sys-color-primary); color: var(--md-sys-color-primary); }
+@container (min-width: 430px) {
+  .codex-progress-group--single-ring .codex-progress-group__inner { grid-template-columns: minmax(150px, 0.8fr) minmax(210px, 1fr); align-items: center; }
+  .codex-progress-group--single-ring .codex-estimate-strip { border-top: 0; border-inline-start: 1px solid var(--app-supporting-surface-border); padding-top: 0; padding-inline-start: var(--app-space-3); }
+  .codex-progress-group--single-ring .codex-estimate-strip__metrics { grid-template-columns: minmax(0, 1fr); }
+}
+@container (max-width: 360px) {
+  .codex-estimate-strip__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .provider-progress-item-list--compact {
   gap: var(--app-space-2);
 }

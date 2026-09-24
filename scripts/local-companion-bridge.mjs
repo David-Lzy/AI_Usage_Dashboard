@@ -8,21 +8,25 @@ import { createLocalCompanionBridge } from "./lib/local-companion-bridge-server.
 const HELP = `Experimental AI Usage Dashboard local companion bridge
 
 Usage:
-  npm run bridge:local -- (--source <id>=<json-file> | --ccusage <id>=<json-file>) [options]
+  npm run bridge:local -- (--source <id>=<json-file> | --ccusage <id>=<json-file> | --codex-home <directory>) [options]
 
 Options:
   --source <id>=<path>  Explicit custom-source.v1 JSON file (repeatable)
   --ccusage <id>=<path> Explicit ccusage daily --json export (repeatable)
+  --codex-home <path> Explicit local Codex home; enables read-only quota access
+  --codex-bin <path>  Codex CLI executable (default: codex on PATH)
   --host <loopback>     127.0.0.1 (default) or ::1
   --port <number>       Listening port (default: 47831)
   --help                Show this help
 
-The bridge never scans directories or executes commands. Tokens remain in
+Custom sources never scan directories or execute commands. The optional Codex
+path starts only the Codex CLI app-server for read-only quota requests and
+reads selected Codex session logs for observed estimates. Tokens remain in
 memory and are reset whenever this process stops.
 `;
 
 export function parseLocalCompanionBridgeArgs(argv) {
-  const result = { host: "127.0.0.1", port: 47_831, sources: [], help: false };
+  const result = { host: "127.0.0.1", port: 47_831, sources: [], codexHome: null, codexBin: "codex", help: false };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === "--help" || argument === "-h") {
@@ -47,6 +51,18 @@ export function parseLocalCompanionBridgeArgs(argv) {
       index += 1;
       continue;
     }
+    if (argument === "--codex-home") {
+      if (!path.isAbsolute(value)) throw new Error("--codex-home must be absolute.");
+      result.codexHome = value;
+      index += 1;
+      continue;
+    }
+    if (argument === "--codex-bin") {
+      if (value !== "codex" && !path.isAbsolute(value)) throw new Error("--codex-bin must be an absolute executable path.");
+      result.codexBin = value;
+      index += 1;
+      continue;
+    }
     if (argument === "--source" || argument === "--ccusage") {
       const separator = value.indexOf("=");
       if (separator <= 0 || separator === value.length - 1) {
@@ -65,8 +81,8 @@ export function parseLocalCompanionBridgeArgs(argv) {
     }
     throw new Error(`Unknown option: ${argument}`);
   }
-  if (!result.help && result.sources.length === 0) {
-    throw new Error("At least one --source or --ccusage <id>=<json-file> is required.");
+  if (!result.help && result.sources.length === 0 && !result.codexHome) {
+    throw new Error("At least one --source, --ccusage or --codex-home is required.");
   }
   return result;
 }
@@ -99,7 +115,7 @@ async function main() {
     console.log(
       `Serving ${options.sources.length} explicit source file${
         options.sources.length === 1 ? "" : "s"
-      }. Press Ctrl+C to stop.`,
+      }${options.codexHome ? " and local Codex quota" : ""}. Press Ctrl+C to stop.`,
     );
   } catch (error) {
     console.error(

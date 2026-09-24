@@ -7,6 +7,9 @@ import { isLocalCompanionCaptureStale, type LocalCompanionAction, type LocalComp
 import { getAppStateReplacementGeneration } from "../shared/provider-sync-identity";
 import { normalizeSnapshotTimestamp } from "../shared/snapshot-freshness";
 import { seedAppStateIfEmpty, updateAppState } from "../shared/storage";
+import { DEFAULT_APP_STATE } from "../shared/constants";
+import { invalidateProviderSyncIdentity } from "../shared/provider-sync-identity";
+import { fetchCodexLocalSummary } from "../shared/codex-local-bridge";
 
 type Dependencies = {
   readState: () => Promise<AppState>;
@@ -32,8 +35,15 @@ function view(pairing: LocalCompanionPairing | null, state: AppState, failure: L
     status: pairing ? pairing.token ? pairing.status : "expired" : "disconnected",
     checkedAt: pairing?.checkedAt ?? null,
     failure,
-    sources: pairing?.sources.map((source) => ({ ...source, managedId: (state.customSources ?? []).find((setting) => managed(setting) && setting.endpointUrl === endpoint(pairing.baseUrl, source.sourceId))?.id ?? null })) ?? [],
+    sources: ["developer", "debug"].includes(state.settings.userLevel) ? pairing?.sources.map((source) => ({ ...source, managedId: (state.customSources ?? []).find((setting) => managed(setting) && setting.endpointUrl === endpoint(pairing.baseUrl, source.sourceId))?.id ?? null })) ?? [] : [],
+    codexMode: pairing?.codexMode ?? "browser",
+    codexAvailable: pairing?.codexAvailable === true,
   };
+}
+
+function clearCodexSnapshot(state: AppState): AppState {
+  const baseline = DEFAULT_APP_STATE.providers.find((provider) => provider.providerId === "codex-personal-page")!;
+  return { ...state, providers: state.providers.map((provider) => provider.providerId === baseline.providerId ? { ...baseline } : provider) };
 }
 
 async function managedSourceId(baseUrl: string, sourceId: CustomSourceId): Promise<CustomSourceId> {
@@ -59,13 +69,23 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
   async function execute(action: LocalCompanionAction, expected: number, replacement: number) {
     const current = () => generation === expected && deps.replacement() === replacement;
     const initial = await deps.readState();
-    if (!["developer", "debug"].includes(initial.settings.userLevel)) {
+    const codexAction = ["codex-status", "pair-codex", "set-codex-mode", "disconnect-codex"].includes(action.action);
+    if (!codexAction && !["developer", "debug"].includes(initial.settings.userLevel)) {
       return { state: initial, localCompanion: view(null, initial, "developer_required") };
     }
     if (!current()) return finish("superseded");
     if (action.action === "status") return finish();
     let pairing = await deps.readPairing();
     const network = { fetchImpl: deps.fetchImpl };
+
+    if (action.action === "set-codex-mode") {
+      if (action.mode !== "browser" && (!pairing?.token || !pairing.codexAvailable)) return finish("invalid_token");
+      if (pairing && pairing.codexMode !== action.mode) {
+        await deps.writePairing({ ...pairing, codexMode: action.mode });
+        await deps.updateState((state) => current() ? clearCodexSnapshot(state) : state);
+      }
+      return finish();
+    }
 
     async function fail(code: LocalCompanionSettingsFailure, sourceId?: CustomSourceId) {
       if (!current()) return finish("superseded");
@@ -83,10 +103,21 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
       return finish(code);
     }
 
-    if (action.action === "disconnect") {
+    if (action.action === "codex-status") {
+      if (!pairing?.token || !pairing.codexAvailable) return finish();
+      if (!await deps.hasAccess(pairing.baseUrl).catch(() => false)) return fail("permission_required");
+      const health = await fetchLocalCompanionBridgeHealth(pairing.baseUrl, pairing.token, network);
+      if (!current()) return finish("superseded");
+      if (!health.ok) return fail(health.code);
+      if (!health.value.codexAvailable) return fail("unavailable");
+      await deps.writePairing({ ...pairing, status: "connected", checkedAt: deps.now().toISOString() });
+      return finish();
+    }
+
+    if (action.action === "disconnect" || action.action === "disconnect-codex") {
       // Invalidate local access before best-effort remote revocation; no fetch owns AppState.
       await deps.writePairing(null);
-      await deps.updateState((state) => current() ? removeManaged(state) : state);
+      await deps.updateState((state) => current() ? (pairing?.codexMode === "local" || pairing?.codexMode === "hybrid" ? clearCodexSnapshot(removeManaged(state)) : removeManaged(state)) : state);
       if (pairing?.token && await deps.hasAccess(pairing.baseUrl).catch(() => false)) {
         await revokeLocalCompanionBridgePairing(pairing.baseUrl, pairing.token, network);
       }
@@ -102,7 +133,7 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
       });
       return finish();
     }
-    if (action.action === "pair") {
+    if (action.action === "pair" || action.action === "pair-codex") {
       const url = normalizeLocalCompanionBridgeBaseUrl(action.baseUrl);
       if (!url.ok) return finish(url.code);
       if (!await deps.hasAccess(url.value).catch(() => false)) return finish("permission_required");
@@ -112,13 +143,32 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
         await revokeLocalCompanionBridgePairing(url.value, result.value, network);
         return finish("superseded");
       }
+      if (action.action === "pair-codex") {
+        const health = await fetchLocalCompanionBridgeHealth(url.value, result.value, network);
+        if (!current() || !health.ok || !health.value.codexAvailable) {
+          await revokeLocalCompanionBridgePairing(url.value, result.value, network);
+          return finish(!current() ? "superseded" : health.ok ? "invalid_response" : health.code);
+        }
+        const summary = await fetchCodexLocalSummary(url.value, result.value, deps.fetchImpl);
+        if (!current() || !summary.ok) {
+          await revokeLocalCompanionBridgePairing(url.value, result.value, network);
+          if (!current()) return finish("superseded");
+          return finish(summary.ok ? "invalid_response" : summary.code);
+        }
+      }
       const previous = pairing;
-      pairing = { baseUrl: url.value, token: result.value, status: "connected", checkedAt: deps.now().toISOString(), sources: previous?.baseUrl === url.value ? previous.sources : [] };
+      pairing = { baseUrl: url.value, token: result.value, status: "connected", checkedAt: deps.now().toISOString(), sources: previous?.baseUrl === url.value ? previous.sources : [], codexMode: action.action === "pair-codex" ? "local" : "browser", codexAvailable: action.action === "pair-codex" };
       await deps.writePairing(pairing);
-      if (previous?.baseUrl !== url.value) await deps.updateState((state) => current() ? removeManaged(state) : state);
+      await deps.updateState((state) => {
+        if (!current()) return state;
+        const withoutOldSources = previous?.baseUrl !== url.value ? removeManaged(state) : state;
+        return action.action === "pair-codex" || previous?.codexMode === "local" || previous?.codexMode === "hybrid"
+          ? clearCodexSnapshot(withoutOldSources) : withoutOldSources;
+      });
       if (previous?.token && previous.baseUrl !== url.value && await deps.hasAccess(previous.baseUrl).catch(() => false)) {
         await revokeLocalCompanionBridgePairing(previous.baseUrl, previous.token, network);
       }
+      if (action.action === "pair-codex") return finish();
     }
     if (!current()) return finish("superseded");
     if (!pairing?.token) return fail("invalid_token");
@@ -162,7 +212,7 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
     const index = await fetchLocalCompanionBridgeSourceIndex(pairing.baseUrl, pairing.token, network);
     if (!index.ok) return fail(index.code);
     if (!current()) return finish("superseded");
-    pairing = { ...pairing, sources: index.value.sources, status: "connected", checkedAt: deps.now().toISOString() };
+    pairing = { ...pairing, sources: index.value.sources, status: "connected", checkedAt: deps.now().toISOString(), codexAvailable: health.value.codexAvailable };
     await deps.writePairing(pairing);
     const endpoints = new Set(pairing.sources.map((source) => endpoint(pairing!.baseUrl, source.sourceId)));
     await deps.updateState((state) => {
@@ -175,7 +225,8 @@ export function createLocalCompanionController(overrides: Partial<Dependencies> 
 
   return {
     handle(action: LocalCompanionAction) {
-      if (["pair", "disconnect", "remove-source"].includes(action.action)) generation += 1;
+      if (["pair", "disconnect", "remove-source", "pair-codex", "disconnect-codex", "set-codex-mode"].includes(action.action)) generation += 1;
+      if (["pair", "disconnect", "pair-codex", "disconnect-codex", "set-codex-mode"].includes(action.action)) invalidateProviderSyncIdentity("codex-personal-page");
       const expected = generation, replacement = deps.replacement();
       // A bridge command queue orders its credential lifecycle; the shared storage queue
       // is entered only for short latest-state reducers, never while waiting on the network.

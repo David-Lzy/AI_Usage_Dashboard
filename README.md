@@ -145,8 +145,13 @@ custom and never treated as an official provider result. See the
 - [Optional CodexBar dashboard adoption boundary](./Doc/Product/CodexBar_Upstream_Adoption.md)
 
 Local companions are never installed, started, discovered, or updated by the
-extension. Accepted local rows remain separate custom sources rather than
-built-in provider claims.
+extension. Generic accepted local rows remain separate custom sources. The
+unreleased work branch also has an opt-in, same-machine Codex CLI bridge for
+the built-in Codex Personal quota: it can replace browser-page refreshes with
+local quota reads and cautiously estimate API-equivalent value after sufficient
+priced observations. This is not part of the current Chrome Web Store release;
+see the [bridge contract](./Doc/Product/Local_Companion_Bridge.md) for setup,
+limits, and privacy boundaries.
 
 ## Manual Installation
 

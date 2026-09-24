@@ -5,6 +5,14 @@ import { createServer } from "node:http";
 import path from "node:path";
 
 import {
+  CODEX_LOCAL_SUMMARY_SCHEMA,
+  accountBindingDigest,
+  readCodexRateLimits,
+  validateCodexHome,
+} from "./codex-local-quota.mjs";
+import { createCodexObservedEstimator } from "./codex-observed-equivalent.mjs";
+
+import {
   CCUSAGE_DAILY_MAX_INPUT_BYTES,
   convertCcusageDailyExport,
 } from "./ccusage-daily-converter.mjs";
@@ -152,8 +160,8 @@ function secretEquals(left, right) {
 }
 
 function normalizeSourceDefinitions(sources) {
-  if (!Array.isArray(sources) || sources.length === 0) {
-    throw new Error("At least one explicit source file is required.");
+  if (!Array.isArray(sources)) {
+    throw new Error("Explicit source definitions are required.");
   }
   if (sources.length > LOCAL_COMPANION_BRIDGE_MAX_SOURCES) {
     throw new Error(
@@ -376,6 +384,9 @@ export function createLocalCompanionBridge(options) {
     throw new Error("Local companion bridge port is invalid.");
   }
   const sources = normalizeSourceDefinitions(options.sources);
+  if (sources.length === 0 && !options.codexHome) {
+    throw new Error("At least one explicit source or Codex home is required.");
+  }
   const sourcesById = new Map(sources.map((source) => [source.sourceId, source]));
   const randomBytesImpl = options.randomBytesImpl ?? randomBytes;
   const now = options.now ?? Date.now;
@@ -395,6 +406,15 @@ export function createLocalCompanionBridge(options) {
   let bearerToken = null;
   let pairingCode = createPairingCode(randomBytesImpl);
   let startedAddress = null;
+  let codexHome = null;
+  let codexEstimator = null;
+  let codexOperation = Promise.resolve();
+
+  function serializeCodexOperation(operation) {
+    const next = codexOperation.then(operation, operation);
+    codexOperation = next.then(() => undefined, () => undefined);
+    return next;
+  }
 
   const rotatePairingCode = () => {
     pairingCode = createPairingCode(randomBytesImpl);
@@ -447,8 +467,14 @@ export function createLocalCompanionBridge(options) {
           sendJson(response, 401, { error: "invalid_pairing_code" }, origin.headers);
           return;
         }
-        bearerToken = createBearerToken(randomBytesImpl);
-        pairingCode = null;
+        await serializeCodexOperation(async () => {
+          if (bearerToken || !pairingCode || !secretEquals(parsed?.code, pairingCode)) {
+            throw new Error("pairing_code_expired");
+          }
+          if (codexEstimator) await codexEstimator.start();
+          bearerToken = createBearerToken(randomBytesImpl);
+          pairingCode = null;
+        });
         sendJson(
           response,
           200,
@@ -482,6 +508,7 @@ export function createLocalCompanionBridge(options) {
           status: "ok",
           bridgeVersion: "0.1.0-experimental",
           sourceCount: sources.length,
+          codexAvailable: codexHome !== null,
         },
         origin.headers,
       );
@@ -497,6 +524,51 @@ export function createLocalCompanionBridge(options) {
         },
         origin.headers,
       );
+      return;
+    }
+    if (request.method === "GET" && requestUrl.pathname === "/v1/codex/summary") {
+      if (!codexHome) {
+        sendJson(response, 404, { error: "codex_not_configured" }, origin.headers);
+        return;
+      }
+      const requestToken = extractBearerToken(request);
+      try {
+        const payload = await serializeCodexOperation(async () => {
+          if (!bearerToken || !secretEquals(requestToken, bearerToken)) throw new Error("codex_pairing_changed");
+          const readQuota = options.codexReadImpl ?? readCodexRateLimits;
+          const quota = await readQuota({
+            codexHome,
+            codexBin: options.codexBin ?? "codex",
+            spawnImpl: options.codexSpawnImpl,
+          });
+          const estimates = codexEstimator ? await codexEstimator.sample(quota) : [];
+          const confirmed = await readQuota({
+            codexHome,
+            codexBin: options.codexBin ?? "codex",
+            spawnImpl: options.codexSpawnImpl,
+          });
+          if (confirmed.accountId !== quota.accountId || confirmed.windows.length !== quota.windows.length || confirmed.windows.some((window, index) => window.id !== quota.windows[index]?.id || window.resetAt !== quota.windows[index]?.resetAt || window.usedPercent < quota.windows[index]?.usedPercent)) {
+            await codexEstimator?.start();
+            throw new Error("codex_identity_changed");
+          }
+          return {
+            schema: CODEX_LOCAL_SUMMARY_SCHEMA,
+            observedAt: quota.observedAt,
+            accountDigest: accountBindingDigest(requestToken, quota.accountId),
+            windows: quota.windows,
+            availableResetCount: quota.availableResetCount,
+            estimates,
+          };
+        });
+        if (!bearerToken || !secretEquals(requestToken, bearerToken)) {
+          sendJson(response, 401, { error: "unauthorized" }, origin.headers);
+        } else {
+          sendJson(response, 200, payload, origin.headers);
+        }
+      } catch (error) {
+        const revoked = error?.message === "codex_pairing_changed";
+        sendJson(response, revoked ? 401 : 503, { error: revoked ? "unauthorized" : "codex_unavailable" }, origin.headers);
+      }
       return;
     }
     if (
@@ -555,6 +627,10 @@ export function createLocalCompanionBridge(options) {
     async start() {
       if (startedAddress) {
         return startedAddress;
+      }
+      if (options.codexHome) {
+        codexHome = await validateCodexHome(options.codexHome);
+        codexEstimator = createCodexObservedEstimator({ codexHome });
       }
       await new Promise((resolve, reject) => {
         const onError = (error) => {

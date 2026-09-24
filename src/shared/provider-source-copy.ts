@@ -96,6 +96,7 @@ export type ProviderSourceDisplayCopy = {
 const SOURCE_KIND_LABELS: Record<ProviderSourceKind, string> = {
   official_api: "Official API",
   session_page: "Session page",
+  local_companion: "Local Codex CLI",
   policy_only: "Policy only",
 };
 

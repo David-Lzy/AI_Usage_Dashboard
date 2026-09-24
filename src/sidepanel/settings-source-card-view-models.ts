@@ -116,6 +116,7 @@ const DEFAULT_SETTINGS_SOURCE_CARD_LABELS: SettingsSourceCardLabels = {
   sourceKindLabels: {
     official_api: "Official API",
     session_page: "Session page",
+    local_companion: "Local Codex CLI",
     policy_only: "Policy only",
   },
   routeFallback: "Open from provider settings",

@@ -121,6 +121,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "官方 API",
         session_page: "Session page",
+        local_companion: "本機 Codex CLI",
         policy_only: "僅 policy",
       },
       cardLabels: {
@@ -204,6 +205,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "公式 API",
         session_page: "Session page",
+        local_companion: "ローカル Codex CLI",
         policy_only: "Policy のみ",
       },
       cardLabels: {
@@ -287,6 +289,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "공식 API",
         session_page: "Session page",
+        local_companion: "로컬 Codex CLI",
         policy_only: "Policy 전용",
       },
       cardLabels: {
@@ -370,6 +373,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API oficial",
         session_page: "Session page",
+        local_companion: "Codex CLI local",
         policy_only: "Solo policy",
       },
       cardLabels: {
@@ -453,6 +457,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API oficial",
         session_page: "Session page",
+        local_companion: "Codex CLI local",
         policy_only: "Somente policy",
       },
       cardLabels: {
@@ -536,6 +541,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API officielle",
         session_page: "Session page",
+        local_companion: "Codex CLI local",
         policy_only: "Policy uniquement",
       },
       cardLabels: {
@@ -619,6 +625,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "Offizielle API",
         session_page: "Session page",
+        local_companion: "Lokale Codex CLI",
         policy_only: "Nur policy",
       },
       cardLabels: {
@@ -702,6 +709,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API ufficiale",
         session_page: "Session page",
+        local_companion: "Codex CLI locale",
         policy_only: "Solo policy",
       },
       cardLabels: {
@@ -785,6 +793,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "Официальный API",
         session_page: "Session page",
+        local_companion: "Локальный Codex CLI",
         policy_only: "Только policy",
       },
       cardLabels: {
@@ -868,6 +877,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API رسمي",
         session_page: "Session page",
+        local_companion: "Codex CLI محلي",
         policy_only: "سياسة فقط",
       },
       cardLabels: {
@@ -951,6 +961,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "Official API",
         session_page: "Session page",
+        local_companion: "स्थानीय Codex CLI",
         policy_only: "सिर्फ policy",
       },
       cardLabels: {
@@ -1034,6 +1045,7 @@ export const SETTINGS_SOURCE_PERMISSIONS_COPY: Record<
       sourceKindLabels: {
         official_api: "API resmi",
         session_page: "Session page",
+        local_companion: "Codex CLI lokal",
         policy_only: "Hanya policy",
       },
       cardLabels: {

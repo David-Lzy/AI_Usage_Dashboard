@@ -43,6 +43,7 @@ import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
 import { Sub2ApiDeploymentSettings } from "./Sub2ApiDeploymentSettings";
 import { ApiGatewayMeteringModulePreferenceControls } from "./ApiGatewayMeteringModulePreferenceControls";
 import { resolvePopupProviderAccountPresentationMode } from "../../shared/provider-account-presentation";
+import { CodexLocalConnectionSettings } from "./CodexLocalConnectionSettings";
 
 type SettingsProviderDisplaySectionProps = {
   providers: ProviderSetting[];
@@ -194,6 +195,9 @@ export function SettingsProviderDisplaySection({
       </div>
 
       <div className="settings-provider-display__body">
+        {providers.some((provider) => provider.id === "codex-personal-page" && provider.displayEnabled) ? (
+          <CodexLocalConnectionSettings locale={locale} />
+        ) : null}
         {sub2ApiProvider ? (
           <>
             <Sub2ApiDeploymentSettings

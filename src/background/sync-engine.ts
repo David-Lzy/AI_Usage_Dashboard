@@ -33,6 +33,11 @@ import {
 import { syncProviderServiceStatuses } from "./provider-service-status-sync";
 import { mergeBackgroundSyncState } from "./background-state-merge";
 import { normalizeSnapshotTimestamp } from "../shared/snapshot-freshness";
+import { readLocalCompanionPairing } from "../shared/local-companion-pairing";
+import { computeCodexAccountDigest } from "../shared/codex-local-bridge";
+import { codexCredentialBroker } from "../providers/codex/session-credential-broker";
+import { syncCodexLocalProvider } from "../providers/codex/local-companion-adapter";
+import { DEFAULT_APP_STATE } from "../shared/constants";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -52,6 +57,52 @@ type ProviderAdapterSyncResult = {
   setting?: ProviderSetting;
   snapshot: ProviderSnapshot;
 };
+
+export async function syncCodexBySelectedSource(
+  provider: ProviderSnapshot,
+  setting: ProviderSetting,
+  current: AppState,
+  accountId: ProviderAccountId,
+  secrets: Awaited<ReturnType<typeof readProviderSecrets>>,
+  trigger: SyncTrigger,
+  now: Date,
+): Promise<ProviderAdapterSyncResult> {
+  const pairing = await readLocalCompanionPairing();
+  if (!pairing || pairing.codexMode === "browser" || !pairing.codexMode) {
+    return getProviderSyncAdapter(provider.providerId).sync(provider, {
+      accountId, accountMetadata: getActiveProviderAccountMetadata(current, provider.providerId),
+      attemptedAt: now, trigger, secrets, setting,
+      warningThresholdPercent: current.settings.warningThresholdPercent,
+    });
+  }
+  const local = await syncCodexLocalProvider(provider, pairing, now);
+  if (pairing.codexMode !== "hybrid" || !local.accountDigest || local.snapshot.syncStatus !== "ok") {
+    return { snapshot: local.snapshot, setting };
+  }
+  const beforeCredential = await codexCredentialBroker.peekCredential?.();
+  const browserBaseline = DEFAULT_APP_STATE.providers.find((item) => item.providerId === provider.providerId)!;
+  const browser = await getProviderSyncAdapter(provider.providerId).sync(browserBaseline, {
+    accountId, accountMetadata: getActiveProviderAccountMetadata(current, provider.providerId),
+    attemptedAt: now, trigger, secrets, setting,
+    warningThresholdPercent: current.settings.warningThresholdPercent,
+  });
+  const afterCredential = await codexCredentialBroker.peekCredential?.();
+  const matches = async (id: string | null | undefined) => id
+    ? await computeCodexAccountDigest(pairing.token!, id) === local.accountDigest
+    : false;
+  const browserCapture = normalizeSnapshotTimestamp(browser.snapshot.lastSuccessAt);
+  const sameAccount = await matches(afterCredential?.accountId) &&
+    (!beforeCredential?.accountId || await matches(beforeCredential.accountId));
+  const browserHistoryIsNew = browserCapture !== null && Date.parse(browserCapture) >= now.getTime() - 1000;
+  return {
+    setting,
+    snapshot: {
+      ...local.snapshot,
+      usageHistory: sameAccount && browserHistoryIsNew && browser.snapshot.syncStatus === "ok"
+        ? browser.snapshot.usageHistory : undefined,
+    },
+  };
+}
 
 type ActiveProviderAdapterRun = {
   promise: Promise<ProviderAdapterSyncResult>;
@@ -381,8 +432,9 @@ async function runSyncEngineOnce(
         providerId: provider.providerId,
         trigger,
         identity,
-        run: () =>
-          adapter.sync(provider, {
+        run: () => provider.providerId === "codex-personal-page"
+          ? syncCodexBySelectedSource(provider, setting, current, accountId, secrets, trigger, now)
+          : adapter.sync(provider, {
             accountId,
             accountMetadata: getActiveProviderAccountMetadata(
               current,

@@ -58,6 +58,19 @@ describe("sanitized support diagnostics", () => {
       .toEqual([["account-1", true, "warning"], ["account-2", false, "error"], ["account-3", false, null]]);
   });
 
+  it("reports the local Codex source without exporting estimate or account material", () => {
+    const state = createDefaultAppState();
+    const codex = state.providers.find((provider) => provider.providerId === "codex-personal-page")!;
+    Object.assign(codex, {
+      syncSource: "local_companion", accountDigest: SECRET,
+      codexLocal: { availableResetCount: 2, accountVerified: true, estimates: [{ fullUsd: 42, rawLog: SECRET }] },
+    });
+    const report = createSanitizedDiagnostics(state, options);
+    expect(report.providers.find((provider) => provider.providerType === "codex-personal-page")?.accounts[0]?.syncSource).toBe("local_companion");
+    expect(JSON.stringify(report)).not.toContain(SECRET);
+    expect(JSON.stringify(report)).not.toContain("fullUsd");
+  });
+
   it("rejects unknown codes, prototype names, source enums and timestamp text", () => {
     const state = gatewayState();
     const snapshot = state.providers[0];

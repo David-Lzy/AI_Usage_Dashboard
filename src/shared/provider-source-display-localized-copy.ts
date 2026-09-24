@@ -20,6 +20,7 @@ export function buildProviderSourceDisplayLocalizedCopy(
     sourceKindLabels: {
       official_api: "官方 API",
       session_page: "会话页面",
+      local_companion: "本地 Codex CLI",
       policy_only: "仅策略",
     },
     sourcePreferenceLabels: {

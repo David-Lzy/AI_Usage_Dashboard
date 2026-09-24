@@ -22,6 +22,7 @@ export const LOCAL_COMPANION_BRIDGE_PATHS = {
   pair: "/v1/pair",
   revoke: "/v1/revoke",
   sources: "/v1/sources",
+  codexSummary: "/v1/codex/summary",
 } as const;
 
 const PAIRING_CODE_PATTERN = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/u;
@@ -38,6 +39,7 @@ export type LocalCompanionBridgeHealth = {
   status: "ok";
   bridgeVersion: string;
   sourceCount: number;
+  codexAvailable: boolean;
 };
 
 export type LocalCompanionBridgeSourceIndex = {
@@ -212,7 +214,7 @@ async function readBoundedResponseText(
       };
 }
 
-async function requestLocalCompanion(
+export async function requestLocalCompanion(
   baseUrl: string,
   path: string,
   init: RequestInit,
@@ -377,7 +379,7 @@ export async function fetchLocalCompanionBridgeHealth(
     return parsed;
   }
 
-  const { schema, status, bridgeVersion, sourceCount } = parsed.value;
+  const { schema, status, bridgeVersion, sourceCount, codexAvailable } = parsed.value;
   return schema === LOCAL_COMPANION_BRIDGE_SCHEMA_V1 &&
     status === "ok" &&
     typeof bridgeVersion === "string" &&
@@ -385,7 +387,8 @@ export async function fetchLocalCompanionBridgeHealth(
     bridgeVersion.length <= 32 &&
     Number.isInteger(sourceCount) &&
     Number(sourceCount) >= 0 &&
-    Number(sourceCount) <= LOCAL_COMPANION_BRIDGE_MAX_INDEX_ENTRIES
+    Number(sourceCount) <= LOCAL_COMPANION_BRIDGE_MAX_INDEX_ENTRIES &&
+    (codexAvailable === undefined || typeof codexAvailable === "boolean")
     ? {
         ok: true,
         value: {
@@ -393,6 +396,7 @@ export async function fetchLocalCompanionBridgeHealth(
           status,
           bridgeVersion,
           sourceCount: Number(sourceCount),
+          codexAvailable: codexAvailable === true,
         },
       }
     : {

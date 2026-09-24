@@ -12,7 +12,7 @@ type AdapterErrorDiagnosticCode =
   | "adapter.parse_failed";
 
 type AdapterErrorDiagnosticCopy = {
-  sourceKinds: Record<ProviderSourceKind | "current", string>;
+  sourceKinds: Record<Exclude<ProviderSourceKind, "local_companion"> | "current", string>;
   labels: Record<AdapterErrorDiagnosticCode, string>;
   parseFailedSummary: (sourceKind: string) => string;
   unsupportedResponseSummary: (sourceKind: string) => string;
@@ -32,7 +32,7 @@ function getStringParam(
 function getSourceKindParam(
   params: ProviderDiagnosticParams | undefined,
   key: string,
-): ProviderSourceKind | null {
+): Exclude<ProviderSourceKind, "local_companion"> | null {
   const value = getStringParam(params, key);
 
   if (
@@ -320,7 +320,7 @@ function getCopy(i18n: RuntimeI18n): AdapterErrorDiagnosticCopy {
 }
 
 function formatSourceKindLabel(
-  sourceKind: ProviderSourceKind | null,
+  sourceKind: Exclude<ProviderSourceKind, "local_companion"> | null,
   copy: AdapterErrorDiagnosticCopy,
 ): string {
   return sourceKind ? copy.sourceKinds[sourceKind] : copy.sourceKinds.current;

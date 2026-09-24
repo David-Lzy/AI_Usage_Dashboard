@@ -1,0 +1,24 @@
+.codex-local-settings {
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  padding-top: 1.25rem;
+}
+
+.codex-local-settings__heading,
+.codex-local-settings__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.codex-local-settings__heading .body-copy { margin: 0.35rem 0 0; }
+.codex-local-settings__mode { max-width: 36rem; margin-top: 1rem; }
+.codex-local-settings__mode .body-copy { min-height: 1.2em; margin: 0.4rem 0 0; }
+.codex-local-settings__pairing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+.codex-local-settings__actions { justify-content: flex-start; margin-top: 0.75rem; }
+.codex-local-settings__notice { margin: 0.5rem 0 0; }
+
+@media (max-width: 680px) {
+  .codex-local-settings__pairing { grid-template-columns: minmax(0, 1fr); }
+}

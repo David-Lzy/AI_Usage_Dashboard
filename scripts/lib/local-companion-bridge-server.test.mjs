@@ -80,6 +80,97 @@ afterEach(async () => {
 });
 
 describe("experimental local companion bridge", () => {
+  it("serves a sanitized Codex summary only to a paired client", async () => {
+    const codexHome = await mkdtemp(path.join(tmpdir(), "ai-usage-codex-home-"));
+    tempDirectories.push(codexHome);
+    const read = () => ({
+      observedAt: "2026-09-24T10:00:00.000Z",
+      accountId: "secret-account-sentinel",
+      windows: [{ id: "primary", kind: "weekly", durationMinutes: 10080, usedPercent: 25, resetAt: "2026-09-30T10:00:00.000Z" }],
+      availableResetCount: 0,
+    });
+    const { address } = await startBridge({ sources: [], codexHome, codexReadImpl: read });
+    const endpoint = `${address.baseUrl}/v1/codex/summary`;
+    expect((await fetch(endpoint)).status).toBe(401);
+    const paired = await pairLocalCompanionBridge(address.baseUrl, address.pairingCode);
+    expect(paired.ok).toBe(true);
+    const response = await fetch(endpoint, { headers: { Authorization: `Bearer ${paired.value}` } });
+    expect(response.status).toBe(200);
+    const payload = await response.json();
+    expect(payload).toMatchObject({ schema: "ai-usage-dashboard.codex-local.v1", availableResetCount: 0, estimates: [{ status: "learning" }] });
+    expect(payload.accountDigest).toMatch(/^[a-f0-9]{64}$/u);
+    const serialized = JSON.stringify(payload);
+    expect(serialized).not.toContain("secret-account-sentinel");
+    expect(serialized).not.toContain(codexHome);
+    expect(serialized).not.toContain(paired.value);
+  });
+  it("serializes Codex samples and withholds an in-flight response after revocation", async () => {
+    const codexHome = await mkdtemp(path.join(tmpdir(), "ai-usage-codex-home-"));
+    tempDirectories.push(codexHome);
+    let active = 0;
+    let maxActive = 0;
+    let releaseRead;
+    let startedRead;
+    const entered = new Promise((resolve) => { startedRead = resolve; });
+    const blocked = new Promise((resolve) => { releaseRead = resolve; });
+    let blockNext = false;
+    const read = async () => {
+      active += 1;
+      maxActive = Math.max(maxActive, active);
+      if (blockNext) {
+        blockNext = false;
+        startedRead();
+        await blocked;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      active -= 1;
+      return {
+        observedAt: "2026-09-24T10:00:00.000Z",
+        accountId: "account-a",
+        windows: [{ id: "primary", kind: "weekly", durationMinutes: 10080, usedPercent: 25, resetAt: "2026-09-30T10:00:00.000Z" }],
+        availableResetCount: 1,
+      };
+    };
+    const { address } = await startBridge({ sources: [], codexHome, codexReadImpl: read });
+    const paired = await pairLocalCompanionBridge(address.baseUrl, address.pairingCode);
+    expect(paired.ok).toBe(true);
+    const endpoint = `${address.baseUrl}/v1/codex/summary`;
+    const headers = { Authorization: `Bearer ${paired.value}` };
+    const simultaneous = await Promise.all([fetch(endpoint, { headers }), fetch(endpoint, { headers })]);
+    expect(simultaneous.map((response) => response.status)).toEqual([200, 200]);
+    expect(maxActive).toBe(1);
+
+    blockNext = true;
+    const pending = fetch(endpoint, { headers });
+    await entered;
+    expect(await revokeLocalCompanionBridgePairing(address.baseUrl, paired.value)).toMatchObject({ ok: true });
+    releaseRead();
+    expect((await pending).status).toBe(401);
+  });
+  it("rejects a quota read that switches accounts during one sample", async () => {
+    const codexHome = await mkdtemp(path.join(tmpdir(), "ai-usage-codex-home-"));
+    tempDirectories.push(codexHome);
+    let reads = 0;
+    const { address } = await startBridge({
+      sources: [], codexHome,
+      codexReadImpl: () => ({
+        observedAt: "2026-09-24T10:00:00.000Z",
+        accountId: ++reads === 1 ? "account-a" : "account-b",
+        windows: [{ id: "primary", kind: "weekly", durationMinutes: 10080, usedPercent: 25, resetAt: "2026-09-30T10:00:00.000Z" }],
+        availableResetCount: null,
+      }),
+    });
+    const paired = await pairLocalCompanionBridge(address.baseUrl, address.pairingCode);
+    expect(paired.ok).toBe(true);
+    const headers = { Authorization: `Bearer ${paired.value}` };
+    const endpoint = `${address.baseUrl}/v1/codex/summary`;
+    const changed = await fetch(endpoint, { headers });
+    expect(changed.status).toBe(503);
+    expect(JSON.stringify(await changed.json())).not.toContain("account-a");
+    const stable = await fetch(endpoint, { headers });
+    expect(stable.status).toBe(200);
+    expect((await stable.json()).estimates[0].status).toBe("learning");
+  });
   it("returns fixed errors for malformed request paths without terminating the bridge", async () => {
     const { address } = await startBridge();
     expect((await fetch(`${address.baseUrl}//[`)).status).toBe(400);

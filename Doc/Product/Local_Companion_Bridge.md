@@ -1,6 +1,6 @@
 # Experimental Local Companion Bridge
 
-Date: 2026-09-23
+Date: 2026-09-24
 
 Document class:
 
@@ -12,12 +12,10 @@ Freshness model:
 
 Status note:
 
-- reference CLI plus an experimental Settings connection for the authenticated
-  CodexBar dashboard snapshot
-- local companion rows remain Custom Sources and are not built-in Providers
-- generic pairing and ccusage conversion are part of the `0.2.0-rc.14`
-  source candidate; the public Store listing remains `0.2.0-rc.13` until a
-  newer version is confirmed published
+- the public Store is `0.2.0-rc.14`; the Codex local quota and equivalent
+  estimate below are work-branch code, not yet a Store release
+- generic local rows remain Custom Sources; the opt-in Codex summary is a
+  separate, built-in Codex Personal source
 
 ## Status
 
@@ -28,9 +26,71 @@ built-in Provider connection. Developer/Debug Settings in the RC14 candidate
 exposes generic pairing and selected-source refresh in addition to the bounded
 CodexBar dashboard adapter described below.
 
-The bridge proves a narrow local-source boundary before any future desktop
-companion or CodexBar adapter is exposed to users. It is not a way for the
+The bridge proves a narrow local-source boundary. It is not a way for the
 extension to obtain arbitrary machine access.
+
+## Codex Local Quota (Unreleased Work Branch)
+
+Install and sign in to Codex CLI on the **same machine** as the browser, then
+manually start the Node reference bridge with an explicit Codex Home:
+
+```sh
+npm run bridge:local -- --codex-home /absolute/path/to/codex-home
+```
+
+The bridge invokes `codex app-server` for the read-only
+`account/rateLimits/read` request. The CLI may contact Codex services, so this
+removes the browser-page dependency but is not an offline mode. It does not
+install Codex CLI, scan for an installation, or launch a persistent service.
+Only an absolute, explicitly provided Codex Home is accepted. The default
+`codex` executable must be on the operator's PATH; `--codex-bin` allows an
+explicit executable path.
+
+Under Provider display settings, enable Codex Personal, enter the printed
+loopback URL and one-time code, and pair. Basic and Advanced users can use this
+dedicated Codex control; arbitrary Custom Source controls remain
+Developer/Debug-only. Pairing checks that a Codex quota can actually be read,
+then defaults Codex Personal to **Local only**. With no pairing, existing
+browser sync is unchanged. Select **Browser** to return to the browser source,
+or **Local quota + browser history** to allow browser-only history when the
+account identity matches on both sides. Local-only never issues Codex browser
+requests and never silently falls back after a local error. Switching source,
+changing pairing, or disconnecting clears the previous Codex snapshot and
+invalidates in-flight sync results.
+
+The authenticated `GET /v1/codex/summary` response uses
+`ai-usage-dashboard.codex-local.v1` and includes captured time, quota windows,
+reset times, optional banked reset count, a pairing-scoped HMAC account digest,
+and bounded estimate summaries. It never returns the raw account id, token,
+prompt, session text, model log, or file path. A missing reset count stays
+**unknown**, distinct from a real zero. The raw Codex Home and pairing secret
+remain local and outside Chrome Sync and configuration backups.
+
+### Observed API Equivalent
+
+After pairing, the bridge starts at the current end of existing rollout JSONL
+files and reads only newly appended complete lines from the explicitly chosen
+Codex Home. It reads an existing file's first metadata line only to verify its
+creator account; no earlier usage is counted. New session and subagent files
+are counted separately only when their creator account matches the current
+quota account. Replayed fork history and unverified account records are not
+priced. Cumulative `token_count` deltas prevent duplicate rate-limit-only
+events from being charged twice. The reference price table is pinned to the [official API
+pricing](https://developers.openai.com/api/docs/pricing) reviewed on
+2026-09-24. Unrecognized models, tiers, cache categories, incomplete records,
+oversized reads, account changes, and quota resets break the learning sample.
+There is no historical backfill; Companion restart and re-pairing restart
+learning.
+
+Only after at least five percentage points of quota movement with complete
+priced local calls does the extension show an estimate. Observed priced API
+cost divided by the quota movement estimates a full 100% window, then that
+full-window estimate is multiplied by the current used percentage. The detail
+view shows a rounding range, priced-observation sample count, price date, and
+Low or Medium confidence (never High). This is an **API equivalent**, not a
+subscription bill, cash value, or balance. Work on other devices or otherwise
+unobserved calls can change the actual quota without being priced locally;
+the displayed estimate is therefore conditional and may be unavailable.
 
 ## Experimental CodexBar Dashboard Connection
 
@@ -94,9 +154,13 @@ Supported options:
 - `--host 127.0.0.1`: IPv4 loopback, the default
 - `--host ::1`: IPv6 loopback
 - `--port <1-65535>`: fixed local port, default `47831`
+- `--codex-home <absolute-directory>`: opt-in Codex CLI state directory;
+  permits starting without any Custom Source file
+- `--codex-bin <executable>`: manually selected Codex CLI executable
 
-There is deliberately no directory scan, command, executable, browser-profile,
-cookie, Keychain, or environment-discovery option.
+Without `--codex-home`, there is no directory scan, CLI invocation,
+browser-profile, cookie, Keychain, or environment discovery. Codex mode reads
+only session rollout files under the explicitly provided home.
 
 ## ccusage Daily Export (Experimental)
 
@@ -166,6 +230,7 @@ Endpoints:
 | `GET` | `/v1/health` | bearer token | bounded health and source count |
 | `GET` | `/v1/sources` | bearer token | bounded source index |
 | `GET` | `/v1/sources/<custom:id>` | bearer token | one validated `custom-source.v1` payload |
+| `GET` | `/v1/codex/summary` | bearer token | bounded Codex quota and observed equivalent, only with `--codex-home` |
 | `POST` | `/v1/revoke` | bearer token | invalidate token and rotate pairing code |
 
 The pairing code and bearer token are never accepted in a URL or query string.
@@ -237,8 +302,9 @@ metadata and fixed status codes. HTTP redirects and query credentials are
 rejected; streamed responses are bounded even without `Content-Length`.
 
 The reference bridge does not upload files. It reads only paths explicitly
-provided on its command line and returns validated data over loopback. Users
-remain responsible for the contents and permissions of those files.
+provided on its command line, plus Codex session logs under an explicitly
+selected Codex Home in Codex mode, and returns validated data over loopback.
+Users remain responsible for the contents and permissions of those files.
 
 ## External Companion Adapters
 

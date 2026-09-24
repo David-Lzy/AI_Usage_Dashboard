@@ -88,6 +88,7 @@ import { normalizeCursorUsageBilling } from "./cursor-usage-billing";
 import { normalizeApiGatewayMeteringSnapshot } from "./api-gateway-metering";
 import { normalizeSnapshotFreshness } from "./snapshot-freshness";
 import { normalizeResetTimeDisplayMode } from "./reset-time-display";
+import { normalizeCodexLocalTelemetry } from "./codex-local-telemetry";
 import {
   normalizeProviderServiceStatuses,
   normalizeProviderServiceStatusVisibilityBySurface,
@@ -247,10 +248,13 @@ export function normalizeAppState(state: AppState): AppState {
     const apiGatewayMetering = normalizeApiGatewayMeteringSnapshot(
       provider.apiGatewayMetering,
     );
+    const codexLocal = provider.providerId === "codex-personal-page"
+      ? normalizeCodexLocalTelemetry(provider.codexLocal) : null;
     const {
       usageHistory: _usageHistory,
       cursorUsage: _cursorUsage,
       apiGatewayMetering: _apiGatewayMetering,
+      codexLocal: _codexLocal,
       ...providerWithoutUsageExtensions
     } = provider;
 
@@ -259,6 +263,7 @@ export function normalizeAppState(state: AppState): AppState {
       ...(usageHistory ? { usageHistory } : {}),
       ...(cursorUsage ? { cursorUsage } : {}),
       ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
+      ...(codexLocal ? { codexLocal } : {}),
     });
   });
 

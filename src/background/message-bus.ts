@@ -159,6 +159,9 @@ export async function handleAppMessage(
     case "app:local-companion": {
       if (isStoreScreenshotRuntimeLocked) return { ok: true, state: await seedAppStateIfEmpty() };
       const result = await localCompanionController.handle(message);
+      if (!result.localCompanion.failure && ["pair-codex", "set-codex-mode", "disconnect-codex"].includes(message.action)) {
+        void runSyncEngine({ trigger: "manual", providerId: "codex-personal-page" }).catch(() => undefined);
+      }
       if (result.localCompanion.failure) {
         const copy = buildLocalCompanionLocalizedCopy(createRuntimeI18n(result.state.settings.locale).resolvedLocale);
         return { ok: true, ...result, notice: { tone: "error", title: copy.title, message: copy.failures[result.localCompanion.failure] } };

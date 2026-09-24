@@ -192,7 +192,8 @@ export function buildProviderViewModel(
   setting: ProviderSetting | null,
   sourceDisplayCopy?: ProviderSourceDisplayCopy,
 ): ProviderViewModel {
-  const permissionStatus = setting?.status ?? "missing";
+  const permissionStatus = provider.syncSource === "local_companion"
+    ? "granted" : setting?.status ?? "missing";
   const fallbackDefinition = getProviderDefinition(provider.providerId);
   const sourceDisplay = buildProviderSourceDisplay(
     provider,
@@ -214,7 +215,7 @@ export function buildProviderViewModel(
     sourceDisplayCopy,
   );
   const openableSessionPageUrl =
-    sourceDisplay.sessionPagePlan?.rolloutStage === "shipped"
+    provider.syncSource !== "local_companion" && sourceDisplay.sessionPagePlan?.rolloutStage === "shipped"
       ? getOpenableRouteHint(sourceDisplay.sessionPagePlan.routeHints)
       : null;
 

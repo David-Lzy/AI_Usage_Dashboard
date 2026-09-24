@@ -163,7 +163,7 @@ export function getProviderSourceKinds(
   providerId: ProviderId,
 ): ProviderSourceKind[] {
   return getProviderSourceBlueprint(providerId).sources
-    .filter((source) => source.rolloutStage === "shipped")
+    .filter((source) => source.rolloutStage === "shipped" && source.kind !== "local_companion")
     .sort((left, right) => left.priority - right.priority)
     .map((source) => source.kind);
 }
@@ -207,6 +207,8 @@ export function inferCurrentSourceKind(
   if (provider.providerId === "gemini-policy") {
     return "policy_only";
   }
+
+  if (provider.syncSource === "local_companion") return "local_companion";
 
   return provider.syncSource === "page_parse" ? "session_page" : "official_api";
 }
@@ -548,7 +550,7 @@ function classifySourceState(
 ): ClassifiedSourceState {
   const warningReason = provider.warningReason ?? "";
   const lowerReason = lower(warningReason);
-  const requiresHostAccess = setting.hostOrigins.length > 0;
+  const requiresHostAccess = currentPlan.kind !== "local_companion" && setting.hostOrigins.length > 0;
   const typedSourceState = classifySourceStateFromWarningDiagnostic(
     provider,
     currentPlan,
@@ -711,7 +713,9 @@ export function buildProviderSourceDisplay(
   );
   const cookiePolicy = buildCookiePolicyDisplay(copy);
   const manualCookieImport = buildManualCookieImportDisplay(copy);
-  const hostAccess = buildHostAccessDisplay(setting, copy);
+  const hostAccess = currentPlan.kind === "local_companion"
+    ? { label: copy.hostAccess.notRequiredLabel, detail: copy.hostAccess.notRequiredDetail }
+    : buildHostAccessDisplay(setting, copy);
 
   return {
     currentKind,

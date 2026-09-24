@@ -38,6 +38,7 @@ export type CodexCredentialRequestOptions = {
 
 export type CodexCredentialBroker = {
   clearCredential: () => Promise<void>;
+  peekCredential?: () => Promise<CodexSessionCredential | null>;
   getCredential: (
     options?: CodexCredentialRequestOptions,
   ) => Promise<CodexCredentialResult>;
@@ -243,7 +244,7 @@ export function createCodexCredentialBroker(
     return { ok: true, credential };
   }
 
-  return { clearCredential, getCredential, setManualCredential };
+  return { clearCredential, getCredential, peekCredential: readCredential, setManualCredential };
 }
 
 export const codexCredentialBroker = createCodexCredentialBroker();

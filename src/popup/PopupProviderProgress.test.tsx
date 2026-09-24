@@ -10,6 +10,7 @@ import { SAMPLE_APP_STATE } from "../shared/demo-state";
 import { createDefaultProgressItemsBySurface } from "../shared/display-preferences";
 import type { RuntimeI18n } from "../shared/i18n";
 import type { ProviderViewModel } from "../shared/provider-view-models";
+import { CodexEstimateStrip } from "../shared/components/CodexEstimateStrip";
 import { PopupProviderProgress } from "./PopupProviderProgress";
 
 const testI18n = {
@@ -71,6 +72,75 @@ function renderPopupProviderProgress(
 }
 
 describe("PopupProviderProgress", () => {
+  it("shows priced local equivalents and distinguishes zero reset cards from unknown", () => {
+    const local = createProvider({
+      syncSource: "local_companion", syncStatus: "ok", lastSuccessAt: new Date().toISOString(),
+      codexLocal: { availableResetCount: 0, accountVerified: true, estimates: [{ windowId: "primary", status: "ready", fullUsd: 200, fullLowerUsd: 190, fullUpperUsd: 210, currentUsd: 80, sampleCount: 3, confidence: "medium", priceDate: "2026-09-24" }] },
+      usageWindows: [{ label: "Weekly limit", normalizedLabel: "Weekly limit", kind: "weekly", modelLabel: null, quotaUnit: "percent", used: 40, remaining: 60, total: 100, resetAt: "2026-09-30T10:00:00.000Z", resetLabel: null }],
+    });
+    const html = renderPopupProviderProgress(local);
+    expect(html).toContain("codex-progress-group--single-ring");
+    expect(html).toContain('data-codex-estimate-status="ready"');
+    expect(html).toContain("$80.00");
+    expect(html).toContain("$200.00");
+    expect(html).toContain("Available reset cards");
+    expect(html).toContain(">0</strong>");
+    expect(renderPopupProviderProgress({ ...local, codexLocal: { ...local.codexLocal!, availableResetCount: null } })).toContain("Unknown");
+  });
+
+  it("keeps dual-window estimates below the rings and suppresses stale prices", () => {
+    const local = createProvider({
+      syncSource: "local_companion", syncStatus: "error", lastSuccessAt: "2026-09-20T10:00:00.000Z",
+      codexLocal: { availableResetCount: 2, accountVerified: true, estimates: [{ windowId: "secondary", status: "ready", fullUsd: 100, fullLowerUsd: 90, fullUpperUsd: 110, currentUsd: 20, sampleCount: 2, confidence: "medium", priceDate: "2026-09-24" }] },
+      usageWindows: [
+        { label: "5-hour limit", normalizedLabel: "5-hour limit", kind: "rolling_5h", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: "2026-09-24T15:00:00.000Z", resetLabel: null },
+        { label: "Weekly limit", normalizedLabel: "Weekly limit", kind: "weekly", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: "2026-09-30T10:00:00.000Z", resetLabel: null },
+      ],
+    });
+    const html = renderPopupProviderProgress(local);
+    expect(html).toContain('class="codex-progress-group"');
+    expect(html).not.toContain("codex-progress-group--single-ring");
+    expect(html).toContain("Disconnected");
+    expect(html).not.toContain("$100.00");
+    const stale = renderPopupProviderProgress({ ...local, syncStatus: "ok" });
+    expect(stale).toContain('data-codex-estimate-status="stale"');
+    expect(stale).toContain("Stale");
+  });
+  it("labels unknown quota windows distinctly and exposes the selected detail mode", () => {
+    const window = { label: "Usage limit", normalizedLabel: "Usage limit", kind: "unknown" as const, modelLabel: null, quotaUnit: "percent" as const, used: 20, remaining: 80, total: 100, resetAt: null, resetLabel: null };
+    const provider = createProvider({
+      syncSource: "local_companion", syncStatus: "ok", lastSuccessAt: new Date().toISOString(),
+      usageWindows: [window, { ...window }],
+      codexLocal: { availableResetCount: 0, accountVerified: true, estimates: [
+        { windowId: "primary", status: "ready", fullUsd: 100, fullLowerUsd: 90, fullUpperUsd: 110, currentUsd: 20, sampleCount: 1, confidence: "low", priceDate: "2026-09-24" },
+        { windowId: "secondary", status: "learning", fullUsd: null, fullLowerUsd: null, fullUpperUsd: null, currentUsd: null, sampleCount: 0, confidence: null, priceDate: null },
+      ] },
+    });
+    const html = renderToStaticMarkup(<CodexEstimateStrip provider={provider} i18n={testI18n} detail />);
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain("Window 1");
+    expect(html).toContain("Window 2");
+    expect(html).toContain("Confidence: Low");
+  });
+  it("uses the single-ring layout when one of two local windows is hidden", () => {
+    const provider = createProvider({
+      syncSource: "local_companion", syncStatus: "ok", lastSuccessAt: new Date().toISOString(),
+      usageWindows: [
+        { label: "5-hour limit", normalizedLabel: "5-hour limit", kind: "rolling_5h", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: null, resetLabel: null },
+        { label: "Weekly limit", normalizedLabel: "Weekly limit", kind: "weekly", modelLabel: null, quotaUnit: "percent", used: 40, remaining: 60, total: 100, resetAt: null, resetLabel: null },
+      ],
+      codexLocal: { availableResetCount: 0, accountVerified: true, estimates: [
+        { windowId: "primary", status: "learning", fullUsd: null, fullLowerUsd: null, fullUpperUsd: null, currentUsd: null, sampleCount: 0, confidence: null, priceDate: null },
+        { windowId: "secondary", status: "ready", fullUsd: 100, fullLowerUsd: 90, fullUpperUsd: 110, currentUsd: 40, sampleCount: 3, confidence: "medium", priceDate: "2026-09-24" },
+      ] },
+    });
+    const html = renderPopupProviderProgress(provider, {
+      popup: { "codex-personal-page": [{ id: "window:rolling_5h:5-hour%20limit::0", visible: false }] },
+      sidebar: {}, fullPage: {},
+    });
+    expect(html).toContain("codex-progress-group--single-ring");
+    expect(html).not.toContain("5-hour limit");
+  });
   it("renders structured usage windows before single-value progress", () => {
     const html = renderPopupProviderProgress(
       createProvider({

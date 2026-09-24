@@ -1,6 +1,6 @@
 # Codex Provider Note
 
-Date: 2026-07-14
+Date: 2026-09-24
 
 Process rule:
 
@@ -18,6 +18,23 @@ Status note:
 
 - this provider note should track the current selected source path, support boundary, and official-source basis for Codex
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
+
+## Current Personal Source Extension (Unreleased)
+
+The original Enterprise Analytics MVP decision below is historical context,
+not the current complete product scope. Codex Personal already supports the
+signed-in browser usage-page path. The 2026-09-24 work branch adds an opt-in
+same-machine Companion path using Codex CLI `account/rateLimits/read` for
+quota windows, reset times, and official available banked reset cards. Without
+pairing, browser behavior is unchanged. Local-only never refreshes the browser
+page; hybrid may add browser history only when both account identities match.
+
+The local bridge does not treat API-equivalent estimates as paid balance.
+Only new, completely priced session-log token deltas and at least five points
+of observed quota movement can produce an estimate. Unknown prices, changed
+accounts, resets, and read gaps restart learning. See the [Local Companion
+Bridge](../Product/Local_Companion_Bridge.md) for the full contract. This
+feature is **not** in the current Chrome Web Store package.
 
 ## 1. Decision
 

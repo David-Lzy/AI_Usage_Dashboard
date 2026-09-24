@@ -3,6 +3,7 @@ import { normalizeLocalCompanionBearerToken, normalizeLocalCompanionBridgeBaseUr
 import { getSafeLocalStorage, getSafeStorageItem, setSafeStorageItem, removeSafeStorageItem } from "./local-storage";
 import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
 import type { LocalCompanionSettingsStatus } from "./local-companion-settings";
+import { normalizeCodexLocalSourceMode, type CodexLocalSourceMode } from "./codex-local-bridge";
 
 // A protocol-specific local key avoids overwriting a CodexBar token on the same origin.
 export const LOCAL_COMPANION_PAIRING_KEY = "aiUsageDashboard.localCompanionPairing.v1";
@@ -12,6 +13,8 @@ export type LocalCompanionPairing = {
   status: Exclude<LocalCompanionSettingsStatus, "disconnected">;
   checkedAt: string | null;
   sources: LocalCompanionBridgeSourceIndexEntry[];
+  codexMode?: CodexLocalSourceMode;
+  codexAvailable?: boolean;
 };
 let memory: LocalCompanionPairing | null = null;
 
@@ -27,7 +30,7 @@ function normalize(value: unknown): LocalCompanionPairing | null {
     return [{ sourceId: entry.sourceId, label: entry.label }];
   });
   if (sources.length !== raw.sources.length) return null;
-  return { baseUrl: url.value, token: normalizeLocalCompanionBearerToken(raw.token), status: raw.status as LocalCompanionPairing["status"], checkedAt: normalizeSnapshotTimestamp(raw.checkedAt), sources };
+  return { baseUrl: url.value, token: normalizeLocalCompanionBearerToken(raw.token), status: raw.status as LocalCompanionPairing["status"], checkedAt: normalizeSnapshotTimestamp(raw.checkedAt), sources, codexMode: normalizeCodexLocalSourceMode(raw.codexMode), codexAvailable: raw.codexAvailable === true };
 }
 
 export async function readLocalCompanionPairing(): Promise<LocalCompanionPairing | null> {

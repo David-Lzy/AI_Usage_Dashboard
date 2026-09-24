@@ -170,9 +170,9 @@ isolated local metadata, snapshot, and secret.
 The repository includes an optional experimental Node reference process for
 serving explicitly selected `custom-source.v1` JSON files over loopback. The
 extension does not install, start, discover, or update this process. The
-reference process binds only to `127.0.0.1` or `::1`; it does not upload input
-files and does not scan directories, browser profiles, credentials, or local
-tools.
+reference process binds only to `127.0.0.1` or `::1` and does not upload input
+files. Generic Custom Source mode does not scan directories, browser profiles,
+credentials, or local tools.
 
 Pairing uses a one-time code and issues a revocable bearer token. The extension
 stores that token only in extension-managed local secret storage. It is not
@@ -190,6 +190,24 @@ runs ccusage nor scans for its files. Generic tokens use a protocol-specific
 local key, separate from CodexBar and excluded from all exports. Source refresh
 is manual and selected-source only; service restart expires pairing. Disconnect
 removes the local token and managed snapshots even if the service is offline.
+
+The unreleased Codex mode is a separate opt-in exception: the operator provides
+an absolute Codex Home and manually starts the Companion on the browser's
+machine. It invokes the installed Codex CLI's read-only app-server quota
+request and incrementally reads newly appended rollout JSONL records under the
+specified home to compute an optional API-equivalent estimate. For existing
+files it reads only the first metadata line to check account ownership, not
+historical usage. Raw prompts, responses, logs, paths and direct account ids
+are not sent to the extension.
+The bridge returns only quota windows, capture time, an optional reset-card
+count, a pairing-scoped account digest, and bounded estimate summaries. The
+extension stores these summaries in its local Codex snapshot; its pairing
+token and source mode remain in extension-local secret storage, outside Chrome
+Sync and configuration backup. Companion restart or re-pairing discards the
+in-memory observation baseline. Local-only mode never requests the Codex
+browser page, although Codex CLI may contact Codex services for a fresh quota.
+The estimate is not a subscription bill or balance and is suppressed when
+pricing or account continuity cannot be established.
 
 Settings exposes an experimental, opt-in adapter for the versioned CodexBar
 dashboard snapshot. CodexBar is separately installed third-party local

@@ -25,6 +25,7 @@ import {
 } from "../reset-time-display";
 import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-copy";
 import { UsageProgress } from "./UsageProgress";
+import { CodexEstimateStrip } from "./CodexEstimateStrip";
 
 type ProviderProgressItemListProps = {
   density?: "compact" | "detail";
@@ -158,7 +159,7 @@ export function ProviderProgressItemList({
       ? " provider-progress-item-list--single-circular"
       : "");
 
-  return (
+  const list = (
     <div
       className={listClassName}
       data-single-circular-progress={
@@ -236,6 +237,15 @@ export function ProviderProgressItemList({
           </div>
         );
       })}
+    </div>
+  );
+  if (provider.providerId !== "codex-personal-page" || provider.syncSource !== "local_companion" || !provider.codexLocal) return list;
+  return (
+    <div className={`codex-progress-group${hasSingleCircularProgressItem ? " codex-progress-group--single-ring" : ""}`}>
+      <div className="codex-progress-group__inner">
+        {list}
+        <CodexEstimateStrip provider={provider} i18n={i18n} detail={surface === "fullPage"} />
+      </div>
     </div>
   );
 }
