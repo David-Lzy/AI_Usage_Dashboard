@@ -16,9 +16,11 @@ Status note:
 - AI Usage Dashboard has a live Chrome Web Store listing
 - a direct public-page fetch displayed `0.2.0-rc.14` on 2026-09-23 UTC;
   authenticated Store API status reports manifest `0.2.0.14` as `PUBLISHED`
-  at 100%
-- GitHub Release `v0.2.0-rc.14` provides verified browser-specific packages
-  and checksums; its Chrome manifest is `0.2.0.14`
+  at 100% again on 2026-09-24 UTC
+- GitHub Release `v0.2.1` is stable and provides verified browser-specific
+  packages and checksums; its Chrome manifest is `0.2.1.0`
+- 0.2.1 has not been submitted to the Chrome Web Store at this checkpoint;
+  Store listing metadata and images must be updated in the Developer Dashboard
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -31,7 +33,14 @@ Status note:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
 - A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
   `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
-  manifest `0.2.0.14` as `PUBLISHED` at 100%.
+  manifest `0.2.0.14` as `PUBLISHED` at 100%; a fresh API check on
+  2026-09-24 UTC reported the same published revision.
+- [GitHub Release v0.2.1](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.1)
+  passed its tag workflow on 2026-09-24 UTC. The Chrome and Firefox assets were
+  downloaded and verified against the release's `SHA256SUMS.txt`. The Store
+  handoff job skipped because repository Store variables are not configured.
+- The 0.2.1 Store package and image set are prepared separately. API status
+  still lists only RC14 as published; no 0.2.1 review submission is claimed.
 - [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
   were downloaded and verified against its published `SHA256SUMS.txt`.
@@ -76,8 +85,8 @@ These dated observations explain the handoff history, not the current listing:
   optional Store upload because repository credentials were unavailable. The
   verified local official API fallback then uploaded manifest `0.2.0.13` and
   submitted it for review.
-- The maintained listing-copy sources now include bounded Sub2API-compatible
-  aggregate metering. Applying those text changes to the live Developer
+- Maintained listing-copy sources include bounded Sub2API-compatible aggregate
+  metering and the 0.2.1 update; applying those changes to the live Developer
   Dashboard remains a separate metadata operation.
 - Chrome Web Store API status observed on 2026-07-29 reports manifest
   `0.2.0.12` as `PUBLISHED` at 100%.

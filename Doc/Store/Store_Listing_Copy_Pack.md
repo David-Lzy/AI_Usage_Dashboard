@@ -16,7 +16,8 @@ Freshness model:
 
 Status note:
 
-- this is the maintained English source copy pack for the current Chrome Web Store listing
+- this is the maintained English source copy pack for the 0.2.1 Store update;
+  source text is not proof that the live listing has been changed
 - primary upload locale copy is maintained in the product-description files in this directory
 - keep provider/product names unchanged and do not strengthen partial provider support claims
 

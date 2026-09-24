@@ -15,6 +15,9 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
+The 0.2.1 GitHub release is available now. The Store may still serve RC14
+until its separate update review completes.
+
 ![AI Usage Dashboard popup and Settings surfaces](./Doc/Assets/ai-usage-dashboard-readme-hero.png)
 
 _Current extension UI with illustrative QA values. No real accounts or credentials are included._
@@ -206,14 +209,13 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   2026-09-23 UTC. The authenticated Store API reports manifest `0.2.0.14`
   as `PUBLISHED` at 100%.
 - Source package version: `0.2.1`; Chrome manifest version: `0.2.1.0`.
-- This work branch is an unpublished 0.2.1 candidate. The Store and latest
-  GitHub Release remain RC14 until the release and Store review complete.
-- GitHub Release [`v0.2.0-rc.14`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
-  provides verified Chrome and Firefox packages plus `SHA256SUMS.txt`.
-- RC14 is the verified Store baseline. The 0.2.1 candidate adds the new
+- GitHub Release [`v0.2.1`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.1)
+  is stable and provides verified Chrome and unsigned Firefox local-beta
+  packages plus `SHA256SUMS.txt`. Its tag workflow passed on 2026-09-24 UTC.
+- RC14 remains the verified Store baseline. The 0.2.1 release adds the new
   Settings organization, diagnostics, notifications, comparison, export, and
-  optional Codex local bridge; these are not Store features until the new
-  package is published.
+  optional Codex local bridge; these are not Store features until the 0.2.1
+  package is separately published there.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 
