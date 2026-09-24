@@ -8,6 +8,27 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+@container settings-shell (min-width: 920px) {
+  .status-card.settings-usage-notifications {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .settings-usage-notifications > .section-label,
+  .settings-usage-notifications > .configuration-backup-controls,
+  .settings-usage-notifications > .quota-notification-settings--embedded > .quota-notification-settings__body,
+  .settings-usage-notifications > .quota-notification-settings--embedded > .quota-notification-settings__status {
+    grid-column: 1 / -1;
+  }
+
+  .settings-usage-notifications > .adaptive-control-grid {
+    grid-column: 1 / 3;
+  }
+
+  .settings-usage-notifications > .quota-notification-settings--embedded > .material-select {
+    grid-column: 3;
+  }
+}
+
 .settings-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

@@ -157,6 +157,43 @@ try {
   );
   assert.equal(await inAppThreshold.inputValue(), "60");
   assert.equal(await notificationThreshold.inputValue(), "90");
+  const expandedLayout = await usage.evaluate((section) => {
+    const sync = section.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
+    const warning = section.querySelector('[data-settings-custom-number-field="warning-threshold"]')?.getBoundingClientRect();
+    const mode = section.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    const details = section.querySelector(".quota-notification-settings__body")?.getBoundingClientRect();
+    return sync && warning && mode && details
+      ? { tops: [sync.top, warning.top, mode.top], bottoms: [sync.bottom, warning.bottom, mode.bottom],
+          detailTop: details.top, detailLeft: details.left, detailWidth: details.width, syncLeft: sync.left, modeWidth: mode.width }
+      : null;
+  });
+  assert(expandedLayout, "Notification controls or expanded details are missing");
+  assert(Math.max(...expandedLayout.tops) - Math.min(...expandedLayout.tops) < 4, JSON.stringify(expandedLayout));
+  assert(expandedLayout.detailTop >= Math.max(...expandedLayout.bottoms), JSON.stringify(expandedLayout));
+  assert(Math.abs(expandedLayout.detailLeft - expandedLayout.syncLeft) < 4, JSON.stringify(expandedLayout));
+  assert(expandedLayout.detailWidth > expandedLayout.modeWidth * 2, JSON.stringify(expandedLayout));
+  await page.setViewportSize({ width: 980, height: 1200 });
+  await page.waitForFunction(() => {
+    const section = document.querySelector("#settings-usage-notifications");
+    const sync = section?.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
+    const mode = section?.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    const details = section?.querySelector(".quota-notification-settings__body")?.getBoundingClientRect();
+    return Boolean(sync && mode && details && Math.abs(sync.top - mode.top) < 4 && details.top >= mode.bottom);
+  });
+  await page.setViewportSize({ width: 900, height: 1200 });
+  await page.waitForFunction(() => {
+    const section = document.querySelector("#settings-usage-notifications");
+    const warning = section?.querySelector('[data-settings-custom-number-field="warning-threshold"]')?.getBoundingClientRect();
+    const mode = section?.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    return Boolean(warning && mode && mode.top > warning.top + 4);
+  });
+  await page.setViewportSize({ width: 1280, height: 1200 });
+  await page.waitForFunction(() => {
+    const section = document.querySelector("#settings-usage-notifications");
+    const sync = section?.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
+    const mode = section?.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    return Boolean(sync && mode && Math.abs(sync.top - mode.top) < 4);
+  });
 
   for (const sectionId of ["settings-appearance", "settings-usage-notifications"]) {
     const label = sectionId === "settings-appearance"
@@ -199,6 +236,17 @@ try {
     () => window.__settingsSplitQa.notificationPreferences.enabled === false,
   );
   assert.equal(await usage.locator(".quota-notification-settings__account").count(), 0);
+  const collapsedLayout = await usage.evaluate((section) => {
+    const sync = section.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
+    const warning = section.querySelector('[data-settings-custom-number-field="warning-threshold"]')?.getBoundingClientRect();
+    const mode = section.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    return sync && warning && mode
+      ? { tops: [sync.top, warning.top, mode.top], widths: [sync.width, warning.width, mode.width] }
+      : null;
+  });
+  assert(collapsedLayout, "Notification mode dropdown is missing");
+  assert(Math.max(...collapsedLayout.tops) - Math.min(...collapsedLayout.tops) < 4, JSON.stringify(collapsedLayout));
+  assert(Math.max(...collapsedLayout.widths) - Math.min(...collapsedLayout.widths) < 4, JSON.stringify(collapsedLayout));
   await page.evaluate(() => {
     document.activeElement?.blur();
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -225,6 +273,13 @@ try {
     `${server.baseUrl}/src/sidepanel/index.html?app-locale=ar&app-dir=rtl#settings`,
   );
   await rtlPage.locator("#settings-usage-notifications").waitFor();
+  const narrowLayout = await rtlPage.locator("#settings-usage-notifications").evaluate((section) => {
+    const sync = section.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
+    const warning = section.querySelector('[data-settings-custom-number-field="warning-threshold"]')?.getBoundingClientRect();
+    const mode = section.querySelector('[data-settings-material-select="quota-notification-mode"]')?.getBoundingClientRect();
+    return sync && warning && mode ? [sync.top, warning.top, mode.top] : null;
+  });
+  assert(narrowLayout && narrowLayout[0] < narrowLayout[1] && narrowLayout[1] < narrowLayout[2], JSON.stringify(narrowLayout));
   const rtlNavButtons = rtlPage.locator(".settings-section-nav .settings-nav-chip");
   await rtlNavButtons.last().focus();
   await rtlPage.keyboard.press("Enter");

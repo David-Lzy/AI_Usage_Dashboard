@@ -4,12 +4,7 @@
 }
 
 .quota-notification-settings--embedded {
-  margin-block-start: var(--app-space-3);
-}
-
-.quota-notification-settings--embedded > .material-select {
-  inline-size: calc((100% - var(--app-space-3)) / 2);
-  max-inline-size: 100%;
+  display: contents;
 }
 
 .quota-notification-settings__body {
@@ -174,10 +169,6 @@
 }
 
 @media (max-width: 760px) {
-  .quota-notification-settings--embedded > .material-select {
-    inline-size: 100%;
-  }
-
   .quota-notification-settings__body {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -210,7 +210,10 @@ the in-app warning threshold, quota notification controls, and configuration
 backup/Chrome Sync. Appearance contains accent color, motion, Popup Provider
 browsing, and More UI settings. The existing `settings-appearance` deep link
 continues to target Appearance; `settings-usage-notifications` targets the new
-module. The two thresholds are independent, both expressed as percent used:
+module. On wide Settings surfaces, sync interval, in-app warning threshold,
+and notification mode share one row; narrow surfaces stack them, and expanded
+notification details occupy the following row. The two thresholds are
+independent, both expressed as percent used:
 the in-app threshold affects page and toolbar warning state, whereas the
 notification threshold determines when system notifications can fire. Moving
 the controls does not migrate or reset either stored value.
