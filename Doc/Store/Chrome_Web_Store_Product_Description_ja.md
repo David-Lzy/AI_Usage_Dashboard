@@ -1,6 +1,6 @@
-AI Usage Dashboard は、AI コーディングのクォータ、設定ブロック、同期状態をまとめて見られる小さなコックピットです。
+AI コーディングのクォータを、作業が止まる前に確認。AI Usage Dashboard は、source が公開する制限、リセット時刻、支出、同期状態を Chrome 拡張機能にまとめます。
 
-Chrome ツールバーの popup でまずはさっと確認。詳しく見たいときは side panel や full-page dashboard を開けます。タブ探しを減らして、コードを書く時間を少し増やします。(^_^)
+ツールバーの popup ですばやく確認し、詳細は side panel や full-page dashboard で確認できます。設定の先頭に Quick Setup があるため、使う source だけを接続できます。
 
 Codex、Cursor、Claude Personal、Claude Code の組織向け分析、Gemini Code Assist、ユーザー設定の Sub2API 互換ゲートウェイなどのワークフローを対象に、各 source が正確な値、部分的な情報、使用ウィンドウ、policy-only、または利用不可のどれなのかを明示します。
 
@@ -12,6 +12,10 @@ cookie や生のブラウザー auth header の貼り付けは求めません。
 • provider が公開している場合の残り使用ウィンドウとリセット時刻
 • source 種別：API、ログイン済みページ、部分的なページ情報、documented policy、または利用不可
 • snapshot の鮮度と同期状態
+• 任意のクォータ/リセット通知。アプリ内警告とシステム通知のしきい値は別設定
+• 期間別集計、集計データの安全な CSV 出力、匿名化された診断レポート
+• 期間・単位・通貨が比較可能な保存済み Sub2API デプロイの比較
+• 同じ端末で手動ペアリングする任意の Codex CLI Companion。条件付きの API 相当額推定は請求額や残高ではありません
 • toolbar badge と toolbar icon の動作
 • 独自のクォータ endpoint 向けのカスタム HTTP/HTTPS JSON source
 • 設定した Sub2API 互換ゲートウェイが返す集計残高、支出、リクエスト、Token、モデル、傾向、制限
@@ -22,7 +26,7 @@ cookie や生のブラウザー auth header の貼り付けは求めません。
 
 AI コーディングアシスタントは便利ですが、クォータページやアカウント状態は迷子になりがちです。さっきまで動いていたのに、次の瞬間にはクォータ枠、権限不足、期限切れのログイン状態、または provider のポリシー変更に引っかかることがあります。
 
-AI Usage Dashboard は、その状態をひとつの落ち着いた場所にまとめます。まずは軽く確認して、本当に必要なときだけ詳細へ。小さなダッシュボードであって、もうひとつ管理するものを増やすためのものではありません。✨
+AI Usage Dashboard は状態を見やすくまとめ、未知の値や古いキャッシュを新しい source の値と区別します。
 
 Provider coverage は正直に表示します
 
@@ -50,6 +54,7 @@ AI Usage Dashboard は保守的な設計です：
 • ローカル画像から gradient を生成するとき、画像はブラウザー内で処理され、元の画像 bytes はアップロードも保存もされません
 • packaged script のみを実行し、remote code は読み込みません
 • 設定とキャッシュデータは、明示的に export しない限り Chrome プロファイルに保存されます
+• Codex Companion は同じ端末で手動起動・ペアリングしたときだけ動作し、拡張機能がインストールや起動を行うことはありません
 
 これは OpenAI、Cursor、Anthropic、Google、JetBrains、その他 provider の公式製品ではありません。
 

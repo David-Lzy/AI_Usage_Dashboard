@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="440" height="280" viewBox="0 0 440 280">
+  <rect width="440" height="280" fill="#151b25"/>
+  <rect x="0" y="274" width="440" height="6" fill="#46cae6"/>
+  <image x="24" y="49" width="182" height="182" xlink:href="ai-usage-dashboard-icon-source.png"/>
+  <text x="219" y="123" fill="#f4f7fc" font-family="Inter, sans-serif" font-size="27" font-weight="700">AI Usage</text>
+  <text x="219" y="157" fill="#f4f7fc" font-family="Inter, sans-serif" font-size="27" font-weight="700">Dashboard</text>
+  <rect x="220" y="185" width="46" height="5" rx="2.5" fill="#46cae6"/>
+  <rect x="272" y="185" width="23" height="5" rx="2.5" fill="#5594fa"/>
+  <rect x="301" y="185" width="14" height="5" rx="2.5" fill="#9b72ee"/>
+</svg>

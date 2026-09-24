@@ -158,7 +158,7 @@ background implementation, which would create an independent write queue. The
 in-page fallback exists only for ordinary web previews, not Chrome or Firefox
 extension pages.
 
-### Capture Freshness (Unreleased Work Branch)
+### Capture Freshness (0.2.1 Source)
 
 Provider snapshots store nullable ISO `lastAttemptAt` and `lastSuccessAt`
 separately. `syncedAt` remains a legacy compatibility label, not evidence of
@@ -174,7 +174,7 @@ responses and hydration retries. Each history module's detail caption describes
 that module, not a newer sibling. Cached or unknown-age data is not made current
 by a failed refresh or by another module's successful request.
 
-### Support Diagnostics (Unreleased Work Branch)
+### Support Diagnostics (0.2.1 Source)
 
 Debug Settings exposes a sanitized report preview and explicit JSON download in
 the existing source diagnostics section. It covers configured built-in provider
@@ -187,7 +187,7 @@ Raw error text, credentials, URLs, identities and usage values are excluded.
 Preview captures one immutable report; subsequent sync does not change the file
 being reviewed. Download is local and user-initiated, with no upload service.
 
-### Deployment Comparison (Unreleased Work Branch)
+### Deployment Comparison (0.2.1 Source)
 
 Full-page Sub2API detail can inspect saved deployments for an inclusive range
 of source day labels and refresh an individual deployment without changing
@@ -202,7 +202,7 @@ protocol does not establish bucket timezone, even when a query timezone was
 requested: such saved values are explicitly non-comparable, not silently
 converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
 
-### Quota Notifications (Unreleased Work Branch)
+### Quota Notifications (0.2.1 Source)
 
 Settings places **Quick Setup** immediately below the top navigation, with its
 navigation chip first. **Overview** follows, then the peer **Usage &
@@ -442,7 +442,7 @@ Gemini remains policy-only unless the product explicitly accepts project-scoped 
 
 JetBrains remains retained in the repo but deferred from the active support promise until a real organization-visible `Users and licensing` session is reverified. Its current runtime adapter is explicitly no-network and clears obsolete live quota fields. Deferred JetBrains state must not enter Provider Display ordering or quota item controls.
 
-## Aggregate CSV (Unreleased Work Branch)
+## Aggregate CSV (0.2.1 Source)
 
 The full-page Provider detail adds local account/family/date selection and an
 explicit preview followed by CSV download. These controls never change the
@@ -466,7 +466,7 @@ CSV schema v1 has stable English columns:
 `schema_version,provider,account,account_label,family,date,series,metric,value,unit,currency,range_start,range_end,coverage_start,coverage_end,observed_days,selected_days,source_timezone,requested_timezone,captured_at,freshness`.
 Only these fields are serialized; see [privacy boundaries](../../PRIVACY.md).
 
-## Period Summaries (Unreleased Work Branch)
+## Period Summaries (0.2.1 Source)
 
 Provider aggregate usage and deployment comparison share this week, this month,
 last 7 days, last 30 days and custom date-range controls. Weeks begin Monday;

@@ -339,6 +339,11 @@ describe("runtime i18n", () => {
 
     expect(formattedUtc).toContain("2026");
     expect(formattedUtc?.endsWith("UTC")).toBe(true);
+    const capturedAt = i18n.formatTemporalValue("2026-09-24T13:44:18.377Z");
+    expect(capturedAt).toContain("Sep 24, 2026");
+    expect(capturedAt?.endsWith("UTC")).toBe(true);
+    expect(i18n.formatTemporalValue("2026-09-24T23:44:18.377+10:00")).toBe(capturedAt);
+    expect(i18n.formatTemporalValue("2026-09-24T99:44:18Z")).toBeNull();
     expect(i18n.formatTemporalValue("Current billing period")).toBeNull();
   });
 

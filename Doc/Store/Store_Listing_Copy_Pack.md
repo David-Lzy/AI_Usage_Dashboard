@@ -1,6 +1,6 @@
 # Store Listing Copy Pack
 
-Date: 2026-07-26
+Date: 2026-09-24
 
 Process rule:
 
@@ -28,19 +28,19 @@ Title:
 
 Short description:
 
-`Track usage, setup blockers, and sync health across AI coding tools.`
+`See AI coding quotas, reset times, spend, and sync health in one place.`
 
 Collapsed-view abstract:
 
-`AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and sync health. Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)`
+`See AI coding quotas before they interrupt your work. AI Usage Dashboard brings source-visible limits, reset times, spending, and sync health into one Chrome extension. Use the toolbar popup for a quick check, or open the side panel and full-page dashboard for details.`
 
 Details:
 
 `It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
 
-`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, sync status, toolbar badge behavior, toolbar icon behavior, custom HTTP/HTTPS JSON sources, configured Sub2API gateway aggregates, language, theme, popup appearance, progress style, remaining-color gradients, provider order, and import/export settings. Open the side panel or full-page dashboard when source details matter.`
+`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, and sync status. Use the side panel or full-page dashboard for normalized trends, saved Sub2API deployment comparison, selected period summaries, and aggregate CSV export. Settings starts with Quick Setup, then separates Usage & Notifications from Appearance.`
 
-`AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. AI Usage Dashboard gives you one calm place to glance at the current state, then lets you open the detail view only when you need it. A tiny dashboard, not another project to manage. ✨`
+`AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. AI Usage Dashboard makes those states easier to scan while keeping unknown or stale data visibly distinct from fresh source values.`
 
 `Provider coverage is intentionally honest. Some paths can show live or near-live usage windows, some expose partial page context, some are policy-only in this release, and some providers may require a signed-in page, optional host access, or API credentials. First-run provider cards show a focused Grant access action when host permission is the blocker. When a source is unavailable or partial, the extension labels that state instead of inventing a number.`
 
@@ -56,6 +56,10 @@ Feature bullets:
 - `Side panel and full-page dashboard for deeper review`
 - `Source labels for exact, partial, window-scoped, policy-only, or unavailable data`
 - `Custom HTTP/HTTPS JSON sources and configured Sub2API-compatible gateway aggregates`
+- `Optional quota/reset notifications and sanitized diagnostic export`
+- `Selected period summaries and safe aggregate CSV export`
+- `Saved Sub2API deployment comparison when source data is comparable`
+- `Optional same-machine Codex CLI Companion; conditional API-equivalent estimates are not bills or balances`
 - `Traditional progress bands or editable remaining-color gradients`
 - `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon`
 - `Import/export and Chrome Sync support for extension settings`
@@ -63,11 +67,15 @@ Feature bullets:
 
 Screenshot captions:
 
-- `Check provider status and quota rings from the toolbar popup.`
-- `Review enabled providers in one dashboard.`
-- `Inspect source boundaries before trusting a number.`
-- `Tune language, theme, sync, badge, icon, and progress display.`
-- `Use quick setup and provider display controls without leaving the extension.`
+- `Scan source-visible quotas and reset times in the toolbar popup.`
+- `Review enabled providers and sync health in the dashboard.`
+- `Inspect bounded Codex history with its own capture timestamp.`
+- `Compare saved Sub2API deployments and preview selected aggregate CSV.`
+- `Configure sync, warning thresholds, optional notifications, and appearance.`
+
+The five 1280x800 screenshots are localized to English, Simplified Chinese,
+Japanese, Brazilian Portuguese, and Latin American Spanish. Each set uses the
+same current UI story order and labels illustrative QA values as sample data.
 
 ## Claim Guardrails
 

@@ -98,7 +98,7 @@ isolated snapshot, metadata, and secret. A non-loopback HTTP origin requires a
 persistent acknowledgement that the API key will be sent without transport
 encryption.
 
-### Saved Deployment Comparison (Unreleased Work Branch)
+### Saved Deployment Comparison (0.2.1 Source)
 
 The full-page Sub2API detail includes saved deployments side by side, selected
 source dates, requests, Tokens, actual/reference costs, observed-day coverage

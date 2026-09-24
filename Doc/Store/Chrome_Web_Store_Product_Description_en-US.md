@@ -1,6 +1,6 @@
-AI Usage Dashboard is a small cockpit for AI coding quota, setup blockers, and sync health.
+See AI coding quotas before they interrupt your work. AI Usage Dashboard brings source-visible limits, reset times, spending, and sync health into one Chrome extension.
 
-Open the Chrome toolbar popup for a quick peek; open the side panel or full-page dashboard when you need details. Less tab-hunting, more coding. (^_^)
+Use the toolbar popup for a quick check, or open the side panel and full-page dashboard for details. Quick Setup is first in Settings, so you can connect only the sources you use.
 
 It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
 
@@ -12,6 +12,10 @@ What it helps you see
 • remaining usage windows and reset timing when a provider exposes them
 • source type: API, signed-in page, partial page context, documented policy, or unavailable source
 • snapshot freshness and sync status
+• optional quota/reset notifications with separate in-app and system thresholds
+• selected period summaries, safe aggregate CSV export, and a sanitized diagnostics report
+• comparison of saved Sub2API deployments when coverage, units, and currency permit
+• optional same-machine Codex CLI Companion quota reads after manual pairing; conditional API-equivalent estimates are not bills or balances
 • toolbar badge and toolbar icon behavior
 • custom HTTP/HTTPS JSON sources for your own quota endpoints
 • key-scoped aggregate balance, spend, requests, tokens, models, trends, and returned limits from configured Sub2API-compatible gateways
@@ -22,7 +26,7 @@ How it feels in daily use
 
 AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. One moment everything works; the next moment a quota window, missing permission, expired session, or provider policy gets in the way.
 
-AI Usage Dashboard tries to make that less mysterious. It gives you one calm place to glance at the current state, then lets you open the detail view only when you need it. A tiny dashboard, not another project to manage. ✨
+AI Usage Dashboard makes those states easier to scan, while keeping unknown or stale data visibly distinct from fresh source values.
 
 Provider coverage is intentionally honest
 
@@ -50,6 +54,7 @@ AI Usage Dashboard is conservative by design:
 • local image-based gradients are processed in your browser; original image bytes are not uploaded or saved
 • packaged extension scripts only; no remote code loading
 • settings and cached data stay in your Chrome profile unless you export them
+• the optional Codex Companion runs only when you start and pair it on the same computer; the extension does not install or launch it
 
 This is not an official product from OpenAI, Cursor, Anthropic, Google, JetBrains, or any other provider.
 

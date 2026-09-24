@@ -368,6 +368,12 @@ function buildUtcDate(
 
 function parseTemporalValue(rawValue: string): ParsedTemporalValue | null {
   const normalizedValue = rawValue.trim();
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/i.test(normalizedValue)) {
+    const timestamp = Date.parse(normalizedValue);
+    if (Number.isFinite(timestamp)) {
+      return { date: new Date(timestamp), mode: "date-time", utcExplicit: true };
+    }
+  }
   let match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(normalizedValue);
 
   if (match) {

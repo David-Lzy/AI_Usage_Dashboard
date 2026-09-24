@@ -17,7 +17,7 @@ provider data to a project-owned server.
 
 ![AI Usage Dashboard popup and Settings surfaces](./Doc/Assets/ai-usage-dashboard-readme-hero.png)
 
-_Real extension surfaces are shown. No credentials are included in the media._
+_Current extension UI with illustrative QA values. No real accounts or credentials are included._
 
 ## Built For Daily Checks
 
@@ -72,7 +72,7 @@ Firefox local-beta package.
 
 | Provider | Available source path | What the dashboard can show |
 | --- | --- | --- |
-| Codex | Enterprise analytics or signed-in Codex usage page | Source-visible usage windows, reset times, credits, and normalized history. No plan-wide absolute balance is invented. |
+| Codex | Enterprise analytics, signed-in Codex usage page, or opt-in same-machine CLI Companion | Source-visible usage windows, reset times, credits, and normalized history. Conditional API-equivalent estimates are not subscription charges. No plan-wide absolute balance is invented. |
 | Claude | Signed-in Claude Personal usage page or Claude Code Analytics Admin API | Personal Pro usage windows and credit state, or separate organization analytics. |
 | Cursor | Team Admin API or signed-in Usage/Spending pages | Team/API data or normalized personal billing pools, On-Demand charges, and aggregate history. |
 | Sub2API | User-configured deployment and API key | Key-scoped balance, spend, requests, tokens, trends, models, and returned limits through the bounded `GET /v1/usage` contract. |
@@ -146,12 +146,14 @@ custom and never treated as an official provider result. See the
 
 Local companions are never installed, started, discovered, or updated by the
 extension. Generic accepted local rows remain separate custom sources. The
-unreleased work branch also has an opt-in, same-machine Codex CLI bridge for
-the built-in Codex Personal quota: it can replace browser-page refreshes with
-local quota reads and cautiously estimate API-equivalent value after sufficient
-priced observations. This is not part of the current Chrome Web Store release;
-see the [bridge contract](./Doc/Product/Local_Companion_Bridge.md) for setup,
-limits, and privacy boundaries.
+0.2.1 source includes an opt-in, same-machine Codex CLI bridge for the built-in
+Codex Personal quota. After manual pairing, local-only mode can replace
+browser-page quota refreshes with local quota reads. API-equivalent estimates
+appear only after sufficient complete, priced observations; they are not
+subscription charges or balances. See the
+[bridge contract](./Doc/Product/Local_Companion_Bridge.md) for setup, limits,
+and privacy boundaries. Store availability may lag the source release during
+review.
 
 ## Manual Installation
 
@@ -203,15 +205,15 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   displays `0.2.0-rc.14`, verified by a direct public-page fetch on
   2026-09-23 UTC. The authenticated Store API reports manifest `0.2.0.14`
   as `PUBLISHED` at 100%.
-- Source package version: `0.2.0-rc.15`; Chrome manifest version: `0.2.0.15`.
-- This work branch is an unpublished RC15 preview. The Store and latest GitHub
-  Release remain RC14.
+- Source package version: `0.2.1`; Chrome manifest version: `0.2.1.0`.
+- This work branch is an unpublished 0.2.1 candidate. The Store and latest
+  GitHub Release remain RC14 until the release and Store review complete.
 - GitHub Release [`v0.2.0-rc.14`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   provides verified Chrome and Firefox packages plus `SHA256SUMS.txt`.
-- RC14 includes the accepted sync, diagnostics, notification, comparison,
-  export, and local-bridge changes. These are included in the published
-  Chrome Store build; the GitHub Release also provides a Firefox local-beta
-  package.
+- RC14 is the verified Store baseline. The 0.2.1 candidate adds the new
+  Settings organization, diagnostics, notifications, comparison, export, and
+  optional Codex local bridge; these are not Store features until the new
+  package is published.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

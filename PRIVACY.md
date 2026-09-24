@@ -29,7 +29,7 @@ and Chrome Sync. Sub2API uses this model to isolate user-named deployments;
 other built-in source entries continue to use one `default` account unless
 their descriptor has a separately verified multi-account contract.
 
-The unreleased improvements branch constructs production defaults independently
+The 0.2.1 source constructs production defaults independently
 of synthetic demonstration snapshots. First install and missing-storage fallback
 do not seed example usage, capture times, billing or history. Configuration
 reset uses production settings defaults; genuine cached usage and existing
@@ -44,7 +44,7 @@ unavailable, including on a browser implementation that does not expose it,
 the credential remains only in service-worker memory. It is cleared with the
 browser session or extension lifecycle.
 
-## Sanitized Support Export (Unreleased Work Branch)
+## Sanitized Support Export (0.2.1 Source)
 
 At the Debug display level, the source diagnostics section can preview and
 download a local JSON support report. The preview and downloaded file are the
@@ -62,7 +62,7 @@ parameters, page titles, paths, raw responses, free-text errors, usage values,
 history, custom-source payloads and arbitrary extension storage. The existing
 configuration backup is a separate operation with a different documented scope.
 
-## Usage CSV Export (Unreleased Work Branch)
+## Usage CSV Export (0.2.1 Source)
 
 Full-page Provider details can preview and download selected, already stored
 daily aggregates. The selection is one saved account, one data family and an
@@ -83,7 +83,7 @@ The file uses UTF-8 with BOM, stable English column names and CRLF records.
 Text cells with spreadsheet formula prefixes are protected; CSV escaping is
 handled by Papa Parse. No spreadsheet file is opened or executed automatically.
 
-## Quota Notifications (Unreleased Work Branch)
+## Quota Notifications (0.2.1 Source)
 
 Notifications are off by default. Enabling them explicitly requests the optional
 browser `notifications` permission. The extension keeps preferences and a bounded
@@ -181,7 +181,7 @@ normalized source snapshots, or user-facing errors. The token is sent only to
 the explicitly configured loopback bridge. Restarting the reference process
 invalidates its in-memory token.
 
-Unreleased work-branch additions provide Developer/Debug-only generic pairing
+The 0.2.1 source provides Developer/Debug-only generic pairing
 and conversion of an explicitly selected ccusage daily JSON export. The
 converter retains token totals, estimated USD cost when known, source date
 coverage and export-file modification time. It excludes project paths, account
@@ -191,7 +191,7 @@ local key, separate from CodexBar and excluded from all exports. Source refresh
 is manual and selected-source only; service restart expires pairing. Disconnect
 removes the local token and managed snapshots even if the service is offline.
 
-The unreleased Codex mode is a separate opt-in exception: the operator provides
+The 0.2.1 Codex mode is a separate opt-in exception: the operator provides
 an absolute Codex Home and manually starts the Companion on the browser's
 machine. It invokes the installed Codex CLI's read-only app-server quota
 request and incrementally reads newly appended rollout JSONL records under the

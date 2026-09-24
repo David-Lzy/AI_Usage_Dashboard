@@ -12,8 +12,9 @@ Freshness model:
 
 Status note:
 
-- the public Store is `0.2.0-rc.14`; the Codex local quota and equivalent
-  estimate below are work-branch code, not yet a Store release
+- the public Store baseline verified before this source release is
+  `0.2.0-rc.14`; the Codex local quota and equivalent estimate belong to
+  0.2.1 source and require separate Store publication
 - generic local rows remain Custom Sources; the opt-in Codex summary is a
   separate, built-in Codex Personal source
 
@@ -22,14 +23,14 @@ Status note:
 The repository includes an experimental Node reference bridge for development
 and protocol testing. The extension does not install, start, download, or
 update this process, and the generic reference CLI is not presented as a
-built-in Provider connection. Developer/Debug Settings in the RC14 candidate
+built-in Provider connection. Developer/Debug Settings in the 0.2.1 source
 exposes generic pairing and selected-source refresh in addition to the bounded
 CodexBar dashboard adapter described below.
 
 The bridge proves a narrow local-source boundary. It is not a way for the
 extension to obtain arbitrary machine access.
 
-## Codex Local Quota (Unreleased Work Branch)
+## Codex Local Quota (0.2.1 Source)
 
 The preview has no standalone Companion installer. On the **same machine** as
 the browser, obtain the matching project source, install Node.js `>=22.12.0`

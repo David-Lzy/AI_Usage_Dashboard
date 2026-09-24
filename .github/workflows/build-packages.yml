@@ -179,10 +179,21 @@ jobs:
           chrome_asset="${{ steps.release-target.outputs.chrome-asset }}"
           firefox_asset="${{ steps.release-target.outputs.firefox-asset }}"
 
+          if [[ "${package_version}" == "0.2.1" ]]; then
+            release_summary="Stable Chrome package and unsigned Firefox local-beta package."
+            release_highlights="- Quick Setup now comes first; Usage & Notifications and Appearance have clearer controls.
+          - Adds optional quota/reset notifications, sanitized diagnostics export, and aggregate CSV/period summaries.
+          - Adds bounded Sub2API deployment comparison and an opt-in, same-machine Codex CLI Companion for local quota reads.
+          - Codex API-equivalent estimates appear only after enough complete, priced observations; they are not subscription charges or balances."
+          else
+            release_summary="Browser-specific packages for this version."
+            release_highlights="- Review the repository documentation and changelog for version-specific changes."
+          fi
+
           cat > release-notes.md <<NOTES
           ## AI Usage Dashboard ${package_version}
 
-          Release candidate package for manual review, extension-store handoff, and browser-specific testing.
+          ${release_summary}
 
           ### Downloads
 
@@ -195,9 +206,7 @@ jobs:
           ### Notes
 
           - Chrome Web Store remains the recommended install path for everyday Chrome users.
-          - Hardens account-isolated sync, concurrent settings updates, capture freshness, and production empty states.
-          - Adds optional quota/reset notifications, sanitized diagnostics export, and aggregate CSV/period summaries.
-          - Adds bounded multi-deployment comparison and an experimental, explicitly paired local companion bridge.
+          ${release_highlights}
           NOTES
 
       - name: Prepare release assets

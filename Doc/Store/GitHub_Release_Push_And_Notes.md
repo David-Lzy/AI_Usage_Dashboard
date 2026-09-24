@@ -1,6 +1,6 @@
 # GitHub Release Push And Notes Guide
 
-Date: 2026-09-23
+Date: 2026-09-24
 
 Document class:
 
@@ -129,7 +129,7 @@ Use this structure for generated or manually edited GitHub Release notes:
 ```md
 ## AI Usage Dashboard <package-version>
 
-Release candidate package for manual review, extension-store handoff, and browser-specific testing.
+<Stable or release-candidate Chrome package> and unsigned Firefox local-beta package.
 
 ### Downloads
 
@@ -150,6 +150,10 @@ new settings, supported package automation, or important bug fixes. Avoid
 listing internal phase numbers, private TODO names, local machine paths,
 operator notes, screenshot evidence, upload receipts, or personal review
 history.
+
+The 0.2.1 tag uses a version-specific stable summary and highlights. Later
+versions fall back to generic package notes until their own copy is reviewed;
+do not reuse the 0.2.1 feature list as a claim about another release.
 
 ## Claim Boundaries
 

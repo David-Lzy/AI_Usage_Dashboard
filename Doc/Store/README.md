@@ -1,6 +1,6 @@
 # Store Documentation
 
-Date: 2026-05-18
+Date: 2026-09-24
 
 Document class:
 
@@ -17,9 +17,11 @@ Status note:
 
 ## Current Public Copy
 
-The product-description files are the upload-ready overview drafts for the
-Chrome Web Store. They use a short abstract first because the store UI folds the
-description after the opening lines.
+The product-description files are the 0.2.1 upload-ready overview drafts for
+the Chrome Web Store. They use a short abstract first because the store UI
+folds the description after the opening lines. The 0.2.1 screenshots use
+explicit illustrative QA data captured from the current extension; they do not
+present simulated balances as live account values.
 
 - [English product description](./Chrome_Web_Store_Product_Description_en-US.md)
 - [Simplified Chinese product description](./Chrome_Web_Store_Product_Description_zh-CN.md)
@@ -27,6 +29,7 @@ description after the opening lines.
 - [Japanese product description](./Chrome_Web_Store_Product_Description_ja.md)
 - [Latin American Spanish draft](./Chrome_Web_Store_Product_Description_es-419.md)
 - [Brazilian Portuguese draft](./Chrome_Web_Store_Product_Description_pt-BR.md)
+- [0.2.1 update notes](./Chrome_Web_Store_Update_Notes_0.2.1.md)
 
 ## Source References
 
