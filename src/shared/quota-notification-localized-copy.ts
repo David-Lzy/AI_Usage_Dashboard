@@ -3,8 +3,9 @@ import type { ResolvedAppLocale } from "./i18n";
 export type QuotaNotificationLocalizedCopy = {
   eyebrow: string;
   title: string;
-  enabled: string;
-  paused: string;
+  modeOff: string;
+  modeOn: string;
+  modePaused: string;
   threshold: string;
   percent: string;
   accounts: string;
@@ -37,8 +38,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   en: {
     eyebrow: "Notifications",
     title: "Quota notifications",
-    enabled: "Enable notifications",
-    paused: "Pause notifications",
+    modeOff: "Off",
+    modeOn: "On",
+    modePaused: "Paused",
     threshold: "Notification trigger threshold",
     percent: "%",
     accounts: "Accounts",
@@ -71,8 +73,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   "zh-CN": {
     eyebrow: "通知",
     title: "用量通知",
-    enabled: "启用通知",
-    paused: "暂停通知",
+    modeOff: "关闭",
+    modeOn: "启用",
+    modePaused: "暂停",
     threshold: "通知触发阈值",
     percent: "%",
     accounts: "账户",
@@ -105,8 +108,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   "zh-TW": {
     eyebrow: "通知",
     title: "用量通知",
-    enabled: "啟用通知",
-    paused: "暫停通知",
+    modeOff: "關閉",
+    modeOn: "啟用",
+    modePaused: "暫停",
     threshold: "通知觸發閾值",
     percent: "%",
     accounts: "帳戶",
@@ -139,8 +143,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   ja: {
     eyebrow: "通知",
     title: "使用量の通知",
-    enabled: "通知を有効にする",
-    paused: "通知を一時停止する",
+    modeOff: "オフ",
+    modeOn: "オン",
+    modePaused: "一時停止",
     threshold: "通知のトリガーしきい値",
     percent: "%",
     accounts: "アカウント",
@@ -173,8 +178,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   ko: {
     eyebrow: "알림",
     title: "할당량 알림",
-    enabled: "알림 사용",
-    paused: "알림 일시중지",
+    modeOff: "끔",
+    modeOn: "켬",
+    modePaused: "일시중지",
     threshold: "알림 트리거 임계값",
     percent: "%",
     accounts: "계정",
@@ -207,8 +213,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   "es-419": {
     eyebrow: "Notificaciones",
     title: "Notificaciones de cuota",
-    enabled: "Activar notificaciones",
-    paused: "Pausar notificaciones",
+    modeOff: "Desactivadas",
+    modeOn: "Activadas",
+    modePaused: "En pausa",
     threshold: "Umbral de activación de notificaciones",
     percent: "%",
     accounts: "Cuentas",
@@ -241,8 +248,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   "pt-BR": {
     eyebrow: "Notificações",
     title: "Notificações de cota",
-    enabled: "Ativar notificações",
-    paused: "Pausar notificações",
+    modeOff: "Desativadas",
+    modeOn: "Ativadas",
+    modePaused: "Pausadas",
     threshold: "Limite para notificações",
     percent: "%",
     accounts: "Contas",
@@ -275,8 +283,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   fr: {
     eyebrow: "Notifications",
     title: "Notifications de quota",
-    enabled: "Activer les notifications",
-    paused: "Mettre les notifications en pause",
+    modeOff: "Désactivées",
+    modeOn: "Activées",
+    modePaused: "En pause",
     threshold: "Seuil de déclenchement des notifications",
     percent: "%",
     accounts: "Comptes",
@@ -309,8 +318,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   de: {
     eyebrow: "Benachrichtigungen",
     title: "Kontingentbenachrichtigungen",
-    enabled: "Benachrichtigungen aktivieren",
-    paused: "Benachrichtigungen pausieren",
+    modeOff: "Aus",
+    modeOn: "Ein",
+    modePaused: "Pausiert",
     threshold: "Schwelle für Benachrichtigungen",
     percent: "%",
     accounts: "Konten",
@@ -343,8 +353,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   it: {
     eyebrow: "Notifiche",
     title: "Notifiche quota",
-    enabled: "Abilita notifiche",
-    paused: "Sospendi notifiche",
+    modeOff: "Disattivate",
+    modeOn: "Attivate",
+    modePaused: "In pausa",
     threshold: "Soglia per le notifiche",
     percent: "%",
     accounts: "Account",
@@ -377,8 +388,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   ru: {
     eyebrow: "Уведомления",
     title: "Уведомления о квоте",
-    enabled: "Включить уведомления",
-    paused: "Приостановить уведомления",
+    modeOff: "Выкл.",
+    modeOn: "Вкл.",
+    modePaused: "Пауза",
     threshold: "Порог для уведомлений",
     percent: "%",
     accounts: "Учетные записи",
@@ -411,8 +423,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   ar: {
     eyebrow: "الإشعارات",
     title: "إشعارات الحصة",
-    enabled: "تفعيل الإشعارات",
-    paused: "إيقاف الإشعارات مؤقتا",
+    modeOff: "إيقاف",
+    modeOn: "تفعيل",
+    modePaused: "متوقفة مؤقتا",
     threshold: "عتبة تشغيل الإشعارات",
     percent: "%",
     accounts: "الحسابات",
@@ -445,8 +458,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   hi: {
     eyebrow: "सूचनाएं",
     title: "कोटा सूचनाएं",
-    enabled: "सूचनाएं चालू करें",
-    paused: "सूचनाएं रोकें",
+    modeOff: "बंद",
+    modeOn: "चालू",
+    modePaused: "रुकी हुई",
     threshold: "सूचना ट्रिगर सीमा",
     percent: "%",
     accounts: "खाते",
@@ -479,8 +493,9 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
   id: {
     eyebrow: "Notifikasi",
     title: "Notifikasi kuota",
-    enabled: "Aktifkan notifikasi",
-    paused: "Jeda notifikasi",
+    modeOff: "Nonaktif",
+    modeOn: "Aktif",
+    modePaused: "Dijeda",
     threshold: "Ambang pemicu notifikasi",
     percent: "%",
     accounts: "Akun",

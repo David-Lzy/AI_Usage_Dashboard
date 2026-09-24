@@ -215,12 +215,15 @@ the in-app threshold affects page and toolbar warning state, whereas the
 notification threshold determines when system notifications can fire. Moving
 the controls does not migrate or reset either stored value.
 
-Settings offers optional notifications at every display level. The feature is
-off by default; only the explicit enable action requests notification permission.
-The initial threshold is the existing warning threshold, measured as percent used.
-Account/window switches and an indefinite pause control delivery; the test action
-does not simulate a quota event. Permissions denied or unavailable never enable
-the feature silently. Preferences and the bounded ledger stay local-only.
+Settings offers optional notifications at every display level. A compact
+Off / On / Paused dropdown uses the same control style as other preferences;
+the threshold, test action, and multi-select account/window details appear only
+while notifications are enabled (On or Paused). The feature is off by default;
+only selecting On or Paused from Off requests notification permission. The
+initial threshold is the existing warning threshold, measured as percent used.
+Account/window switches and indefinite pause still control delivery; the test
+action does not simulate a quota event. Permissions denied or unavailable never
+enable the feature silently. Preferences and the bounded ledger stay local-only.
 
 Only known percentage windows with a proven successful capture at most 30 minutes
 old are eligible. First observation and preference edits establish a baseline;

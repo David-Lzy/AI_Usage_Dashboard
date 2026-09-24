@@ -1,11 +1,15 @@
 .quota-notification-settings {
-  gap: var(--app-space-4);
+  gap: var(--app-space-3);
   min-width: 0;
 }
 
 .quota-notification-settings--embedded {
-  padding-block-start: var(--app-space-4);
-  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  margin-block-start: var(--app-space-3);
+}
+
+.quota-notification-settings--embedded > .material-select {
+  inline-size: calc((100% - var(--app-space-3)) / 2);
+  max-inline-size: 100%;
 }
 
 .quota-notification-settings__body {
@@ -15,6 +19,8 @@
   gap: var(--app-space-5);
   inline-size: min(100%, 1120px);
   min-width: 0;
+  padding-block-start: var(--app-space-4);
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .quota-notification-settings__general,
@@ -36,66 +42,6 @@
   border: 0;
 }
 
-.switch-row.quota-notification-settings__switch,
-.switch-row.quota-notification-settings__pause {
-  flex-direction: row;
-  align-items: center;
-  min-block-size: 64px;
-  padding: var(--app-space-3) var(--app-space-4);
-}
-
-.switch-row.quota-notification-settings__pause {
-  border-color: var(--md-sys-color-outline-variant);
-  background: transparent;
-}
-
-.quota-notification-settings__switch .switch-row__title,
-.quota-notification-settings__pause .switch-row__title {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.quota-notification-settings__toggle.switch-row__control {
-  position: relative;
-  inline-size: 48px;
-  block-size: 28px;
-  flex: 0 0 48px;
-  margin: 0;
-  appearance: none;
-  border: 2px solid var(--md-sys-color-outline);
-  border-radius: var(--md-sys-shape-corner-full);
-  background: var(--md-sys-color-surface-container-highest);
-  transition: background-color var(--app-motion-duration-fast)
-    var(--app-motion-easing-standard);
-}
-
-.quota-notification-settings__toggle::before {
-  content: "";
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 5px;
-  inline-size: 16px;
-  block-size: 16px;
-  border-radius: 50%;
-  background: var(--md-sys-color-on-surface-variant);
-  transform: translateY(-50%);
-  transition: inset-inline-start var(--app-motion-duration-fast)
-    var(--app-motion-easing-standard);
-}
-
-.quota-notification-settings__toggle:checked {
-  border-color: var(--md-sys-color-primary);
-  background: var(--md-sys-color-primary);
-}
-
-.quota-notification-settings__toggle:checked::before {
-  inset-inline-start: 22px;
-  inline-size: 20px;
-  block-size: 20px;
-  background: var(--md-sys-color-on-primary);
-}
-
-.quota-notification-settings__toggle:focus-visible,
 .quota-notification-settings__checkbox:focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 3px;
@@ -223,12 +169,15 @@
   cursor: not-allowed;
 }
 
-.quota-notification-settings__toggle:disabled,
 .quota-notification-settings__checkbox:disabled {
   opacity: 0.45;
 }
 
 @media (max-width: 760px) {
+  .quota-notification-settings--embedded > .material-select {
+    inline-size: 100%;
+  }
+
   .quota-notification-settings__body {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -245,9 +194,4 @@
   .quota-notification-settings__windows {
     padding-inline-start: 0;
   }
-}
-
-:root[data-motion-resolved="reduced"] .quota-notification-settings__toggle,
-:root[data-motion-resolved="reduced"] .quota-notification-settings__toggle::before {
-  transition: none;
 }

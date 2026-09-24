@@ -109,7 +109,9 @@ before connecting a provider or custom endpoint.
 - Settings separates **Usage & Notifications** (sync interval, in-app warning,
   optional system notifications, and configuration backup) from **Appearance**
   (color, motion, popup browsing, and advanced UI controls). The in-app warning
-  and notification trigger percentages are independent.
+  and notification trigger percentages are independent. Notifications use a
+  compact Off / On / Paused selector; account and threshold options appear when
+  enabled.
 - Choose traditional remaining-percentage bands or an editable one-dimensional
   gradient shared by popup, side panel, full-page, detail, and preview surfaces.
 - Generate a gradient locally from a PNG, JPEG, or WebP image. Only the derived
@@ -122,9 +124,9 @@ before connecting a provider or custom endpoint.
 
 ![AI Usage Dashboard Settings overview](./Doc/Assets/ai-usage-dashboard-settings-overview.png)
 
-_Settings preview rendered from synthetic QA snapshots. The two percentages
-illustrate independent settings; no real accounts, credentials, or usage
-evidence are included._
+_Settings preview rendered from synthetic QA snapshots with notifications off.
+Its separate trigger threshold and account controls appear when enabled. No
+real accounts, credentials, or usage evidence are included._
 
 ## Extend It
 

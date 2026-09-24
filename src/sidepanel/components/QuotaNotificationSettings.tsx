@@ -3,7 +3,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type ChangeEvent,
   type KeyboardEvent,
 } from "react";
 
@@ -22,7 +21,10 @@ import {
   type QuotaNotificationChange,
   type QuotaNotificationPreferences,
 } from "../../shared/quota-notifications";
+import { MaterialSelect } from "./MaterialSelect";
 import "./QuotaNotificationSettings.css";
+
+type NotificationMode = "off" | "on" | "paused";
 
 type QuotaNotificationSettingsView = {
   preferences: QuotaNotificationPreferences;
@@ -86,14 +88,21 @@ export function QuotaNotificationSettings({
 
   const preferences = view?.preferences;
   const controlsDisabled = busy || !preferences || view.permission !== "granted";
+  const mode: NotificationMode = !preferences?.enabled
+    ? "off"
+    : preferences.paused
+      ? "paused"
+      : "on";
 
-  async function save(change: QuotaNotificationChange) {
+  async function save(changes: QuotaNotificationChange | QuotaNotificationChange[]) {
     setBusy(true);
     setStatus(null);
     try {
-      const nextView = await updateQuotaNotificationSettings(change);
-      setView(nextView);
-      setThresholdDraft(String(nextView.preferences.thresholdPercent));
+      for (const change of Array.isArray(changes) ? changes : [changes]) {
+        const nextView = await updateQuotaNotificationSettings(change);
+        setView(nextView);
+        setThresholdDraft(String(nextView.preferences.thresholdPercent));
+      }
     } catch {
       setStatus(copy.saveFailed);
     } finally {
@@ -101,18 +110,29 @@ export function QuotaNotificationSettings({
     }
   }
 
-  async function handleEnabledChange(event: ChangeEvent<HTMLInputElement>) {
-    const enabled = event.currentTarget.checked;
+  async function handleModeChange(nextMode: NotificationMode) {
+    if (!preferences || nextMode === mode) {
+      return;
+    }
 
-    if (enabled) {
+    if (nextMode !== "off" && !preferences.enabled) {
       if (permissionRequestPendingRef.current) {
         return;
       }
       permissionRequestPendingRef.current = true;
+      // Start the optional permission request in the select's user gesture.
       const permissionRequest = requestQuotaNotificationPermission();
       setBusy(true);
-      const granted = await permissionRequest;
-      permissionRequestPendingRef.current = false;
+      let granted = false;
+      try {
+        granted = await permissionRequest;
+      } catch {
+        setStatus(copy.permissionNotGranted);
+        setBusy(false);
+        return;
+      } finally {
+        permissionRequestPendingRef.current = false;
+      }
 
       if (!granted) {
         setView((current) =>
@@ -124,7 +144,20 @@ export function QuotaNotificationSettings({
       }
     }
 
-    await save({ type: "enabled", value: enabled });
+    if (nextMode === "off") {
+      await save({ type: "enabled", value: false });
+      return;
+    }
+
+    const shouldPause = nextMode === "paused";
+    const changes: QuotaNotificationChange[] = [];
+    if (preferences.paused !== shouldPause) {
+      changes.push({ type: "paused", value: shouldPause });
+    }
+    if (!preferences.enabled) {
+      changes.push({ type: "enabled", value: true });
+    }
+    await save(changes);
   }
 
   function commitThreshold() {
@@ -172,52 +205,42 @@ export function QuotaNotificationSettings({
       data-quota-notifications=""
       aria-busy={busy || !view}
     >
-      <div className="dashboard-section__header">
-        <div>
-          {embedded ? null : <p className="section-label">{copy.eyebrow}</p>}
-          <h2 className="section-title">{copy.title}</h2>
+      {embedded ? null : (
+        <div className="dashboard-section__header">
+          <div>
+            <p className="section-label">{copy.eyebrow}</p>
+            <h2 className="section-title">{copy.title}</h2>
+          </div>
         </div>
-      </div>
+      )}
 
-      {!view || !preferences ? (
-        <p className="supporting-copy" role="status">
-          {statusMessage ?? copy.loading}
-        </p>
+      <MaterialSelect<NotificationMode>
+        label={copy.title}
+        labelHidden={!embedded}
+        value={mode}
+        options={[
+          { value: "off", label: copy.modeOff },
+          { value: "on", label: copy.modeOn },
+          { value: "paused", label: copy.modePaused },
+        ]}
+        fieldIdPrefix="quota-notification-mode"
+        disabled={busy || !preferences || (view.permission === "unsupported" && !preferences.enabled)}
+        onChange={(value) => void handleModeChange(value)}
+      />
+
+      {!view || !preferences || !preferences.enabled ? (
+        statusMessage || !view ? (
+          <p className="supporting-copy quota-notification-settings__status" role="status">
+            {statusMessage ?? copy.loading}
+          </p>
+        ) : null
       ) : (
         <div className="quota-notification-settings__body">
           <div className="quota-notification-settings__general">
-            <label className="switch-row quota-notification-settings__switch">
-              <span className="switch-row__title">{copy.enabled}</span>
-              <input
-                className="switch-row__control quota-notification-settings__toggle"
-                type="checkbox"
-                checked={preferences.enabled}
-                disabled={
-                  busy ||
-                  (view.permission === "unsupported" && !preferences.enabled)
-                }
-                data-notification-action="enable"
-                onChange={(event) => void handleEnabledChange(event)}
-              />
-            </label>
-
             <fieldset
               className="quota-notification-settings__controls"
-              disabled={controlsDisabled || !preferences.enabled}
+              disabled={controlsDisabled}
             >
-              <label className="switch-row quota-notification-settings__pause">
-                <span className="switch-row__title">{copy.paused}</span>
-                <input
-                  className="switch-row__control quota-notification-settings__toggle"
-                  type="checkbox"
-                  checked={preferences.paused}
-                  data-notification-action="pause"
-                  onChange={(event) =>
-                    void save({ type: "paused", value: event.currentTarget.checked })
-                  }
-                />
-              </label>
-
               <label className="form-field quota-notification-settings__threshold">
                 <span className="form-field__label">{copy.threshold}</span>
                 <span className="quota-notification-settings__number-control">
@@ -258,7 +281,7 @@ export function QuotaNotificationSettings({
 
           <fieldset
             className="quota-notification-settings__scopes"
-            disabled={controlsDisabled || !preferences.enabled}
+            disabled={controlsDisabled}
           >
             <legend className="quota-notification-settings__scope-label">
               {copy.accounts}
@@ -351,11 +374,14 @@ function getStatusMessage(
   if (view.permission === "unsupported") {
     return copy.permissionUnsupported;
   }
+  if (!view.preferences.enabled) {
+    return null;
+  }
   if (view.permission === "denied") {
     return copy.permissionNotGranted;
   }
   if (view.preferences.paused) {
     return copy.pausedStatus;
   }
-  return view.preferences.enabled ? copy.readyStatus : null;
+  return copy.readyStatus;
 }

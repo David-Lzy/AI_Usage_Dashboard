@@ -66,19 +66,30 @@ try {
         ReactDOM.createRoot(holder).render(React.createElement(QuotaNotificationSettings, { state, i18n: createRuntimeI18n(locale), warningThresholdPercent: 75 }));
       }, { locale, theme });
       const control = page.locator("#quota-qa [data-quota-notifications]");
-      const enable = control.locator('[data-notification-action="enable"]');
-      await enable.waitFor();
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 2);
-      assert.equal(await enable.isChecked(), false);
+      const mode = control.locator('[data-settings-material-select="quota-notification-mode"] button');
+      await mode.waitFor();
+      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await mode.getAttribute("aria-expanded"), "false");
       assert.equal(await page.evaluate(() => window.__quotaQa.requests.length), 0);
-      assert.equal(await enable.isEnabled(), true, "Missing permission must not disable the explicit enable gesture");
-      await enable.focus();
+      assert.equal(await mode.isEnabled(), true, "Missing permission must not disable the explicit enable gesture");
+      if (locale === "zh-CN" && width === 1280) {
+        await control.screenshot({ path: path.join(output, "zh-CN-1280-off-light.png") });
+      }
+      await mode.focus();
       await page.keyboard.press("Space");
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("Enter");
       await page.waitForFunction(() => window.__quotaQa.requests.length === 1);
-      assert.equal(await enable.isChecked(), false);
+      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await page.evaluate(() => window.__quotaQa.getStore()?.preferences.enabled ?? false), false);
       await page.evaluate(() => { window.__quotaQa.deny = false; });
-      await enable.click();
+      async function selectMode(value) {
+        await mode.click();
+        await page.locator(`.material-select__menu [id$="-option-${value}"]`).click();
+      }
+      await selectMode("on");
       await page.waitForFunction(() => window.__quotaQa.getStore()?.preferences.enabled === true);
+      assert.equal(await control.locator(".quota-notification-settings__account").count(), 2);
       const threshold = control.locator('[data-notification-action="threshold"]');
       assert.equal(await threshold.inputValue(), "75");
       await threshold.fill("80");
@@ -94,9 +105,8 @@ try {
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.disabledWindowKeys.length === 1);
       await windowToggle.check();
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.disabledWindowKeys.length === 0);
-      const pause = control.locator('[data-notification-action="pause"]');
       const test = control.locator('[data-notification-action="test"]');
-      await pause.check();
+      await selectMode("paused");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.paused === true);
       assert.equal(await test.isEnabled(), false);
       if (locale === "zh-CN" && width === 1280) {
@@ -106,17 +116,28 @@ try {
         await page.emulateMedia({ colorScheme: "light" });
         await page.evaluate(() => { document.documentElement.dataset.themeResolved = "light"; });
       }
-      await pause.uncheck();
+      await selectMode("off");
+      await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === false);
+      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      await selectMode("on");
+      await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === true && window.__quotaQa.getStore().preferences.paused === false);
+      assert.equal(await threshold.inputValue(), "80");
       await test.click();
       await page.waitForFunction(() => window.__quotaQa.events.some((event) => event.kind === "test"));
       await page.evaluate(async () => { await window.__quotaQa.advance(85); await window.__quotaQa.restart(); });
+      await selectMode("off");
+      await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === false);
+      await selectMode("paused");
+      await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === true && window.__quotaQa.getStore().preferences.paused === true);
+      assert.equal(await test.isEnabled(), false);
+      await page.evaluate(async () => { await window.__quotaQa.advance(95); });
       const trace = await page.evaluate(() => ({ requests: window.__quotaQa.requests, events: window.__quotaQa.events }));
       assert.equal(trace.events.filter((event) => event.kind === "low").length, 1);
+      assert.equal(trace.requests.length, 4);
       assert(trace.requests.every((request) => request.active));
       assert(trace.requests.every((request) => JSON.stringify(request.request) === '{"permissions":["notifications"]}'));
       const layout = await control.evaluate((element) => {
-        const switchTitle = element.querySelector(".quota-notification-settings__switch .switch-row__title").getBoundingClientRect();
-        const switchInput = element.querySelector(".quota-notification-settings__switch .switch-row__control").getBoundingClientRect();
+        const modeButton = element.querySelector('[data-settings-material-select="quota-notification-mode"] button').getBoundingClientRect();
         const body = element.querySelector(".quota-notification-settings__body");
         const accountCheckbox = element.querySelector(".quota-notification-settings__checkbox:checked");
         const checkboxMark = getComputedStyle(accountCheckbox, "::after");
@@ -127,14 +148,14 @@ try {
             return box.left < parent.left - 1 || box.right > parent.right + 1;
           }).length,
           columns: getComputedStyle(body).gridTemplateColumns.split(" ").length,
-          switchRowAligned: Math.abs((switchTitle.top + switchTitle.bottom) / 2 - (switchInput.top + switchInput.bottom) / 2) <= Math.max(switchTitle.height, switchInput.height) / 2,
+          modeHeight: modeButton.height,
           checkboxMark: { left: checkboxMark.borderLeftWidth, right: checkboxMark.borderRightWidth },
           unitWidth: element.querySelector(".quota-notification-settings__unit").getBoundingClientRect().width,
           direction: document.documentElement.dir };
       });
       assert(layout.scroll <= layout.width + 2 && layout.clipped === 0, JSON.stringify(layout));
       assert.equal(layout.outside, 0, JSON.stringify(layout));
-      assert(layout.switchRowAligned, `Notification switch label and checkbox split across rows: ${JSON.stringify(layout)}`);
+      assert(layout.modeHeight >= 44 && layout.modeHeight <= 72, JSON.stringify(layout));
       assert.equal(layout.columns, width === 320 ? 1 : 2, JSON.stringify(layout));
       assert.deepEqual(layout.checkboxMark, { left: "2px", right: "0px" }, JSON.stringify(layout));
       assert(layout.unitWidth < 50, "Percent unit must not stretch into a page-wide chip");

@@ -90,6 +90,10 @@ try {
         if (message.type === "quota-notifications:update") {
           if (message.change.type === "threshold") {
             notificationPreferences.thresholdPercent = message.change.value;
+          } else if (message.change.type === "enabled") {
+            notificationPreferences.enabled = message.change.value;
+          } else if (message.change.type === "paused") {
+            notificationPreferences.paused = message.change.value;
           }
           return {
             ok: true,
@@ -186,6 +190,15 @@ try {
   await page.evaluate(() => { window.location.hash = "#settings"; });
   await usage.waitFor();
   await page.waitForTimeout(400);
+  const notificationMode = usage.locator(
+    '[data-settings-material-select="quota-notification-mode"] button',
+  );
+  await notificationMode.click();
+  await page.locator('.material-select__menu [id$="-option-off"]').click();
+  await page.waitForFunction(
+    () => window.__settingsSplitQa.notificationPreferences.enabled === false,
+  );
+  assert.equal(await usage.locator(".quota-notification-settings__account").count(), 0);
   await page.evaluate(() => {
     document.activeElement?.blur();
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
