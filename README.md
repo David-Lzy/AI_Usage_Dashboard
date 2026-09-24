@@ -203,7 +203,9 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   displays `0.2.0-rc.14`, verified by a direct public-page fetch on
   2026-09-23 UTC. The authenticated Store API reports manifest `0.2.0.14`
   as `PUBLISHED` at 100%.
-- Source package version: `0.2.0-rc.14`; Chrome manifest version: `0.2.0.14`.
+- Source package version: `0.2.0-rc.15`; Chrome manifest version: `0.2.0.15`.
+- This work branch is an unpublished RC15 preview. The Store and latest GitHub
+  Release remain RC14.
 - GitHub Release [`v0.2.0-rc.14`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   provides verified Chrome and Firefox packages plus `SHA256SUMS.txt`.
 - RC14 includes the accepted sync, diagnostics, notification, comparison,
