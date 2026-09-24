@@ -19,9 +19,12 @@ Status note:
   at 100% again on 2026-09-24 UTC
 - GitHub Release `v0.2.1` is stable and provides verified browser-specific
   packages and checksums; its Chrome manifest is `0.2.1.0`
-- the Store API accepted the 0.2.1 package upload as a draft on 2026-09-24
-  UTC, but it has not been submitted for review; listing metadata and images
-  must be updated in the Developer Dashboard first
+- the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
+  updated listing and images were saved in the Developer Dashboard and the
+  revision was submitted for review once with automatic publication after
+  approval selected
+- authenticated Store API status on 2026-09-24 UTC reported `0.2.1.0` as
+  `PENDING_REVIEW` at 100% while `0.2.0.14` remained `PUBLISHED` at 100%
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -41,10 +44,13 @@ Status note:
   downloaded and verified against the release's `SHA256SUMS.txt`. The Store
   handoff job skipped because repository Store variables are not configured.
 - The 0.2.1 Store package upload returned `SUCCEEDED` and manifest `0.2.1.0`.
-  The following authenticated API status still listed only RC14 as published,
-  with no 0.2.1 submitted revision. The 0.2.1 image sets and listing copy are
-  prepared but not yet saved in the Developer Dashboard; no review submission
-  is claimed.
+  The Developer Dashboard saved the five updated localized screenshot sets,
+  five global English screenshots, two promotional images, and current listing
+  descriptions. It accepted one review submission on 2026-09-24 UTC with
+  automatic publication after approval selected. A subsequent authenticated
+  API check reported `0.2.1.0` as `PENDING_REVIEW` at 100%, while RC14 manifest
+  `0.2.0.14` remained `PUBLISHED` at 100%. Submission does not prove public
+  availability.
 - [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
   were downloaded and verified against its published `SHA256SUMS.txt`.
@@ -90,8 +96,8 @@ These dated observations explain the handoff history, not the current listing:
   verified local official API fallback then uploaded manifest `0.2.0.13` and
   submitted it for review.
 - Maintained listing-copy sources include bounded Sub2API-compatible aggregate
-  metering and the 0.2.1 update; applying those changes to the live Developer
-  Dashboard remains a separate metadata operation.
+  metering and the 0.2.1 update. The 0.2.1 metadata was applied to the live
+  Developer Dashboard before its review submission.
 - Chrome Web Store API status observed on 2026-07-29 reports manifest
   `0.2.0.12` as `PUBLISHED` at 100%.
 - The same historical status check reported manifest `0.2.0.13` as
@@ -152,11 +158,11 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Refresh Store screenshots and branding from the current extension UI before
-  the next version. Keep future uploaded, submitted, and published states
-  distinct as RC14 is now the public baseline.
-- Apply the maintained Sub2API listing-copy updates in the Developer Dashboard
-  when the publisher account can complete Google's interactive re-verification.
+- Monitor the submitted 0.2.1 revision and verify both authenticated API
+  publication state and public-page rollout before calling it available on the
+  Store. Keep uploaded, submitted, and published states distinct.
+- For the next version, refresh Store screenshots and copy from its actual
+  extension UI before submitting a new revision.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
 - Keep personal upload operations and generated screenshot working files under
   `.local/`.

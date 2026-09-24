@@ -15,20 +15,23 @@ Status note:
 - this directory holds public Chrome Web Store listing copy and localization source material
 - personal upload handoffs, screenshot capture notes, package hashes, and submission receipts live in ignored `.local/` history
 
-## Current Public Copy
+## Current Submission Copy
 
-The product-description files are the 0.2.1 upload-ready overview drafts for
-the Chrome Web Store. They use a short abstract first because the store UI
-folds the description after the opening lines. The 0.2.1 screenshots use
-explicit illustrative QA data captured from the current extension; they do not
-present simulated balances as live account values.
+The product-description files are the maintained 0.2.1 Store submission copy.
+The revision is under review, not yet public. They use a short abstract first
+because the store UI folds the description after the opening lines. The five
+updated locale screenshot sets and the global English fallback use explicit
+illustrative QA data captured from the current extension; they do not present
+simulated balances as live account values. Other Store locales use the updated
+English overview and global screenshots, except Traditional Chinese, which has
+its own updated overview.
 
 - [English product description](./Chrome_Web_Store_Product_Description_en-US.md)
 - [Simplified Chinese product description](./Chrome_Web_Store_Product_Description_zh-CN.md)
 - [Traditional Chinese product description](./Chrome_Web_Store_Product_Description_zh-TW.md)
 - [Japanese product description](./Chrome_Web_Store_Product_Description_ja.md)
-- [Latin American Spanish draft](./Chrome_Web_Store_Product_Description_es-419.md)
-- [Brazilian Portuguese draft](./Chrome_Web_Store_Product_Description_pt-BR.md)
+- [Latin American Spanish product description](./Chrome_Web_Store_Product_Description_es-419.md)
+- [Brazilian Portuguese product description](./Chrome_Web_Store_Product_Description_pt-BR.md)
 - [0.2.1 update notes](./Chrome_Web_Store_Update_Notes_0.2.1.md)
 
 ## Source References

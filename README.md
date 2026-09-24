@@ -15,8 +15,8 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
-The 0.2.1 GitHub release is available now. The Store may still serve RC14
-until its separate update review completes.
+The 0.2.1 GitHub release is available now. The Store update is under review;
+the public Store may still serve RC14 until approval and rollout complete.
 
 ![AI Usage Dashboard popup and Settings surfaces](./Doc/Assets/ai-usage-dashboard-readme-hero.png)
 
@@ -217,8 +217,10 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   optional Codex local bridge; these are not Store features until the 0.2.1
   package is separately published there.
 - The authenticated Store API accepted the `0.2.1.0` package upload on
-  2026-09-24 UTC. Listing text and image updates still require the Developer
-  Dashboard, so the revision has not been submitted for review.
+  2026-09-24 UTC. The updated listing text and images were saved in the
+  Developer Dashboard and submitted once for review. On 2026-09-24 UTC, the
+  Store API reported `0.2.1.0` as `PENDING_REVIEW` at 100%, while `0.2.0.14`
+  remained `PUBLISHED` at 100%.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 
