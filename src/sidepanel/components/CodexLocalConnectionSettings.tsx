@@ -16,6 +16,7 @@ import { MaterialSelect } from "./MaterialSelect";
 import "./CodexLocalConnectionSettings.css";
 
 type Props = { locale: ResolvedAppLocale };
+const START_COMMAND = 'node scripts/local-companion-bridge.mjs --codex-home "ABSOLUTE_CODEX_HOME_PATH"';
 
 export function CodexLocalConnectionSettings({ locale }: Props) {
   const copy = getCodexLocalConnectionCopy(locale);
@@ -94,6 +95,19 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
           {connected ? copy.connected : view?.status === "expired" ? copy.expired : view?.status === "unavailable" ? copy.unavailable : copy.disconnected}
         </span>
       </div>
+      {!connected ? (
+        <details className="codex-local-settings__guide" data-codex-local-setup="" open>
+          <summary>{copy.setupTitle}</summary>
+          <ol>
+            <li>{copy.setupPrepare}</li>
+            <li>
+              {copy.setupRun}
+              <pre><code dir="ltr">{START_COMMAND}</code></pre>
+            </li>
+            <li>{copy.setupFinish}</li>
+          </ol>
+        </details>
+      ) : null}
       <div className="codex-local-settings__mode">
         <MaterialSelect<CodexLocalSourceMode>
           label={copy.mode}

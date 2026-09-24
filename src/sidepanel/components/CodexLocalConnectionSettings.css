@@ -13,6 +13,35 @@
 }
 
 .codex-local-settings__heading .body-copy { margin: 0.35rem 0 0; }
+.codex-local-settings__guide {
+  margin-top: 1rem;
+  padding-block: 0.75rem;
+  border-block: 1px solid var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+.codex-local-settings__guide summary {
+  width: fit-content;
+  color: var(--md-sys-color-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+.codex-local-settings__guide ol {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding-inline-start: 1.5rem;
+}
+.codex-local-settings__guide li { padding-inline-start: 0.25rem; }
+.codex-local-settings__guide pre {
+  max-width: 100%;
+  margin: 0.4rem 0 0;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 2px solid var(--md-sys-color-primary);
+  direction: ltr;
+  text-align: start;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .codex-local-settings__mode { max-width: 36rem; margin-top: 1rem; }
 .codex-local-settings__mode .body-copy { min-height: 1.2em; margin: 0.4rem 0 0; }
 .codex-local-settings__pairing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }

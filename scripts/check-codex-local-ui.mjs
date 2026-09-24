@@ -86,7 +86,7 @@ try {
       }
     }
   }
-  for (const locale of popupOnly ? [] : ["en", "ar"]) {
+  for (const locale of popupOnly ? [] : SUPPORTED_RDP_CAPTURE_LOCALES) {
     for (const theme of ["light", "dark"]) {
       for (const width of [360, 720]) {
         const page = await browser.newPage({ viewport: { width, height: 900 } });
@@ -111,9 +111,15 @@ try {
             inputs: element.querySelectorAll("input").length,
             mode: element.querySelector(".material-select")?.textContent ?? "",
             overflow: element.scrollWidth > element.clientWidth + 1,
+            guideOpen: element.querySelector("[data-codex-local-setup]")?.open ?? false,
+            commandVisible: element.querySelector("[data-codex-local-setup] code")?.textContent?.includes("ABSOLUTE_CODEX_HOME_PATH") ?? false,
+            commandOverflow: (() => {
+              const command = element.querySelector("[data-codex-local-setup] pre");
+              return command ? command.scrollWidth > command.clientWidth + 1 : true;
+            })(),
             top: element.getBoundingClientRect().top,
           }));
-          if (check.inputs !== 2 || !check.mode || check.overflow || check.top < 250) throw new Error(`settings/${locale}/${theme}/${width}: ${JSON.stringify(check)}`);
+          if (check.inputs !== 2 || !check.mode || check.overflow || !check.guideOpen || !check.commandVisible || check.commandOverflow || check.top < 250) throw new Error(`settings/${locale}/${theme}/${width}: ${JSON.stringify(check)}`);
           await section.screenshot({ path: path.join(output, `settings-${locale}-${theme}-${width}.png`) });
           results.push({ locale, mode: "settings", theme, width, overflow: check.overflow });
         } finally { await page.close(); }

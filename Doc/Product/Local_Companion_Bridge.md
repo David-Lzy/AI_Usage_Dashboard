@@ -31,12 +31,23 @@ extension to obtain arbitrary machine access.
 
 ## Codex Local Quota (Unreleased Work Branch)
 
-Install and sign in to Codex CLI on the **same machine** as the browser, then
-manually start the Node reference bridge with an explicit Codex Home:
+The preview has no standalone Companion installer. On the **same machine** as
+the browser, obtain the matching project source, install Node.js `>=22.12.0`
+and Codex CLI, and sign in to Codex CLI. From the project root, manually start
+the Node reference bridge with an explicit, absolute Codex Home path:
 
 ```sh
-npm run bridge:local -- --codex-home /absolute/path/to/codex-home
+node scripts/local-companion-bridge.mjs --codex-home "/absolute/path/to/CodexHome"
 ```
+
+Replace the example path with the Codex Home used by the signed-in CLI. The
+command runs on Windows, macOS and Linux when `node` and `codex` are on `PATH`;
+use `--codex-bin <absolute-executable-path>` if the CLI is elsewhere. Keep the
+terminal open. It prints a loopback URL and one-time pairing code; enter both
+under **Provider display settings → Codex local connection** and allow Chrome's
+local-address permission request. The disconnected Settings control includes
+these steps. Restarting Companion clears the in-memory token and requires
+pairing again with its new code.
 
 The bridge invokes `codex app-server` for the read-only
 `account/rateLimits/read` request. The CLI may contact Codex services, so this
