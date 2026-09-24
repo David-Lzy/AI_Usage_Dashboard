@@ -19,7 +19,8 @@ describe("buildSettingsPageViewModels", () => {
 
     expect(viewModels.settingsSectionNavItems).toEqual([
       { id: SETTINGS_SECTION_IDS.overview, label: "Overview" },
-      { id: SETTINGS_SECTION_IDS.appearance, label: "Appearance & Sync" },
+      { id: SETTINGS_SECTION_IDS.usageNotifications, label: "Usage & Notifications" },
+      { id: SETTINGS_SECTION_IDS.appearance, label: "Appearance" },
       { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
       {
         id: SETTINGS_SECTION_IDS.providerDisplay,
@@ -51,8 +52,12 @@ describe("buildSettingsPageViewModels", () => {
     });
 
     expect(viewModels.settingsSectionNavItems).toContainEqual({
+      id: SETTINGS_SECTION_IDS.usageNotifications,
+      label: "用量与通知",
+    });
+    expect(viewModels.settingsSectionNavItems).toContainEqual({
       id: SETTINGS_SECTION_IDS.appearance,
-      label: "外观与同步",
+      label: "外观",
     });
     expect(viewModels.settingsSectionNavItems).toContainEqual({
       id: SETTINGS_SECTION_IDS.providerDisplay,

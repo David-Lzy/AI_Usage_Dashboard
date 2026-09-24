@@ -1,5 +1,8 @@
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
+import type { MotionMode } from "../../providers/types";
+import { getPreferredScrollBehavior } from "../motion";
 import type { SettingsSectionId } from "../settings-section-ids";
 
 export type SettingsSectionNavItem = {
@@ -11,6 +14,7 @@ type SettingsSectionNavigationProps = {
   ariaLabel: string;
   activeSectionId: SettingsSectionId;
   items: SettingsSectionNavItem[];
+  motionMode?: MotionMode;
   onSelectSection: (sectionId: SettingsSectionId) => void;
 };
 
@@ -24,10 +28,35 @@ export function SettingsSectionNavigation({
   ariaLabel,
   activeSectionId,
   items,
+  motionMode = "system",
   onSelectSection,
 }: SettingsSectionNavigationProps) {
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    const active = nav?.querySelector<HTMLElement>('[aria-current="true"]');
+
+    if (!nav || !active || nav.scrollWidth <= nav.clientWidth) {
+      return;
+    }
+
+    const navBounds = nav.getBoundingClientRect();
+    const activeBounds = active.getBoundingClientRect();
+    const leftOverflow = activeBounds.left - navBounds.left - 8;
+    const rightOverflow = activeBounds.right - navBounds.right + 8;
+
+    if (leftOverflow < 0 || rightOverflow > 0) {
+      nav.scrollBy({
+        left: leftOverflow < 0 ? leftOverflow : rightOverflow,
+        behavior: getPreferredScrollBehavior(window, motionMode),
+      });
+    }
+  }, [activeSectionId, motionMode]);
+
   return (
     <nav
+      ref={navRef}
       className="settings-section-nav"
       aria-label={ariaLabel}
       data-i18n-layout-contract="settings-navigation"

@@ -109,6 +109,10 @@ function buildSettingsSectionNavItems(
       label: settingsCopy.layout.sections.overview,
     },
     {
+      id: SETTINGS_SECTION_IDS.usageNotifications,
+      label: settingsCopy.layout.sections.usageNotifications,
+    },
+    {
       id: SETTINGS_SECTION_IDS.appearance,
       label: settingsCopy.layout.sections.appearance,
     },

@@ -167,6 +167,15 @@ Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
 tests separately cover OS API rejection and Firefox's permission-probe fallback;
 these checks do not claim a visible notification in the user's desktop session.
 
+`node scripts/check-settings-split-browser.mjs [screenshot-path]` checks the
+Usage & Notifications / Appearance split in an isolated source browser. It
+edits the in-app and notification thresholds independently, tests Settings
+navigation by pointer and keyboard, preserves the old Appearance deep link,
+and reaches the last chip in a 320px Arabic RTL sidebar. Its screenshot uses
+only `SAMPLE_APP_STATE` plus synthetic notification windows and a mocked
+permission transport. The optional output path regenerates the sanitized
+Settings image in `Doc/Assets/` after visual review.
+
 Localization or responsive UI changes that can vary by language length should
 also run the visual locale matrix against `dist/chrome/`:
 

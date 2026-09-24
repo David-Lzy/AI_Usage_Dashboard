@@ -1,5 +1,6 @@
 export const SETTINGS_SECTION_IDS = {
   overview: "settings-overview",
+  usageNotifications: "settings-usage-notifications",
   quickSetup: "settings-quick-setup",
   appearance: "settings-appearance",
   providerDisplay: "settings-provider-display",

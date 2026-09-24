@@ -3,6 +3,7 @@ import { useEffect, type ChangeEvent } from "react";
 import type {
   ActionBadgeSelections,
   ActionBadgeSelectionMode,
+  AppState,
   AppSettings,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
@@ -38,12 +39,15 @@ import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
+import { QuotaNotificationSettings } from "./QuotaNotificationSettings";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
 
 type SettingsPreferencesSectionProps = {
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
   sectionId?: string;
+  usageSectionId?: string;
+  providerAccounts?: AppState["providerAccounts"];
   settings: AppSettings;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
@@ -105,6 +109,8 @@ export function SettingsPreferencesSection({
   i18n,
   providers,
   sectionId,
+  usageSectionId,
+  providerAccounts,
   settings,
   settingsCopy,
   snapshots,
@@ -199,8 +205,6 @@ export function SettingsPreferencesSection({
     actionBadgeOptions[0]?.label ??
     i18n.t("settings.preferences.action_badge_label");
   const basePreferenceMeasurementLabels = [
-    ...syncIntervalOptions.map((option) => option.label),
-    ...warningThresholdOptions.map((option) => option.label),
     ...themePresetOptions.map((option) => option.label),
     ...motionModeOptions.map((option) => option.label),
     ...popupProviderBrowsingModeOptions.map((option) => option.label),
@@ -212,6 +216,10 @@ export function SettingsPreferencesSection({
     ...(settings.toolbarIconMode === "provider"
       ? toolbarIconProviderOptions.map((option) => option.label)
       : []),
+  ];
+  const usagePreferenceMeasurementLabels = [
+    ...syncIntervalOptions.map((option) => option.label),
+    ...warningThresholdOptions.map((option) => option.label),
   ];
 
   function handleToolbarIconCustomImageChange(
@@ -357,129 +365,155 @@ export function SettingsPreferencesSection({
   );
 
   return (
-    <section className="status-card settings-section-anchor" id={sectionId}>
-      <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
-      <AdaptiveControlGrid
-        className="settings-grid settings-grid--balanced-settings"
-        measurementLabels={basePreferenceMeasurementLabels}
+    <>
+      <section
+        className="status-card settings-section-anchor settings-usage-notifications"
+        id={usageSectionId}
       >
-        <EditableNumberCombobox
-          label={i18n.t("settings.preferences.sync_interval_label")}
-          value={settings.syncIntervalMinutes}
-          minimum={SYNC_INTERVAL_MIN_MINUTES}
-          maximum={SYNC_INTERVAL_MAX_MINUTES}
-          unitLabel={syncIntervalUnitLabel}
-          errorText={syncIntervalErrorText}
-          menuButtonLabel={syncIntervalMenuButtonLabel}
-          fieldIdPrefix="sync-interval"
-          options={syncIntervalOptions}
-          onChange={onSyncIntervalChange}
+        <p className="section-label">
+          {settingsCopy.layout.sections.usageNotifications}
+        </p>
+        <AdaptiveControlGrid
+          className="settings-grid settings-grid--balanced-settings"
+          measurementLabels={usagePreferenceMeasurementLabels}
+        >
+          <EditableNumberCombobox
+            label={i18n.t("settings.preferences.sync_interval_label")}
+            value={settings.syncIntervalMinutes}
+            minimum={SYNC_INTERVAL_MIN_MINUTES}
+            maximum={SYNC_INTERVAL_MAX_MINUTES}
+            unitLabel={syncIntervalUnitLabel}
+            errorText={syncIntervalErrorText}
+            menuButtonLabel={syncIntervalMenuButtonLabel}
+            fieldIdPrefix="sync-interval"
+            options={syncIntervalOptions}
+            onChange={onSyncIntervalChange}
+          />
+
+          <EditableNumberCombobox
+            label={i18n.t("settings.preferences.warning_threshold_label")}
+            value={settings.warningThresholdPercent}
+            minimum={WARNING_THRESHOLD_MIN_PERCENT}
+            maximum={WARNING_THRESHOLD_MAX_PERCENT}
+            unitLabel="%"
+            errorText={warningThresholdErrorText}
+            menuButtonLabel={warningThresholdMenuButtonLabel}
+            fieldIdPrefix="warning-threshold"
+            options={warningThresholdOptions}
+            onChange={onWarningThresholdChange}
+          />
+        </AdaptiveControlGrid>
+
+        <QuotaNotificationSettings
+          embedded
+          state={{
+            providers: snapshots,
+            providerSettings: providers,
+            providerAccounts,
+          }}
+          i18n={i18n}
+          warningThresholdPercent={settings.warningThresholdPercent}
         />
 
-        <EditableNumberCombobox
-          label={i18n.t("settings.preferences.warning_threshold_label")}
-          value={settings.warningThresholdPercent}
-          minimum={WARNING_THRESHOLD_MIN_PERCENT}
-          maximum={WARNING_THRESHOLD_MAX_PERCENT}
-          unitLabel="%"
-          errorText={warningThresholdErrorText}
-          menuButtonLabel={warningThresholdMenuButtonLabel}
-          fieldIdPrefix="warning-threshold"
-          options={warningThresholdOptions}
-          onChange={onWarningThresholdChange}
+        <ConfigurationBackupControls
+          copy={settingsCopy.configurationBackup}
+          onExportJson={onExportConfiguration}
+          onImportJson={onImportConfigurationJson}
+          onSaveToChromeSync={onSaveConfigurationToChromeSync}
+          onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
+          onResetToInitialConfiguration={onResetConfigurationToInitial}
         />
+      </section>
 
-        <AccentColorSelect
-          label={i18n.t("settings.preferences.accent_preset_label")}
-          themePreset={settings.themePreset}
-          themeCustomSeedHex={settings.themeCustomSeedHex}
-          themePresetOptions={themePresetOptions}
-          copy={settingsCopy.colorChoices}
+      <section className="status-card settings-section-anchor" id={sectionId}>
+        <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
+        <AdaptiveControlGrid
+          className="settings-grid settings-grid--balanced-settings"
+          measurementLabels={basePreferenceMeasurementLabels}
+        >
+          <AccentColorSelect
+            label={i18n.t("settings.preferences.accent_preset_label")}
+            themePreset={settings.themePreset}
+            themeCustomSeedHex={settings.themeCustomSeedHex}
+            themePresetOptions={themePresetOptions}
+            copy={settingsCopy.colorChoices}
+            activePopover={activePopover}
+            onActivePopoverChange={setActivePopover}
+            onThemePresetChange={onThemePresetChange}
+            onThemeCustomSeedChange={onThemeCustomSeedChange}
+          />
+
+          <MaterialSelect
+            label={i18n.t("settings.preferences.motion_mode_label")}
+            value={settings.motionMode}
+            fieldIdPrefix="motion-mode"
+            sessionPopoverId="motion-mode"
+            activePopover={activePopover}
+            onActivePopoverChange={setActivePopover}
+            options={motionModeOptions}
+            onChange={onMotionModeChange}
+          />
+
+          <MaterialSelect
+            label={i18n.t(
+              "settings.preferences.popup_provider_browsing_mode_label",
+            )}
+            value={settings.popupProviderBrowsingMode}
+            fieldIdPrefix="popup-provider-browsing-mode"
+            sessionPopoverId="popup-provider-browsing-mode"
+            activePopover={activePopover}
+            onActivePopoverChange={setActivePopover}
+            options={popupProviderBrowsingModeOptions}
+            onChange={onPopupProviderBrowsingModeChange}
+          />
+        </AdaptiveControlGrid>
+
+        <SettingsUiMoreSection
+          i18n={i18n}
+          settings={settings}
+          settingsCopy={settingsCopy}
+          uiMoreOpen={uiMoreOpen}
+          toolbarPopupPreviewOpen={toolbarPopupPreviewOpen}
+          popupPreviewRemainingPercent={popupPreviewRemainingPercent}
+          toolbarPopupPreviewPosition={toolbarPopupPreviewPosition}
           activePopover={activePopover}
+          popupCircularRowCountHelperText={popupCircularRowCountHelperText}
+          uiFontHelperText={uiFontHelperText}
+          progressDisplayStyleOptions={progressDisplayStyleOptions}
+          popupCircularProgressItemsPerRowOptions={
+            popupCircularProgressItemsPerRowOptionsForSelect
+          }
+          popupSizePresetOptions={popupSizePresetOptions}
+          popupCornerStyleOptions={popupCornerStyleOptions}
+          popupShadowStyleOptions={popupShadowStyleOptions}
+          uiFontFamilyOptions={uiFontFamilyOptions}
+          toolbarPreferenceControls={toolbarPreferenceControls}
+          toolbarPreferenceMeasurementLabels={
+            toolbarPreferenceMeasurementLabels
+          }
+          onToggleUiMore={() => setUiMoreOpen((current) => !current)}
+          onToggleToolbarPopupPreview={handleToolbarPopupPreviewToggle}
+          onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
+          onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
+          onToolbarPopupPreviewPositionChange={setToolbarPopupPreviewPosition}
           onActivePopoverChange={setActivePopover}
-          onThemePresetChange={onThemePresetChange}
-          onThemeCustomSeedChange={onThemeCustomSeedChange}
+          onFullPageProgressStyleChange={onFullPageProgressStyleChange}
+          onPopupCornerStyleChange={onPopupCornerStyleChange}
+          onPopupCircularProgressItemsPerRowChange={
+            onPopupCircularProgressItemsPerRowChange
+          }
+          onPopupProgressStyleChange={onPopupProgressStyleChange}
+          onPopupShadowStyleChange={onPopupShadowStyleChange}
+          onPopupSizePresetChange={onPopupSizePresetChange}
+          onProgressColorAppearanceChange={onProgressColorAppearanceChange}
+          onProgressColorBandsChange={onProgressColorBandsChange}
+          onProgressThicknessPxChange={onProgressThicknessPxChange}
+          onSidebarProgressStyleChange={onSidebarProgressStyleChange}
+          onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
+          onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
+          onUiFontFamilyChange={onUiFontFamilyChange}
         />
-
-        <MaterialSelect
-          label={i18n.t("settings.preferences.motion_mode_label")}
-          value={settings.motionMode}
-          fieldIdPrefix="motion-mode"
-          sessionPopoverId="motion-mode"
-          activePopover={activePopover}
-          onActivePopoverChange={setActivePopover}
-          options={motionModeOptions}
-          onChange={onMotionModeChange}
-        />
-
-        <MaterialSelect
-          label={i18n.t(
-            "settings.preferences.popup_provider_browsing_mode_label",
-          )}
-          value={settings.popupProviderBrowsingMode}
-          fieldIdPrefix="popup-provider-browsing-mode"
-          sessionPopoverId="popup-provider-browsing-mode"
-          activePopover={activePopover}
-          onActivePopoverChange={setActivePopover}
-          options={popupProviderBrowsingModeOptions}
-          onChange={onPopupProviderBrowsingModeChange}
-        />
-      </AdaptiveControlGrid>
-
-      <ConfigurationBackupControls
-        copy={settingsCopy.configurationBackup}
-        onExportJson={onExportConfiguration}
-        onImportJson={onImportConfigurationJson}
-        onSaveToChromeSync={onSaveConfigurationToChromeSync}
-        onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
-        onResetToInitialConfiguration={onResetConfigurationToInitial}
-      />
-
-      <SettingsUiMoreSection
-        i18n={i18n}
-        settings={settings}
-        settingsCopy={settingsCopy}
-        uiMoreOpen={uiMoreOpen}
-        toolbarPopupPreviewOpen={toolbarPopupPreviewOpen}
-        popupPreviewRemainingPercent={popupPreviewRemainingPercent}
-        toolbarPopupPreviewPosition={toolbarPopupPreviewPosition}
-        activePopover={activePopover}
-        popupCircularRowCountHelperText={popupCircularRowCountHelperText}
-        uiFontHelperText={uiFontHelperText}
-        progressDisplayStyleOptions={progressDisplayStyleOptions}
-        popupCircularProgressItemsPerRowOptions={
-          popupCircularProgressItemsPerRowOptionsForSelect
-        }
-        popupSizePresetOptions={popupSizePresetOptions}
-        popupCornerStyleOptions={popupCornerStyleOptions}
-        popupShadowStyleOptions={popupShadowStyleOptions}
-        uiFontFamilyOptions={uiFontFamilyOptions}
-        toolbarPreferenceControls={toolbarPreferenceControls}
-        toolbarPreferenceMeasurementLabels={
-          toolbarPreferenceMeasurementLabels
-        }
-        onToggleUiMore={() => setUiMoreOpen((current) => !current)}
-        onToggleToolbarPopupPreview={handleToolbarPopupPreviewToggle}
-        onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
-        onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
-        onToolbarPopupPreviewPositionChange={setToolbarPopupPreviewPosition}
-        onActivePopoverChange={setActivePopover}
-        onFullPageProgressStyleChange={onFullPageProgressStyleChange}
-        onPopupCornerStyleChange={onPopupCornerStyleChange}
-        onPopupCircularProgressItemsPerRowChange={
-          onPopupCircularProgressItemsPerRowChange
-        }
-        onPopupProgressStyleChange={onPopupProgressStyleChange}
-        onPopupShadowStyleChange={onPopupShadowStyleChange}
-        onPopupSizePresetChange={onPopupSizePresetChange}
-        onProgressColorAppearanceChange={onProgressColorAppearanceChange}
-        onProgressColorBandsChange={onProgressColorBandsChange}
-        onProgressThicknessPxChange={onProgressThicknessPxChange}
-        onSidebarProgressStyleChange={onSidebarProgressStyleChange}
-        onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
-        onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
-        onUiFontFamilyChange={onUiFontFamilyChange}
-      />
-    </section>
+      </section>
+    </>
   );
 }

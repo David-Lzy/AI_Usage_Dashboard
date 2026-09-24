@@ -67,7 +67,6 @@ import { CustomSourceSettingsSection } from "../components/CustomSourceSettingsS
 import { CodexBarDashboardBridgeSettings } from "../components/CodexBarDashboardBridgeSettings";
 import { LocalCompanionBridgeSettings } from "../components/LocalCompanionBridgeSettings";
 import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
-import { QuotaNotificationSettings } from "../components/QuotaNotificationSettings";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
 import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
@@ -292,6 +291,7 @@ export function SettingsPage({
   activeSessionPageAttachAvailable,
 }: SettingsPageProps) {
   const routeFocusKey = getSettingsRouteFocusKey(routeFocus);
+  const settingsShellRef = useRef<HTMLElement>(null);
   const lastScrolledRouteFocusKeyRef = useRef<string | null>(null);
   const {
     codexAnalyticsApiKeyInput,
@@ -341,6 +341,35 @@ export function SettingsPage({
     onSaveCodexSessionToken,
     onClearCodexSessionToken,
   });
+
+  useEffect(() => {
+    const shell = settingsShellRef.current;
+    const bar = shell?.querySelector<HTMLElement>(".top-app-bar");
+
+    if (!shell || !bar) {
+      return;
+    }
+
+    const updateAnchorOffset = () => {
+      shell.style.setProperty(
+        "--settings-anchor-offset",
+        `${Math.ceil(bar.getBoundingClientRect().bottom + 16)}px`,
+      );
+    };
+    updateAnchorOffset();
+
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateAnchorOffset);
+    observer?.observe(bar);
+    window.addEventListener("resize", updateAnchorOffset);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", updateAnchorOffset);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -437,7 +466,7 @@ export function SettingsPage({
   ].filter((label): label is string => Boolean(label));
 
   return (
-    <main className="app-shell settings-shell">
+    <main className="app-shell settings-shell" ref={settingsShellRef}>
       <TopBar
         title={i18n.t("settings.topbar.title")}
         subtitle={i18n.t("settings.topbar.subtitle")}
@@ -459,6 +488,7 @@ export function SettingsPage({
             ariaLabel={settingsCopy.layout.sectionsAria}
             activeSectionId={activeSettingsSection}
             items={settingsSectionNavItems}
+            motionMode={settings.motionMode}
             onSelectSection={scrollToSection}
           />
         }
@@ -533,9 +563,11 @@ export function SettingsPage({
 
       <SettingsPreferencesSection
         sectionId={SETTINGS_SECTION_IDS.appearance}
+        usageSectionId={SETTINGS_SECTION_IDS.usageNotifications}
         settings={settings}
         providers={providers}
         snapshots={snapshots}
+        providerAccounts={providerAccounts}
         i18n={i18n}
         settingsCopy={settingsCopy}
         surfaceSessionState={settingsSurfaceSession.preferences}
@@ -576,16 +608,6 @@ export function SettingsPage({
           onToolbarIconCustomImageDataUrlChange
         }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
-      />
-
-      <QuotaNotificationSettings
-        state={{
-          providers: snapshots,
-          providerSettings: providers,
-          providerAccounts,
-        }}
-        i18n={i18n}
-        warningThresholdPercent={settings.warningThresholdPercent}
       />
 
       <SettingsQuickSetupSection

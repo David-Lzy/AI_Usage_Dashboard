@@ -204,6 +204,17 @@ converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
 
 ### Quota Notifications (Unreleased Work Branch)
 
+Settings presents two peer modules after the overview: **Usage & Notifications**
+and **Appearance**. Usage & Notifications contains the default sync interval,
+the in-app warning threshold, quota notification controls, and configuration
+backup/Chrome Sync. Appearance contains accent color, motion, Popup Provider
+browsing, and More UI settings. The existing `settings-appearance` deep link
+continues to target Appearance; `settings-usage-notifications` targets the new
+module. The two thresholds are independent, both expressed as percent used:
+the in-app threshold affects page and toolbar warning state, whereas the
+notification threshold determines when system notifications can fire. Moving
+the controls does not migrate or reset either stored value.
+
 Settings offers optional notifications at every display level. The feature is
 off by default; only the explicit enable action requests notification permission.
 The initial threshold is the existing warning threshold, measured as percent used.

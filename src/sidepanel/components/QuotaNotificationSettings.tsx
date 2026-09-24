@@ -33,12 +33,14 @@ type QuotaNotificationSettingsProps = {
   state: Pick<AppState, "providers" | "providerSettings" | "providerAccounts">;
   i18n: RuntimeI18n;
   warningThresholdPercent: number;
+  embedded?: boolean;
 };
 
 export function QuotaNotificationSettings({
   state,
   i18n,
   warningThresholdPercent,
+  embedded = false,
 }: QuotaNotificationSettingsProps) {
   const copy = buildQuotaNotificationLocalizedCopy(i18n.resolvedLocale);
   const [view, setView] = useState<QuotaNotificationSettingsView | null>(null);
@@ -166,13 +168,13 @@ export function QuotaNotificationSettings({
 
   return (
     <section
-      className="dashboard-section quota-notification-settings"
+      className={`dashboard-section quota-notification-settings${embedded ? " quota-notification-settings--embedded" : ""}`}
       data-quota-notifications=""
       aria-busy={busy || !view}
     >
       <div className="dashboard-section__header">
         <div>
-          <p className="section-label">{copy.eyebrow}</p>
+          {embedded ? null : <p className="section-label">{copy.eyebrow}</p>}
           <h2 className="section-title">{copy.title}</h2>
         </div>
       </div>
@@ -183,62 +185,85 @@ export function QuotaNotificationSettings({
         </p>
       ) : (
         <div className="quota-notification-settings__body">
-          <label className="switch-row quota-notification-settings__switch">
-            <span className="switch-row__title">{copy.enabled}</span>
-            <input
-              className="switch-row__control"
-              type="checkbox"
-              checked={preferences?.enabled ?? false}
-              disabled={
-                busy ||
-                (view.permission === "unsupported" && !preferences.enabled)
-              }
-              data-notification-action="enable"
-              onChange={(event) => void handleEnabledChange(event)}
-            />
-          </label>
+          <div className="quota-notification-settings__general">
+            <label className="switch-row quota-notification-settings__switch">
+              <span className="switch-row__title">{copy.enabled}</span>
+              <input
+                className="switch-row__control quota-notification-settings__toggle"
+                type="checkbox"
+                checked={preferences.enabled}
+                disabled={
+                  busy ||
+                  (view.permission === "unsupported" && !preferences.enabled)
+                }
+                data-notification-action="enable"
+                onChange={(event) => void handleEnabledChange(event)}
+              />
+            </label>
+
+            <fieldset
+              className="quota-notification-settings__controls"
+              disabled={controlsDisabled || !preferences.enabled}
+            >
+              <label className="switch-row quota-notification-settings__pause">
+                <span className="switch-row__title">{copy.paused}</span>
+                <input
+                  className="switch-row__control quota-notification-settings__toggle"
+                  type="checkbox"
+                  checked={preferences.paused}
+                  data-notification-action="pause"
+                  onChange={(event) =>
+                    void save({ type: "paused", value: event.currentTarget.checked })
+                  }
+                />
+              </label>
+
+              <label className="form-field quota-notification-settings__threshold">
+                <span className="form-field__label">{copy.threshold}</span>
+                <span className="quota-notification-settings__number-control">
+                  <input
+                    className="form-field__control"
+                    type="number"
+                    min="1"
+                    max="100"
+                    step="1"
+                    inputMode="numeric"
+                    value={thresholdDraft}
+                    data-notification-action="threshold"
+                    onBlur={commitThreshold}
+                    onChange={(event) => setThresholdDraft(event.currentTarget.value)}
+                    onKeyDown={handleThresholdKeyDown}
+                  />
+                  <span className="quota-notification-settings__unit">{copy.percent}</span>
+                </span>
+              </label>
+
+              <button
+                className="text-button text-button--outlined quota-notification-settings__test"
+                type="button"
+                disabled={preferences.paused}
+                data-notification-action="test"
+                onClick={() => void handleTest()}
+              >
+                {copy.test}
+              </button>
+            </fieldset>
+
+            {statusMessage ? (
+              <p className="supporting-copy quota-notification-settings__status" role="status">
+                {statusMessage}
+              </p>
+            ) : null}
+          </div>
 
           <fieldset
-            className="quota-notification-settings__controls"
+            className="quota-notification-settings__scopes"
             disabled={controlsDisabled || !preferences.enabled}
           >
-            <label className="quota-notification-settings__check-row">
-              <input
-                type="checkbox"
-                checked={preferences.paused}
-                data-notification-action="pause"
-                onChange={(event) =>
-                  void save({ type: "paused", value: event.currentTarget.checked })
-                }
-              />
-              <span>{copy.paused}</span>
-            </label>
-
-            <label className="form-field quota-notification-settings__threshold">
-              <span className="form-field__label">{copy.threshold}</span>
-              <span className="quota-notification-settings__number-control">
-                <input
-                  className="form-field__control"
-                  type="number"
-                  min="1"
-                  max="100"
-                  step="1"
-                  inputMode="numeric"
-                  value={thresholdDraft}
-                  disabled={controlsDisabled || !preferences.enabled}
-                  data-notification-action="threshold"
-                  onBlur={commitThreshold}
-                  onChange={(event) => setThresholdDraft(event.currentTarget.value)}
-                  onKeyDown={handleThresholdKeyDown}
-                />
-                <span className="quota-notification-settings__unit">{copy.percent}</span>
-              </span>
-            </label>
-
-            <div className="quota-notification-settings__scopes">
-              <p className="quota-notification-settings__scope-label">
-                {copy.accounts}
-              </p>
+            <legend className="quota-notification-settings__scope-label">
+              {copy.accounts}
+            </legend>
+            <div className="quota-notification-settings__account-list">
               {accounts.length === 0 ? (
                 <p className="supporting-copy" role="status">
                   {copy.noSupportedWindows}
@@ -257,6 +282,7 @@ export function QuotaNotificationSettings({
                     >
                       <label className="quota-notification-settings__check-row">
                         <input
+                          className="quota-notification-settings__checkbox"
                           type="checkbox"
                           checked={accountEnabled}
                           data-notification-account={account.key}
@@ -281,6 +307,7 @@ export function QuotaNotificationSettings({
                             data-notification-window={window.key}
                           >
                             <input
+                              className="quota-notification-settings__checkbox"
                               type="checkbox"
                               checked={!preferences.disabledWindowKeys.includes(window.key)}
                               disabled={!accountEnabled}
@@ -308,26 +335,8 @@ export function QuotaNotificationSettings({
               )}
             </div>
           </fieldset>
-
-          <button
-            className="text-button quota-notification-settings__test"
-            type="button"
-            disabled={
-              controlsDisabled || !preferences.enabled || preferences.paused
-            }
-            data-notification-action="test"
-            onClick={() => void handleTest()}
-          >
-            {copy.test}
-          </button>
         </div>
       )}
-
-      {view && statusMessage ? (
-        <p className="supporting-copy quota-notification-settings__status" role="status">
-          {statusMessage}
-        </p>
-      ) : null}
     </section>
   );
 }

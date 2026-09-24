@@ -41,6 +41,7 @@ describe("SettingsPreferencesSection", () => {
     return renderToStaticMarkup(
       <SettingsPreferencesSection
         sectionId={SETTINGS_SECTION_IDS.appearance}
+        usageSectionId={SETTINGS_SECTION_IDS.usageNotifications}
         settings={settings}
         providers={SAMPLE_APP_STATE.providerSettings}
         snapshots={SAMPLE_APP_STATE.providers}
@@ -82,8 +83,26 @@ describe("SettingsPreferencesSection", () => {
 
   it("renders the always-visible controls plus the collapsible more section", () => {
     const html = renderPreferencesSection();
+    const usageStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.usageNotifications}"`);
+    const appearanceStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.appearance}"`);
+    const usageHtml = html.slice(usageStart, appearanceStart);
+    const appearanceHtml = html.slice(appearanceStart);
 
+    expect(usageStart).toBeGreaterThan(-1);
+    expect(appearanceStart).toBeGreaterThan(usageStart);
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
+    expect(usageHtml).toContain('data-settings-custom-number-field="sync-interval"');
+    expect(usageHtml).toContain('data-settings-custom-number-field="warning-threshold"');
+    expect(usageHtml).toContain('data-quota-notifications=""');
+    expect(usageHtml).toContain("quota-notification-settings--embedded");
+    expect(usageHtml).toContain('data-configuration-backup=""');
+    expect(usageHtml).toContain("In-app warning threshold");
+    expect(appearanceHtml).toContain('data-color-choice-dropdown="accent-color"');
+    expect(appearanceHtml).toContain('data-settings-material-select="motion-mode"');
+    expect(appearanceHtml).toContain('data-settings-material-select="popup-provider-browsing-mode"');
+    expect(appearanceHtml).toContain(">More UI settings<");
+    expect(appearanceHtml).not.toContain('data-configuration-backup=""');
+    expect(appearanceHtml).not.toContain('data-quota-notifications=""');
     expect(html).toContain(
       'class="adaptive-control-grid settings-grid settings-grid--balanced-settings"',
     );

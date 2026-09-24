@@ -83,9 +83,8 @@ describe("SettingsNavigation", () => {
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
     );
-    expect(settingsNavigationCss).toContain(
-      "@container settings-shell (max-width: 360px)",
-    );
+    expect(settingsNavigationCss).toContain("overflow-x: auto;");
+    expect(settingsNavigationCss).toContain("scroll-margin-top: var(--settings-anchor-offset");
     expect(settingsNavigationCss).toContain(
       "grid-template-columns: minmax(0, 1fr);",
     );

@@ -31,19 +31,26 @@ try {
         const { QUOTA_NOTIFICATION_STORAGE_KEY } = await import("/src/shared/quota-notifications.ts");
         const state = createDefaultAppState();
         state.settings.warningThresholdPercent = 75;
-        state.providers = state.providers.filter((provider) => provider.providerId === "codex-personal-page");
-        state.providerSettings = state.providerSettings.filter((provider) => provider.id === "codex-personal-page");
-        state.providerSettings[0].status = "granted";
+        const selectedProviders = new Set(["claude-code-team-page", "codex-personal-page"]);
+        state.providers = state.providers.filter((provider) => selectedProviders.has(provider.providerId));
+        state.providerSettings = state.providerSettings.filter((provider) => selectedProviders.has(provider.id));
+        state.providerSettings.find((provider) => provider.id === "codex-personal-page").status = "granted";
+        const codex = state.providers.find((provider) => provider.providerId === "codex-personal-page");
+        const claude = state.providers.find((provider) => provider.providerId === "claude-code-team-page");
         let now = Date.parse("2026-09-22T12:00:00Z"), stored, permission = "denied";
         const requests = [], events = [], listeners = new Set();
-        Object.assign(state.providers[0], { syncStatus: "ok", lastAttemptAt: new Date(now).toISOString(), lastSuccessAt: new Date(now).toISOString(),
+        Object.assign(codex, { syncStatus: "ok", lastAttemptAt: new Date(now).toISOString(), lastSuccessAt: new Date(now).toISOString(),
           usageWindows: [{ kind: "weekly", label: "Weekly limit", normalizedLabel: "weekly", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: "2026-09-23T12:00:00Z", resetLabel: null }] });
+        Object.assign(claude, { usageWindows: [
+          { kind: "rolling_5h", label: "5-hour limit", normalizedLabel: "5-hour", modelLabel: null, quotaUnit: "percent", used: 10, remaining: 90, total: 100, resetAt: null, resetLabel: null },
+          { kind: "weekly", label: "Weekly limit", normalizedLabel: "weekly", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: null, resetLabel: null },
+        ] });
         const dependencies = { readState: async () => state, readStore: async () => stored,
           writeStore: async (value) => { const previous = stored; stored = structuredClone(value); for (const listener of listeners) listener({ [QUOTA_NOTIFICATION_STORAGE_KEY]: { oldValue: previous, newValue: stored } }, "local"); },
           permission: async () => permission, deliver: async (event) => { events.push(event); }, now: () => now };
         let controller = createQuotaNotificationController(dependencies);
         window.__quotaQa = { requests, events, deny: true, getStore: () => stored,
-          advance: async (used) => { now += 60_000; Object.assign(state.providers[0], { lastAttemptAt: new Date(now).toISOString(), lastSuccessAt: new Date(now).toISOString() }); Object.assign(state.providers[0].usageWindows[0], { used, remaining: 100 - used }); await controller.evaluate(); },
+          advance: async (used) => { now += 60_000; Object.assign(codex, { lastAttemptAt: new Date(now).toISOString(), lastSuccessAt: new Date(now).toISOString() }); Object.assign(codex.usageWindows[0], { used, remaining: 100 - used }); await controller.evaluate(); },
           restart: async () => { controller = createQuotaNotificationController(dependencies); await controller.evaluate(); } };
         // Only the browser/OS transport is mocked; UI, client, controller and persistence transitions are real.
         window.chrome = { runtime: { id: "notification-qa", sendMessage: (message) => controller.handle(message) }, permissions: {
@@ -61,6 +68,7 @@ try {
       const control = page.locator("#quota-qa [data-quota-notifications]");
       const enable = control.locator('[data-notification-action="enable"]');
       await enable.waitFor();
+      assert.equal(await control.locator(".quota-notification-settings__account").count(), 2);
       assert.equal(await enable.isChecked(), false);
       assert.equal(await page.evaluate(() => window.__quotaQa.requests.length), 0);
       assert.equal(await enable.isEnabled(), true, "Missing permission must not disable the explicit enable gesture");
@@ -91,6 +99,13 @@ try {
       await pause.check();
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.paused === true);
       assert.equal(await test.isEnabled(), false);
+      if (locale === "zh-CN" && width === 1280) {
+        await page.emulateMedia({ colorScheme: "dark" });
+        await page.evaluate(() => { document.documentElement.dataset.themeResolved = "dark"; });
+        await control.screenshot({ path: path.join(output, "zh-CN-1280-paused-dark.png") });
+        await page.emulateMedia({ colorScheme: "light" });
+        await page.evaluate(() => { document.documentElement.dataset.themeResolved = "light"; });
+      }
       await pause.uncheck();
       await test.click();
       await page.waitForFunction(() => window.__quotaQa.events.some((event) => event.kind === "test"));
@@ -102,19 +117,26 @@ try {
       const layout = await control.evaluate((element) => {
         const switchTitle = element.querySelector(".quota-notification-settings__switch .switch-row__title").getBoundingClientRect();
         const switchInput = element.querySelector(".quota-notification-settings__switch .switch-row__control").getBoundingClientRect();
+        const body = element.querySelector(".quota-notification-settings__body");
+        const accountCheckbox = element.querySelector(".quota-notification-settings__checkbox:checked");
+        const checkboxMark = getComputedStyle(accountCheckbox, "::after");
         return { width: element.clientWidth, scroll: element.scrollWidth,
           clipped: [...element.querySelectorAll("button")].filter((button) => button.scrollWidth > button.clientWidth + 2).length,
           outside: [...element.querySelectorAll("input,button,h2,label")].filter((child) => {
             const box = child.getBoundingClientRect(), parent = element.getBoundingClientRect();
             return box.left < parent.left - 1 || box.right > parent.right + 1;
           }).length,
+          columns: getComputedStyle(body).gridTemplateColumns.split(" ").length,
           switchRowAligned: Math.abs((switchTitle.top + switchTitle.bottom) / 2 - (switchInput.top + switchInput.bottom) / 2) <= Math.max(switchTitle.height, switchInput.height) / 2,
+          checkboxMark: { left: checkboxMark.borderLeftWidth, right: checkboxMark.borderRightWidth },
           unitWidth: element.querySelector(".quota-notification-settings__unit").getBoundingClientRect().width,
           direction: document.documentElement.dir };
       });
       assert(layout.scroll <= layout.width + 2 && layout.clipped === 0, JSON.stringify(layout));
       assert.equal(layout.outside, 0, JSON.stringify(layout));
       assert(layout.switchRowAligned, `Notification switch label and checkbox split across rows: ${JSON.stringify(layout)}`);
+      assert.equal(layout.columns, width === 320 ? 1 : 2, JSON.stringify(layout));
+      assert.deepEqual(layout.checkboxMark, { left: "2px", right: "0px" }, JSON.stringify(layout));
       assert(layout.unitWidth < 50, "Percent unit must not stretch into a page-wide chip");
       assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
       await control.screenshot({ path: path.join(output, `${locale}-${width}.png`) });

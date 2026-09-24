@@ -866,6 +866,15 @@
   background: var(--app-supporting-surface-background);
 }
 
+.settings-usage-notifications > .configuration-backup-controls {
+  margin-block-start: 0;
+  padding: var(--app-space-4) 0 0;
+  border: 0;
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 0;
+  background: transparent;
+}
+
 .configuration-backup-controls__header {
   display: flex;
   align-items: flex-start;
@@ -1290,4 +1299,3 @@
     justify-content: flex-end;
   }
 }
-

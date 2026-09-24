@@ -44,6 +44,12 @@ describe("sidepanel route state", () => {
         sectionId: "settings-quick-setup",
       },
     });
+    for (const sectionId of ["settings-usage-notifications", "settings-appearance"]) {
+      expect(parseSidePanelHash(`#settings/section/${sectionId}`)).toEqual({
+        name: "settings",
+        focus: { kind: "section", sectionId },
+      });
+    }
     expect(parseSidePanelHash("#settings/quick-setup/cursor-personal-page")).toEqual({
       name: "settings",
       focus: {

@@ -79,7 +79,7 @@
 }
 
 .settings-section-anchor {
-  scroll-margin-top: 172px;
+  scroll-margin-top: var(--settings-anchor-offset, 172px);
 }
 
 .settings-section-anchor:has(.material-select__button[data-open="true"]),
@@ -314,12 +314,13 @@
 .settings-section-nav {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: safe center;
   gap: var(--app-space-2);
-  inline-size: max-content;
-  max-inline-size: 100%;
+  inline-size: 100%;
   margin-inline: auto;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .settings-shell {
@@ -375,6 +376,7 @@
 
 .settings-nav-chip {
   display: inline-flex;
+  flex: none;
   align-items: center;
   justify-content: center;
   min-height: 34px;
@@ -528,10 +530,6 @@
     grid-template-columns: 1fr;
   }
 
-  .settings-section-anchor {
-    scroll-margin-top: 232px;
-  }
-
   .settings-back-to-top-fab {
     right: var(--app-space-3);
     bottom: var(--app-space-3);
@@ -551,12 +549,6 @@
 
   .settings-overview__level-control {
     grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 1120px) {
-  .settings-section-anchor {
-    scroll-margin-top: 324px;
   }
 }
 
@@ -583,8 +575,7 @@
   }
 
   .settings-section-nav {
-    inline-size: max-content;
-    max-inline-size: 100%;
+    inline-size: 100%;
   }
 }
 
@@ -640,38 +631,14 @@
   }
 
   .settings-section-nav {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    inline-size: min(100%, 440px);
-    width: auto;
-    justify-content: stretch;
+    justify-content: flex-start;
   }
 
   .settings-nav-chip {
-    inline-size: 100%;
-    min-inline-size: 0;
+    max-inline-size: 220px;
     min-height: 44px;
     padding-inline: 10px;
     white-space: normal;
     text-wrap: balance;
-  }
-}
-
-@container settings-shell (max-width: 360px) {
-  .settings-section-nav {
-    grid-template-columns: minmax(0, 1fr);
-    inline-size: 100%;
-  }
-}
-
-@media (max-width: 520px) {
-  .settings-section-anchor {
-    scroll-margin-top: 480px;
-  }
-}
-
-@media (max-width: 340px) {
-  .settings-section-anchor {
-    scroll-margin-top: 540px;
   }
 }

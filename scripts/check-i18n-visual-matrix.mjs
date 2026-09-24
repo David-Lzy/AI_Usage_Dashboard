@@ -655,6 +655,7 @@ async function collectLayoutSnapshot(page, routeId, expectedDir, expectedTheme) 
 
       const offscreenElements = elements
         .filter(visibleElement)
+        .filter((element) => !element.matches(".settings-section-nav .settings-nav-chip"))
         .map((element) => {
           const rect = element.getBoundingClientRect();
           const leftOverflow = Math.max(0, -rect.left);
@@ -868,6 +869,12 @@ async function collectLayoutSnapshot(page, routeId, expectedDir, expectedTheme) 
         root.dataset.appLocaleFallbackCount ?? "0",
         10,
       );
+      const settingsNav = evaluatedRouteId === "settings"
+        ? document.querySelector(".settings-section-nav")
+        : null;
+      const activeNavChip = settingsNav?.querySelector('[aria-current="true"]');
+      const navRect = settingsNav?.getBoundingClientRect();
+      const activeNavRect = activeNavChip?.getBoundingClientRect();
 
       if (rootOverflow > 1) {
         issues.push({
@@ -880,6 +887,27 @@ async function collectLayoutSnapshot(page, routeId, expectedDir, expectedTheme) 
         issues.push({
           code: "element_offscreen",
           message: `${offscreenElements.length} visible elements extend beyond the viewport.`,
+        });
+      }
+
+      if (
+        navRect && activeNavRect &&
+        (navRect.left < -1 || navRect.right > viewportWidth + 1 ||
+          activeNavRect.left < navRect.left - 1 ||
+          activeNavRect.right > navRect.right + 1)
+      ) {
+        issues.push({
+          code: "settings_navigation_unreachable",
+          message: "The Settings navigation or its active item is outside the visible scrollport.",
+        });
+      }
+      if (
+        settingsNav && settingsNav.scrollWidth > settingsNav.clientWidth + 1 &&
+        !["auto", "scroll"].includes(getComputedStyle(settingsNav).overflowX)
+      ) {
+        issues.push({
+          code: "settings_navigation_unreachable",
+          message: "Overflowing Settings navigation does not allow horizontal scrolling.",
         });
       }
 
@@ -990,7 +1018,12 @@ async function collectStickyOverlapSnapshot(page, routeId) {
     return [];
   }
 
-  const anchors = ["#settings-overview", "#settings-appearance", "#settings-provider-display"];
+  const anchors = [
+    "#settings-overview",
+    "#settings-usage-notifications",
+    "#settings-appearance",
+    "#settings-provider-display",
+  ];
   const snapshots = [];
 
   for (const anchor of anchors) {

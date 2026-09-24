@@ -9,6 +9,7 @@ export type SettingsCoreCopyText = {
     sections: {
       overview: string;
       quickSetup: string;
+      usageNotifications: string;
       appearance: string;
       advanced: string;
     };
@@ -116,7 +117,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "概覽",
         quickSetup: "快速設定",
-        appearance: "外觀與同步",
+        usageNotifications: "用量與通知",
+        appearance: "外觀",
         advanced: "進階",
       },
       overview: {
@@ -235,7 +237,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "概要",
         quickSetup: "Quick Setup",
-        appearance: "外観と同期",
+        usageNotifications: "使用量と通知",
+        appearance: "外観",
         advanced: "詳細",
       },
       overview: {
@@ -357,7 +360,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "개요",
         quickSetup: "Quick Setup",
-        appearance: "모양 및 동기화",
+        usageNotifications: "사용량 및 알림",
+        appearance: "모양",
         advanced: "고급",
       },
       overview: {
@@ -477,7 +481,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Resumen",
         quickSetup: "Quick Setup",
-        appearance: "Apariencia y sincronización",
+        usageNotifications: "Uso y notificaciones",
+        appearance: "Apariencia",
         advanced: "Avanzado",
       },
       overview: {
@@ -599,7 +604,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Visão geral",
         quickSetup: "Quick Setup",
-        appearance: "Aparência e sincronização",
+        usageNotifications: "Uso e notificações",
+        appearance: "Aparência",
         advanced: "Avançado",
       },
       overview: {
@@ -721,7 +727,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Aperçu",
         quickSetup: "Quick Setup",
-        appearance: "Apparence et synchronisation",
+        usageNotifications: "Utilisation et notifications",
+        appearance: "Apparence",
         advanced: "Avancé",
       },
       overview: {
@@ -843,7 +850,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Übersicht",
         quickSetup: "Quick Setup",
-        appearance: "Darstellung und Synchronisierung",
+        usageNotifications: "Nutzung und Benachrichtigungen",
+        appearance: "Darstellung",
         advanced: "Erweitert",
       },
       overview: {
@@ -965,7 +973,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Panoramica",
         quickSetup: "Quick Setup",
-        appearance: "Aspetto e sincronizzazione",
+        usageNotifications: "Utilizzo e notifiche",
+        appearance: "Aspetto",
         advanced: "Avanzate",
       },
       overview: {
@@ -1087,7 +1096,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Обзор",
         quickSetup: "Quick Setup",
-        appearance: "Внешний вид и синхронизация",
+        usageNotifications: "Использование и уведомления",
+        appearance: "Внешний вид",
         advanced: "Расширенно",
       },
       overview: {
@@ -1209,7 +1219,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "نظرة عامة",
         quickSetup: "Quick Setup",
-        appearance: "المظهر والمزامنة",
+        usageNotifications: "الاستخدام والإشعارات",
+        appearance: "المظهر",
         advanced: "متقدم",
       },
       overview: {
@@ -1330,7 +1341,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Overview",
         quickSetup: "Quick Setup",
-        appearance: "दिखावट और सिंक्रोनाइज़ेशन",
+        usageNotifications: "उपयोग और सूचनाएं",
+        appearance: "दिखावट",
         advanced: "Advanced",
       },
       overview: {
@@ -1452,7 +1464,8 @@ export const SETTINGS_CORE_COPY: Record<
       sections: {
         overview: "Ringkasan",
         quickSetup: "Quick Setup",
-        appearance: "Tampilan dan sinkronisasi",
+        usageNotifications: "Penggunaan dan notifikasi",
+        appearance: "Tampilan",
         advanced: "Advanced",
       },
       overview: {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SUPPORTED_APP_LOCALES } from "./i18n";
+import { createRuntimeI18n, SUPPORTED_APP_LOCALES } from "./i18n";
 import { buildQuotaNotificationLocalizedCopy } from "./quota-notification-localized-copy";
 
 describe("quota notification localized copy", () => {
@@ -20,5 +20,8 @@ describe("quota notification localized copy", () => {
     expect(copy.notifyLowBody).toContain("{remaining}");
     expect(copy.notifyResetTitle).toContain("{provider}");
     expect(copy.notifyResetBody).toContain("{provider}");
+    expect(copy.threshold).not.toBe(
+      createRuntimeI18n(locale).t("settings.preferences.warning_threshold_label"),
+    );
   });
 });

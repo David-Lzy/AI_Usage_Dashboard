@@ -84,6 +84,7 @@ describe("SettingsPage", () => {
     );
     expect(html).toContain('data-material-action-icon="save"');
     expect(html).toContain('class="settings-section-nav"');
+    expect(html).toContain('id="settings-usage-notifications"');
     expect(html).toContain(
       'class="adaptive-control-grid settings-overview__controls"',
     );
@@ -97,6 +98,9 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-settings-material-select="motion-mode"');
     expect(html.indexOf('id="settings-appearance"')).toBeLessThan(
       html.indexOf('data-settings-material-select="motion-mode"'),
+    );
+    expect(html.indexOf('id="settings-usage-notifications"')).toBeLessThan(
+      html.indexOf('id="settings-appearance"'),
     );
     expect(html).toContain('data-provider-carousel=""');
     expect(html).toContain(">Quick Setup<");

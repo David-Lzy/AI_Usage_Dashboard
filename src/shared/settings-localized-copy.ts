@@ -60,7 +60,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
         sections: {
           overview: "概览",
           quickSetup: "快速设置",
-          appearance: "外观与同步",
+          usageNotifications: "用量与通知",
+          appearance: "外观",
           advanced: "高级",
         },
         overview: {
@@ -310,7 +311,8 @@ export function buildSettingsLocalizedCopy(i18n: RuntimeI18n) {
       sections: {
         overview: "Overview",
         quickSetup: "Quick Setup",
-        appearance: "Appearance & Sync",
+        usageNotifications: "Usage & Notifications",
+        appearance: "Appearance",
         advanced: "Advanced",
       },
       overview: {

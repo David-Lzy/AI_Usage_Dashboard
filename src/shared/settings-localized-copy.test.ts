@@ -112,6 +112,9 @@ describe("buildSettingsLocalizedCopy", () => {
         englishCopy.layout.overview.title,
       );
       expect(copy.layout.sections.appearance).not.toMatch(/\bsync\b/i);
+      expect(copy.layout.sections.usageNotifications).not.toBe(
+        englishCopy.layout.sections.usageNotifications,
+      );
       expect(copy.quickSetup.noActionNeeded).not.toBe(
         englishCopy.quickSetup.noActionNeeded,
       );
