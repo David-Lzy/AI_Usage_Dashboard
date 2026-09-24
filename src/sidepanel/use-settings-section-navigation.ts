@@ -10,7 +10,7 @@ import {
 
 export function useSettingsSectionNavigation(motionMode: MotionMode = "system") {
   const [activeSettingsSection, setActiveSettingsSection] =
-    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.overview);
+    useState<SettingsSectionId>(SETTINGS_SECTION_IDS.quickSetup);
 
   useEffect(() => {
     if (

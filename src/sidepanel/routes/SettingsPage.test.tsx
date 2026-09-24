@@ -84,6 +84,14 @@ describe("SettingsPage", () => {
     );
     expect(html).toContain('data-material-action-icon="save"');
     expect(html).toContain('class="settings-section-nav"');
+    expect(html.indexOf('id="settings-quick-setup"')).toBeLessThan(
+      html.indexOf('id="settings-overview"'),
+    );
+    const navMarkup = html.match(/<nav class="settings-section-nav"[\s\S]*?<\/nav>/)?.[0];
+    expect(navMarkup).toBeDefined();
+    expect(navMarkup?.indexOf('>Quick Setup<')).toBeLessThan(
+      navMarkup?.indexOf('>Overview<') ?? 0,
+    );
     expect(html).toContain('id="settings-usage-notifications"');
     expect(html).toContain(
       'class="adaptive-control-grid settings-overview__controls"',

@@ -18,10 +18,10 @@ describe("buildSettingsPageViewModels", () => {
     });
 
     expect(viewModels.settingsSectionNavItems).toEqual([
+      { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
       { id: SETTINGS_SECTION_IDS.overview, label: "Overview" },
       { id: SETTINGS_SECTION_IDS.usageNotifications, label: "Usage & Notifications" },
       { id: SETTINGS_SECTION_IDS.appearance, label: "Appearance" },
-      { id: SETTINGS_SECTION_IDS.quickSetup, label: "Quick Setup" },
       {
         id: SETTINGS_SECTION_IDS.providerDisplay,
         label: "Provider display settings",

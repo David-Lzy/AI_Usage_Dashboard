@@ -105,6 +105,10 @@ function buildSettingsSectionNavItems(
     label: string;
   }> = [
     {
+      id: SETTINGS_SECTION_IDS.quickSetup,
+      label: settingsCopy.layout.sections.quickSetup,
+    },
+    {
       id: SETTINGS_SECTION_IDS.overview,
       label: settingsCopy.layout.sections.overview,
     },
@@ -115,10 +119,6 @@ function buildSettingsSectionNavItems(
     {
       id: SETTINGS_SECTION_IDS.appearance,
       label: settingsCopy.layout.sections.appearance,
-    },
-    {
-      id: SETTINGS_SECTION_IDS.quickSetup,
-      label: settingsCopy.layout.sections.quickSetup,
     },
     {
       id: SETTINGS_SECTION_IDS.providerDisplay,

@@ -28,7 +28,7 @@ describe("useSettingsSectionNavigation", () => {
     const html = renderToStaticMarkup(<SettingsSectionNavigationProbe />);
 
     expect(html).toContain(
-      `data-active-section="${SETTINGS_SECTION_IDS.overview}"`,
+      `data-active-section="${SETTINGS_SECTION_IDS.quickSetup}"`,
     );
     expect(html).toContain('data-has-section-scroll="true"');
     expect(html).toContain('data-has-top-scroll="true"');

@@ -498,6 +498,28 @@ export function SettingsPage({
         onPrimaryAction={onSavePreferences}
       />
 
+      <SettingsQuickSetupSection
+        focusedProviderId={quickSetupFocusedProviderId}
+        i18n={i18n}
+        sectionId={SETTINGS_SECTION_IDS.quickSetup}
+        providers={providers}
+        providerSourceDisplayCopy={providerSourceDisplayCopy}
+        snapshots={snapshots}
+        settingsCopy={settingsCopy}
+        textDirection={i18n.resolvedTextDirection}
+        userLevel={settings.userLevel}
+        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
+        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
+        onToggleProvider={onToggleProvider}
+        onTogglePermission={onTogglePermission}
+        onOpenSessionPage={onOpenSessionPage}
+        onAttachActiveSessionPage={onAttachActiveSessionPage}
+        onClearPageBinding={onClearPageBinding}
+        onOpenCredentialSettings={onOpenCredentialSettings}
+      />
+
       <SettingsOverviewSection
         sectionId={SETTINGS_SECTION_IDS.overview}
         ariaLabel={settingsCopy.layout.overview.aria}
@@ -608,28 +630,6 @@ export function SettingsPage({
           onToolbarIconCustomImageDataUrlChange
         }
         onThemeCustomSeedChange={onSaveThemeCustomSeed}
-      />
-
-      <SettingsQuickSetupSection
-        focusedProviderId={quickSetupFocusedProviderId}
-        i18n={i18n}
-        sectionId={SETTINGS_SECTION_IDS.quickSetup}
-        providers={providers}
-        providerSourceDisplayCopy={providerSourceDisplayCopy}
-        snapshots={snapshots}
-        settingsCopy={settingsCopy}
-        textDirection={i18n.resolvedTextDirection}
-        userLevel={settings.userLevel}
-        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
-        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
-        onToggleProvider={onToggleProvider}
-        onTogglePermission={onTogglePermission}
-        onOpenSessionPage={onOpenSessionPage}
-        onAttachActiveSessionPage={onAttachActiveSessionPage}
-        onClearPageBinding={onClearPageBinding}
-        onOpenCredentialSettings={onOpenCredentialSettings}
       />
 
       <SettingsProviderDisplaySection

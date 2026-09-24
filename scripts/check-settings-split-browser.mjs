@@ -132,6 +132,18 @@ try {
   await page.evaluate(() => { window.location.hash = "#settings"; });
   const usage = page.locator("#settings-usage-notifications");
   await usage.locator('[data-notification-action="threshold"]').waitFor();
+  assert.equal(
+    await page.locator("main.settings-shell > .settings-section-anchor").first().getAttribute("id"),
+    "settings-quick-setup",
+  );
+  assert.equal(
+    await page.locator(".settings-section-nav .settings-nav-chip").first().innerText(),
+    "Quick Setup",
+  );
+  assert.equal(
+    await page.locator(".settings-section-nav .settings-nav-chip").first().getAttribute("aria-current"),
+    "true",
+  );
   await page.waitForFunction(
     () => document.querySelectorAll(".quota-notification-settings__account").length === 2,
   );
@@ -195,10 +207,12 @@ try {
     return Boolean(sync && mode && Math.abs(sync.top - mode.top) < 4);
   });
 
-  for (const sectionId of ["settings-appearance", "settings-usage-notifications"]) {
-    const label = sectionId === "settings-appearance"
-      ? "Appearance"
-      : "Usage & Notifications";
+  for (const [sectionId, label] of [
+    ["settings-quick-setup", "Quick Setup"],
+    ["settings-overview", "Overview"],
+    ["settings-appearance", "Appearance"],
+    ["settings-usage-notifications", "Usage & Notifications"],
+  ]) {
     const button = page.locator(".settings-section-nav").getByRole("button", {
       name: label,
       exact: true,
@@ -252,12 +266,12 @@ try {
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   });
   await page.waitForTimeout(200);
-  const overviewClearance = await page.evaluate(() => {
-    const overview = document.querySelector("#settings-overview");
+  const quickSetupClearance = await page.evaluate(() => {
+    const quickSetup = document.querySelector("#settings-quick-setup");
     const bar = document.querySelector(".top-app-bar");
-    return overview.getBoundingClientRect().top - bar.getBoundingClientRect().bottom;
+    return quickSetup.getBoundingClientRect().top - bar.getBoundingClientRect().bottom;
   });
-  assert(overviewClearance >= 8, `Overview is obscured by the sticky bar: ${overviewClearance}px`);
+  assert(quickSetupClearance >= 8, `Quick Setup is obscured by the sticky bar: ${quickSetupClearance}px`);
   assert.deepEqual(pageErrors, []);
   await page.mouse.move(1270, 1190);
   await mkdir(path.dirname(screenshotPath), { recursive: true });
@@ -273,6 +287,14 @@ try {
     `${server.baseUrl}/src/sidepanel/index.html?app-locale=ar&app-dir=rtl#settings`,
   );
   await rtlPage.locator("#settings-usage-notifications").waitFor();
+  assert.equal(
+    await rtlPage.locator("main.settings-shell > .settings-section-anchor").first().getAttribute("id"),
+    "settings-quick-setup",
+  );
+  assert.equal(
+    await rtlPage.locator(".settings-section-nav .settings-nav-chip").first().getAttribute("aria-current"),
+    "true",
+  );
   const narrowLayout = await rtlPage.locator("#settings-usage-notifications").evaluate((section) => {
     const sync = section.querySelector('[data-settings-custom-number-field="sync-interval"]')?.getBoundingClientRect();
     const warning = section.querySelector('[data-settings-custom-number-field="warning-threshold"]')?.getBoundingClientRect();

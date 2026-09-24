@@ -204,8 +204,9 @@ converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
 
 ### Quota Notifications (Unreleased Work Branch)
 
-Settings presents two peer modules after the overview: **Usage & Notifications**
-and **Appearance**. Usage & Notifications contains the default sync interval,
+Settings places **Quick Setup** immediately below the top navigation, with its
+navigation chip first. **Overview** follows, then the peer **Usage &
+Notifications** and **Appearance** modules. Usage & Notifications contains the default sync interval,
 the in-app warning threshold, quota notification controls, and configuration
 backup/Chrome Sync. Appearance contains accent color, motion, Popup Provider
 browsing, and More UI settings. The existing `settings-appearance` deep link
@@ -296,6 +297,8 @@ Display eligibility plus dashboard display visibility determines whether a provi
 ### Quick Setup
 
 - Quick Setup is the source-entry display and setup entry point.
+- Quick Setup is the first Settings section and first top navigation item;
+  its existing section ID remains the deep-link target.
 - Quick Setup must not be hidden behind Advanced, Developer, or Debug display levels.
 - Quick Setup should show personal/page/policy source entries by default.
 - Team/Enterprise/API source entries should be available through an explicit "show Team/API providers" control so personal users are not overloaded.

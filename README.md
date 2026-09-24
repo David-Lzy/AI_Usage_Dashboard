@@ -106,6 +106,8 @@ before connecting a provider or custom endpoint.
 
 ## Personalize The Dashboard
 
+- Quick Setup is the first Settings section and navigation item, so provider
+  selection is available before appearance and advanced controls.
 - Settings separates **Usage & Notifications** (sync interval, in-app warning,
   optional system notifications, and configuration backup) from **Appearance**
   (color, motion, popup browsing, and advanced UI controls). The in-app warning
@@ -122,11 +124,10 @@ before connecting a provider or custom endpoint.
 - Enable the default-off quota pace estimate in Provider detail for fresh,
   fixed-duration windows. It is a local presentation estimate, not source data.
 
-![AI Usage Dashboard Settings overview](./Doc/Assets/ai-usage-dashboard-settings-overview.png)
+![AI Usage Dashboard Settings Quick Setup](./Doc/Assets/ai-usage-dashboard-settings-quick-setup.png)
 
-_Settings preview rendered from synthetic QA snapshots with notifications off.
-Its separate trigger threshold and account controls appear when enabled. No
-real accounts, credentials, or usage evidence are included._
+_Settings Quick Setup preview rendered from synthetic QA snapshots. No real
+accounts, credentials, or usage evidence are included._
 
 ## Extend It
 
