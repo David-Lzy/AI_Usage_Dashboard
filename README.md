@@ -216,6 +216,9 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   Settings organization, diagnostics, notifications, comparison, export, and
   optional Codex local bridge; these are not Store features until the 0.2.1
   package is separately published there.
+- The authenticated Store API accepted the `0.2.1.0` package upload on
+  2026-09-24 UTC. Listing text and image updates still require the Developer
+  Dashboard, so the revision has not been submitted for review.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

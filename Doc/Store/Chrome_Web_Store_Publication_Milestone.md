@@ -19,8 +19,9 @@ Status note:
   at 100% again on 2026-09-24 UTC
 - GitHub Release `v0.2.1` is stable and provides verified browser-specific
   packages and checksums; its Chrome manifest is `0.2.1.0`
-- 0.2.1 has not been submitted to the Chrome Web Store at this checkpoint;
-  Store listing metadata and images must be updated in the Developer Dashboard
+- the Store API accepted the 0.2.1 package upload as a draft on 2026-09-24
+  UTC, but it has not been submitted for review; listing metadata and images
+  must be updated in the Developer Dashboard first
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -39,8 +40,11 @@ Status note:
   passed its tag workflow on 2026-09-24 UTC. The Chrome and Firefox assets were
   downloaded and verified against the release's `SHA256SUMS.txt`. The Store
   handoff job skipped because repository Store variables are not configured.
-- The 0.2.1 Store package and image set are prepared separately. API status
-  still lists only RC14 as published; no 0.2.1 review submission is claimed.
+- The 0.2.1 Store package upload returned `SUCCEEDED` and manifest `0.2.1.0`.
+  The following authenticated API status still listed only RC14 as published,
+  with no 0.2.1 submitted revision. The 0.2.1 image sets and listing copy are
+  prepared but not yet saved in the Developer Dashboard; no review submission
+  is claimed.
 - [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
   were downloaded and verified against its published `SHA256SUMS.txt`.
