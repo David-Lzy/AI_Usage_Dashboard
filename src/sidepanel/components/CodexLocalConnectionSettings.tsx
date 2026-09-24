@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { sendAppMessage } from "../../shared/app-client";
 import {
@@ -11,6 +11,7 @@ import { getCodexLocalConnectionCopy } from "../../shared/codex-local-localized-
 import { requestCustomSourceHostAccess } from "../../shared/custom-source-host-access";
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { LocalCompanionAction, LocalCompanionSettingsView } from "../../shared/local-companion-settings";
+import { MaterialIcon } from "./MaterialIcon";
 import { MaterialSelect } from "./MaterialSelect";
 
 import "./CodexLocalConnectionSettings.css";
@@ -20,11 +21,13 @@ const START_COMMAND = 'node scripts/local-companion-bridge.mjs --codex-home "ABS
 
 export function CodexLocalConnectionSettings({ locale }: Props) {
   const copy = getCodexLocalConnectionCopy(locale);
+  const setupId = useId();
   const [view, setView] = useState<LocalCompanionSettingsView | null>(null);
   const [baseUrl, setBaseUrl] = useState(`http://127.0.0.1:${LOCAL_COMPANION_BRIDGE_DEFAULT_PORT}`);
   const [pairingCode, setPairingCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const [setupOpen, setSetupOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -87,8 +90,23 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
   return (
     <div className="codex-local-settings" data-codex-local-settings="">
       <div className="codex-local-settings__heading">
-        <div>
-          <h3 className="settings-subsection-title">{copy.title}</h3>
+        <div className="codex-local-settings__heading-main">
+          <div className="codex-local-settings__title-row">
+            <h3 className="settings-subsection-title">{copy.title}</h3>
+            {!connected ? (
+              <button
+                className="codex-local-settings__guide-toggle"
+                type="button"
+                aria-expanded={setupOpen}
+                aria-controls={setupId}
+                data-codex-local-setup-toggle=""
+                onClick={() => setSetupOpen((open) => !open)}
+              >
+                <MaterialIcon name={setupOpen ? "keyboard-arrow-down" : "keyboard-arrow-right"} />
+                {copy.setupTitle}
+              </button>
+            ) : null}
+          </div>
           <p className="body-copy">{copy.detail}</p>
         </div>
         <span className="status-chip" data-codex-local-status={view?.status ?? "disconnected"}>
@@ -96,8 +114,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
         </span>
       </div>
       {!connected ? (
-        <details className="codex-local-settings__guide" data-codex-local-setup="" open>
-          <summary>{copy.setupTitle}</summary>
+        <div className="codex-local-settings__guide" data-codex-local-setup="" id={setupId} hidden={!setupOpen}>
           <ol>
             <li>{copy.setupPrepare}</li>
             <li>
@@ -106,7 +123,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
             </li>
             <li>{copy.setupFinish}</li>
           </ol>
-        </details>
+        </div>
       ) : null}
       <div className="codex-local-settings__mode">
         <MaterialSelect<CodexLocalSourceMode>

@@ -11,6 +11,9 @@ describe("CodexLocalConnectionSettings", () => {
     );
 
     expect(html).toContain('data-codex-local-setup=""');
+    expect(html).toContain('data-codex-local-setup-toggle=""');
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('hidden=""');
     expect(html).toContain("node scripts/local-companion-bridge.mjs --codex-home");
     expect(html).toContain("ABSOLUTE_CODEX_HOME_PATH");
     expect(html).toContain('data-codex-local-status="disconnected"');

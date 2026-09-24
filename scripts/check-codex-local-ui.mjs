@@ -107,11 +107,27 @@ try {
             }
             return opacity >= 0.95;
           });
+          const collapsed = await section.evaluate((element) => {
+            const guide = element.querySelector("[data-codex-local-setup]");
+            const toggle = element.querySelector("[data-codex-local-setup-toggle]");
+            const title = element.querySelector(".settings-subsection-title");
+            return {
+              hidden: guide?.hidden,
+              expanded: toggle?.getAttribute("aria-expanded"),
+              controlsGuide: toggle?.getAttribute("aria-controls") === guide?.id,
+              sameRow: Math.abs((toggle?.getBoundingClientRect().top ?? 0) - (title?.getBoundingClientRect().top ?? 0)) < 12,
+              overflow: element.scrollWidth > element.clientWidth + 1,
+            };
+          });
+          if (!collapsed.hidden || collapsed.expanded !== "false" || !collapsed.controlsGuide || collapsed.overflow || (width === 720 && !collapsed.sameRow)) throw new Error(`settings-collapsed/${locale}/${theme}/${width}: ${JSON.stringify(collapsed)}`);
+          if (["en", "zh-CN", "ar"].includes(locale)) await section.screenshot({ path: path.join(output, `settings-collapsed-${locale}-${theme}-${width}.png`) });
+          await section.locator("[data-codex-local-setup-toggle]").click();
           const check = await section.evaluate((element) => ({
             inputs: element.querySelectorAll("input").length,
             mode: element.querySelector(".material-select")?.textContent ?? "",
             overflow: element.scrollWidth > element.clientWidth + 1,
-            guideOpen: element.querySelector("[data-codex-local-setup]")?.open ?? false,
+            guideOpen: element.querySelector("[data-codex-local-setup]")?.hidden === false,
+            expanded: element.querySelector("[data-codex-local-setup-toggle]")?.getAttribute("aria-expanded"),
             commandVisible: element.querySelector("[data-codex-local-setup] code")?.textContent?.includes("ABSOLUTE_CODEX_HOME_PATH") ?? false,
             commandOverflow: (() => {
               const command = element.querySelector("[data-codex-local-setup] pre");
@@ -119,8 +135,10 @@ try {
             })(),
             top: element.getBoundingClientRect().top,
           }));
-          if (check.inputs !== 2 || !check.mode || check.overflow || !check.guideOpen || !check.commandVisible || check.commandOverflow || check.top < 250) throw new Error(`settings/${locale}/${theme}/${width}: ${JSON.stringify(check)}`);
+          if (check.inputs !== 2 || !check.mode || check.overflow || !check.guideOpen || check.expanded !== "true" || !check.commandVisible || check.commandOverflow || check.top < 250) throw new Error(`settings/${locale}/${theme}/${width}: ${JSON.stringify(check)}`);
           await section.screenshot({ path: path.join(output, `settings-${locale}-${theme}-${width}.png`) });
+          await section.locator("[data-codex-local-setup-toggle]").click();
+          if (!await section.locator("[data-codex-local-setup]").evaluate((guide) => guide.hidden)) throw new Error(`settings-recollapse/${locale}/${theme}/${width}`);
           results.push({ locale, mode: "settings", theme, width, overflow: check.overflow });
         } finally { await page.close(); }
       }
