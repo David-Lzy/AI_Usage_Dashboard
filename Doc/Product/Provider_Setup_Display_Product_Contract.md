@@ -253,8 +253,8 @@ crash may suppress an alert instead of replaying it. OS display is not guarantee
 The migration branch implements five task-oriented Settings categories. This
 does not describe the published 0.2.1 layout documented above. The category shell
 and connection workflows have moved, and ordinary preferences now show actual
-save acknowledgements. The remaining appearance presentation and other surfaces
-are separate migration steps, not completed features.
+save acknowledgements. All five Settings categories are functional. Dashboard,
+Sidebar, detail and Popup alignment remain separate migration steps.
 
 | Category | Primary editing responsibility |
 | --- | --- |
@@ -290,6 +290,22 @@ system-notification triggering are independent values. Denied enablement restore
 Off and can be retried through a new explicit user gesture.
 Failed notification writes expose an explicit retry for the unacknowledged
 changes; an unsaved notification threshold stays marked invalid until confirmed.
+
+Appearance has four unframed groups: global appearance, surface layout, visible
+content and toolbar. The surface selector targets Popup, Sidebar or Full Page;
+only that surface's layout and content editors are shown, without copying values
+to the others. Popup deployment presentation belongs to its layout controls;
+the deployment connection form provides a navigation shortcut. Reset-time format
+is explicitly global. Progress bands, gradients, thickness and image-derived
+colors are retained in an expandable editor. The existing synthetic Popup
+preview remains available, with all three widths and its sample-value control.
+Theme mode, accent, font and motion stay global, including system/time resolution.
+
+General retains language and display-level gating. Data & Backup separates JSON,
+Chrome Sync and reset actions; import validation and reset confirmation are
+unchanged. Export does not include credentials, snapshots or machine pairing.
+Cursor's local-only module preferences report actual local storage failure and
+retain the draft for retry, independently of background-confirmed preferences.
 
 Accounts & Connections uses compact Personal/Web and API lists instead of a
 carousel. Configure expands the existing Provider actions and forms. Codex local

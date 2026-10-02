@@ -94,7 +94,9 @@ describe("cursor usage UI preferences", () => {
       "up",
     );
 
-    writeCursorUsageUiPreferences(reorderedSidebar, { storage });
+    expect(writeCursorUsageUiPreferences(reorderedSidebar, { storage })).toBe(
+      true,
+    );
 
     expect(readCursorUsageUiPreferences({ storage })).toEqual({
       popup: [
@@ -112,6 +114,16 @@ describe("cursor usage UI preferences", () => {
     });
   });
 
+  it("reports unavailable or rejected local writes without claiming persistence", () => {
+    const value = createDefaultCursorUsageUiPreferences();
+    expect(writeCursorUsageUiPreferences(value, { storage: null })).toBe(false);
+    const storage = createStorage();
+    storage.setItem = () => {
+      throw new Error("Storage rejected");
+    };
+    expect(writeCursorUsageUiPreferences(value, { storage })).toBe(false);
+  });
+
   it("normalizes malformed and partial module preferences", () => {
     const storage = createStorage({
       "ai-usage-dashboard:cursor-usage:module-preferences": JSON.stringify({
@@ -127,10 +139,12 @@ describe("cursor usage UI preferences", () => {
       { id: "usage_history", visible: false },
       { id: "billing_summary", visible: true },
     ]);
-    expect(readCursorUsageUiPreferences({
-      storage: createStorage({
-        "ai-usage-dashboard:cursor-usage:module-preferences": "{",
+    expect(
+      readCursorUsageUiPreferences({
+        storage: createStorage({
+          "ai-usage-dashboard:cursor-usage:module-preferences": "{",
+        }),
       }),
-    })).toEqual(createDefaultCursorUsageUiPreferences());
+    ).toEqual(createDefaultCursorUsageUiPreferences());
   });
 });

@@ -2,6 +2,7 @@ import type {
   ApiGatewayMeteringDisplayPreferences,
   AppState,
   AppSettings,
+  DisplaySurface,
   ProgressItemsBySurface,
   ProviderAccountId,
   ProviderAccountsByProvider,
@@ -33,8 +34,10 @@ import {
 } from "../../shared/provider-accounts";
 import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
 import { ApiGatewayMeteringModulePreferenceControls } from "./ApiGatewayMeteringModulePreferenceControls";
+import { getSettingsAppearanceCopy } from "../../shared/settings-appearance-localized-copy";
 
 type SettingsProviderDisplaySectionProps = {
+  surface?: DisplaySurface;
   providers: ProviderSetting[];
   providerSourceDisplayCopy: ProviderSourceDisplayCopy;
   sectionId?: string;
@@ -68,6 +71,7 @@ type SettingsProviderDisplaySectionProps = {
 };
 
 export function SettingsProviderDisplaySection({
+  surface,
   providers,
   providerSourceDisplayCopy,
   sectionId,
@@ -132,13 +136,19 @@ export function SettingsProviderDisplaySection({
     <section
       className="status-card settings-section-anchor settings-provider-display"
       data-settings-provider-display-section=""
+      data-settings-display-surface={surface}
       id={sectionId}
     >
       <div className="dashboard-section__header">
         <div className="section-title-with-info">
           <h2 className="section-title">
-            {settingsCopy.preferenceGroups.providerDisplayShow}
+            {getSettingsAppearanceCopy(locale).content}
           </h2>
+          {surface && (
+            <span className="meta-chip">
+              {settingsCopy.progressItems.surfaceLabels[surface]}
+            </span>
+          )}
           <MaterialInfoTooltip>
             {settingsCopy.preferenceGroups.providerDisplayDetail}
           </MaterialInfoTooltip>
@@ -149,6 +159,7 @@ export function SettingsProviderDisplaySection({
         {sub2ApiProvider ? (
           <>
             <ApiGatewayMeteringModulePreferenceControls
+              surface={surface}
               locale={locale}
               settingsCopy={settingsCopy}
               value={sub2ApiDisplayPreferences}
@@ -163,6 +174,7 @@ export function SettingsProviderDisplaySection({
         ) : null}
 
         <ProviderOrderPreferenceControls
+          surface={surface}
           copy={settingsCopy.providerOrder}
           providers={orderSources}
           providerOrderBySurface={settings.providerOrderBySurface}
@@ -170,6 +182,7 @@ export function SettingsProviderDisplaySection({
         />
 
         <ProviderProgressItemPreferenceControls
+          surface={surface}
           copy={settingsCopy.progressItems}
           customSources={customProgressSources}
           detailsOpenByProvider={providerProgressDetailsOpen}
@@ -181,6 +194,7 @@ export function SettingsProviderDisplaySection({
         />
 
         <UsageHistoryModulePreferenceControls
+          surface={surface}
           locale={locale}
           providers={displayVisibleProviders}
           settingsCopy={settingsCopy}
@@ -190,6 +204,7 @@ export function SettingsProviderDisplaySection({
         />
 
         <ProviderServiceStatusPreferenceControls
+          surface={surface}
           locale={locale}
           settingsCopy={settingsCopy}
           value={settings.providerServiceStatusVisibilityBySurface}
@@ -200,6 +215,7 @@ export function SettingsProviderDisplaySection({
           (provider) => provider.id === "cursor-personal-page",
         ) ? (
           <CursorUsageModulePreferenceControls
+            surface={surface}
             locale={locale}
             settingsCopy={settingsCopy}
           />

@@ -121,8 +121,8 @@ export function readCursorUsageUiPreferences(
 export function writeCursorUsageUiPreferences(
   value: CursorUsageUiPreferences,
   options?: CursorUsageUiPreferenceOptions,
-): void {
-  setSafeStorageItem(
+): boolean {
+  return setSafeStorageItem(
     resolveStorage(options),
     MODULE_PREFERENCES_STORAGE_KEY,
     JSON.stringify(normalizeCursorUsageUiPreferences(value)),

@@ -9,9 +9,7 @@ import type { SettingsPreferencesSurfaceSessionControls } from "../use-settings-
 import { getSettingsUserLevelVisibility } from "../settings-user-level-visibility";
 import { SettingsPreferencesSection } from "./SettingsPreferencesSection";
 import { canUseFloatingToolbarPopupPreview } from "./SettingsUiMoreSection";
-import {
-  POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT,
-} from "./ToolbarPopupPreview";
+import { POPUP_APPEARANCE_PREVIEW_DEFAULT_REMAINING_PERCENT } from "./ToolbarPopupPreview";
 
 describe("SettingsPreferencesSection", () => {
   function createSurfaceSessionControls(
@@ -34,6 +32,7 @@ describe("SettingsPreferencesSection", () => {
 
   function renderPreferencesSection(
     settings = SAMPLE_APP_STATE.settings,
+    providerAccounts = SAMPLE_APP_STATE.providerAccounts,
   ): string {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
@@ -43,6 +42,7 @@ describe("SettingsPreferencesSection", () => {
         sectionId={SETTINGS_SECTION_IDS.appearance}
         usageSectionId={SETTINGS_SECTION_IDS.usageNotifications}
         settings={settings}
+        providerAccounts={providerAccounts}
         providers={SAMPLE_APP_STATE.providerSettings}
         snapshots={SAMPLE_APP_STATE.providers}
         i18n={i18n}
@@ -81,87 +81,95 @@ describe("SettingsPreferencesSection", () => {
     );
   }
 
-  it("renders the always-visible controls plus the collapsible more section", () => {
-    const html = renderPreferencesSection();
-    const usageStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.usageNotifications}"`);
-    const appearanceStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.appearance}"`);
-    const dataStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.data}"`);
-    const usageHtml = html.slice(usageStart, dataStart);
-    const dataHtml = html.slice(dataStart, appearanceStart);
-    const appearanceHtml = html.slice(appearanceStart);
+  it("places multiple-deployment presentation in Popup layout", () => {
+    const html = renderPreferencesSection(SAMPLE_APP_STATE.settings, {
+      "sub2api-api-key": {
+        activeAccountId: "default",
+        accounts: ["default", "account_backup12"].map((id) => ({
+          id,
+          label: id,
+          createdAt: null,
+          lastSuccessAt: null,
+        })),
+        inactiveAccounts: {},
+      },
+    });
+    const layout = html.slice(
+      html.indexOf('data-settings-appearance-group="layout"'),
+      html.indexOf('data-settings-appearance-group="content"'),
+    );
+    expect(layout).toContain(
+      'data-fusion-field="sub2api-popup-account-presentation"',
+    );
+    expect(
+      html.match(/data-fusion-field="sub2api-popup-account-presentation"/g),
+    ).toHaveLength(1);
+  });
 
-    expect(usageStart).toBeGreaterThan(-1);
-    expect(appearanceStart).toBeGreaterThan(usageStart);
-    expect(html).toContain(`id="${SETTINGS_SECTION_IDS.appearance}"`);
-    expect(usageHtml).toContain('data-settings-custom-number-field="sync-interval"');
-    expect(usageHtml).toContain('data-settings-custom-number-field="warning-threshold"');
-    expect(usageHtml).toContain('data-quota-notifications=""');
-    expect(usageHtml).toContain("quota-notification-settings--embedded");
-    expect(dataStart).toBeGreaterThan(usageStart);
-    expect(dataHtml).toContain('data-configuration-backup=""');
-    expect(usageHtml).not.toContain('data-configuration-backup=""');
-    expect(usageHtml).toContain("In-app warning (% used)");
-    expect(appearanceHtml).toContain('data-color-choice-dropdown="accent-color"');
-    expect(appearanceHtml).toContain('data-settings-material-select="motion-mode"');
-    expect(appearanceHtml).toContain('data-settings-material-select="popup-provider-browsing-mode"');
-    expect(appearanceHtml).toContain(">More UI settings<");
-    expect(appearanceHtml).not.toContain('data-configuration-backup=""');
-    expect(appearanceHtml).not.toContain('data-quota-notifications=""');
-    expect(html).toContain(
-      'class="adaptive-control-grid settings-grid settings-grid--balanced-settings"',
+  it("groups all preferences without hiding capabilities behind More UI", () => {
+    const html = renderPreferencesSection();
+    const usage = html.slice(
+      html.indexOf('id="settings-usage-notifications"'),
+      html.indexOf('id="settings-data"'),
     );
-    expect(html).toContain('data-adaptive-control-grid=""');
-    expect(html).toContain('data-settings-custom-number-field="sync-interval"');
-    expect(html).toContain('data-settings-custom-number-field="warning-threshold"');
-    expect(html).not.toContain('data-settings-material-select="locale-preference"');
-    expect(html).not.toContain('data-settings-material-select="theme-mode"');
-    expect(html).toContain('data-color-choice-dropdown="accent-color"');
-    expect(html).toContain('data-settings-material-select="motion-mode"');
-    expect(html).toContain(
-      'data-settings-material-select="popup-provider-browsing-mode"',
+    const appearance = html.slice(html.indexOf('id="settings-appearance"'));
+    expect(usage).toContain(
+      'data-settings-custom-number-field="sync-interval"',
     );
-    expect(html).toContain("material-info-tooltip__trigger");
-    expect(html).toContain('role="tooltip"');
-    expect(html).not.toContain("settings-preferences__field-with-helper");
-    expect(html).not.toContain("settings-preferences__inline-helper");
-    expect(html).not.toContain('data-action-badge-selection-controls=""');
-    expect(html).not.toContain('data-action-badge-mode-switch=""');
-    expect(html).not.toContain(
-      "Automatic mode shows attention count until provider quota badges are available",
+    expect(usage).toContain(
+      'data-settings-custom-number-field="warning-threshold"',
     );
-    expect(html).not.toContain('data-action-badge-mode-control=""');
-    expect(html).not.toContain('data-action-badge-mode-reset=""');
-    expect(html).not.toContain("Badge rotation interval");
-    expect(html).not.toContain(
-      'data-settings-material-select="toolbar-icon-mode"',
+    expect(usage).toContain('data-quota-notifications=""');
+    expect(usage).toContain('data-quota-pace-forecast-setting=""');
+    expect(usage).not.toContain('data-configuration-backup=""');
+    expect(appearance).not.toContain('data-quota-pace-forecast-setting=""');
+    expect(appearance).not.toContain(
+      'data-settings-custom-number-field="sync-interval"',
     );
+    for (const group of ["global", "layout", "content", "toolbar"]) {
+      expect(appearance).toContain(`data-settings-appearance-group="${group}"`);
+    }
+    for (const field of [
+      "motion-mode",
+      "ui-font-family",
+      "settings-editing-surface",
+      "popup-progress-style",
+      "popup-circular-row-count",
+      "popup-provider-browsing-mode",
+      "popup-size-preset",
+      "popup-corner-style",
+      "popup-shadow-style",
+      "reset-time-display-mode",
+      "toolbar-icon-mode",
+    ]) {
+      expect(appearance).toContain(`data-settings-material-select="${field}"`);
+    }
+    expect(appearance).not.toContain(
+      'data-settings-material-select="sidebar-progress-style"',
+    );
+    expect(appearance).not.toContain(
+      'data-settings-material-select="full-page-progress-style"',
+    );
+    expect(appearance).toContain('data-color-choice-dropdown="accent-color"');
+    expect(appearance).toContain('data-progress-appearance-preferences=""');
+    expect(appearance).toContain('data-action-badge-selection-controls=""');
+    expect(appearance).not.toContain(">More UI settings<");
     expect(html).toContain('data-configuration-backup=""');
-    expect(html).toContain("Configuration backup and sync");
     expect(html).toContain("Export JSON");
     expect(html).toContain("Save to Chrome Sync");
     expect(html).toContain("Initialize configuration");
-    expect(html).toContain(">More UI settings<");
-    expect(html).toContain('class="settings-preferences__more-toggle"');
-    expect(html).toContain("settings-preferences__more-toggle-icon");
-    expect(html).toContain('data-material-icon="keyboard-arrow-down"');
-    expect(html).not.toContain(
-      'class="source-card__details-toggle settings-preferences__more-toggle"',
+    expect(appearance).toContain(">Open toolbar popup preview<");
+    expect(appearance).not.toContain("data-toolbar-popup-preview=");
+    expect(
+      appearance.indexOf('data-settings-appearance-group="global"'),
+    ).toBeLessThan(
+      appearance.indexOf('data-settings-appearance-group="layout"'),
     );
-    expect(html).toContain(">Open toolbar popup preview<");
-    expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
-    expect(html).not.toContain('data-settings-material-select="ui-font-family"');
-    expect(html).not.toContain(
-      'data-settings-material-select="reset-time-display-mode"',
+    expect(
+      appearance.indexOf('data-settings-appearance-group="content"'),
+    ).toBeLessThan(
+      appearance.indexOf('data-settings-appearance-group="toolbar"'),
     );
-    expect(html).not.toContain('data-progress-appearance-preferences=""');
-    expect(html).not.toContain("Tune thickness and remaining-color bands");
-    expect(html).not.toContain("#B3261E");
-    expect(html).not.toContain('data-toolbar-popup-preview=');
-    expect(html).not.toContain('data-provider-order-preferences=""');
-    expect(html).not.toContain('data-provider-progress-preferences=""');
-    expect(html).not.toContain("Provider display settings");
-    expect(html).not.toContain("Quick glance");
-    expect(html).not.toContain('class="theme-customization-form"');
   });
 
   it("renders badge selection mode as a closed dropdown setting", () => {
@@ -193,19 +201,20 @@ describe("SettingsPreferencesSection", () => {
     expect(canUseFloatingToolbarPopupPreview(760)).toBe(true);
   });
 
-  it("renders the advanced UI controls only when the more section starts open", () => {
+  it("preserves all advanced appearance controls with a custom theme", () => {
     const html = renderPreferencesSection({
       ...SAMPLE_APP_STATE.settings,
       themePreset: "custom",
     });
 
-    expect(html).toContain(">Collapse UI settings<");
+    expect(html).toContain(">Global appearance<");
     expect(html).toContain(
       'class="adaptive-control-grid settings-grid settings-grid--balanced-settings"',
     );
-    expect(html).toContain("settings-preferences__more-toggle-icon");
-    expect(html).toContain('data-material-icon="keyboard-arrow-up"');
-    expect(html).toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).toContain('data-settings-appearance-group="toolbar"');
+    expect(html).toContain(
+      'data-settings-material-select="popup-circular-row-count"',
+    );
     expect(html).toContain(
       'data-settings-material-select="popup-provider-browsing-mode"',
     );
@@ -241,18 +250,15 @@ describe("SettingsPreferencesSection", () => {
     expect(html).toContain('data-progress-appearance-preferences=""');
     expect(html).toContain("Tune thickness and remaining-color bands");
     expect(html).toContain("#B3261E");
-    expect(html).not.toContain('data-toolbar-popup-preview=');
+    expect(html).not.toContain("data-toolbar-popup-preview=");
     expect(
       html.indexOf('data-progress-appearance-preferences=""'),
-    ).toBeGreaterThan(
+    ).toBeLessThan(
       html.indexOf('data-settings-material-select="popup-shadow-style"'),
     );
     expect(
-      html.indexOf('data-settings-material-select="popup-provider-browsing-mode"'),
-    ).toBeLessThan(html.indexOf("settings-preferences__more--ui"));
-    expect(
       html.indexOf('data-settings-material-select="toolbar-icon-mode"'),
-    ).toBeGreaterThan(html.indexOf("settings-preferences__more--ui"));
+    ).toBeGreaterThan(html.indexOf('data-settings-appearance-group="toolbar"'));
   });
 
   it("renders the quota pace preference as default-off and preserves opt-in", () => {

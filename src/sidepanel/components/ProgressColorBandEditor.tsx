@@ -4,6 +4,7 @@ import type { ProgressColorBand } from "../../providers/types";
 import { RECOMMENDED_COLOR_CHOICES } from "../../shared/color-choices";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
+import { MaterialIcon } from "./MaterialIcon";
 import {
   areProgressColorBandsValid,
   moveProgressColorBand,
@@ -22,8 +23,12 @@ import {
 type ProgressColorBandEditorProps = {
   active: boolean;
   colorBands: ProgressColorBand[];
-  colorChoiceCopy: ReturnType<typeof buildSettingsLocalizedCopy>["colorChoices"];
-  copy: ReturnType<typeof buildSettingsLocalizedCopy>["progressAppearance"]["colorBands"];
+  colorChoiceCopy: ReturnType<
+    typeof buildSettingsLocalizedCopy
+  >["colorChoices"];
+  copy: ReturnType<
+    typeof buildSettingsLocalizedCopy
+  >["progressAppearance"]["colorBands"];
   activePopover?: SettingsActivePopoverSessionState | null;
   onActivePopoverChange?: (
     nextPopover: SettingsActivePopoverSessionState | null,
@@ -172,30 +177,38 @@ export function ProgressColorBandEditor({
                   className="text-button progress-appearance-band__action"
                   type="button"
                   disabled={isFirst}
+                  aria-label={copy.moveUp}
+                  title={copy.moveUp}
                   onClick={() =>
-                    onColorBandsChange(moveProgressColorBand(colorBands, band.id, "up"))
+                    onColorBandsChange(
+                      moveProgressColorBand(colorBands, band.id, "up"),
+                    )
                   }
                 >
-                  {copy.moveUp}
+                  <MaterialIcon name="keyboard-arrow-up" />
                 </button>
                 <button
                   className="text-button progress-appearance-band__action"
                   type="button"
                   disabled={isLast}
+                  aria-label={copy.moveDown}
+                  title={copy.moveDown}
                   onClick={() =>
                     onColorBandsChange(
                       moveProgressColorBand(colorBands, band.id, "down"),
                     )
                   }
                 >
-                  {copy.moveDown}
+                  <MaterialIcon name="keyboard-arrow-down" />
                 </button>
                 <button
                   className="text-button progress-appearance-band__action"
                   type="button"
                   disabled={draftBands.length <= 1}
                   onClick={() =>
-                    onColorBandsChange(removeProgressColorBand(colorBands, band.id))
+                    onColorBandsChange(
+                      removeProgressColorBand(colorBands, band.id),
+                    )
                   }
                 >
                   {copy.removeBand}

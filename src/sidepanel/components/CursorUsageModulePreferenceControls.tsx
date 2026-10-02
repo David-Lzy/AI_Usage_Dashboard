@@ -14,13 +14,17 @@ import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialIcon } from "./MaterialIcon";
+import { SettingsSaveFeedback } from "./SettingsSaveFeedback";
+import type { SettingsSaveStatus } from "../settings-save-feedback";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
 
 export function CursorUsageModulePreferenceControls({
+  surface: selectedSurface,
   locale,
   settingsCopy,
 }: {
+  surface?: DisplaySurface;
   locale: ResolvedAppLocale;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
 }) {
@@ -28,6 +32,7 @@ export function CursorUsageModulePreferenceControls({
     readCursorUsageUiPreferences(),
   );
   const copy = buildCursorUsageLocalizedCopy(locale);
+  const [saveStatus, setSaveStatus] = useState<SettingsSaveStatus>("idle");
   const moduleLabels: Record<CursorUsageUiModuleId, string> = {
     billing_summary: copy.billingSummary,
     usage_history: copy.recentUsage,
@@ -35,7 +40,9 @@ export function CursorUsageModulePreferenceControls({
 
   const updatePreferences = (nextPreferences: CursorUsageUiPreferences) => {
     setPreferences(nextPreferences);
-    writeCursorUsageUiPreferences(nextPreferences);
+    setSaveStatus(
+      writeCursorUsageUiPreferences(nextPreferences) ? "saved" : "error",
+    );
   };
 
   return (
@@ -51,9 +58,10 @@ export function CursorUsageModulePreferenceControls({
         </div>
       </div>
       <div className="usage-history-preferences__surface-grid">
-        {SURFACES.map((surface) => {
+        {(selectedSurface ? [selectedSurface] : SURFACES).map((surface) => {
           const surfacePreferences = preferences[surface];
-          const surfaceLabel = settingsCopy.progressItems.surfaceLabels[surface];
+          const surfaceLabel =
+            settingsCopy.progressItems.surfaceLabels[surface];
           const visibleCount = surfacePreferences.filter(
             (preference) => preference.visible,
           ).length;
@@ -64,7 +72,9 @@ export function CursorUsageModulePreferenceControls({
               key={surface}
             >
               <div className="provider-progress-surface__header">
-                <p className="provider-progress-surface__title">{surfaceLabel}</p>
+                <p className="provider-progress-surface__title">
+                  {surfaceLabel}
+                </p>
                 <span className="meta-chip">
                   {settingsCopy.progressItems.visibleCount(
                     visibleCount,
@@ -177,6 +187,11 @@ export function CursorUsageModulePreferenceControls({
           );
         })}
       </div>
+      <SettingsSaveFeedback
+        status={saveStatus}
+        locale={locale}
+        onRetry={() => updatePreferences(preferences)}
+      />
     </section>
   );
 }

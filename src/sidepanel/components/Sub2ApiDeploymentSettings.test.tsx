@@ -21,17 +21,47 @@ function getSub2ApiSnapshot() {
 }
 
 describe("Sub2ApiDeploymentSettings", () => {
-  it("renders the selected popup presentation mode for multiple deployments", () => {
-    const first = saveSub2ApiDeployment(
-      structuredClone(SAMPLE_APP_STATE),
-      {
-        accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
-        displayLabel: "Primary gateway",
-        baseUrl: "https://primary.example.test",
-        apiKey: "primary-secret",
-        insecureTransportAcknowledged: false,
-      },
+  it("offers a navigation shortcut instead of a duplicate appearance editor", () => {
+    const html = renderToStaticMarkup(
+      <Sub2ApiDeploymentSettings
+        locale="en"
+        snapshot={null}
+        popupAccountPresentationMode="select"
+        onOpenPresentationSettings={() => {}}
+        providerAccounts={{
+          "sub2api-api-key": {
+            activeAccountId: "default",
+            accounts: ["default", "account_backup12"].map((id) => ({
+              id,
+              label: id,
+              createdAt: null,
+              lastSuccessAt: null,
+            })),
+            inactiveAccounts: {},
+          },
+        }}
+        onSelectAccount={() => {}}
+        onSave={() => {}}
+        onTest={async () => true}
+        onDisconnect={() => {}}
+        onRemove={() => {}}
+        onPopupAccountPresentationModeChange={() => {}}
+      />,
     );
+    expect(html).toContain("Popup deployment layout");
+    expect(html).not.toContain(
+      'data-settings-material-select="sub2api-popup-account-presentation"',
+    );
+  });
+
+  it("renders the selected popup presentation mode for multiple deployments", () => {
+    const first = saveSub2ApiDeployment(structuredClone(SAMPLE_APP_STATE), {
+      accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
+      displayLabel: "Primary gateway",
+      baseUrl: "https://primary.example.test",
+      apiKey: "primary-secret",
+      insecureTransportAcknowledged: false,
+    });
     expect(first.ok).toBe(true);
     if (!first.ok) return;
 
@@ -72,16 +102,13 @@ describe("Sub2ApiDeploymentSettings", () => {
   });
 
   it("renders isolated deployment CRUD fields without exposing a saved key", () => {
-    const connected = saveSub2ApiDeployment(
-      structuredClone(SAMPLE_APP_STATE),
-      {
-        accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
-        displayLabel: "Private gateway",
-        baseUrl: "https://gateway.example.test",
-        apiKey: "must-not-render",
-        insecureTransportAcknowledged: false,
-      },
-    );
+    const connected = saveSub2ApiDeployment(structuredClone(SAMPLE_APP_STATE), {
+      accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
+      displayLabel: "Private gateway",
+      baseUrl: "https://gateway.example.test",
+      apiKey: "must-not-render",
+      insecureTransportAcknowledged: false,
+    });
     expect(connected.ok).toBe(true);
     if (!connected.ok) return;
 
@@ -142,16 +169,13 @@ describe("Sub2ApiDeploymentSettings", () => {
   });
 
   it("keeps a persistent warning for acknowledged non-loopback HTTP", () => {
-    const connected = saveSub2ApiDeployment(
-      structuredClone(SAMPLE_APP_STATE),
-      {
-        accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
-        displayLabel: "Lab gateway",
-        baseUrl: "http://gateway.example.test",
-        apiKey: "not-stored-in-state",
-        insecureTransportAcknowledged: true,
-      },
-    );
+    const connected = saveSub2ApiDeployment(structuredClone(SAMPLE_APP_STATE), {
+      accountId: DEFAULT_PROVIDER_ACCOUNT_ID,
+      displayLabel: "Lab gateway",
+      baseUrl: "http://gateway.example.test",
+      apiKey: "not-stored-in-state",
+      insecureTransportAcknowledged: true,
+    });
     expect(connected.ok).toBe(true);
     if (!connected.ok) return;
 
@@ -176,7 +200,9 @@ describe("Sub2ApiDeploymentSettings", () => {
   });
 
   it("defines bounded responsive fields and shared compact ordering controls", () => {
-    expect(settingsAppearanceCss).toContain(".sub2api-deployment-settings__form");
+    expect(settingsAppearanceCss).toContain(
+      ".sub2api-deployment-settings__form",
+    );
     expect(settingsAppearanceCss).toContain(
       ".sub2api-deployment-settings__connection-mode",
     );

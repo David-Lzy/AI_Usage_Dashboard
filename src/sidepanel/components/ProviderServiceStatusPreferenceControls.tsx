@@ -17,12 +17,14 @@ import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 
 export function ProviderServiceStatusPreferenceControls({
+  surface: selectedSurface,
   locale,
   onChange,
   requestHostAccess = requestProviderServiceStatusHostAccess,
   settingsCopy,
   value,
 }: {
+  surface?: DisplaySurface;
   locale: ResolvedAppLocale;
   onChange: (value: ProviderServiceStatusVisibilityBySurface) => void;
   requestHostAccess?: (
@@ -76,43 +78,53 @@ export function ProviderServiceStatusPreferenceControls({
         </div>
       </div>
       <div className="provider-service-status-preferences__vendors">
-        {(Object.keys(PROVIDER_SERVICE_STATUS_CONFIG) as ProviderServiceStatusVendorId[]).map(
-          (vendorId) => {
-            const config = PROVIDER_SERVICE_STATUS_CONFIG[vendorId];
-            return (
-              <fieldset
-                className="provider-service-status-preferences__vendor"
-                key={vendorId}
-                disabled={pendingVendorId === vendorId}
-              >
-                <legend>{copy.vendors[vendorId]}</legend>
-                <div className="provider-service-status-preferences__surfaces">
-                  {PROVIDER_SERVICE_STATUS_SURFACES.map((surface) => (
-                    <label key={surface}>
-                      <input
-                        type="checkbox"
-                        checked={value[surface]?.[config.brandId] === true}
-                        onChange={(event) =>
-                          void handleVisibilityChange(
-                            vendorId,
-                            surface,
-                            event.currentTarget.checked,
-                          )
-                        }
-                      />
-                      <span>{settingsCopy.progressItems.surfaceLabels[surface]}</span>
-                    </label>
-                  ))}
-                </div>
-                {deniedVendorId === vendorId ? (
-                  <p className="supporting-copy provider-service-status-preferences__error" role="status">
-                    {copy.accessDenied}
-                  </p>
-                ) : null}
-              </fieldset>
-            );
-          },
-        )}
+        {(
+          Object.keys(
+            PROVIDER_SERVICE_STATUS_CONFIG,
+          ) as ProviderServiceStatusVendorId[]
+        ).map((vendorId) => {
+          const config = PROVIDER_SERVICE_STATUS_CONFIG[vendorId];
+          return (
+            <fieldset
+              className="provider-service-status-preferences__vendor"
+              key={vendorId}
+              disabled={pendingVendorId === vendorId}
+            >
+              <legend>{copy.vendors[vendorId]}</legend>
+              <div className="provider-service-status-preferences__surfaces">
+                {(selectedSurface
+                  ? [selectedSurface]
+                  : PROVIDER_SERVICE_STATUS_SURFACES
+                ).map((surface) => (
+                  <label key={surface}>
+                    <input
+                      type="checkbox"
+                      checked={value[surface]?.[config.brandId] === true}
+                      onChange={(event) =>
+                        void handleVisibilityChange(
+                          vendorId,
+                          surface,
+                          event.currentTarget.checked,
+                        )
+                      }
+                    />
+                    <span>
+                      {settingsCopy.progressItems.surfaceLabels[surface]}
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {deniedVendorId === vendorId ? (
+                <p
+                  className="supporting-copy provider-service-status-preferences__error"
+                  role="status"
+                >
+                  {copy.accessDenied}
+                </p>
+              ) : null}
+            </fieldset>
+          );
+        })}
       </div>
     </section>
   );

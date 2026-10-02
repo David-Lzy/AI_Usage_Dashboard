@@ -423,6 +423,7 @@ export function SettingsPage({
         settings={settings}
         providerAccounts={providerAccounts}
         onSelectAccount={onSelectProviderAccount}
+        onOpenPresentationSettings={() => selectCategory("appearance")}
         onPopupAccountPresentationModeChange={
           onPopupProviderAccountPresentationModeChange
         }
@@ -517,7 +518,13 @@ export function SettingsPage({
         expandActionIconName={surfaceActionIconName}
         secondaryActionLabel={i18n.t("common.actions.back")}
         secondaryActionIconName="keyboard-backspace"
-        primaryActionContent={<SettingsSaveFeedback status={saveStatus} locale={i18n.resolvedLocale} onRetry={onRetrySettingsSave} />}
+        primaryActionContent={
+          <SettingsSaveFeedback
+            status={saveStatus}
+            locale={i18n.resolvedLocale}
+            onRetry={onRetrySettingsSave}
+          />
+        }
         sticky
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
@@ -532,7 +539,12 @@ export function SettingsPage({
           onChange={selectCategory}
         />
         <div className="settings-category-content">
-          <h2 className="settings-category-heading" tabIndex={-1} aria-live="polite" aria-atomic="true">
+          <h2
+            className="settings-category-heading"
+            tabIndex={-1}
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {categoryCopy[activeCategory]}
           </h2>
           <ControlVisibilityBoundary
@@ -657,6 +669,41 @@ export function SettingsPage({
 
           <SettingsPreferencesSection
             activeCategory={activeCategory}
+            onPopupProviderAccountPresentationModeChange={
+              onPopupProviderAccountPresentationModeChange
+            }
+            displayControls={(surface) => (
+              <SettingsProviderDisplaySection
+                surface={surface}
+                sectionId={SETTINGS_SECTION_IDS.providerDisplay}
+                settings={settings}
+                providers={providers}
+                providerSourceDisplayCopy={providerSourceDisplayCopy}
+                snapshots={snapshots}
+                providerAccounts={providerAccounts}
+                locale={i18n.resolvedLocale}
+                customSources={customSources}
+                customSourceStates={customSourceStates}
+                settingsCopy={settingsCopy}
+                providerProgressDetailsOpen={
+                  settingsSurfaceSession.providerProgressDetailsOpen
+                }
+                onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
+                onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
+                onUsageHistoryModulesBySurfaceChange={
+                  onUsageHistoryModulesBySurfaceChange
+                }
+                onProviderServiceStatusVisibilityBySurfaceChange={
+                  onProviderServiceStatusVisibilityBySurfaceChange
+                }
+                onProviderProgressDetailsOpenChange={
+                  settingsSurfaceSession.setProviderProgressDetailsOpen
+                }
+                onSub2ApiMeteringDisplayPreferencesChange={
+                  onSub2ApiMeteringDisplayPreferencesChange
+                }
+              />
+            )}
             themeControl={
               <MaterialSelect
                 label={i18n.t("settings.preferences.theme_mode_label")}
@@ -727,41 +774,6 @@ export function SettingsPage({
             }
             onThemeCustomSeedChange={onSaveThemeCustomSeed}
           />
-
-          <ControlVisibilityBoundary
-            data-settings-category-panel="appearance-content"
-            hidden={activeCategory !== "appearance"}
-          >
-            <SettingsProviderDisplaySection
-              sectionId={SETTINGS_SECTION_IDS.providerDisplay}
-              settings={settings}
-              providers={providers}
-              providerSourceDisplayCopy={providerSourceDisplayCopy}
-              snapshots={snapshots}
-              providerAccounts={providerAccounts}
-              locale={i18n.resolvedLocale}
-              customSources={customSources}
-              customSourceStates={customSourceStates}
-              settingsCopy={settingsCopy}
-              providerProgressDetailsOpen={
-                settingsSurfaceSession.providerProgressDetailsOpen
-              }
-              onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
-              onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
-              onUsageHistoryModulesBySurfaceChange={
-                onUsageHistoryModulesBySurfaceChange
-              }
-              onProviderServiceStatusVisibilityBySurfaceChange={
-                onProviderServiceStatusVisibilityBySurfaceChange
-              }
-              onProviderProgressDetailsOpenChange={
-                settingsSurfaceSession.setProviderProgressDetailsOpen
-              }
-              onSub2ApiMeteringDisplayPreferencesChange={
-                onSub2ApiMeteringDisplayPreferencesChange
-              }
-            />
-          </ControlVisibilityBoundary>
         </div>
       </div>
 
@@ -813,6 +825,7 @@ export function SettingsPage({
       </section>
 
       <SettingsBackToTopButton
+        inline
         label={i18n.t("settings.actions.back_to_top")}
         shortLabel={i18n.t("settings.actions.back_to_top_short")}
         onClick={scrollToSettingsTop}

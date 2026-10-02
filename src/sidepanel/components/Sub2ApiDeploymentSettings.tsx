@@ -31,6 +31,7 @@ type Sub2ApiDeploymentSettingsProps = {
   providerAccounts?: ProviderAccountsByProvider;
   snapshot: ProviderSnapshot | null;
   popupAccountPresentationMode: PopupProviderAccountPresentationMode;
+  onOpenPresentationSettings?: () => void;
   onSelectAccount: (accountId: ProviderAccountId) => void;
   onPopupAccountPresentationModeChange: (
     mode: PopupProviderAccountPresentationMode,
@@ -45,11 +46,7 @@ type Sub2ApiDeploymentSettingsProps = {
 };
 
 type ConnectionTestStatus =
-  | "idle"
-  | "testing"
-  | "success"
-  | "failure"
-  | "timeout";
+  "idle" | "testing" | "success" | "failure" | "timeout";
 
 const CONNECTION_TEST_TIMEOUT_MS = 20_000;
 const CONNECTION_TEST_TICK_MS = 250;
@@ -76,6 +73,7 @@ export function Sub2ApiDeploymentSettings({
   providerAccounts,
   snapshot,
   popupAccountPresentationMode,
+  onOpenPresentationSettings,
   onSelectAccount,
   onPopupAccountPresentationModeChange,
   onSave,
@@ -169,8 +167,7 @@ export function Sub2ApiDeploymentSettings({
     isAdding,
   ]);
 
-  const requiresInsecureAcknowledgement =
-    isSub2ApiNonLoopbackHttpUrl(baseUrl);
+  const requiresInsecureAcknowledgement = isSub2ApiNonLoopbackHttpUrl(baseUrl);
   const draft: Sub2ApiDeploymentDraft = {
     accountId: isAdding ? null : activeAccountId,
     displayLabel,
@@ -336,32 +333,42 @@ export function Sub2ApiDeploymentSettings({
         ) : null}
         {!isAdding && (collection?.accounts.length ?? 0) > 1 ? (
           <div className="sub2api-deployment-settings__presentation">
-            <MaterialSelect
-              fieldIdPrefix="sub2api-popup-account-presentation"
-              label={accountPresentationCopy.label}
-              labelAccessory={
-                <MaterialInfoTooltip>
-                  {accountPresentationCopy.detail}
-                </MaterialInfoTooltip>
-              }
-              value={popupAccountPresentationMode}
-              options={[
-                {
-                  value: "select",
-                  label: accountPresentationCopy.select,
-                },
-                {
-                  value: "cycle",
-                  label: accountPresentationCopy.cycle,
-                },
-                {
-                  value: "cards",
-                  label: accountPresentationCopy.cards,
-                },
-              ]}
-              disabled={connectionTestStatus === "testing"}
-              onChange={onPopupAccountPresentationModeChange}
-            />
+            {onOpenPresentationSettings ? (
+              <button
+                className="text-button"
+                type="button"
+                onClick={onOpenPresentationSettings}
+              >
+                {accountPresentationCopy.label}
+              </button>
+            ) : (
+              <MaterialSelect
+                fieldIdPrefix="sub2api-popup-account-presentation"
+                label={accountPresentationCopy.label}
+                labelAccessory={
+                  <MaterialInfoTooltip>
+                    {accountPresentationCopy.detail}
+                  </MaterialInfoTooltip>
+                }
+                value={popupAccountPresentationMode}
+                options={[
+                  {
+                    value: "select",
+                    label: accountPresentationCopy.select,
+                  },
+                  {
+                    value: "cycle",
+                    label: accountPresentationCopy.cycle,
+                  },
+                  {
+                    value: "cards",
+                    label: accountPresentationCopy.cards,
+                  },
+                ]}
+                disabled={connectionTestStatus === "testing"}
+                onChange={onPopupAccountPresentationModeChange}
+              />
+            )}
           </div>
         ) : null}
         <div

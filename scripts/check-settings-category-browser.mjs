@@ -125,7 +125,34 @@ try {
           const layout = await page.evaluate(() => ({
             width: innerWidth,
             documentWidth: document.documentElement.scrollWidth,
+            outside: [...document.querySelectorAll("body *")]
+              .filter(
+                (el) =>
+                  el.checkVisibility() && el.getBoundingClientRect().width > 0,
+              )
+              .filter((el) => {
+                const r = el.getBoundingClientRect();
+                return r.left < -1 || r.right > innerWidth + 1;
+              })
+              .slice(-20)
+              .map((el) => ({
+                tag: el.tagName,
+                class: el.className,
+                left: el.getBoundingClientRect().left,
+                right: el.getBoundingClientRect().right,
+                width: getComputedStyle(el).width,
+                minWidth: getComputedStyle(el).minWidth,
+                position: getComputedStyle(el).position,
+              })),
             direction: document.documentElement.dir,
+            railIcons: [
+              ...document.querySelectorAll(".settings-category-rail svg"),
+            ]
+              .filter((el) => el.checkVisibility())
+              .map((el) => ({
+                fill: getComputedStyle(el).fill,
+                color: getComputedStyle(el).color,
+              })),
             overlaps: [
               ...document.querySelectorAll(".settings-connection__row"),
             ]
@@ -155,9 +182,13 @@ try {
           }));
           assert(
             layout.documentWidth <= width + 1,
-            `${name}/${label}: page overflow ${layout.documentWidth}`,
+            `${name}/${label}: page overflow ${JSON.stringify(layout)}`,
           );
           assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
+          assert(
+            layout.railIcons.every((icon) => icon.fill === icon.color),
+            `${name}: rail icon does not use semantic foreground`,
+          );
           assert.deepEqual(
             layout.overlaps,
             [],
@@ -261,11 +292,12 @@ try {
             .locator("#settings-appearance")
             .waitFor({ state: "visible" });
           const motionMenu = page.locator(
-            '[data-settings-material-select="motion-mode"] button[role="combobox"]',
+            '[data-fusion-field="motion-mode"] input:not(.hidden-input)',
           );
           await motionMenu.click();
           await page
-            .locator('.material-select__menu[role="listbox"]')
+            .locator('[data-fusion-field="motion-mode"] mdui-menu-item')
+            .first()
             .waitFor({ state: "visible" });
           await page.evaluate(() => {
             location.hash = "#settings/section/settings-usage-notifications";
@@ -275,7 +307,9 @@ try {
             .waitFor({ state: "visible" });
           assert.equal(
             await page
-              .locator('.material-select__menu[role="listbox"]:visible')
+              .locator(
+                '[data-fusion-field="motion-mode"] mdui-menu-item:visible',
+              )
               .count(),
             0,
             "A hidden category left a portal menu visible",

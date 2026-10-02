@@ -2,94 +2,34 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import type {
   AppSettings,
+  DisplaySurface,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
+  PopupProviderBrowsingMode,
   PopupShadowStyle,
   PopupSizePreset,
-  ProgressColorAppearance,
-  ProgressColorBand,
   ProgressDisplayStyle,
   ResetTimeDisplayMode,
-  UiFontFamily,
 } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
 import {
   buildResetTimeDisplayCopy,
   RESET_TIME_DISPLAY_MODES,
 } from "../../shared/reset-time-display";
-import { buildQuotaPaceLocalizedCopy } from "../../shared/quota-pace-localized-copy";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import { getSettingsAppearanceCopy } from "../../shared/settings-appearance-localized-copy";
 import type { SettingsActivePopoverSessionState } from "../../shared/surface-session-state";
 import { AdaptiveControlGrid } from "./AdaptiveControlGrid";
-import { MaterialIcon } from "./MaterialIcon";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
-import { MaterialSelect, type MaterialSelectOption } from "./MaterialSelect";
-import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
+import type { MaterialSelectOption } from "./MaterialSelect";
+import { FusionSelect } from "./material-ui/FusionControls";
+import { MaterialActionIcon } from "../../shared/components/MaterialActionIcon";
 import {
   ToolbarPopupPreview,
   type ToolbarPopupPreviewPosition,
 } from "./ToolbarPopupPreview";
 
 export const TOOLBAR_POPUP_PREVIEW_FLOATING_MIN_WIDTH_PX = 640;
-
-type PopupCircularProgressItemsPerRowSelectValue = "1" | "2" | "3" | "4";
-
-type SettingsUiMoreSectionProps = {
-  i18n: RuntimeI18n;
-  settings: AppSettings;
-  settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
-  uiMoreOpen: boolean;
-  toolbarPopupPreviewOpen: boolean;
-  popupPreviewRemainingPercent: number;
-  toolbarPopupPreviewPosition: ToolbarPopupPreviewPosition | null;
-  activePopover: SettingsActivePopoverSessionState | null;
-  popupCircularRowCountHelperText: string;
-  uiFontHelperText: string;
-  progressDisplayStyleOptions: Array<MaterialSelectOption<ProgressDisplayStyle>>;
-  popupCircularProgressItemsPerRowOptions: Array<
-    MaterialSelectOption<PopupCircularProgressItemsPerRowSelectValue>
-  >;
-  popupSizePresetOptions: Array<MaterialSelectOption<PopupSizePreset>>;
-  popupCornerStyleOptions: Array<MaterialSelectOption<PopupCornerStyle>>;
-  popupShadowStyleOptions: Array<MaterialSelectOption<PopupShadowStyle>>;
-  uiFontFamilyOptions: Array<MaterialSelectOption<UiFontFamily>>;
-  toolbarPreferenceControls: ReactNode;
-  toolbarPreferenceMeasurementLabels: readonly string[];
-  onToggleUiMore: () => void;
-  onToggleToolbarPopupPreview: () => void;
-  onCloseToolbarPopupPreview: () => void;
-  onPreviewRemainingPercentChange: (remainingPercent: number) => void;
-  onToolbarPopupPreviewPositionChange: (
-    position: ToolbarPopupPreviewPosition | null,
-  ) => void;
-  onActivePopoverChange: (
-    nextPopover: SettingsActivePopoverSessionState | null,
-  ) => void;
-  onFullPageProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
-  onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
-  onPopupCircularProgressItemsPerRowChange: (
-    itemsPerRow: PopupCircularProgressItemsPerRow,
-  ) => void;
-  onPopupProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
-  onPopupShadowStyleChange: (shadowStyle: PopupShadowStyle) => void;
-  onPopupSizePresetChange: (sizePreset: PopupSizePreset) => void;
-  onProgressColorAppearanceChange: (
-    colorAppearance: ProgressColorAppearance,
-  ) => void;
-  onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
-  onProgressThicknessPxChange: (progressThicknessPx: number) => void;
-  onSidebarProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
-  onResetTimeDisplayModeChange: (
-    resetTimeDisplayMode: ResetTimeDisplayMode,
-  ) => void;
-  onQuotaPaceForecastEnabledChange: (enabled: boolean) => void;
-  onUiFontFamilyChange: (uiFontFamily: UiFontFamily) => void;
-};
-
 export function canUseFloatingToolbarPopupPreview(
   containerWidth: number,
 ): boolean {
@@ -99,386 +39,308 @@ export function canUseFloatingToolbarPopupPreview(
 function useFloatingToolbarPopupPreviewCapability() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [canUseFloatingPreview, setCanUseFloatingPreview] = useState(false);
-
   useEffect(() => {
     const container = containerRef.current;
-    let animationFrameId: number | null = null;
-
-    if (!container) {
-      return undefined;
-    }
-
-    function measureContainerNow() {
-      const nextCanUseFloatingPreview = canUseFloatingToolbarPopupPreview(
-        container?.getBoundingClientRect().width ?? 0,
+    if (!container) return;
+    let frame: number | null = null;
+    const measure = () => {
+      frame = null;
+      setCanUseFloatingPreview(
+        canUseFloatingToolbarPopupPreview(
+          container.getBoundingClientRect().width,
+        ),
       );
-
-      setCanUseFloatingPreview((currentCanUseFloatingPreview) =>
-        currentCanUseFloatingPreview === nextCanUseFloatingPreview
-          ? currentCanUseFloatingPreview
-          : nextCanUseFloatingPreview,
-      );
-    }
-
-    function scheduleMeasureContainer() {
-      if (
-        typeof window === "undefined" ||
-        typeof window.requestAnimationFrame !== "function"
-      ) {
-        measureContainerNow();
-        return;
-      }
-
-      if (animationFrameId !== null) {
-        return;
-      }
-
-      animationFrameId = window.requestAnimationFrame(() => {
-        animationFrameId = null;
-        measureContainerNow();
-      });
-    }
-
-    measureContainerNow();
-
-    if (typeof ResizeObserver === "undefined") {
-      if (typeof window === "undefined") {
-        return undefined;
-      }
-
-      window.addEventListener("resize", scheduleMeasureContainer);
-
-      return () => {
-        if (
-          animationFrameId !== null &&
-          typeof window.cancelAnimationFrame === "function"
-        ) {
-          window.cancelAnimationFrame(animationFrameId);
-        }
-
-        window.removeEventListener("resize", scheduleMeasureContainer);
-      };
-    }
-
-    const resizeObserver = new ResizeObserver(scheduleMeasureContainer);
-    resizeObserver.observe(container);
-
+    };
+    const schedule = () => {
+      if (frame === null) frame = window.requestAnimationFrame(measure);
+    };
+    measure();
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(schedule);
+    observer?.observe(container);
+    window.addEventListener("resize", schedule);
     return () => {
-      if (
-        animationFrameId !== null &&
-        typeof window !== "undefined" &&
-        typeof window.cancelAnimationFrame === "function"
-      ) {
-        window.cancelAnimationFrame(animationFrameId);
-      }
-
-      resizeObserver.disconnect();
+      observer?.disconnect();
+      window.removeEventListener("resize", schedule);
+      if (frame !== null) window.cancelAnimationFrame(frame);
     };
   }, []);
-
-  return {
-    canUseFloatingPreview,
-    containerRef,
-  };
+  return { containerRef, canUseFloatingPreview };
 }
 
-export function SettingsUiMoreSection({
-  i18n,
-  settings,
-  settingsCopy,
-  uiMoreOpen,
-  toolbarPopupPreviewOpen,
-  popupPreviewRemainingPercent,
-  toolbarPopupPreviewPosition,
-  activePopover,
-  popupCircularRowCountHelperText,
-  uiFontHelperText,
-  progressDisplayStyleOptions,
-  popupCircularProgressItemsPerRowOptions,
-  popupSizePresetOptions,
-  popupCornerStyleOptions,
-  popupShadowStyleOptions,
-  uiFontFamilyOptions,
-  toolbarPreferenceControls,
-  toolbarPreferenceMeasurementLabels,
-  onToggleUiMore,
-  onToggleToolbarPopupPreview,
-  onCloseToolbarPopupPreview,
-  onPreviewRemainingPercentChange,
-  onToolbarPopupPreviewPositionChange,
-  onActivePopoverChange,
-  onFullPageProgressStyleChange,
-  onPopupCornerStyleChange,
-  onPopupCircularProgressItemsPerRowChange,
-  onPopupProgressStyleChange,
-  onPopupShadowStyleChange,
-  onPopupSizePresetChange,
-  onProgressColorAppearanceChange,
-  onProgressColorBandsChange,
-  onProgressThicknessPxChange,
-  onSidebarProgressStyleChange,
-  onResetTimeDisplayModeChange,
-  onQuotaPaceForecastEnabledChange,
-  onUiFontFamilyChange,
-}: SettingsUiMoreSectionProps) {
-  const { canUseFloatingPreview, containerRef } =
-    useFloatingToolbarPopupPreviewCapability();
-  const shouldRenderInlinePreview =
-    toolbarPopupPreviewOpen && uiMoreOpen && !canUseFloatingPreview;
-  const shouldRenderFloatingPreview =
-    toolbarPopupPreviewOpen && canUseFloatingPreview;
-  const resetTimeDisplayCopy = buildResetTimeDisplayCopy(i18n.resolvedLocale);
-  const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
-  const resetTimeDisplayModeOptions: Array<
-    MaterialSelectOption<ResetTimeDisplayMode>
-  > = RESET_TIME_DISPLAY_MODES.map((value) => ({
-    value,
-    label:
-      value === "date"
-        ? resetTimeDisplayCopy.dateOption
-        : value === "weekday"
-          ? resetTimeDisplayCopy.weekdayOption
-          : resetTimeDisplayCopy.dateAndWeekdayOption,
-  }));
-  const uiMoreMeasurementLabels = [
-    ...progressDisplayStyleOptions.map((option) => option.label),
-    ...popupCircularProgressItemsPerRowOptions.map((option) => option.label),
-    ...popupSizePresetOptions.map((option) => option.label),
-    ...popupCornerStyleOptions.map((option) => option.label),
-    ...popupShadowStyleOptions.map((option) => option.label),
-    ...toolbarPreferenceMeasurementLabels,
-    ...uiFontFamilyOptions.map((option) => option.label),
-    ...resetTimeDisplayModeOptions.map((option) => option.label),
-  ];
+type SelectOption<T extends string> = Array<MaterialSelectOption<T>>;
+type Props = {
+  i18n: RuntimeI18n;
+  settings: AppSettings;
+  settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
+  surface: DisplaySurface;
+  displayControls?: ReactNode;
+  popupAccountPresentationControls?: ReactNode;
+  onSurfaceChange: (surface: DisplaySurface) => void;
+  toolbarPopupPreviewOpen: boolean;
+  popupPreviewRemainingPercent: number;
+  toolbarPopupPreviewPosition: ToolbarPopupPreviewPosition | null;
+  activePopover: SettingsActivePopoverSessionState | null;
+  popupCircularRowCountHelperText: string;
+  progressDisplayStyleOptions: SelectOption<ProgressDisplayStyle>;
+  popupCircularProgressItemsPerRowOptions: SelectOption<"1" | "2" | "3" | "4">;
+  popupSizePresetOptions: SelectOption<PopupSizePreset>;
+  popupCornerStyleOptions: SelectOption<PopupCornerStyle>;
+  popupShadowStyleOptions: SelectOption<PopupShadowStyle>;
+  popupProviderBrowsingModeOptions: SelectOption<PopupProviderBrowsingMode>;
+  toolbarPreferenceControls: ReactNode;
+  toolbarPreferenceMeasurementLabels: readonly string[];
+  onToggleToolbarPopupPreview: () => void;
+  onCloseToolbarPopupPreview: () => void;
+  onPreviewRemainingPercentChange: (remainingPercent: number) => void;
+  onToolbarPopupPreviewPositionChange: (
+    position: ToolbarPopupPreviewPosition | null,
+  ) => void;
+  onActivePopoverChange: (
+    next: SettingsActivePopoverSessionState | null,
+  ) => void;
+  onFullPageProgressStyleChange: (style: ProgressDisplayStyle) => void;
+  onPopupCornerStyleChange: (style: PopupCornerStyle) => void;
+  onPopupCircularProgressItemsPerRowChange: (
+    items: PopupCircularProgressItemsPerRow,
+  ) => void;
+  onPopupProgressStyleChange: (style: ProgressDisplayStyle) => void;
+  onPopupShadowStyleChange: (style: PopupShadowStyle) => void;
+  onPopupSizePresetChange: (size: PopupSizePreset) => void;
+  onPopupProviderBrowsingModeChange: (mode: PopupProviderBrowsingMode) => void;
+  onSidebarProgressStyleChange: (style: ProgressDisplayStyle) => void;
+  onResetTimeDisplayModeChange: (mode: ResetTimeDisplayMode) => void;
+};
 
+export function SettingsUiMoreSection(props: Props) {
+  const {
+    i18n,
+    settings,
+    settingsCopy,
+    surface,
+    displayControls,
+    activePopover,
+    onActivePopoverChange,
+  } = props;
+  const copy = getSettingsAppearanceCopy(i18n.resolvedLocale);
+  const { containerRef, canUseFloatingPreview } =
+    useFloatingToolbarPopupPreviewCapability();
+  const resetCopy = buildResetTimeDisplayCopy(i18n.resolvedLocale);
+  const surfaceLabels = settingsCopy.progressItems.surfaceLabels;
+  const progressSettings = {
+    popup: {
+      key: "popup-progress-style",
+      label: "settings.preferences.popup_progress_style_label",
+      value: settings.popupProgressStyle,
+      change: props.onPopupProgressStyleChange,
+    },
+    sidebar: {
+      key: "sidebar-progress-style",
+      label: "settings.preferences.sidebar_progress_style_label",
+      value: settings.sidebarProgressStyle,
+      change: props.onSidebarProgressStyleChange,
+    },
+    fullPage: {
+      key: "full-page-progress-style",
+      label: "settings.preferences.full_page_progress_style_label",
+      value: settings.fullPageProgressStyle,
+      change: props.onFullPageProgressStyleChange,
+    },
+  } as const;
+  const progress = progressSettings[surface];
+  const measurements = [
+    ...props.progressDisplayStyleOptions,
+    ...props.popupSizePresetOptions,
+    ...props.popupCornerStyleOptions,
+    ...props.popupShadowStyleOptions,
+    ...props.popupCircularProgressItemsPerRowOptions,
+    ...props.popupProviderBrowsingModeOptions,
+  ].map(({ label }) => label);
+  const preview = (placement: "inline" | "floating") => (
+    <ToolbarPopupPreview
+      i18n={i18n}
+      settings={settings}
+      placement={placement}
+      previewRemainingPercent={props.popupPreviewRemainingPercent}
+      floatingPosition={props.toolbarPopupPreviewPosition}
+      onPreviewRemainingPercentChange={props.onPreviewRemainingPercentChange}
+      onFloatingPositionChange={props.onToolbarPopupPreviewPositionChange}
+      onClose={props.onCloseToolbarPopupPreview}
+    />
+  );
   return (
     <div
       ref={containerRef}
-      className="source-card__details settings-preferences__more settings-preferences__more--ui"
-      data-open={uiMoreOpen ? "true" : "false"}
+      className="settings-appearance-editor"
       data-toolbar-popup-preview-mode={
         canUseFloatingPreview ? "floating" : "inline"
       }
     >
-      <div className="settings-preferences__more-toolbar">
-        <button
-          className="settings-preferences__more-toggle"
-          type="button"
-          aria-expanded={uiMoreOpen}
-          onClick={onToggleUiMore}
-        >
-          <span className="settings-preferences__more-toggle-label">
-            {uiMoreOpen
-              ? settingsCopy.preferenceGroups.uiMoreHide
-              : settingsCopy.preferenceGroups.uiMoreShow}
-          </span>
-          <span
-            className="settings-preferences__more-toggle-icon"
-            aria-hidden="true"
+      <section
+        className="settings-appearance-group"
+        data-settings-appearance-group="layout"
+      >
+        <div className="settings-appearance-group__header">
+          <h2>{copy.layout}</h2>
+          <button
+            type="button"
+            className="text-button text-button--outlined settings-preferences__test-popup-button"
+            aria-pressed={props.toolbarPopupPreviewOpen}
+            onClick={props.onToggleToolbarPopupPreview}
           >
-            <MaterialIcon
-              name={uiMoreOpen ? "keyboard-arrow-up" : "keyboard-arrow-down"}
-            />
-          </span>
-        </button>
-        <button
-          className="text-button text-button--outlined settings-preferences__test-popup-button"
-          type="button"
-          aria-pressed={toolbarPopupPreviewOpen}
-          onClick={onToggleToolbarPopupPreview}
-        >
-          {toolbarPopupPreviewOpen
-            ? i18n.t("settings.popup_appearance_preview.close_test_popup")
-            : i18n.t("settings.popup_appearance_preview.open_test_popup")}
-        </button>
-        <div className="settings-preferences__more-info">
-          <MaterialInfoTooltip>
-            {settingsCopy.preferenceGroups.uiMoreDetail}
-          </MaterialInfoTooltip>
+            <MaterialActionIcon name="tab" />
+            {i18n.t(
+              props.toolbarPopupPreviewOpen
+                ? "settings.popup_appearance_preview.close_test_popup"
+                : "settings.popup_appearance_preview.open_test_popup",
+            )}
+          </button>
         </div>
-      </div>
-
-      {uiMoreOpen ? (
-        <div className="source-card__details-body settings-preferences__more-body">
-          {shouldRenderInlinePreview ? (
-            <ToolbarPopupPreview
-              i18n={i18n}
-              placement="inline"
-              previewRemainingPercent={popupPreviewRemainingPercent}
-              settings={settings}
-              onPreviewRemainingPercentChange={onPreviewRemainingPercentChange}
-              onFloatingPositionChange={onToolbarPopupPreviewPositionChange}
-            />
-          ) : null}
-
-          <AdaptiveControlGrid
-            className="settings-grid settings-grid--balanced-settings"
-            measurementLabels={uiMoreMeasurementLabels}
-          >
-            <MaterialSelect
-              label={i18n.t("settings.preferences.popup_progress_style_label")}
-              value={settings.popupProgressStyle}
-              fieldIdPrefix="popup-progress-style"
-              sessionPopoverId="popup-progress-style"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={progressDisplayStyleOptions}
-              onChange={onPopupProgressStyleChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t(
-                "settings.preferences.popup_circular_row_count_label",
-              )}
-              value={
-                String(settings.popupCircularProgressItemsPerRow) as
-                  PopupCircularProgressItemsPerRowSelectValue
-              }
-              fieldIdPrefix="popup-circular-row-count"
-              sessionPopoverId="popup-circular-row-count"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={popupCircularProgressItemsPerRowOptions}
-              labelAccessory={
-                <MaterialInfoTooltip className="settings-preferences__field-note">
-                  {popupCircularRowCountHelperText}
-                </MaterialInfoTooltip>
-              }
-              onChange={(value) =>
-                onPopupCircularProgressItemsPerRowChange(
-                  Number(value) as PopupCircularProgressItemsPerRow,
-                )
-              }
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.sidebar_progress_style_label")}
-              value={settings.sidebarProgressStyle}
-              fieldIdPrefix="sidebar-progress-style"
-              sessionPopoverId="sidebar-progress-style"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={progressDisplayStyleOptions}
-              onChange={onSidebarProgressStyleChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.full_page_progress_style_label")}
-              value={settings.fullPageProgressStyle}
-              fieldIdPrefix="full-page-progress-style"
-              sessionPopoverId="full-page-progress-style"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={progressDisplayStyleOptions}
-              onChange={onFullPageProgressStyleChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.popup_size_label")}
-              value={settings.popupSizePreset}
-              fieldIdPrefix="popup-size-preset"
-              sessionPopoverId="popup-size-preset"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={popupSizePresetOptions}
-              onChange={onPopupSizePresetChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.popup_corner_label")}
-              value={settings.popupCornerStyle}
-              fieldIdPrefix="popup-corner-style"
-              sessionPopoverId="popup-corner-style"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={popupCornerStyleOptions}
-              onChange={onPopupCornerStyleChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.popup_shadow_label")}
-              value={settings.popupShadowStyle}
-              fieldIdPrefix="popup-shadow-style"
-              sessionPopoverId="popup-shadow-style"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={popupShadowStyleOptions}
-              onChange={onPopupShadowStyleChange}
-            />
-
-            {toolbarPreferenceControls}
-
-            <MaterialSelect
-              label={resetTimeDisplayCopy.settingLabel}
-              value={settings.resetTimeDisplayMode}
-              fieldIdPrefix="reset-time-display-mode"
-              sessionPopoverId="reset-time-display-mode"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={resetTimeDisplayModeOptions}
-              onChange={onResetTimeDisplayModeChange}
-            />
-
-            <MaterialSelect
-              label={i18n.t("settings.preferences.ui_font_label")}
-              value={settings.uiFontFamily}
-              fieldIdPrefix="ui-font-family"
-              sessionPopoverId="ui-font-family"
-              activePopover={activePopover}
-              onActivePopoverChange={onActivePopoverChange}
-              options={uiFontFamilyOptions}
-              labelAccessory={
-                <MaterialInfoTooltip className="settings-preferences__field-note">
-                  {uiFontHelperText}
-                </MaterialInfoTooltip>
-              }
-              onChange={onUiFontFamilyChange}
-            />
-          </AdaptiveControlGrid>
-
-          <label
-            className="settings-preferences__binary-setting"
-            data-quota-pace-forecast-setting=""
-          >
-            <input
-              checked={settings.quotaPaceForecastEnabled}
-              type="checkbox"
-              onChange={(event) =>
-                onQuotaPaceForecastEnabledChange(event.currentTarget.checked)
-              }
-            />
-            <span className="settings-preferences__binary-setting-copy">
-              <strong>{quotaPaceCopy.settingLabel}</strong>
-              <span>{quotaPaceCopy.settingDetail}</span>
-            </span>
-          </label>
-
-          <ProgressAppearancePreferenceControls
-            copy={settingsCopy.progressAppearance}
-            colorChoiceCopy={settingsCopy.colorChoices}
-            thicknessPx={settings.progressThicknessPx}
-            colorAppearance={settings.progressColorAppearance}
-            colorBands={settings.progressColorBands}
-            activePopover={activePopover}
-            onActivePopoverChange={onActivePopoverChange}
-            onThicknessPxChange={onProgressThicknessPxChange}
-            onColorAppearanceChange={onProgressColorAppearanceChange}
-            onColorBandsChange={onProgressColorBandsChange}
+        <div className="settings-surface-selector">
+          <FusionSelect
+            fieldIdPrefix="settings-editing-surface"
+            label={copy.surface}
+            value={surface}
+            onChange={props.onSurfaceChange}
+            options={(["popup", "sidebar", "fullPage"] as const).map(
+              (value) => ({ value, label: surfaceLabels[value] }),
+            )}
           />
         </div>
-      ) : null}
-      {shouldRenderFloatingPreview ? (
-        <ToolbarPopupPreview
-          i18n={i18n}
-          placement="floating"
-          previewRemainingPercent={popupPreviewRemainingPercent}
-          floatingPosition={toolbarPopupPreviewPosition}
-          settings={settings}
-          onPreviewRemainingPercentChange={onPreviewRemainingPercentChange}
-          onFloatingPositionChange={onToolbarPopupPreviewPositionChange}
-          onClose={onCloseToolbarPopupPreview}
-        />
-      ) : null}
+        {props.toolbarPopupPreviewOpen && !canUseFloatingPreview
+          ? preview("inline")
+          : null}
+        <AdaptiveControlGrid
+          className="settings-grid settings-grid--balanced-settings"
+          measurementLabels={measurements}
+        >
+          <FusionSelect
+            key={progress.key}
+            label={i18n.t(progress.label)}
+            value={progress.value}
+            fieldIdPrefix={progress.key}
+            sessionPopoverId={progress.key}
+            activePopover={activePopover}
+            onActivePopoverChange={onActivePopoverChange}
+            options={props.progressDisplayStyleOptions}
+            onChange={progress.change}
+          />
+          {surface === "popup" && (
+            <>
+              <FusionSelect
+                label={i18n.t(
+                  "settings.preferences.popup_circular_row_count_label",
+                )}
+                value={
+                  String(settings.popupCircularProgressItemsPerRow) as
+                    "1" | "2" | "3" | "4"
+                }
+                fieldIdPrefix="popup-circular-row-count"
+                sessionPopoverId="popup-circular-row-count"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                options={props.popupCircularProgressItemsPerRowOptions}
+                labelAccessory={
+                  <MaterialInfoTooltip>
+                    {props.popupCircularRowCountHelperText}
+                  </MaterialInfoTooltip>
+                }
+                onChange={(value) =>
+                  props.onPopupCircularProgressItemsPerRowChange(
+                    Number(value) as PopupCircularProgressItemsPerRow,
+                  )
+                }
+              />
+              <FusionSelect
+                label={i18n.t(
+                  "settings.preferences.popup_provider_browsing_mode_label",
+                )}
+                value={settings.popupProviderBrowsingMode}
+                fieldIdPrefix="popup-provider-browsing-mode"
+                sessionPopoverId="popup-provider-browsing-mode"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                options={props.popupProviderBrowsingModeOptions}
+                onChange={props.onPopupProviderBrowsingModeChange}
+              />
+              <FusionSelect
+                label={i18n.t("settings.preferences.popup_size_label")}
+                value={settings.popupSizePreset}
+                fieldIdPrefix="popup-size-preset"
+                sessionPopoverId="popup-size-preset"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                options={props.popupSizePresetOptions}
+                onChange={props.onPopupSizePresetChange}
+              />
+              <FusionSelect
+                label={i18n.t("settings.preferences.popup_corner_label")}
+                value={settings.popupCornerStyle}
+                fieldIdPrefix="popup-corner-style"
+                sessionPopoverId="popup-corner-style"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                options={props.popupCornerStyleOptions}
+                onChange={props.onPopupCornerStyleChange}
+              />
+              <FusionSelect
+                label={i18n.t("settings.preferences.popup_shadow_label")}
+                value={settings.popupShadowStyle}
+                fieldIdPrefix="popup-shadow-style"
+                sessionPopoverId="popup-shadow-style"
+                activePopover={activePopover}
+                onActivePopoverChange={onActivePopoverChange}
+                options={props.popupShadowStyleOptions}
+                onChange={props.onPopupShadowStyleChange}
+              />
+              {props.popupAccountPresentationControls}
+            </>
+          )}
+        </AdaptiveControlGrid>
+      </section>
+      <section
+        className="settings-appearance-group"
+        data-settings-appearance-group="content"
+      >
+        {displayControls ?? <h2>{copy.content}</h2>}
+        <div className="settings-reset-format">
+          <FusionSelect
+            label={`${resetCopy.settingLabel} (${copy.global})`}
+            value={settings.resetTimeDisplayMode}
+            fieldIdPrefix="reset-time-display-mode"
+            sessionPopoverId="reset-time-display-mode"
+            activePopover={activePopover}
+            onActivePopoverChange={onActivePopoverChange}
+            options={RESET_TIME_DISPLAY_MODES.map((value) => ({
+              value,
+              label:
+                value === "date"
+                  ? resetCopy.dateOption
+                  : value === "weekday"
+                    ? resetCopy.weekdayOption
+                    : resetCopy.dateAndWeekdayOption,
+            }))}
+            onChange={props.onResetTimeDisplayModeChange}
+          />
+        </div>
+      </section>
+      <section
+        className="settings-appearance-group"
+        data-settings-appearance-group="toolbar"
+      >
+        <h2>{copy.toolbar}</h2>
+        <AdaptiveControlGrid
+          className="settings-grid settings-grid--balanced-settings"
+          measurementLabels={props.toolbarPreferenceMeasurementLabels}
+        >
+          {props.toolbarPreferenceControls}
+        </AdaptiveControlGrid>
+      </section>
+      {props.toolbarPopupPreviewOpen && canUseFloatingPreview
+        ? preview("floating")
+        : null}
     </div>
   );
 }

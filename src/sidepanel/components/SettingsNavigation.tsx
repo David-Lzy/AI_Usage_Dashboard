@@ -19,6 +19,7 @@ type SettingsSectionNavigationProps = {
 };
 
 type SettingsBackToTopButtonProps = {
+  inline?: boolean;
   label: string;
   shortLabel: string;
   onClick: () => void;
@@ -82,6 +83,7 @@ export function SettingsSectionNavigation({
 }
 
 export function SettingsBackToTopButton({
+  inline = false,
   label,
   shortLabel,
   onClick,
@@ -110,7 +112,7 @@ export function SettingsBackToTopButton({
     </button>
   );
 
-  if (typeof document === "undefined") {
+  if (inline || typeof document === "undefined") {
     return button;
   }
 

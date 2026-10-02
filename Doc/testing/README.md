@@ -276,6 +276,18 @@ for focused reruns. It runs offline with the screenshot runtime lock; screenshot
 are synthetic evidence, not user account data. Pairing and bridge failures remain
 covered separately by `check-local-companion-browser.mjs` and controller tests.
 
+`node scripts/check-settings-appearance-browser.mjs --extension=<isolated-chrome>`
+checks all 14 locales, both themes and 390/1440px. It changes three independent
+surface styles/orders, Popup deployment presentation and three preview sizes,
+retains category drafts, checks rich-color layout, and records the four groups
+and backup page. The English desktop case additionally exercises gradient and
+thickness writes, rejected local Cursor preferences and retry, a real JSON
+download/import round trip, malformed import, unavailable Sync, cancelled reset
+and system-theme changes. The profile is offline and seeded with synthetic
+snapshots; no real Provider or permission request is made. The pre-existing
+theme and customization unit suites retain time-boundary, image validation,
+font, color and backup-schema coverage.
+
 ```sh
 node scripts/check-material-ui-browser.mjs
 export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-material-qa-XXXXXX)"

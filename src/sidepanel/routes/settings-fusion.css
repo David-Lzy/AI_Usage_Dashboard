@@ -8,6 +8,7 @@
   display: none !important;
 }
 .settings-fusion .top-app-bar {
+  top: 0;
   display: block;
   border-radius: 0;
   box-shadow: none;
@@ -87,6 +88,7 @@
   width: 22px;
   height: 22px;
   flex-shrink: 0;
+  fill: currentColor;
 }
 .settings-category-mobile {
   display: none;
@@ -135,6 +137,14 @@
 .settings-fusion [data-quick-setup-provider-id],
 .settings-fusion .source-card[data-provider-id] {
   scroll-margin-top: var(--settings-anchor-offset);
+}
+.settings-fusion .settings-section-anchor:focus {
+  outline: none;
+}
+.settings-fusion .settings-back-to-top-fab {
+  position: static;
+  justify-self: end;
+  margin-top: 12px;
 }
 .settings-fusion .settings-category-content > section,
 .settings-fusion [data-settings-category-panel] > section {
@@ -376,4 +386,171 @@
   .settings-fusion .top-app-bar__action-label {
     display: none;
   }
+}
+body:has(.settings-fusion) {
+  background: var(--md-sys-color-surface-container-lowest);
+}
+.settings-fusion .top-app-bar,
+.settings-fusion .settings-category-mobile {
+  background: var(--md-sys-color-surface-container-lowest);
+}
+.settings-appearance-group {
+  padding-block: 24px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+.settings-appearance-group:first-child {
+  padding-top: 0;
+}
+.settings-appearance-group h2 {
+  margin: 0 0 20px;
+  font-size: 18px;
+  line-height: 1.4;
+}
+.settings-appearance-group__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.settings-appearance-group__header h2 {
+  margin: 0;
+}
+.settings-appearance-group__header button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+}
+.settings-appearance-group__header svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+.settings-surface-selector,
+.settings-reset-format {
+  max-width: 440px;
+  margin-block: 20px;
+}
+.settings-fusion .settings-quota-estimate {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  padding-block: 20px;
+  margin-top: 16px;
+}
+.settings-fusion
+  :is(
+    .configuration-backup-controls,
+    .progress-appearance-preferences,
+    .progress-appearance-card,
+    .provider-order-preferences,
+    .provider-order-surface,
+    .provider-progress-preferences,
+    .provider-progress-surface,
+    .api-gateway-module-preferences
+  ) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+.settings-fusion .progress-appearance-preferences {
+  margin-top: 24px;
+}
+.settings-fusion .settings-provider-display__body {
+  gap: 24px;
+}
+.settings-fusion .settings-provider-display__body > section + section {
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  padding-top: 24px;
+}
+.settings-fusion
+  :is(
+    .provider-order-preferences__surfaces,
+    .provider-progress-provider__surfaces,
+    .usage-history-preferences__surface-grid,
+    .api-gateway-module-preferences__surface-grid
+  ) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.settings-fusion
+  :is(
+    .provider-order-list__item,
+    .provider-progress-list__item,
+    .provider-progress-provider,
+    .provider-service-status-preferences__vendor
+  ) {
+  border-radius: 8px;
+}
+.settings-fusion
+  :is(.provider-order-list__action, .provider-progress-list__action) {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 6px;
+}
+.settings-fusion
+  :is(.provider-order-list__action, .provider-progress-list__action)
+  svg {
+  width: 20px;
+  height: 20px;
+}
+.settings-fusion .cursor-usage-preferences .settings-save-feedback {
+  justify-content: start;
+  width: auto;
+}
+.settings-fusion .configuration-backup-controls__actions {
+  gap: 12px;
+}
+.settings-fusion .settings-data .configuration-backup-controls {
+  margin: 0;
+}
+.settings-fusion .configuration-backup-controls__header > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@container settings-content (max-width: 600px) {
+  .settings-fusion
+    :is(
+      .progress-appearance-preferences__body,
+      .provider-service-status-preferences__vendors
+    ) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.settings-fusion .configuration-backup-controls__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.configuration-backup-controls__action-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-block: 12px;
+}
+.configuration-backup-controls__reset {
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+  margin-top: 12px;
+}
+.configuration-backup-controls__reset .text-button {
+  color: var(--app-color-error);
+}
+.settings-progress-editor {
+  margin-top: 20px;
+}
+.settings-progress-editor > summary {
+  cursor: pointer;
+  color: var(--md-sys-color-primary);
+  padding-block: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.settings-progress-editor > summary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }

@@ -19,6 +19,7 @@ type Props = {
   settings: AppSettings;
   providerAccounts?: ProviderAccountsByProvider;
   onSelectAccount: ComponentProps<typeof ProviderAccountSelector>["onChange"];
+  onOpenPresentationSettings?: () => void;
   onPopupAccountPresentationModeChange: (
     providerId: ProviderSetting["id"],
     mode: ComponentProps<
@@ -37,6 +38,7 @@ export function SettingsProviderConnectionControls({
   settings,
   providerAccounts,
   onSelectAccount,
+  onOpenPresentationSettings,
   onPopupAccountPresentationModeChange,
   onSave,
   onTest,
@@ -49,6 +51,7 @@ export function SettingsProviderConnectionControls({
       <Sub2ApiDeploymentSettings
         locale={locale}
         providerAccounts={providerAccounts}
+        onOpenPresentationSettings={onOpenPresentationSettings}
         snapshot={snapshot}
         popupAccountPresentationMode={resolvePopupProviderAccountPresentationMode(
           settings.popupProviderAccountPresentationByProvider,

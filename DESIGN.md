@@ -137,6 +137,11 @@ pages have already migrated.
 - Global appearance, surface layout, visible content and toolbar are distinct
   appearance groups. Keep all existing customizations and independent Popup,
   Sidebar and Full Page values; prototype controls are only a small subset.
+  Use one surface selector for layout and visible-content editors. Keep the
+  global reset-time format explicitly labeled, and place detailed progress
+  colors in an expandable subgroup. A connection form links to presentation
+  settings rather than duplicating the editor. Back-to-top is an inline footer
+  action in Settings so it cannot cover narrow controls.
 - Ordinary preferences remain immediate updates. Show saved only after the
   relevant persistence acknowledgement, with honest pending/error feedback.
   Credentials, pairing, imports and resets remain explicit operations.

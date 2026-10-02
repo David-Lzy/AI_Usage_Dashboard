@@ -12,7 +12,9 @@ const results = [];
 const pageErrors = [];
 try {
   await mkdir(output, { recursive: true });
-  browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome" });
+  browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+    ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
+    : { channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome" }) });
   for (const locale of SUPPORTED_RDP_CAPTURE_LOCALES) {
     for (const [width, theme] of [[320, "dark"], [430, "light"]]) {
       const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme, reducedMotion: "reduce" });
