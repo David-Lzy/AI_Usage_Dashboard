@@ -59,6 +59,10 @@ try {
     assert.equal(intermediate.hidden, false);
     assert.equal(intermediate.inert, false);
     assert.equal(intermediate.active > 0, !reduced, JSON.stringify({ mode, system, intermediate }));
+    await page.evaluate(() => window.__motionLong(true));
+    await page.waitForTimeout(45);
+    const retarget = await body.evaluate((element) => element.getAnimations().map((animation) => ({ duration: animation.effect.getTiming().duration, frames: animation.effect.getKeyframes().map((frame) => frame.height) })));
+    if (!reduced) assert(retarget.some((animation) => Number.parseFloat(animation.frames.at(-1)) > 600), "Async content retargets during the same entrance");
     await page.waitForTimeout(400);
     await page.locator("#motion-draft").fill("edited draft");
     await page.locator("#motion-draft").focus();
@@ -91,7 +95,7 @@ try {
     assert.equal(await page.locator("#motion-draft").inputValue(), "edited draft");
     await page.evaluate(() => window.__motionRoot.unmount());
     assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.effect?.target?.closest?.("#motion-body")).length), 0);
-    results.push({ mode, system, profile, intermediate, rapidInterruptions: "pass", drafts: "retained", focus: "returned", modeChange: "settled", unmount: "clean" });
+    results.push({ mode, system, profile, intermediate, retarget, rapidInterruptions: "pass", drafts: "retained", focus: "returned", modeChange: "settled", unmount: "clean" });
     await page.close();
   }
   assert.deepEqual(errors, []);

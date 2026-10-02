@@ -172,6 +172,7 @@
   background: var(--app-surface-success-background);
   color: var(--app-surface-success-on);
 }
+.toast[data-motion-owned] { animation: none; }
 
 .toast--error {
   --app-toned-on: var(--app-surface-error-on);

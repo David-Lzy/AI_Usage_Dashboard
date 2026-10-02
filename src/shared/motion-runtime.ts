@@ -49,6 +49,7 @@ export function animateMotion(
   options: {
     channel?: string;
     speed?: MotionSpeed;
+    duration?: number;
     delay?: number;
     easing?: string;
     onFinish?: () => void;
@@ -59,7 +60,7 @@ export function animateMotion(
   running.set(element, owners);
   owners.get(channel)?.();
   const motion = readMotion(element);
-  const duration = motion[options.speed ?? "medium"];
+  const duration = Math.max(0, Math.min(motion[options.speed ?? "medium"], options.duration ?? Infinity));
   if (!duration || typeof element.animate !== "function") {
     options.onFinish?.();
     return null;

@@ -7,6 +7,8 @@ import {
   type SettingsCategory,
 } from "../settings-categories";
 import { FusionSelect } from "./material-ui/FusionControls";
+import { useRef } from "react";
+import { useMotionSelection } from "../../shared/use-motion-effects";
 
 export function SettingsCategoryNavigation({
   locale,
@@ -20,13 +22,18 @@ export function SettingsCategoryNavigation({
   onChange: (category: SettingsCategory) => void;
 }) {
   const copy = getSettingsCategoryCopy(locale);
+  const railRef = useRef<HTMLElement | null>(null);
+  const indicatorRef = useRef<HTMLSpanElement | null>(null);
+  useMotionSelection(railRef, indicatorRef, value);
   return (
     <>
       <nav
+        ref={railRef}
         className="settings-category-rail"
         aria-label={label}
         data-settings-category-navigation="rail"
       >
+        <span className="settings-category-rail__indicator" ref={indicatorRef} aria-hidden="true" />
         {SETTINGS_CATEGORIES.map((category) => (
           <button
             type="button"

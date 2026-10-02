@@ -53,6 +53,7 @@ import { getSettingsSaveCopy } from "../../shared/settings-save-localized-copy";
 import { getProviderAccountPresentationLocalizedCopy } from "../../shared/provider-account-presentation-localized-copy";
 import { resolvePopupProviderAccountPresentationMode } from "../../shared/provider-account-presentation";
 import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
+import { MotionDetails } from "../../shared/components/MotionDetails";
 
 type SettingsPreferencesSectionProps = {
   onPopupProviderAccountPresentationModeChange?: (
@@ -510,15 +511,12 @@ export function SettingsPreferencesSection({
               }
             />
           </AdaptiveControlGrid>
-          <details
+          <MotionDetails
             className="settings-progress-editor"
             open={progressEditorOpen}
-            onToggle={(event) =>
-              setProgressEditorOpen(event.currentTarget.open)
-            }
+            onOpenChange={setProgressEditorOpen}
+            summary={settingsCopy.progressAppearance.sectionLabel}
           >
-            <summary>{settingsCopy.progressAppearance.sectionLabel}</summary>
-            <ControlVisibilityBoundary hidden={!progressEditorOpen}>
               <ProgressAppearancePreferenceControls
                 copy={settingsCopy.progressAppearance}
                 colorChoiceCopy={settingsCopy.colorChoices}
@@ -531,8 +529,7 @@ export function SettingsPreferencesSection({
                 onColorAppearanceChange={onProgressColorAppearanceChange}
                 onColorBandsChange={onProgressColorBandsChange}
               />
-            </ControlVisibilityBoundary>
-          </details>
+          </MotionDetails>
         </section>
 
         <SettingsUiMoreSection

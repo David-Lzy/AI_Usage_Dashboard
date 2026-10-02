@@ -25,6 +25,7 @@ import { FusionSelect } from "./material-ui/FusionControls";
 import { getSettingsSaveCopy } from "../../shared/settings-save-localized-copy";
 import { SettingsSaveFeedback } from "./SettingsSaveFeedback";
 import "./QuotaNotificationSettings.css";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
 
 type NotificationMode = "off" | "on" | "paused";
 
@@ -246,8 +247,9 @@ export function QuotaNotificationSettings({
             {statusMessage ?? copy.loading}
           </p>
         ) : null
-      ) : (
-        <div className="quota-notification-settings__body">
+      ) : null}
+      {preferences ? (
+        <ControlVisibilityBoundary animate hidden={!preferences.enabled} className="quota-notification-settings__body" data-motion-focus-target={'[data-fusion-field="quota-notification-mode"] mdui-select'}>
           <div className="quota-notification-settings__general">
             <fieldset
               className="quota-notification-settings__controls"
@@ -371,8 +373,8 @@ export function QuotaNotificationSettings({
               )}
             </div>
           </fieldset>
-        </div>
-      )}
+        </ControlVisibilityBoundary>
+      ) : null}
       {failedChanges && (
         <div className="quota-notification-settings__save-feedback">
           <SettingsSaveFeedback

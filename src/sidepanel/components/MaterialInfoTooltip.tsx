@@ -47,6 +47,7 @@ export function MaterialInfoTooltip({
       data-open={isOpen && panelVisible ? "true" : "false"}
       data-positioned={position === null ? "false" : "true"}
       role="tooltip"
+      aria-hidden={!isOpen || !panelVisible || undefined}
       style={tooltipStyle}
     >
       {children}

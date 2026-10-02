@@ -269,6 +269,9 @@ try {
             '[data-credential-provider-id="cursor-team-api"] input[type="password"]',
           );
           await key.waitFor({ state: "visible" });
+          // A deep link restores its anchor after two layout frames. Sample
+          // scroll only after that restoration, not during its pending frame.
+          await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           await key.fill("UNSAVED_SECRET_SENTINEL");
           const previousScroll = await page.evaluate(() => scrollY);
           await navigate("usage");

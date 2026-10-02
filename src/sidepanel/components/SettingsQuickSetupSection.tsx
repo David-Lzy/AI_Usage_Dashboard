@@ -20,6 +20,7 @@ import {
   type SettingsQuickSetupActionModel,
 } from "../settings-view-models";
 import { FusionCheckbox } from "./material-ui/FusionControls";
+import { MotionDetails } from "../../shared/components/MotionDetails";
 
 type Props = {
   activeSessionPageAttachAvailable: boolean;
@@ -247,11 +248,12 @@ export function SettingsQuickSetupSection({
                 >
                   {copy.configure}
                   <MaterialActionIcon
-                    name={open ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                    name="keyboard-arrow-down"
                   />
                 </button>
               </div>
               <ControlVisibilityBoundary
+                animate
                 id={bodyId}
                 className="settings-connection__body"
                 hidden={!open || groupFor(provider.id) !== group}
@@ -301,14 +303,11 @@ export function SettingsQuickSetupSection({
                 </div>
                 {renderConfiguration?.(provider)}
                 {model ? (
-                  <details
+                  <MotionDetails
                     className="settings-connection__source-modes"
                     data-quick-setup-source-modes={provider.id}
+                    summary={<>{settingsCopy.quickSetup.currentSetupLabel}: {model.currentSetupValue}</>}
                   >
-                    <summary>
-                      {settingsCopy.quickSetup.currentSetupLabel}:{" "}
-                      {model.currentSetupValue}
-                    </summary>
                     <p>
                       {settingsCopy.sources.preferenceLabel}:{" "}
                       {model.sourcePreferenceValue}
@@ -325,7 +324,7 @@ export function SettingsQuickSetupSection({
                         <p className="supporting-copy">{mode.detail}</p>
                       </div>
                     ))}
-                  </details>
+                  </MotionDetails>
                 ) : null}
               </ControlVisibilityBoundary>
             </article>

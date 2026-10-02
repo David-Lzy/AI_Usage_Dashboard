@@ -51,7 +51,7 @@ describe("ProviderProgressItemPreferenceControls", () => {
     );
 
     expect(html).toContain(
-      '<details class="provider-progress-provider" data-provider-progress-preference-provider="jetbrains-org-page">',
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="jetbrains-org-page" data-motion-details="">',
     );
     expect(html).toContain(
       'data-provider-progress-preference-provider-summary="jetbrains-org-page"',
@@ -61,7 +61,7 @@ describe("ProviderProgressItemPreferenceControls", () => {
       /<details[^>]*data-provider-progress-preference-provider="jetbrains-org-page"[^>]*open/,
     );
     expect(html).toContain(
-      '<details class="provider-progress-provider" data-provider-progress-preference-provider="codex-personal-page">',
+      '<details class="provider-progress-provider" data-provider-progress-preference-provider="codex-personal-page" data-motion-details="">',
     );
     expect(html).toContain(
       'data-provider-progress-preference-provider-summary="codex-personal-page"',

@@ -24,6 +24,18 @@ export function readColorChannels(
 }
 
 export function syncFusionThemeTokens(scope: HTMLElement): void {
+  const profile = document.documentElement.dataset.motionProfile ?? "standard";
+  if (scope.dataset.fusionMotionProfile && scope.dataset.fusionMotionProfile !== profile) {
+    const settle = (root: HTMLElement | ShadowRoot) => {
+      for (const animation of root.getAnimations({ subtree: true })) {
+        if (Number.isFinite(animation.effect?.getComputedTiming().endTime)) {
+          try { animation.finish(); } catch { animation.cancel(); }
+        }
+      }
+      for (const element of root.querySelectorAll("*")) if (element.shadowRoot) settle(element.shadowRoot);
+    };
+    settle(scope);
+  }
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = 1;
   const context = canvas.getContext("2d", { willReadFrequently: true });
@@ -45,7 +57,7 @@ export function syncFusionThemeTokens(scope: HTMLElement): void {
     if (channels) scope.style.setProperty(`--mdui-color-${role}`, channels);
   }
   scope.dataset.fusionMotion = document.documentElement.dataset.motionResolved ?? "full";
-  scope.dataset.fusionMotionProfile = document.documentElement.dataset.motionProfile ?? "standard";
+  scope.dataset.fusionMotionProfile = profile;
   scope.style.colorScheme = document.documentElement.dataset.themeResolved ?? "light";
 }
 

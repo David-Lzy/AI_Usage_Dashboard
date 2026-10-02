@@ -302,7 +302,9 @@ export function useSettingsSurfaceSessionState({
     return () => {
       cancelled = true;
     };
-  }, [defaultAdvancedOpen, defaultUiMoreOpen, forceAdvancedOpen]);
+    // Hydrate once per mounted page. Preference changes must not restore an
+    // older open menu, scroll position or draft over the current interaction.
+  }, []);
 
   useBrowserLayoutEffect(() => {
     rememberLatestSettingsSurfaceSessionStateSnapshot(

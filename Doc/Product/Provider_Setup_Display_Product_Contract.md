@@ -310,6 +310,14 @@ is explicitly global. Progress bands, gradients, thickness and image-derived
 colors are retained in an expandable editor. The existing synthetic Popup
 preview remains available, with all three widths and its sample-value control.
 Theme mode, accent, font and motion stay global, including system/time resolution.
+The unreleased branch offers Default, Follow system, More and Reduced motion.
+Category selection updates logical visibility immediately, restores its scroll
+position, then introduces incoming content. Mounted connection drafts survive
+category changes. Disclosure closing is inert immediately; visual completion
+does not delay portal closure or saved/error feedback. More adds bounded
+selection movement, native-button ripples and short success feedback, not idle
+decoration. Failed saves and denied notification permission remain real states;
+motion cannot turn them into successful operations.
 
 General retains language and display-level gating. Data & Backup separates JSON,
 Chrome Sync and reset actions; import validation and reset confirmation are

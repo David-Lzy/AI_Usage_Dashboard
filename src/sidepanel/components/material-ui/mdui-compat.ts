@@ -44,7 +44,13 @@ export function installSelectTopLayer(
   const open = () => {
     if (!panel.isConnected) return;
     panel.hidden = false;
+    panel.inert = false;
+    panel.removeAttribute("aria-hidden");
     if (!panel.matches(":popover-open")) panel.showPopover();
+  };
+  const close = () => {
+    panel.inert = true;
+    panel.setAttribute("aria-hidden", "true");
   };
   const closed = () => {
     // A previous close animation can finish after a new open and hide the slot.
@@ -52,13 +58,26 @@ export function installSelectTopLayer(
     else if (panel.matches(":popover-open")) panel.hidePopover();
   };
   dropdown.addEventListener("open", open);
+  dropdown.addEventListener("close", close);
   dropdown.addEventListener("closed", closed);
   if (dropdown.open) open();
   return () => {
     dropdown.removeEventListener("open", open);
+    dropdown.removeEventListener("close", close);
     dropdown.removeEventListener("closed", closed);
     if (panel.matches(":popover-open")) panel.hidePopover();
   };
+}
+
+export function setSelectPanelVisibility(element: Select, visible: boolean) {
+  const dropdown = getSelectDropdown(element);
+  const menu = element.shadowRoot?.querySelector("mdui-menu");
+  if (menu) {
+    menu.inert = !visible;
+    if (visible) menu.removeAttribute("aria-hidden");
+    else menu.setAttribute("aria-hidden", "true");
+  }
+  if (!visible && dropdown) dropdown.open = false;
 }
 
 export function setControlledSelectValue(element: Select, value: string): void {

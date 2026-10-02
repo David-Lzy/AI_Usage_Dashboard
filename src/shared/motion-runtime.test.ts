@@ -84,4 +84,15 @@ describe("motion runtime", () => {
     expect(animateMotion(element, [], { onFinish: done })).toBeNull();
     expect(done).toHaveBeenCalledTimes(2);
   });
+
+  it("bounds retargeting by the current profile and remaining deadline", () => {
+    const { element, animations } = fixture();
+    animateMotion(element, [], { duration: 40 });
+    expect(animations[0].options.duration).toBe(40);
+    animateMotion(element, [], { duration: 900 });
+    expect(animations[1].options.duration).toBe(200);
+    const done = vi.fn();
+    expect(animateMotion(element, [], { duration: -1, onFinish: done })).toBeNull();
+    expect(done).toHaveBeenCalledOnce();
+  });
 });

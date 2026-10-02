@@ -97,6 +97,9 @@
       var(--app-motion-easing-standard);
 }
 
+.app-motion-ripple-host { overflow: hidden; isolation: isolate; }
+.app-motion-ripple { position: absolute; border-radius: 50%; background: currentColor; pointer-events: none; }
+
 a.text-button:link,
 a.text-button:visited {
   color: var(--md-sys-color-primary);

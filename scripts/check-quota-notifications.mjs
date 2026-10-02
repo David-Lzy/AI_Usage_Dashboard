@@ -81,7 +81,8 @@ try {
           window.__quotaQa.changes.push({ type, value: element.value, menu: element.shadowRoot?.querySelector('mdui-menu')?.value, disabled: element.disabled });
         });
       });
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__body").getAttribute("inert"), "");
       assert.equal(await mode.getAttribute("aria-expanded"), "false");
       assert.equal(await page.evaluate(() => window.__quotaQa.requests.length), 0);
       assert.equal(await mode.isEnabled(), true, "Missing permission must not disable the explicit enable gesture");
@@ -95,7 +96,7 @@ try {
       await page.waitForFunction(() => document.activeElement?.tagName === "MDUI-MENU-ITEM" && document.activeElement.getAttribute("value") === "on");
       await page.keyboard.press("Enter");
       await page.waitForFunction(() => window.__quotaQa.requests.length === 1);
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
       assert.equal(await page.evaluate(() => window.__quotaQa.getStore()?.preferences.enabled ?? false), false);
       await page.evaluate(() => { window.__quotaQa.deny = false; });
       async function selectMode(value) {
@@ -190,7 +191,7 @@ try {
       }
       await selectMode("off");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === false);
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
       await selectMode("on");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === true && window.__quotaQa.getStore().preferences.paused === false);
       assert.equal(await threshold.inputValue(), "80");

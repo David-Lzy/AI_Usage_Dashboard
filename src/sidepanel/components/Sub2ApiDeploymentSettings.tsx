@@ -1,3 +1,4 @@
+import { MotionDetails } from "../../shared/components/MotionDetails";
 import { useEffect, useRef, useState } from "react";
 
 import type {
@@ -25,6 +26,7 @@ import {
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { TechnicalText } from "../../shared/components/TechnicalText";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 
 type Sub2ApiDeploymentSettingsProps = {
   locale: ResolvedAppLocale;
@@ -105,6 +107,8 @@ export function Sub2ApiDeploymentSettings({
   const [retainCachedSummary, setRetainCachedSummary] = useState(true);
   const [connectionTestStatus, setConnectionTestStatus] =
     useState<ConnectionTestStatus>("idle");
+  const feedbackRef = useRef<HTMLDivElement | null>(null);
+  useMotionEntrance(feedbackRef, connectionTestStatus, true);
   const [connectionTestRemainingMs, setConnectionTestRemainingMs] = useState(
     CONNECTION_TEST_TIMEOUT_MS,
   );
@@ -310,10 +314,9 @@ export function Sub2ApiDeploymentSettings({
         )}
       </div>
 
-      <details className="sub2api-deployment-settings__trust">
-        <summary>{copy.trustTitle}</summary>
+      <MotionDetails className="sub2api-deployment-settings__trust" summary={copy.trustTitle}>
         <p>{copy.trustDetail}</p>
-      </details>
+      </MotionDetails>
 
       <div className="sub2api-deployment-settings__connection-bar">
         {!isAdding && collection?.accounts.length ? (
@@ -451,6 +454,7 @@ export function Sub2ApiDeploymentSettings({
           ) : null}
           {connectionTestStatus !== "idle" ? (
             <div
+              ref={feedbackRef}
               className={`sub2api-deployment-settings__test-feedback sub2api-deployment-settings__test-feedback--${connectionTestStatus}`}
               data-sub2api-test-status={connectionTestStatus}
               aria-live="polite"
@@ -556,11 +560,10 @@ export function Sub2ApiDeploymentSettings({
         ) : null}
       </div>
 
-      <details className="sub2api-deployment-settings__protocol">
-        <summary>{copy.protocolTitle}</summary>
+      <MotionDetails className="sub2api-deployment-settings__protocol" summary={copy.protocolTitle}>
         <p>{copy.protocolDetail}</p>
         <p>{copy.protocolExcluded}</p>
-      </details>
+      </MotionDetails>
     </section>
   );
 }

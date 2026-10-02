@@ -27,6 +27,7 @@ import {
   labelSelectMenu,
   restoreRequiredSelectValue,
   setControlledSelectValue,
+  setSelectPanelVisibility,
   type FusionFieldElement,
 } from "./mdui-compat";
 
@@ -46,7 +47,10 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
   const current = useRef(props);
   current.current = props;
   useLayoutEffect(() => {
-    if (ref.current) setControlledSelectValue(ref.current, value);
+    if (ref.current) {
+      setControlledSelectValue(ref.current, value);
+      setSelectPanelVisibility(ref.current, panelVisible);
+    }
   });
   useEffect(() => {
     if (ref.current)
@@ -61,6 +65,7 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
     let cancelled = false;
     void element.updateComplete.then(() => {
       const dropdown = getSelectDropdown(element);
+      if (!cancelled) setSelectPanelVisibility(element, panelVisible);
       if (!cancelled && dropdown && !panelVisible) {
         dropdown.open = false;
         return;
@@ -139,6 +144,10 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
       );
       const dropdown = getSelectDropdown(element);
       if (dropdown) dropdown.open = false;
+      // Clear session intent before a preference can change the display level
+      // and restore a new settings session. MDUI emits close asynchronously.
+      if (latest.activePopover?.id === latest.sessionPopoverId)
+        latest.onActivePopoverChange?.(null);
       if (!latest.disabled && next !== latest.value) latest.onChange(next);
       // Controlled values also roll back when a permission request is rejected
       // without a parent render, or when the selected item is clicked again.

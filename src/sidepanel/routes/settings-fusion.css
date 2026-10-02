@@ -66,6 +66,8 @@
   gap: 4px;
 }
 .settings-category-rail button {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -78,7 +80,20 @@
   color: var(--md-sys-color-on-surface-variant);
   background: transparent;
   font: inherit;
+  transition: color var(--app-motion-duration-fast), background-color var(--app-motion-duration-fast);
 }
+.settings-category-rail__indicator {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 48px;
+  border-radius: 24px;
+  background: var(--md-sys-color-secondary-container);
+  pointer-events: none;
+  visibility: hidden;
+}
+.settings-category-rail[data-motion-selection="ready"] .settings-category-rail__indicator { visibility: visible; }
+.settings-category-rail[data-motion-selection="ready"] button[aria-current="page"] { background: transparent; }
 .settings-category-rail button[aria-current="page"] {
   background: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
@@ -128,6 +143,34 @@
   height: 20px;
   fill: currentColor;
 }
+.settings-save-feedback__icon { display: inline-flex; flex: 0 0 20px; width: 20px; height: 20px; }
+.settings-save-feedback__icon .status-chip { min-width: 20px; width: 20px; height: 20px; padding: 0; border: 0; background: transparent; color: inherit; }
+.settings-save-feedback[data-settings-save-status="pending"] .settings-save-feedback__icon { animation: app-saving-spin 900ms linear infinite; }
+:root[data-motion-profile="expressive"] .settings-save-feedback[data-settings-save-status="saved"] .settings-save-feedback__icon { animation: app-saved-pop var(--app-motion-duration-fast) var(--app-motion-easing-emphasized); }
+@keyframes app-saving-spin { to { transform: rotate(360deg); } }
+@keyframes app-saved-pop { 0% { transform: scale(0.6); } 65% { transform: scale(1.12); } 100% { transform: none; } }
+.settings-connection__row button[aria-expanded] svg,
+.codex-local-settings__guide-toggle svg { transition: transform var(--app-motion-duration-medium) var(--app-motion-easing-emphasized); }
+.settings-connection__row button[aria-expanded="true"] svg { transform: rotate(180deg); }
+.codex-local-settings__guide-toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+[data-motion-details] > summary { cursor: pointer; }
+[data-motion-details] > div { display: flow-root; }
+[data-motion-details] > div[hidden] { display: none; }
+[data-motion-details] > summary::marker { content: ""; }
+[data-motion-details] > summary::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-inline-end: 10px;
+  border-inline-end: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--app-motion-duration-medium) var(--app-motion-easing-emphasized);
+}
+[data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
+:root[dir="rtl"] [data-motion-details] > summary::before { transform: rotate(135deg); }
+:root[dir="rtl"] [data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
 .settings-fusion .status-card,
 .settings-fusion .settings-provider-display {
   border: 0;

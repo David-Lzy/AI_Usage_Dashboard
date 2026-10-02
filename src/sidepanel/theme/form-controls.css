@@ -564,6 +564,8 @@ select.form-field__control {
   transform: translateY(0);
   visibility: visible;
 }
+:root[data-motion-profile="expressive"] .material-info-tooltip__content { transform: translateY(-6px) scale(0.96); }
+:root[data-motion-profile="expressive"] .material-info-tooltip__content[data-open="true"][data-positioned="true"] { transform: none; }
 
 .section-title-with-info {
   --material-info-tooltip-size: var(--md-sys-typescale-title-medium-size);

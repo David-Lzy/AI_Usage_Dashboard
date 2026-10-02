@@ -8,6 +8,7 @@ import {
 } from "./settings-route-focus";
 import { buildSidePanelHash, type SettingsRouteFocus } from "./route-state";
 import { getPreferredScrollBehavior } from "./motion";
+import { animateEntrance, animateMotion, readMotion } from "../shared/motion-runtime";
 import {
   getSettingsCategoryForFocus,
   getSettingsCategoryForSection,
@@ -36,6 +37,12 @@ export function useSettingsCategoryNavigation(
   const previousFocusKey = useRef(focusKey);
   const pendingTarget = useRef<SettingsRouteFocus | undefined>(focus);
   const pendingScroll = useRef(false);
+  const entrances = useRef<Array<() => void>>([]);
+
+  useBrowserLayoutEffect(() => () => {
+    entrances.current.forEach((cancel) => cancel());
+    entrances.current = [];
+  }, [category, motion]);
 
   useEffect(() => {
     if (focus) return;
@@ -82,6 +89,7 @@ export function useSettingsCategoryNavigation(
     const target = pendingTarget.current;
     if (!pendingScroll.current && !target) return;
     let innerFrame = 0;
+    const animations: Array<() => void> = [];
     const frame = requestAnimationFrame(() => {
       innerFrame = requestAnimationFrame(() => {
         pendingScroll.current = false;
@@ -112,11 +120,33 @@ export function useSettingsCategoryNavigation(
             destination.focus({ preventScroll: true });
           }
         }
+        const content = document.querySelector<HTMLElement>(".settings-category-content");
+        if (content?.checkVisibility()) {
+          entrances.current.forEach((cancel) => cancel());
+          entrances.current = animations;
+          const fade = animateMotion(content, [{ opacity: 0.45 }, { opacity: 1 }], { channel: "category" });
+          if (fade) animations.push(fade);
+          const count = readMotion(content).profile === "expressive" ? 4 : 1;
+          const headings = [...content.querySelectorAll<HTMLElement>(".settings-category-heading, h2, h3")]
+            .filter((heading) => heading.checkVisibility() && heading.getBoundingClientRect().top < innerHeight && heading.getBoundingClientRect().bottom > 0)
+            .slice(0, count);
+          headings.forEach((heading, index) => { const cancel = animateEntrance(heading, index); if (cancel) animations.push(cancel); });
+          if (count > 1) {
+            [...content.querySelectorAll<HTMLElement>(".settings-connection, .settings-appearance-group, [data-settings-category-panel] > section")]
+              .filter((group) => group.checkVisibility() && group.getBoundingClientRect().top < innerHeight && group.getBoundingClientRect().bottom > 0)
+              .slice(0, 4).forEach((group, index) => {
+                const cancel = animateMotion(group, [{ opacity: 0.5 }, { opacity: 1 }], { channel: "category-group", delay: index * 30 });
+                if (cancel) animations.push(cancel);
+              });
+          }
+        }
       });
     });
     return () => {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(innerFrame);
+      // An acknowledgement of our own hash can arrive after the first frame.
+      // It must not cancel the entrance of the category that is still selected.
     };
   }, [category, focusKey, motion]);
 

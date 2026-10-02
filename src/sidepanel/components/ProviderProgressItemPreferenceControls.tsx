@@ -1,3 +1,4 @@
+import { MotionDetails } from "../../shared/components/MotionDetails";
 import { useMemo, useState, type DragEvent, type KeyboardEvent } from "react";
 
 import type {
@@ -244,22 +245,16 @@ export function ProviderProgressItemPreferenceControls({
           const progressItemMap = createProgressItemMap(source.progressItems);
 
           return (
-            <details
+            <MotionDetails
               key={source.id}
               className="provider-progress-provider"
               data-provider-progress-preference-provider={source.id}
               open={detailsOpenByProvider[source.id] === true}
-              onToggle={(event) => {
-                onDetailsOpenByProviderChange?.({
-                  ...detailsOpenByProvider,
-                  [source.id]: (event.currentTarget as HTMLDetailsElement).open,
-                });
-              }}
-            >
-              <summary
-                className="provider-progress-provider__summary"
-                data-provider-progress-preference-provider-summary={source.id}
-              >
+              onOpenChange={onDetailsOpenByProviderChange ? (open) => {
+                onDetailsOpenByProviderChange({ ...detailsOpenByProvider, [source.id]: open });
+              } : undefined}
+              summaryProps={{ className: "provider-progress-provider__summary", "data-provider-progress-preference-provider-summary": source.id } as React.HTMLAttributes<HTMLElement>}
+              summary={<>
                 <span className="provider-progress-provider__summary-copy">
                   <span className="provider-progress-provider__title">
                     {source.label}
@@ -270,7 +265,7 @@ export function ProviderProgressItemPreferenceControls({
                       : copy.provider.emptyDetail}
                   </span>
                 </span>
-              </summary>
+              </>}>
 
               <div className="provider-progress-provider__body">
                 {source.progressItems.length === 0 ? (
@@ -471,7 +466,7 @@ export function ProviderProgressItemPreferenceControls({
                   </div>
                 )}
               </div>
-            </details>
+            </MotionDetails>
           );
         })}
       </div>

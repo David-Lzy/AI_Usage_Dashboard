@@ -27,6 +27,7 @@ describe("MDUI production adapter", () => {
     let shown = false;
     const panel = {
       isConnected: true, hidden: true, popover: null, style: {},
+      setAttribute: vi.fn(), removeAttribute: vi.fn(), inert: false,
       matches: () => shown,
       showPopover: vi.fn(() => { shown = true; }),
       hidePopover: vi.fn(() => { shown = false; }),
@@ -40,10 +41,14 @@ describe("MDUI production adapter", () => {
     expect(panel.popover).toBe("manual");
     expect(panel.hidden).toBe(false);
     expect(shown).toBe(true);
+    dropdown.dispatchEvent(new Event("close"));
+    expect(panel.inert).toBe(true);
+    expect(panel.setAttribute).toHaveBeenCalledWith("aria-hidden", "true");
     panel.hidden = true;
     dropdown.dispatchEvent(new Event("closed"));
     expect(shown).toBe(true);
     expect(panel.hidden).toBe(false);
+    expect(panel.inert).toBe(false);
     dropdown.open = false;
     dropdown.dispatchEvent(new Event("closed"));
     expect(shown).toBe(false);
