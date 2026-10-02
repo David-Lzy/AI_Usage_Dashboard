@@ -114,7 +114,7 @@ control language.
 
 The accepted visual direction keeps the existing font, blue accent and semantic
 light/dark roles, while simplifying navigation and grouping. This is the target
-for an incremental production migration, not a claim about the published 0.2.1
+for an incremental production migration, not a claim about the released 0.2.1
 interface. Validate MDUI 2.1.5 in real Chrome and Firefox extensions before using
 its adapters across the application; prototype results are not that validation.
 
@@ -159,6 +159,10 @@ The UI has three density contexts rather than one desktop breakpoint:
 - Popup is a stable compact viewport whose width tokens are defined in
   [tokens.css](src/sidepanel/theme/tokens.css). It prioritizes current quota and
   immediate actions; detailed diagnostics belong elsewhere.
+  Native action views use the preferred 344/392/520px width without a viewport
+  sizing feedback loop; source/tab previews retain their responsive bounds.
+  Its flat toolbar, dividers and fixed Provider title size align with B fusion,
+  while saved card corner/shadow preferences and all browsing modes remain intact.
 - Sidebar must tolerate narrow and tall browser layouts. Controls reduce column
   count before labels become unreadable, and repeated content may collapse or
   use an explicit Provider browsing mode.

@@ -281,6 +281,17 @@ fails. The current baseline is therefore **four visible warnings**, not zero.
 
 The unreleased B fusion adapter has separate source and real-extension gates:
 
+`node scripts/check-fusion-native-popup.mjs --extension=<isolated-chrome>`
+opens the actual Chrome action bubble with `chrome.action.openPopup()` in an
+owned offline profile. CDP attaches to that action target, not a tab with an
+emulated viewport. The default 72 cases cover three locales including RTL,
+both themes, three preferred widths, all progress styles, all browsing modes,
+corner/shadow settings, theme-menu bounds, keyboard dismissal/focus and unchanged
+quota snapshots. Screenshots are captured directly from the action target. This
+uses Chromium's headless action UI, not the user's shared desktop; it does not
+claim an interactive desktop screen-reader review. The full 14-locale mode and
+automatic/manual scrolling matrix remains `check-popup-modes.mjs`.
+
 `node scripts/check-settings-category-browser.mjs --extension=<isolated-chrome>`
 checks the five-category shell in an actual extension profile across 14 locales,
 light/dark and 390/1440px. It covers old links, back/forward, independent category
@@ -369,6 +380,9 @@ not browser process startup or a flushed OS cache. Idle, glide, hover-paused and
 reduced-motion CPU each get three 30-second windows. The harness verifies actual
 motion/paused states and samples only its own extension renderers. Missing PIDs
 fail measurement rather than becoming zero. CPU excludes browser/GPU processes.
+Fresh-install fixture injection is checked after the queued bootstrap write and
+before navigation; preparation retries are reported separately, never included
+as rendering samples. A failed rendering measurement is not silently retried.
 
 Results, profile ownership, fixture hash, environment, screenshots, median/p95,
 spread, largest chunks and archive bytes go into a unique directory below
@@ -376,7 +390,9 @@ spread, largest chunks and archive bytes go into a unique directory below
 `--smoke` is a harness check, not a valid baseline. Use
 `--startup-only` or `--cpu-only` to repeat one subset without replacing earlier
 evidence. Combine only compatible fixture/build hashes and record both reports.
-`--locale=en`, `--locale=de`, or `--locale=ar` narrows a rerun. The report includes
+`--locale=en`, `--locale=de`, or `--locale=ar` narrows a rerun.
+`--cpu-scenarios=glide` can narrow a same-host CPU comparison without shortening
+its three 30-second samples. The report includes
 host load and the build-content hash. Set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing extension-capable Chromium binary
 when the Playwright-managed browser is unavailable; no browser is installed by

@@ -251,7 +251,7 @@ crash may suppress an alert instead of replaying it. OS display is not guarantee
 ### Settings Organization (Unreleased Migration)
 
 The migration branch implements five task-oriented Settings categories. This
-does not describe the published 0.2.1 layout documented above. The category shell
+does not describe the released 0.2.1 layout documented above. The category shell
 and connection workflows have moved, and ordinary preferences now show actual
 save acknowledgements. All five Settings categories are functional. Dashboard
 and Sidebar use compact headers, operational summaries and responsive Provider
@@ -261,7 +261,10 @@ and source/diagnostics. Account and source context, successful capture time and
 actionable failures remain visible before the technical disclosure. History and
 export retain their own collection times and eligibility rules. Opening metadata
 does not reset analysis selections; the existing Debug diagnostics export stays
-in Accounts & Connections. Popup alignment remains a separate migration step.
+in Accounts & Connections. Popup now shares the flat toolbar and section-divider
+language, while retaining all four browsing modes, progress styles and saved
+size/corner/shadow preferences. Native action views honor the three preferred
+widths; page previews continue to adapt within their existing size bounds.
 
 | Category | Primary editing responsibility |
 | --- | --- |

@@ -154,8 +154,14 @@ visible when technical information is collapsed.
 
 ![Unreleased B fusion Provider detail](./Doc/Assets/ai-usage-dashboard-detail-fusion.png)
 
-_Branch preview using synthetic QA data, not the published 0.2.1 Store interface.
-The earlier screenshot above is retained for the published layout._
+The native toolbar Popup uses the same visual language while keeping its four
+browsing modes, saved appearance and compact dimensions.
+
+![Unreleased B fusion native Popup](./Doc/Assets/ai-usage-dashboard-popup-fusion.png)
+
+_Branch preview using synthetic QA data, not the released 0.2.1 interface.
+The earlier screenshot above is retained for that release's layout; Store review
+and rollout are tracked separately._
 
 ## Extend It
 

@@ -17,6 +17,8 @@ const smoke = process.argv.includes("--smoke");
 const cpuOnly = process.argv.includes("--cpu-only");
 const startupOnly = process.argv.includes("--startup-only");
 assert(!(cpuOnly && startupOnly), "Choose only one measurement subset");
+const cpuScenarios = arg("--cpu-scenarios")?.split(",") ?? ["idle", "glide", "hover-paused", "reduced"];
+assert(cpuScenarios.length && cpuScenarios.every((id) => ["idle", "glide", "hover-paused", "reduced"].includes(id)), "Unknown CPU scenario");
 const repeats = smoke ? 1 : 10;
 const cpuRepeats = smoke ? 1 : 3;
 const intervalMs = smoke ? 1000 : 30000;
@@ -27,6 +29,7 @@ const stateKey = "ai-usage-dashboard.app-state";
 const lockKey = "ai-usage-dashboard.store-screenshot-runtime-lock";
 const clockTicksPerSecond = await resolveClockTicksPerSecond();
 const errors = [];
+const fixturePreparation = [];
 let browserVersion;
 
 // Load the existing explicit synthetic preset without loading frontend bundles in
@@ -59,14 +62,29 @@ async function launch(id, config) {
   try {
     browserVersion = context.browser()?.version();
     const worker = context.serviceWorkers()[0] ?? await context.waitForEvent("serviceworker", { timeout: 15000 });
-    await worker.evaluate(async ({ stateKey, lockKey, fixture }) => {
+    const preparation = await worker.evaluate(async ({ stateKey, lockKey, fixture }) => {
       await chrome.storage.local.set({ [lockKey]: true });
       for (let i = 0; i < 100; i++) {
         if ((await chrome.storage.local.get(stateKey))[stateKey]) break;
         await new Promise((resolve) => setTimeout(resolve, 50));
       }
-      await chrome.storage.local.set({ [stateKey]: fixture });
+      // A fresh onInstalled bootstrap may already have queued its initial write
+      // before the QA lock exists. Settle this external fixture injection before
+      // opening a measured page; never retry a failed rendering measurement.
+      const fingerprint = (state) => JSON.stringify({ settings: state?.settings,
+        providers: state?.providers?.map((provider) => [provider.providerId, provider.used, provider.remaining]),
+        enabled: state?.providerSettings?.map((provider) => [provider.id, provider.displayEnabled]) },
+        (_key, value) => value && typeof value === "object" && !Array.isArray(value)
+          ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value);
+      const expected = fingerprint(fixture);
+      for (let attempt = 0; attempt < 4; attempt++) {
+        await chrome.storage.local.set({ [stateKey]: fixture });
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        if (fingerprint((await chrome.storage.local.get(stateKey))[stateKey]) === expected) return { rewrites: attempt };
+      }
+      throw new Error("QA fixture did not settle before the measurement");
     }, { stateKey, lockKey, fixture: fixtureFor(config) });
+    fixturePreparation.push({ id, ...preparation });
     return { context, profile, extensionId: new URL(worker.url()).host };
   } catch (error) { await context.close(); throw error; }
 }
@@ -75,7 +93,14 @@ async function openPopup(runtime, config) {
   const page = await runtime.context.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(`chrome-extension://${runtime.extensionId}/${manifest.action.default_popup}`, { waitUntil: "domcontentloaded" });
-  await page.waitForFunction(({ count, locale }) => document.querySelectorAll(".popup-provider-card").length === count && document.documentElement.lang === locale, config);
+  try {
+    await page.waitForFunction(({ count, locale }) => document.querySelectorAll(".popup-provider-card").length === count && document.documentElement.lang === locale, config);
+  } catch (error) {
+    await page.screenshot({ path: path.join(output, "startup-failure.png") });
+    errors.push(await page.evaluate(() => JSON.stringify({ cards: document.querySelectorAll(".popup-provider-card").length,
+      locale: document.documentElement.lang, ready: document.readyState, host: document.documentElement.dataset.popupHost ?? "page" })));
+    throw error;
+  }
   const measurement = await page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -157,7 +182,7 @@ const report = {
   revision: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
   extensionPath, fixtureSha256: createHash("sha256").update(JSON.stringify(baseFixture)).digest("hex"),
   environment: { node: process.version, platform: os.platform(), release: os.release(), arch: os.arch(), cpu: os.cpus()[0]?.model, logicalCpus: os.cpus().length, memoryBytes: os.totalmem(), loadAverage: os.loadavg(), clockTicksPerSecond, headless: true, offline: true },
-  workingTreeStatus: execFileSync("git", ["status", "--short"], { encoding: "utf8" }).trim(),
+  workingTreeStatus: execFileSync("git", ["status", "--short"], { encoding: "utf8" }).trim(), fixturePreparation,
   definitions: {
     ready: "Navigation start to expected cards, locale, loaded fonts and two animation frames; excludes browser launch/worker initialization and fixture injection.",
     cold: "First frontend open in a fresh browser profile; OS file cache not flushed. Synthetic state seeded through worker before opening UI.",
@@ -194,7 +219,7 @@ try {
     console.log(`startup ${id}: cold ${report.startup.at(-1).coldSummary.median.toFixed(1)}ms, warm ${report.startup.at(-1).warmSummary.median.toFixed(1)}ms`);
     await writeFile(path.join(output, "result.json"), JSON.stringify(report, null, 2));
   }
-  for (const id of startupOnly ? [] : ["idle", "glide", "hover-paused", "reduced"]) {
+  for (const id of startupOnly ? [] : cpuScenarios) {
     const config = { locale: "en", width: 392, count: 3, mode: id === "idle" ? "collapsible" : "scroll", reduced: id === "reduced" };
     const runtime = await launch(`cpu-${id}`, config);
     try {

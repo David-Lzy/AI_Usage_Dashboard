@@ -7,6 +7,7 @@ import ReactDOM from "react-dom/client";
 
 import { installPerformanceDebugCounters } from "../shared/perf-debug";
 import { PopupApp } from "./PopupApp";
+import { markNativePopupHost } from "./popup-host";
 import "../sidepanel/theme/tokens.css";
 import "../sidepanel/theme/material-theme.css";
 import "../sidepanel/theme/app-shell.css";
@@ -19,6 +20,14 @@ import "../sidepanel/theme/usage-progress.css";
 import "./popup-theme.css";
 
 installPerformanceDebugCounters();
+
+markNativePopupHost(
+  document.documentElement,
+  window,
+  typeof chrome !== "undefined" && chrome.extension?.getViews
+    ? () => chrome.extension.getViews({ type: "popup" })
+    : undefined,
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

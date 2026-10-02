@@ -573,7 +573,10 @@ describe("PopupFeaturedProviderList", () => {
     expect(popupThemeCss).toContain("white-space: nowrap;");
     expect(popupThemeCss).toContain("@media (max-width: 390px)");
     expect(popupThemeCss).not.toContain("grid-template-areas:");
-    expect(popupThemeCss).toContain("font-size: 0.8125rem;");
+    expect(popupThemeCss).toContain("font-size: 1rem;");
+    expect(popupThemeCss).not.toContain("font-size: 0.8125rem;");
+    expect(popupThemeCss).toContain("background: var(--md-sys-color-surface);");
+    expect(popupThemeCss).not.toContain("--md-sys-color-background");
     expect(popupThemeCss).toContain("font-size: 0.75rem;");
     expect(popupThemeCss).toContain("padding-inline: 2px;");
     expect(popupThemeCss).toContain("width: 28px;");
