@@ -252,8 +252,9 @@ crash may suppress an alert instead of replaying it. OS display is not guarantee
 
 The migration branch implements five task-oriented Settings categories. This
 does not describe the published 0.2.1 layout documented above. The category shell
-and connection workflows have moved; the remaining control presentation and
-persistence feedback are separate migration steps, not completed features.
+and connection workflows have moved, and ordinary preferences now show actual
+save acknowledgements. The remaining appearance presentation and other surfaces
+are separate migration steps, not completed features.
 
 | Category | Primary editing responsibility |
 | --- | --- |
@@ -271,11 +272,24 @@ to their new category and retain their target.
 
 All existing values and storage boundaries remain compatible. Light/dark/system/
 time themes, custom colors, fonts, motion, all Popup modes and independent surface
-configuration are retained. Ordinary preferences keep immediate writes and gain
-backend-confirmed pending/success/failure feedback; the redundant global saved
-toast is not a substitute for persistence. Local-only presentation preferences
+configuration are retained. Ordinary preferences keep immediate writes. The
+Settings header shows pending, saved or failed only from the background response;
+there is no global Save button. A failed preference stays in the current UI draft
+for explicit retry, without entering exports or persistent navigation state.
+Per-setting request ownership prevents stale success/failure replies from
+overwriting newer inputs or clearing an unrelated failed field. Category changes
+retain this feedback; reloading discards unconfirmed drafts. Explicit imports and
+restores supersede older drafts, without clearing edits made after they began.
+Leaving Settings while a write is pending does not suppress a later error toast.
+Local-only presentation preferences
 must report their own persistence result rather than an invented backend response.
 Explicit credential, pairing, import and reset operations remain explicit.
+Notification controls retain their own permission, pending/error and test status.
+Both thresholds are labeled as used percentages: in-app/toolbar warning and
+system-notification triggering are independent values. Denied enablement restores
+Off and can be retried through a new explicit user gesture.
+Failed notification writes expose an explicit retry for the unacknowledged
+changes; an unsaved notification threshold stays marked invalid until confirmed.
 
 Accounts & Connections uses compact Personal/Web and API lists instead of a
 carousel. Configure expands the existing Provider actions and forms. Codex local

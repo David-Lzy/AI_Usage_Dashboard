@@ -1,4 +1,6 @@
 import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { SettingsSaveFeedback } from "../components/SettingsSaveFeedback";
+import type { SettingsSaveStatus } from "../settings-save-feedback";
 import { useEffect, useRef } from "react";
 
 import type {
@@ -94,7 +96,8 @@ type SettingsPageProps = {
   providerAccounts?: ProviderAccountsByProvider;
   toast: SettingsToast | null;
   onDismissToast: () => void;
-  onSavePreferences: () => void;
+  saveStatus?: SettingsSaveStatus;
+  onRetrySettingsSave?: () => void;
   onSyncIntervalChange: (minutes: number) => void;
   onLocalePreferenceChange: (locale: AppLocalePreference) => void;
   onUserLevelChange: (userLevel: AppSettings["userLevel"]) => void;
@@ -225,7 +228,8 @@ export function SettingsPage({
   providerAccounts,
   toast,
   onDismissToast,
-  onSavePreferences,
+  saveStatus = "idle",
+  onRetrySettingsSave = () => undefined,
   onSyncIntervalChange,
   onLocalePreferenceChange,
   onUserLevelChange,
@@ -513,13 +517,11 @@ export function SettingsPage({
         expandActionIconName={surfaceActionIconName}
         secondaryActionLabel={i18n.t("common.actions.back")}
         secondaryActionIconName="keyboard-backspace"
-        primaryActionLabel={i18n.t("common.actions.save")}
-        primaryActionIconName="save"
+        primaryActionContent={<SettingsSaveFeedback status={saveStatus} locale={i18n.resolvedLocale} onRetry={onRetrySettingsSave} />}
         sticky
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
-        onPrimaryAction={onSavePreferences}
       />
 
       <div className="settings-category-layout">

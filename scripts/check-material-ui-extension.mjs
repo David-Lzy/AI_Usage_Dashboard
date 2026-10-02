@@ -76,6 +76,7 @@ async function chromeGate() {
       await field.locator("input:not(.hidden-input)").click();
       await field.locator('mdui-menu-item[value="advanced"]').click();
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.value === "advanced");
+      await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.getAttribute('data-settings-save-status') === 'saved');
       assert.equal(await worker.evaluate(async (key) => (await chrome.storage.local.get(key))[key].settings.userLevel, stateKey), "advanced");
       await page.screenshot({ path: path.join(output, `chrome-${config.locale}.png`) });
       results.chrome.push({ ...config, ...control, scripts: extensionScripts, saved: true });
@@ -190,6 +191,7 @@ async function firefoxGate() {
         const select = document.querySelector('[data-fusion-field="settings-user-level"] mdui-select');
         return (select.wrappedJSObject ?? select).value === "advanced";
       });
+      await until(() => document.querySelector('[data-settings-save-status]')?.getAttribute('data-settings-save-status') === 'saved');
       const saved = await command("/execute/async", { script: `const done=arguments[arguments.length-1];browser.storage.local.get(${JSON.stringify(stateKey)}).then(x=>done(x[${JSON.stringify(stateKey)}].settings.userLevel));`, args: [] });
       assert.equal(saved, "advanced");
       const screenshot = await command("/screenshot", undefined, "GET");

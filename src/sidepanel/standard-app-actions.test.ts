@@ -343,15 +343,10 @@ describe("createStandardAppActions", () => {
     );
   });
 
-  it("saves preference feedback through a localized toast", () => {
+  it("does not expose a toast-only global preference save", () => {
     const { actions, setToast } = createActionHarness();
 
-    actions.handleSavePreferences();
-
-    expect(setToast).toHaveBeenCalledWith({
-      tone: "success",
-      title: "Preferences saved",
-      message: "Settings are now persisted in local dashboard state for the preview.",
-    });
+    expect(actions).not.toHaveProperty("handleSavePreferences");
+    expect(setToast).not.toHaveBeenCalled();
   });
 });

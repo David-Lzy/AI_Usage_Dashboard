@@ -104,7 +104,7 @@ try {
           const [checked, setChecked] = React.useState(false);
           const [status, setStatus] = React.useState("");
           return h("section", { className: "fusion-theme", ref, style: { display: "grid", gap: 18 } },
-            h(FusionSelect, { label: "Denied preference", fieldIdPrefix: "rejected", value: "off", onChange: () => {}, options: [{ value: "off", label: "Off" }, { value: "on", label: "On" }] }),
+            h(FusionSelect, { label: "Denied preference", fieldIdPrefix: "rejected", value: "off", onChange: () => { window.__fusionRejectedAttempts = (window.__fusionRejectedAttempts ?? 0) + 1; }, options: [{ value: "off", label: "Off" }, { value: "on", label: "On" }] }),
             h(FusionTextField, { id: "percent", label: "Used percent", value, type: "number", min: 1, max: 100, step: 1, helper: "Independent threshold", onChange: setValue }),
             h(FusionCheckbox, { id: "weekly", checked, onChange: setChecked }, "Weekly quota"),
             h(FusionButton, { id: "fixture-save", onClick: () => setStatus(`${value}:${checked}`) }, "Test command"),
@@ -119,6 +119,9 @@ try {
       await rejected.locator("input:not(.hidden-input)").click();
       await rejected.locator('mdui-menu-item[value="on"]').click();
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="rejected"] mdui-select')?.value === "off");
+      await rejected.locator("input:not(.hidden-input)").click();
+      await rejected.locator('mdui-menu-item[value="on"]').click();
+      assert.equal(await page.evaluate(() => window.__fusionRejectedAttempts), 2, "Rejected selection must remain selectable again");
       const number = page.getByRole("spinbutton", { name: "Used percent" });
       await rejected.locator("input:not(.hidden-input)").click();
       await page.waitForFunction(() => document.activeElement?.matches('[data-fusion-field="rejected"] mdui-menu-item'));

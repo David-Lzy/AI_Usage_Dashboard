@@ -8,28 +8,51 @@ export type FusionFieldElement = HTMLElement & {
 
 // MDUI 2.1.5 does not expose its select menu or forward input ARIA. Keep the
 // version-bound access here, covered by the production browser compatibility gate.
-export async function getFieldInput(element: HTMLElement & { updateComplete: Promise<unknown> }) {
+export async function getFieldInput(
+  element: HTMLElement & { updateComplete: Promise<unknown> },
+) {
   await element.updateComplete;
   const field = element.shadowRoot?.querySelector("mdui-text-field");
   if (field) await field.updateComplete;
-  return (field?.shadowRoot ?? element.shadowRoot)?.querySelector<HTMLInputElement>("input:not(.hidden-input),textarea") ?? null;
+  return (
+    (field?.shadowRoot ?? element.shadowRoot)?.querySelector<HTMLInputElement>(
+      "input:not(.hidden-input),textarea",
+    ) ?? null
+  );
 }
 
 export function getSelectDropdown(element: Select) {
   return element.shadowRoot?.querySelector("mdui-dropdown") ?? null;
 }
 
-export function adjacentTabStop(element: HTMLElement, backwards: boolean): HTMLElement | null {
-  const candidates = [...document.querySelectorAll<HTMLElement>(
-    'button,a[href],input,textarea,select,[tabindex],mdui-select,mdui-text-field,mdui-checkbox,mdui-button',
-  )].filter((candidate) => {
-    if (candidate.closest("[hidden],[inert],mdui-menu-item") ||
-        candidate.matches(":disabled,[disabled]") || !candidate.getClientRects().length ||
-        getComputedStyle(candidate).visibility === "hidden") return false;
+export function setControlledSelectValue(element: Select, value: string): void {
+  element.value = value;
+  // Lit can skip its child-property assignment when a refused user selection
+  // returns to the previous rendered value within the same update cycle.
+  const menu = element.shadowRoot?.querySelector("mdui-menu");
+  if (menu && menu.value !== value) menu.value = value;
+}
+
+export function adjacentTabStop(
+  element: HTMLElement,
+  backwards: boolean,
+): HTMLElement | null {
+  const candidates = [
+    ...document.querySelectorAll<HTMLElement>(
+      "button,a[href],input,textarea,select,[tabindex],mdui-select,mdui-text-field,mdui-checkbox,mdui-button",
+    ),
+  ].filter((candidate) => {
+    if (
+      candidate.closest("[hidden],[inert],mdui-menu-item") ||
+      candidate.matches(":disabled,[disabled]") ||
+      !candidate.getClientRects().length ||
+      getComputedStyle(candidate).visibility === "hidden"
+    )
+      return false;
     return candidate.tabIndex >= 0;
   });
   const index = candidates.indexOf(element);
-  return index < 0 ? null : candidates[index + (backwards ? -1 : 1)] ?? null;
+  return index < 0 ? null : (candidates[index + (backwards ? -1 : 1)] ?? null);
 }
 
 export async function labelFieldInput(

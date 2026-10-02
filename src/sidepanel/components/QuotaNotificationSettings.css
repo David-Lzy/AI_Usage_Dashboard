@@ -9,7 +9,7 @@
 
 .quota-notification-settings__body {
   display: grid;
-  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
   align-items: start;
   gap: var(--app-space-5);
   inline-size: min(100%, 1120px);
@@ -185,4 +185,14 @@
   .quota-notification-settings__windows {
     padding-inline-start: 0;
   }
+}
+.quota-notification-settings__save-feedback {
+  grid-column: 1 / -1;
+}
+.quota-notification-settings__save-feedback .settings-save-feedback {
+  width: auto;
+  justify-content: start;
+}
+.quota-notification-settings__threshold input[aria-invalid="true"] {
+  border-color: var(--app-color-error);
 }

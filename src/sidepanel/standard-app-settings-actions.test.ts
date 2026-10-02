@@ -102,16 +102,11 @@ describe("createStandardAppSettingsActions", () => {
     });
   });
 
-  it("saves preference feedback through a localized toast", () => {
+  it("does not claim a preference save merely from dispatch", () => {
     const { actions, setToast } = createSettingsActionHarness();
-
-    actions.handleSavePreferences();
-
-    expect(setToast).toHaveBeenCalledWith({
-      tone: "success",
-      title: "Preferences saved",
-      message: "Settings are now persisted in local dashboard state for the preview.",
-    });
+    actions.handleUpdateSettings({ syncIntervalMinutes: 15 });
+    expect(setToast).not.toHaveBeenCalled();
+    expect(actions).not.toHaveProperty("handleSavePreferences");
   });
 
   it("resets portable configuration to initial defaults without confirmation when unchanged", async () => {

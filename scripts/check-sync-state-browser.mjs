@@ -25,13 +25,13 @@ try {
   await mkdir(output, { recursive: true });
   await server.listen();
   const base = `http://127.0.0.1:${server.httpServer.address().port}`;
-  browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome" });
+  browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : { channel: process.env.PLAYWRIGHT_CHANNEL ?? "chrome" }) });
   const page = await browser.newPage({ viewport: { width: 1360, height: 960 } });
   const errors = [];
   page.on("pageerror", (error) => { errors.push(error.message); console.error(error.message); });
   page.on("console", (message) => { if (message.type() === "error") console.error(message.text()); });
-  await page.goto(`${base}/src/sidepanel/index.html?surface=full-page#settings`);
-  await page.locator("#settings-appearance").waitFor().catch(async (error) => {
+  await page.goto(`${base}/src/sidepanel/index.html?surface=full-page#settings/section/settings-usage-notifications`);
+  await page.locator("#settings-usage-notifications").waitFor().catch(async (error) => {
     await page.screenshot({ path: path.join(output, "startup-failure.png") });
     throw error;
   });

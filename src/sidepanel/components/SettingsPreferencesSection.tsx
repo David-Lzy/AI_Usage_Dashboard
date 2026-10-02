@@ -44,6 +44,7 @@ import { QuotaNotificationSettings } from "./QuotaNotificationSettings";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
 import type { SettingsCategory } from "../settings-categories";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsSaveCopy } from "../../shared/settings-save-localized-copy";
 
 type SettingsPreferencesSectionProps = {
   activeCategory?: SettingsCategory;
@@ -391,7 +392,7 @@ export function SettingsPreferencesSection({
           />
 
           <EditableNumberCombobox
-            label={i18n.t("settings.preferences.warning_threshold_label")}
+            label={getSettingsSaveCopy(i18n.resolvedLocale).inAppThreshold}
             value={settings.warningThresholdPercent}
             minimum={WARNING_THRESHOLD_MIN_PERCENT}
             maximum={WARNING_THRESHOLD_MAX_PERCENT}

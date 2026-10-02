@@ -167,6 +167,18 @@ Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
 tests separately cover OS API rejection and Firefox's permission-probe fallback;
 these checks do not claim a visible notification in the user's desktop session.
 
+`node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
+exercises actual extension preference writes and notification persistence while
+holding, rejecting and reordering transport acknowledgements. It verifies that
+storage changes alone do not claim acknowledgement, failed drafts survive
+category changes, retry is explicit, stale results cannot overwrite newer edits,
+unrelated failures remain visible, and the two thresholds persist independently.
+All 14 locales run in light/dark at 390/1440px; `--locales=en,de,ar` and
+`--widths=390,900,1100,1440` select focused runs. Browser notification permission
+is a fixture response only; the script forbids OS notification tests and remote
+requests. Evidence is retained under `tmp/output/playwright/settings-save/`.
+The MDUI source gate also checks a rejected selection can be selected again.
+
 `node scripts/check-settings-split-browser.mjs [screenshot-path]` checks the
 Usage & Notifications / Appearance split in an isolated source browser. It
 edits the in-app and notification thresholds independently, tests Settings

@@ -151,14 +151,6 @@ export function createStandardAppSettingsActions({
     });
   }
 
-  function handleSavePreferences() {
-    setToast({
-      tone: "success",
-      title: runtimeI18n.t("settings.toast.preferences_saved_title"),
-      message: runtimeI18n.t("settings.toast.preferences_saved_detail"),
-    });
-  }
-
   function handleExportConfiguration() {
     if (!appState) {
       setToast({
@@ -271,7 +263,6 @@ export function createStandardAppSettingsActions({
     handleSaveCodexWorkspaceConfig,
     handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync,
-    handleSavePreferences,
     handleSaveProviderAdminApiKey,
     handleSetSourcePreference,
     handleUpdateSettings,

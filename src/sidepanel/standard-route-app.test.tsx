@@ -27,6 +27,8 @@ function setRuntimeState({
   mockedUseStandardAppRuntime.mockReturnValue({
     appState,
     toast: null,
+    settingsSaveFeedback: { status: "idle", draft: {}, retryPatch: {} },
+    retrySettingsSave: vi.fn(),
     isLoading,
     loadError: null,
     applyMessage: vi.fn(async (_message: AppMessage) => appState),
@@ -49,6 +51,7 @@ describe("StandardRouteApp cached-first rendering", () => {
 
     expect(mockedUseStandardAppRuntime).toHaveBeenCalledWith({
       preferCachedBootstrap: true,
+      inlinePreferenceFeedback: false,
     });
     expect(html).toContain("AI coding quota overview");
     expect(html).toContain("Provider cards");

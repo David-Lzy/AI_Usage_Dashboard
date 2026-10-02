@@ -100,7 +100,7 @@ describe("SettingsPreferencesSection", () => {
     expect(dataStart).toBeGreaterThan(usageStart);
     expect(dataHtml).toContain('data-configuration-backup=""');
     expect(usageHtml).not.toContain('data-configuration-backup=""');
-    expect(usageHtml).toContain("In-app warning threshold");
+    expect(usageHtml).toContain("In-app warning (% used)");
     expect(appearanceHtml).toContain('data-color-choice-dropdown="accent-color"');
     expect(appearanceHtml).toContain('data-settings-material-select="motion-mode"');
     expect(appearanceHtml).toContain('data-settings-material-select="popup-provider-browsing-mode"');

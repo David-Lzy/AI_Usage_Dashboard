@@ -19,6 +19,7 @@ type TopBarProps = {
   secondaryActionIconName?: MaterialActionIconName;
   primaryActionLabel?: string;
   primaryActionIconName?: MaterialActionIconName;
+  primaryActionContent?: ReactNode;
   bottomContent?: ReactNode;
   sticky?: boolean;
   onThemeAction?: () => void;
@@ -40,6 +41,7 @@ export function TopBar({
   secondaryActionIconName,
   primaryActionLabel = "Settings",
   primaryActionIconName,
+  primaryActionContent,
   bottomContent,
   sticky = false,
   onThemeAction,
@@ -101,7 +103,13 @@ export function TopBar({
               </span>
             </button>
           ) : null}
-          <button className="icon-button" type="button" aria-label={secondaryActionLabel} title={secondaryActionLabel} onClick={onSecondaryAction}>
+          <button
+            className="icon-button"
+            type="button"
+            aria-label={secondaryActionLabel}
+            title={secondaryActionLabel}
+            onClick={onSecondaryAction}
+          >
             {secondaryActionIconName ? (
               <MaterialActionIcon
                 className="top-app-bar__action-icon"
@@ -112,23 +120,27 @@ export function TopBar({
               {secondaryActionLabel}
             </span>
           </button>
-          <button
-            className="icon-button icon-button--primary"
-            type="button"
-            aria-label={primaryActionLabel}
-            title={primaryActionLabel}
-            onClick={onPrimaryAction}
-          >
-            {primaryActionIconName ? (
-              <MaterialActionIcon
-                className="top-app-bar__action-icon"
-                name={primaryActionIconName}
-              />
-            ) : null}
-            <span className="top-app-bar__action-label">
-              {primaryActionLabel}
-            </span>
-          </button>
+          {primaryActionContent !== undefined ? (
+            primaryActionContent
+          ) : (
+            <button
+              className="icon-button icon-button--primary"
+              type="button"
+              aria-label={primaryActionLabel}
+              title={primaryActionLabel}
+              onClick={onPrimaryAction}
+            >
+              {primaryActionIconName ? (
+                <MaterialActionIcon
+                  className="top-app-bar__action-icon"
+                  name={primaryActionIconName}
+                />
+              ) : null}
+              <span className="top-app-bar__action-label">
+                {primaryActionLabel}
+              </span>
+            </button>
+          )}
         </div>
       </div>
 

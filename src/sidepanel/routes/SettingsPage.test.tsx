@@ -20,7 +20,6 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       snapshots={SAMPLE_APP_STATE.providers}
       toast={null}
       onDismissToast={() => {}}
-      onSavePreferences={() => {}}
       onSyncIntervalChange={() => {}}
       onLocalePreferenceChange={() => {}}
       onUserLevelChange={() => {}}
