@@ -20,7 +20,7 @@ try {
     page.on("pageerror", (error) => errors.push(error.message));
     try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
-      await page.locator("#settings-appearance").waitFor();
+      await page.locator(".settings-fusion").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
         const { default: React } = await import("/__qa/react.js");
         const { default: ReactDOM } = await import("/__qa/react-dom-client.js");

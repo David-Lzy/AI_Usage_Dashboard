@@ -256,7 +256,12 @@ and connection workflows have moved, and ordinary preferences now show actual
 save acknowledgements. All five Settings categories are functional. Dashboard
 and Sidebar use compact headers, operational summaries and responsive Provider
 lists; data, order, per-surface preferences and recovery actions are unchanged.
-Provider detail and Popup alignment remain separate migration steps.
+Provider detail now separates quota/reset, trends/statistics, comparison/export
+and source/diagnostics. Account and source context, successful capture time and
+actionable failures remain visible before the technical disclosure. History and
+export retain their own collection times and eligibility rules. Opening metadata
+does not reset analysis selections; the existing Debug diagnostics export stays
+in Accounts & Connections. Popup alignment remains a separate migration step.
 
 | Category | Primary editing responsibility |
 | --- | --- |

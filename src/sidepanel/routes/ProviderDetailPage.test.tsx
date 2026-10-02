@@ -195,6 +195,35 @@ function renderProviderDetail(
 }
 
 describe("ProviderDetailPage", () => {
+  it("prioritizes quota and successful capture before collapsed technical metadata", () => {
+    const state = structuredClone(createState());
+    const provider = state.providers.find((entry) => entry.providerId === "codex-personal-page")!;
+    provider.lastSuccessAt = "2026-10-02T12:00:00Z";
+    provider.lastAttemptAt = "2026-10-02T14:00:00Z";
+    provider.warningReason = "QA stale capture remains visible";
+    const html = renderProviderDetail(state, "codex-personal-page", { aggregateState: true, progressSurface: "fullPage" });
+    const technical = html.indexOf('data-provider-source-info=""');
+    expect(html).toContain('class="app-shell fusion-surface provider-detail-fusion"');
+    expect(html).not.toContain('class="hero-card"');
+    expect(html.indexOf('data-provider-success-time=""')).toBeLessThan(technical);
+    expect(html.indexOf("QA stale capture remains visible")).toBeLessThan(technical);
+    expect(html.indexOf('id="provider-quota-heading"')).toBeLessThan(html.indexOf('id="provider-trends-heading"'));
+    expect(html.indexOf('id="provider-trends-heading"')).toBeLessThan(html.indexOf('id="provider-exports-heading"'));
+    expect(html).toContain('class="detail-section detail-source-info" data-provider-source-info=""');
+    expect(html).not.toContain('data-provider-source-info="" open');
+    expect(html).toContain("Last successful capture");
+    expect(html).toContain("Source &amp; diagnostics");
+  });
+
+  it("does not substitute a failed refresh attempt for an unknown capture", () => {
+    const state = structuredClone(createState());
+    const provider = state.providers.find((entry) => entry.providerId === "codex-personal-page")!;
+    provider.lastSuccessAt = null;
+    provider.lastAttemptAt = "2026-10-02T14:00:00Z";
+    const html = renderProviderDetail(state, "codex-personal-page");
+    expect(html).toMatch(/data-provider-success-time=""[^]*?Unknown/);
+  });
+
   it("renders a source-page recovery action for shipped session-page providers", () => {
     const html = renderProviderDetail(createState(), "codex-personal-page", {
       onOpenSourcePage: () => undefined,

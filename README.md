@@ -132,7 +132,7 @@ before connecting a provider or custom endpoint.
 _Settings Quick Setup preview rendered from synthetic QA snapshots. No real
 accounts, credentials, or usage evidence are included._
 
-### Unreleased Settings Preview
+### Unreleased Interface Preview
 
 The B fusion migration branch reorganizes Settings into Accounts & Connections,
 Usage & Notifications, Appearance & Display, General, and Data & Backup.
@@ -147,6 +147,12 @@ summaries and responsive Provider lists. This screenshot uses synthetic values,
 not a live account or the published Store version.
 
 ![Unreleased B fusion Dashboard](./Doc/Assets/ai-usage-dashboard-dashboard-fusion.png)
+
+Provider detail groups quota and reset, trends, comparison and export, and
+technical source information. Successful capture time and recovery actions stay
+visible when technical information is collapsed.
+
+![Unreleased B fusion Provider detail](./Doc/Assets/ai-usage-dashboard-detail-fusion.png)
 
 _Branch preview using synthetic QA data, not the published 0.2.1 Store interface.
 The earlier screenshot above is retained for the published layout._

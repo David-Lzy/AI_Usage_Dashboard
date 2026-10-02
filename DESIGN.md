@@ -170,6 +170,12 @@ The UI has three density contexts rather than one desktop breakpoint:
   Sidebar stays single-column. Repeated Provider boundaries use an 8px radius,
   while nested usage sections use dividers, not additional floating cards.
   Header commands retain accessible names when narrow layouts show only icons.
+- Provider detail starts with account/source context and the actual successful
+  capture time. Quota/reset, trends/statistics and comparison/export are separate
+  unframed sections. Source/technical metadata is an accessible disclosure;
+  errors, stale bindings, source recovery and unknown capture time stay outside
+  it. Opening or closing metadata must not remount analysis controls or reset
+  their selected account/range. Do not substitute attempt time for capture time.
 
 General rules:
 

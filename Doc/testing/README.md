@@ -17,6 +17,13 @@ Status note:
 
 ## Public Verification
 
+`node scripts/check-fusion-detail-browser.mjs --extension=<isolated Chrome build>`
+checks the migrated detail hierarchy using synthetic Codex history and two
+Sub2API deployments in owned offline extension profiles. The 14-locale matrix
+covers both themes and 390/1440px, keyboard technical disclosure, unchanged
+snapshots/ranges, account selection and visible failed/unknown state. It is
+complemented by the comparison, period/CSV and diagnostics export harnesses.
+
 The migration Dashboard/Sidebar matrix uses
 `node scripts/check-fusion-dashboard-browser.mjs --extension=<isolated Chrome build>`.
 It covers 14 locales, light/dark, 390/900/1440px, keyboard detail/back and Settings

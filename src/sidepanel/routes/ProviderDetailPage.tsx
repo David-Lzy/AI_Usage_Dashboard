@@ -16,13 +16,10 @@ import type {
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { buildRuntimeCommonCopy, createRuntimeI18n } from "../../shared/i18n";
-import type {
-  MaterialActionIconName,
-} from "../../shared/components/MaterialActionIcon";
+import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
 import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnostic-presentation";
 import {
   buildProviderDetailLocalizedCopy,
-  getPermissionStatusLabel,
   getProviderDetailStatusBadgeLabel,
 } from "../../shared/provider-detail-localized-copy";
 import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
@@ -58,6 +55,8 @@ import { getActiveProviderAccountMetadata } from "../../shared/provider-accounts
 import { TechnicalText } from "../../shared/components/TechnicalText";
 import { DeploymentComparison } from "../components/DeploymentComparison";
 import { UsageExport } from "../components/UsageExport";
+import { ProviderDetailSourceInfo } from "../components/ProviderDetailSourceInfo";
+import { getProviderDetailGroupsCopy } from "../../shared/provider-detail-groups-copy";
 
 type ProviderDetailPageProps = {
   localePreference: AppLocalePreference;
@@ -109,8 +108,7 @@ export function ProviderDetailPage({
   progressSurface,
   usageHistoryModulesBySurface = createDefaultUsageHistoryModulesBySurface(),
   providerServiceStatuses = [],
-  providerServiceStatusVisibilityBySurface =
-    createDefaultProviderServiceStatusVisibilityBySurface(),
+  providerServiceStatusVisibilityBySurface = createDefaultProviderServiceStatusVisibilityBySurface(),
   provider,
   providerAccounts,
   aggregateState,
@@ -135,17 +133,18 @@ export function ProviderDetailPage({
     typeof window !== "undefined" ? window : undefined,
   );
   const copy = buildProviderDetailLocalizedCopy(i18n);
+  const groups = getProviderDetailGroupsCopy(i18n.resolvedLocale);
   const usageHistoryCopy = buildUsageHistoryLocalizedCopy(i18n.resolvedLocale);
   const cursorUsageCopy = buildCursorUsageLocalizedCopy(i18n.resolvedLocale);
   const apiGatewayMeteringCopy = buildApiGatewayMeteringLocalizedCopy(
     i18n.resolvedLocale,
   );
   const apiGatewayMeteringDisplayPreferences:
-    | ApiGatewayMeteringDisplayPreferences
-    | undefined = getActiveProviderAccountMetadata(
-    { providerAccounts },
-    provider.providerId,
-  )?.apiGatewayMeteringDisplayPreferences;
+    ApiGatewayMeteringDisplayPreferences | undefined =
+    getActiveProviderAccountMetadata(
+      { providerAccounts },
+      provider.providerId,
+    )?.apiGatewayMeteringDisplayPreferences;
   const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
   const quotaPaceForecasts = quotaPaceForecastEnabled
     ? buildAvailableQuotaPaceForecasts(
@@ -154,14 +153,13 @@ export function ProviderDetailPage({
         quotaPaceNow,
       )
     : [];
-  const visibleUsageHistoryModuleOrder =
-    resolveProviderUsageHistoryModules(
-      usageHistoryModulesBySurface,
-      progressSurface,
-      provider.providerId,
-    )
-      .filter((preference) => preference.visible)
-      .map((preference) => preference.id);
+  const visibleUsageHistoryModuleOrder = resolveProviderUsageHistoryModules(
+    usageHistoryModulesBySurface,
+    progressSurface,
+    provider.providerId,
+  )
+    .filter((preference) => preference.visible)
+    .map((preference) => preference.id);
   const visibleUsageContextLabel =
     buildRuntimeCommonCopy(i18n).visibleUsageContext;
   const showProviderServiceStatus = isProviderServiceStatusVisible(
@@ -175,17 +173,6 @@ export function ProviderDetailPage({
         provider.providerId,
       )
     : null;
-  const showSessionPageContract =
-    provider.sessionPageContractLabel !== null &&
-    (provider.sessionPageContractLabel !== provider.currentSourceContractLabel ||
-      provider.sessionPageContractDetail !== provider.currentSourceContractDetail);
-  const showSessionPageGraduationGate =
-    provider.sessionPageGraduationGateLabel !== null &&
-    (showSessionPageContract ||
-      provider.sessionPageGraduationGateLabel !==
-        provider.currentSourceGraduationGateLabel ||
-      provider.sessionPageGraduationGateDetail !==
-        provider.currentSourceGraduationGateDetail);
   const hasStructuredUsageContext =
     (provider.usageWindows?.length ?? 0) > 0 ||
     (provider.usageBalances?.length ?? 0) > 0 ||
@@ -213,12 +200,17 @@ export function ProviderDetailPage({
         : provider.used !== null
           ? copy.values.usedOnly(i18n.formatPercentValue(provider.used))
           : provider.remaining !== null
-            ? copy.values.remainingOnly(i18n.formatPercentValue(provider.remaining))
+            ? copy.values.remainingOnly(
+                i18n.formatPercentValue(provider.remaining),
+              )
             : copy.values.unknownUsageWindowPercentage
       : provider.used !== null && provider.total !== null
         ? `${i18n.formatNumber(provider.used)} / ${i18n.formatNumber(provider.total)} ${provider.quotaUnit}`
         : provider.used !== null
-          ? copy.values.tracked(i18n.formatNumber(provider.used), provider.quotaUnit)
+          ? copy.values.tracked(
+              i18n.formatNumber(provider.used),
+              provider.quotaUnit,
+            )
           : provider.total !== null
             ? copy.values.unknownOfTotal(
                 i18n.formatNumber(provider.total),
@@ -239,39 +231,20 @@ export function ProviderDetailPage({
         : provider.used !== null && provider.total === null
           ? copy.values.notAvailableFromSource
           : copy.values.unknown;
-  const formattedResetAt = i18n.formatTemporalValue(provider.resetAt) ?? provider.resetAt;
+  const formattedResetAt =
+    i18n.formatTemporalValue(provider.resetAt) ??
+    (provider.resetAt || copy.values.unknown);
   const formattedSyncedAt = provider.lastSuccessAt
-    ? i18n.formatTemporalValue(provider.lastSuccessAt) ?? provider.lastSuccessAt
+    ? (i18n.formatTemporalValue(provider.lastSuccessAt) ??
+      provider.lastSuccessAt)
     : copy.values.unknown;
-  const fidelityNoteToneClassName =
-    provider.currentSourceFidelityTone === "error"
-      ? "detail-note--error"
-      : provider.currentSourceFidelityTone === "warning"
-        ? "detail-note--warning"
-        : "detail-note--neutral";
-  const pageBindingNoteToneClassName =
-    provider.pageBinding.status === "stale"
-      ? "detail-note--warning"
-      : "detail-note--neutral";
   const syncStatusBadgeLabel = getProviderDetailStatusBadgeLabel(
     provider.permissionStatus,
     provider.displaySyncStatus,
     copy,
   );
-  const permissionStatusLabel = getPermissionStatusLabel(
-    provider.permissionStatus,
-    copy,
-  );
   const warningDiagnosticPresentation = getProviderDiagnosticPresentation(
     provider.warningDiagnostic,
-    i18n,
-  );
-  const sourceSelectionDiagnosticPresentation = getProviderDiagnosticPresentation(
-    provider.sourceSelectionDiagnostic,
-    i18n,
-  );
-  const sourceFallbackDiagnosticPresentation = getProviderDiagnosticPresentation(
-    provider.sourceFallbackDiagnostic,
     i18n,
   );
   const diagnosticNoteToneClassName =
@@ -282,10 +255,10 @@ export function ProviderDetailPage({
         : "detail-note--neutral";
 
   return (
-    <main className="app-shell">
+    <main className="app-shell fusion-surface provider-detail-fusion">
       <TopBar
         title={provider.providerLabel}
-        subtitle={copy.topbarSubtitle}
+        compact
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
         themeActionIconName={themeActionIconName}
@@ -293,8 +266,13 @@ export function ProviderDetailPage({
         expandActionTitle={
           surfaceActionTitle ?? copy.openDetailTabTitle(provider.providerLabel)
         }
+        expandActionIconName={
+          progressSurface === "fullPage" ? "dock-left" : "tab"
+        }
         secondaryActionLabel={i18n.t("common.actions.back")}
+        secondaryActionIconName="keyboard-backspace"
         primaryActionLabel={i18n.t("common.actions.refresh")}
+        primaryActionIconName="refresh"
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
@@ -309,13 +287,44 @@ export function ProviderDetailPage({
       />
 
       <section
-        className="status-card"
+        className="detail-context"
         data-theme-stability-surface="provider-detail-sync-status-card"
       >
-        <p className="section-label">{copy.sections.syncStatus}</p>
-        <StatusBadge label={syncStatusBadgeLabel} tone={provider.displayTone} />
+        <div className="detail-context__identity">
+          <h2 className="section-title">
+            <TechnicalText direction="auto">{provider.planName}</TechnicalText>
+          </h2>
+          <StatusBadge
+            label={syncStatusBadgeLabel}
+            tone={provider.displayTone}
+          />
+        </div>
+        <div className="detail-context__source">
+          <span className="meta-chip">
+            <TechnicalText direction="auto">
+              {provider.currentSourceLabel}
+            </TechnicalText>
+          </span>
+          <span
+            className={
+              provider.currentSourceFidelityTone === "error"
+                ? "meta-chip meta-chip--error"
+                : provider.currentSourceFidelityTone === "warning"
+                  ? "meta-chip meta-chip--warning"
+                  : "meta-chip"
+            }
+          >
+            {provider.currentSourceFidelityLabel}
+          </span>
+          <span className="supporting-copy" data-provider-success-time="">
+            {groups.captured}:{" "}
+            <TechnicalText direction="auto">{formattedSyncedAt}</TechnicalText>
+          </span>
+        </div>
+        <p className="supporting-copy">
+          {provider.currentSourceAvailabilitySummary}
+        </p>
       </section>
-
       {showProviderServiceStatus ? (
         <section className="status-card" data-provider-service-status-detail="">
           <ProviderServiceStatus
@@ -326,34 +335,101 @@ export function ProviderDetailPage({
         </section>
       ) : null}
 
-      <section className="hero-card">
-        <p className="section-label">{copy.sections.providerDetail}</p>
-        <h2 className="display-headline">
-          <TechnicalText direction="auto">{provider.planName}</TechnicalText>
-        </h2>
-        <p className="body-copy">{copy.heroDetail}</p>
-      </section>
-
       <section
-        className="status-card"
-        data-theme-stability-surface="provider-detail-usage-card"
+        className="detail-recovery"
+        aria-label={copy.sections.syncStatus}
       >
-        <p className="section-label">{copy.sections.usage}</p>
-        <div className="detail-grid">
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.plan}</p>
-            <p className="detail-field__value">
-              <TechnicalText direction="auto">{provider.planName}</TechnicalText>
+        {provider.permissionStatus === "missing" ? (
+          <div className="detail-note detail-note--warning">
+            <p className="detail-note__label">{copy.notes.accessStatus}</p>
+            <p className="supporting-copy">{copy.notes.accessStatusDetail}</p>
+          </div>
+        ) : null}
+
+        {provider.currentSourceStateKind !== "ready" ? (
+          <div
+            className={`detail-note ${provider.currentSourceStateTone === "error" ? "detail-note--error" : "detail-note--warning"}`}
+          >
+            <p className="detail-note__label">{copy.notes.sourceState}</p>
+            <p className="supporting-copy">
+              {provider.currentSourceStateDetail}
             </p>
           </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.status}</p>
-            <p className="detail-field__value">{syncStatusBadgeLabel}</p>
+        ) : null}
+
+        {showSourcePageAction ? (
+          <div
+            className="detail-note detail-note--neutral"
+            data-provider-detail-open-source-page="true"
+          >
+            <p className="detail-note__label">
+              {copy.notes.sourcePageRecovery}
+            </p>
+            <p className="supporting-copy">
+              {copy.notes.sourcePageRecoveryDetail}
+            </p>
+            <button
+              className="text-button text-button--inline"
+              type="button"
+              onClick={() =>
+                onOpenSourcePage(
+                  provider.providerId,
+                  provider.currentSourceStateKind,
+                )
+              }
+            >
+              {copy.notes.openSourcePageAction}
+            </button>
           </div>
+        ) : null}
+
+        {warningDiagnosticPresentation ? (
+          <div className={`detail-note ${diagnosticNoteToneClassName}`}>
+            <p className="detail-note__label">{copy.notes.diagnosticSummary}</p>
+            <p className="supporting-copy">
+              {warningDiagnosticPresentation.label}
+            </p>
+            <p className="supporting-copy">
+              {warningDiagnosticPresentation.summary}
+            </p>
+          </div>
+        ) : null}
+
+        {provider.warningReason &&
+        (provider.currentSourceStateKind === "ready" ||
+          provider.warningReason !== provider.currentSourceStateDetail) ? (
+          <div className="detail-note detail-note--warning">
+            <p className="detail-note__label">{copy.notes.warningReason}</p>
+            <p className="supporting-copy">
+              <TechnicalText direction="auto">
+                {provider.warningReason}
+              </TechnicalText>
+            </p>
+          </div>
+        ) : null}
+        {provider.pageBinding.status === "stale" &&
+        provider.pageBindingDetail ? (
+          <div className="detail-note detail-note--warning">
+            <p className="detail-note__label">{copy.notes.pageBinding}</p>
+            <p className="supporting-copy">{provider.pageBindingDetail}</p>
+          </div>
+        ) : null}
+      </section>
+      <section
+        className="detail-section"
+        aria-labelledby="provider-quota-heading"
+        data-theme-stability-surface="provider-detail-usage-card"
+      >
+        <h2 id="provider-quota-heading" className="section-title">
+          {groups.quota}
+        </h2>
+        <div className="detail-grid detail-quota-grid">
           {!hasApiGatewayMetering ? (
             <>
               <div className="detail-field">
-                <p className="detail-field__label">{copy.fieldLabels.quotaModel}</p>
+                <p className="detail-field__label">
+                  {copy.fieldLabels.quotaModel}
+                </p>
                 <p className="detail-field__value">
                   {provider.quotaWindow} {provider.quotaUnit}
                 </p>
@@ -363,215 +439,20 @@ export function ProviderDetailPage({
                 <p className="detail-field__value">{normalizedUsageValue}</p>
               </div>
               <div className="detail-field">
-                <p className="detail-field__label">{copy.fieldLabels.remaining}</p>
+                <p className="detail-field__label">
+                  {copy.fieldLabels.remaining}
+                </p>
                 <p className="detail-field__value">{remainingValue}</p>
               </div>
               <div className="detail-field">
-                <p className="detail-field__label">{copy.fieldLabels.resetTime}</p>
+                <p className="detail-field__label">
+                  {copy.fieldLabels.resetTime}
+                </p>
                 <p className="detail-field__value">{formattedResetAt}</p>
               </div>
             </>
           ) : null}
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.sourcePreference}</p>
-            <p className="detail-field__value">{provider.sourcePreferenceLabel}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.syncSource}</p>
-            <p className="detail-field__value">
-              <TechnicalText direction="auto">
-                {provider.currentSourceLabel}
-              </TechnicalText>
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.productContract}</p>
-            <p className="detail-field__value">
-              <TechnicalText direction="auto">
-                {provider.currentSourceContractLabel}
-              </TechnicalText>
-            </p>
-          </div>
-          {showSessionPageContract ? (
-            <div className="detail-field">
-              <p className="detail-field__label">{copy.fieldLabels.sessionPageContract}</p>
-              <p className="detail-field__value">
-                <TechnicalText direction="auto">
-                  {provider.sessionPageContractLabel}
-                </TechnicalText>
-              </p>
-            </div>
-          ) : null}
-          {provider.currentSourceGraduationGateLabel ? (
-            <div className="detail-field">
-              <p className="detail-field__label">{copy.fieldLabels.graduationGate}</p>
-              <p className="detail-field__value">
-                {provider.currentSourceGraduationGateLabel}
-              </p>
-            </div>
-          ) : null}
-          {showSessionPageGraduationGate ? (
-            <div className="detail-field">
-              <p className="detail-field__label">{copy.fieldLabels.sessionPageGate}</p>
-              <p className="detail-field__value">
-                {provider.sessionPageGraduationGateLabel}
-              </p>
-            </div>
-          ) : null}
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.sourceFidelity}</p>
-            <p className="detail-field__value">
-              {provider.currentSourceFidelityLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.sourceState}</p>
-            <p className="detail-field__value">{provider.currentSourceStateLabel}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.usedValueFidelity}</p>
-            <p className="detail-field__value">
-              {provider.currentSourceUsedAvailabilityLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.remainingValueFidelity}</p>
-            <p className="detail-field__value">
-              {provider.currentSourceRemainingAvailabilityLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.resetValueFidelity}</p>
-            <p className="detail-field__value">
-              {provider.currentSourceResetAvailabilityLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.availabilitySummary}</p>
-            <p className="detail-field__value">
-              {provider.currentSourceAvailabilitySummary}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.accessModel}</p>
-            <p className="detail-field__value">{provider.currentAccessModelLabel}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.credentialPersistence}</p>
-            <p className="detail-field__value">
-              {provider.credentialPersistenceLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.cookieStorage}</p>
-            <p className="detail-field__value">{provider.cookiePolicyLabel}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.manualCookieImport}</p>
-            <p className="detail-field__value">
-              {provider.manualCookieImportLabel}
-            </p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.hostAccessRequirement}</p>
-            <p className="detail-field__value">
-              {provider.hostAccessRequirementLabel}
-            </p>
-          </div>
-          {provider.pageBindingLabel ? (
-            <>
-              <div className="detail-field">
-                <p className="detail-field__label">{copy.fieldLabels.pageBinding}</p>
-                <p className="detail-field__value">{provider.pageBindingLabel}</p>
-              </div>
-              <div className="detail-field">
-                <p className="detail-field__label">{copy.fieldLabels.bindingMode}</p>
-                <p className="detail-field__value">
-                  {provider.pageBindingModeLabel}
-                </p>
-              </div>
-            </>
-          ) : null}
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.selectionReason}</p>
-            <p className="detail-field__value">{provider.sourceSelectionReason}</p>
-          </div>
-          {sourceSelectionDiagnosticPresentation ? (
-            <>
-              <div className="detail-field">
-                <p className="detail-field__label">
-                  {copy.fieldLabels.selectionDiagnostic}
-                </p>
-                <p className="detail-field__value">
-                  {sourceSelectionDiagnosticPresentation.label}
-                </p>
-              </div>
-              <div className="detail-field">
-                <p className="detail-field__label">
-                  {copy.fieldLabels.selectionDiagnosticSummary}
-                </p>
-                <p className="detail-field__value">
-                  {sourceSelectionDiagnosticPresentation.summary}
-                </p>
-              </div>
-            </>
-          ) : null}
-          {provider.sourceFallbackReason ? (
-            <div className="detail-field">
-              <p className="detail-field__label">{copy.fieldLabels.fallbackReason}</p>
-              <p className="detail-field__value">{provider.sourceFallbackReason}</p>
-            </div>
-          ) : null}
-          {sourceFallbackDiagnosticPresentation ? (
-            <>
-              <div className="detail-field">
-                <p className="detail-field__label">
-                  {copy.fieldLabels.fallbackDiagnostic}
-                </p>
-                <p className="detail-field__value">
-                  {sourceFallbackDiagnosticPresentation.label}
-                </p>
-              </div>
-              <div className="detail-field">
-                <p className="detail-field__label">
-                  {copy.fieldLabels.fallbackDiagnosticSummary}
-                </p>
-                <p className="detail-field__value">
-                  {sourceFallbackDiagnosticPresentation.summary}
-                </p>
-              </div>
-            </>
-          ) : null}
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.sourceNote}</p>
-            <p className="detail-field__value">{provider.currentSourceNote}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.lastSync}</p>
-            <p className="detail-field__value">{formattedSyncedAt}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.hostAccess}</p>
-            <p className="detail-field__value">{permissionStatusLabel}</p>
-          </div>
-          <div className="detail-field">
-            <p className="detail-field__label">{copy.fieldLabels.hosts}</p>
-            <p className="detail-field__value">
-              <TechnicalText>{provider.hostsLabel}</TechnicalText>
-            </p>
-          </div>
-          {provider.fallbackSourceLabels.length > 0 ? (
-            <div className="detail-field">
-              <p className="detail-field__label">{copy.fieldLabels.fallbackPath}</p>
-              <p className="detail-field__value">
-                <TechnicalText direction="auto">
-                  {provider.fallbackSourceLabels.join(" · ")}
-                </TechnicalText>
-              </p>
-            </div>
-          ) : null}
         </div>
-
         {hasProviderProgressItems ? (
           <ProviderProgressItemList
             displayStyle={progressDisplayStyle}
@@ -649,234 +530,136 @@ export function ProviderDetailPage({
             ) : null}
           </div>
         ) : null}
-
-        {provider.permissionStatus === "missing" ? (
-          <div className="detail-note detail-note--warning">
-            <p className="detail-note__label">{copy.notes.accessStatus}</p>
-            <p className="supporting-copy">{copy.notes.accessStatusDetail}</p>
-          </div>
-        ) : null}
-
-        {provider.currentSourceStateKind !== "ready" ? (
-          <div
-            className={`detail-note ${provider.currentSourceStateTone === "error" ? "detail-note--error" : "detail-note--warning"}`}
-          >
-            <p className="detail-note__label">{copy.notes.sourceState}</p>
-            <p className="supporting-copy">{provider.currentSourceStateDetail}</p>
-          </div>
-        ) : null}
-
-        {showSourcePageAction ? (
-          <div
-            className="detail-note detail-note--neutral"
-            data-provider-detail-open-source-page="true"
-          >
-            <p className="detail-note__label">{copy.notes.sourcePageRecovery}</p>
-            <p className="supporting-copy">
-              {copy.notes.sourcePageRecoveryDetail}
-            </p>
-            <button
-              className="text-button text-button--inline"
-              type="button"
-              onClick={() =>
-                onOpenSourcePage(
-                  provider.providerId,
-                  provider.currentSourceStateKind,
-                )
-              }
-            >
-              {copy.notes.openSourcePageAction}
-            </button>
-          </div>
-        ) : null}
-
-        <div
-          className={`detail-note ${fidelityNoteToneClassName}`}
-          data-theme-stability-surface="provider-detail-fidelity-note"
-        >
-          <p className="detail-note__label">{copy.notes.sourceFidelity}</p>
-          <p className="supporting-copy">{provider.currentSourceFidelityDetail}</p>
-        </div>
-
-        <div
-          className="detail-note detail-note--neutral"
-          data-theme-stability-surface="provider-detail-contract-note"
-        >
-          <p className="detail-note__label">{copy.notes.productContract}</p>
-          <p className="supporting-copy">
-            {provider.currentSourceContractDetail}
-          </p>
-          {provider.currentSourceGraduationGateDetail ? (
-            <p className="supporting-copy">
-              {copy.notes.graduationGatePrefix}
-              {provider.currentSourceGraduationGateDetail}
-            </p>
-          ) : null}
-          {showSessionPageContract ? (
-            <p className="supporting-copy">
-              {copy.notes.sessionPageTrackPrefix}
-              <TechnicalText direction="auto">
-                {provider.sessionPageContractLabel}
-              </TechnicalText>
-              . {provider.sessionPageContractDetail}
-            </p>
-          ) : null}
-          {showSessionPageGraduationGate &&
-          provider.sessionPageGraduationGateDetail ? (
-            <p className="supporting-copy">
-              {copy.notes.sessionPageGatePrefix}
-              {provider.sessionPageGraduationGateDetail}
-            </p>
-          ) : null}
-        </div>
-
-        <div
-          className="detail-note detail-note--neutral"
-          data-theme-stability-surface="provider-detail-trust-note"
-        >
-          <p className="detail-note__label">{copy.notes.trustBoundary}</p>
-          <p className="supporting-copy">{provider.currentAccessModelDetail}</p>
-          <p className="supporting-copy">{provider.credentialPersistenceDetail}</p>
-          <p className="supporting-copy">{provider.cookiePolicyDetail}</p>
-          <p className="supporting-copy">
-            {provider.manualCookieImportDetail}
-          </p>
-          <p className="supporting-copy">{provider.hostAccessRequirementDetail}</p>
-        </div>
-
-        {provider.pageBindingDetail ? (
-          <div
-            className={`detail-note ${pageBindingNoteToneClassName}`}
-          >
-            <p className="detail-note__label">{copy.notes.pageBinding}</p>
-            <p className="supporting-copy">{provider.pageBindingDetail}</p>
-          </div>
-        ) : null}
-
-        {warningDiagnosticPresentation ? (
-          <div className={`detail-note ${diagnosticNoteToneClassName}`}>
-            <p className="detail-note__label">{copy.notes.diagnosticSummary}</p>
-            <p className="supporting-copy">
-              {warningDiagnosticPresentation.label}
-            </p>
-            <p className="supporting-copy">
-              {warningDiagnosticPresentation.summary}
-            </p>
-          </div>
-        ) : null}
-
-        {provider.warningReason ? (
-          <div className="detail-note detail-note--warning">
-            <p className="detail-note__label">{copy.notes.warningReason}</p>
-            <p className="supporting-copy">
-              <TechnicalText direction="auto">
-                {provider.warningReason}
-              </TechnicalText>
-            </p>
-          </div>
-        ) : null}
       </section>
-
-      {provider.apiGatewayMetering ? (
+      {provider.apiGatewayMetering ||
+      provider.providerId === "codex-personal-page" ||
+      (provider.providerId === "cursor-personal-page" &&
+        provider.cursorUsage) ? (
         <section
-          className="status-card api-gateway-metering-detail"
-          data-api-gateway-metering-detail=""
+          className="detail-section"
+          aria-labelledby="provider-trends-heading"
         >
-          <ApiGatewayMeteringSummary
-            copy={apiGatewayMeteringCopy}
-            density="detail"
-            locale={i18n.resolvedLocale}
-            metering={provider.apiGatewayMetering}
-            preferences={apiGatewayMeteringDisplayPreferences}
-            providerId={provider.providerId}
-            surface="fullPage"
-          />
-          <a
-            className="text-button text-button--inline api-gateway-metering-detail__source-action"
-            href={provider.apiGatewayMetering.origin}
-            rel="noreferrer"
-            target="_blank"
-          >
-            {apiGatewayMeteringCopy.openSourceDashboard}
-          </a>
+          <h2 id="provider-trends-heading" className="section-title">
+            {groups.trends}
+          </h2>
+          {provider.apiGatewayMetering ? (
+            <section
+              className="status-card api-gateway-metering-detail"
+              data-api-gateway-metering-detail=""
+            >
+              <ApiGatewayMeteringSummary
+                copy={apiGatewayMeteringCopy}
+                density="detail"
+                locale={i18n.resolvedLocale}
+                metering={provider.apiGatewayMetering}
+                preferences={apiGatewayMeteringDisplayPreferences}
+                providerId={provider.providerId}
+                surface="fullPage"
+              />
+              <a
+                className="text-button text-button--inline api-gateway-metering-detail__source-action"
+                href={provider.apiGatewayMetering.origin}
+                rel="noreferrer"
+                target="_blank"
+              >
+                {apiGatewayMeteringCopy.openSourceDashboard}
+              </a>
+            </section>
+          ) : null}
+
+          {provider.providerId === "codex-personal-page" ? (
+            <section
+              className="status-card"
+              data-provider-usage-history-detail=""
+            >
+              {provider.usageHistory ? (
+                <UsageHistoryDetail
+                  copy={usageHistoryCopy}
+                  history={provider.usageHistory}
+                  formatCapturedAt={(value) =>
+                    i18n.formatTemporalValue(value) ?? value
+                  }
+                  moduleOrder={visibleUsageHistoryModuleOrder}
+                />
+              ) : (
+                <p className="supporting-copy">{usageHistoryCopy.noData}</p>
+              )}
+            </section>
+          ) : null}
+
+          {provider.providerId === "cursor-personal-page" &&
+          provider.cursorUsage ? (
+            <section
+              className="status-card cursor-usage-detail"
+              data-cursor-usage-detail=""
+            >
+              <CursorUsageSummary
+                copy={cursorUsageCopy}
+                density="detail"
+                locale={i18n.resolvedLocale}
+                providerId={provider.providerId}
+                surface="fullPage"
+                usage={provider.cursorUsage}
+              />
+              <nav
+                aria-label={cursorUsageCopy.sourceLinksLabel}
+                className="cursor-usage-source-actions"
+              >
+                <a
+                  className="text-button text-button--inline"
+                  href="https://cursor.com/dashboard/usage"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {cursorUsageCopy.usagePage}
+                </a>
+                <a
+                  className="text-button text-button--inline"
+                  href="https://cursor.com/dashboard/spending"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {cursorUsageCopy.spendingPage}
+                </a>
+                {provider.usageSummary?.includes("CSV export available") ? (
+                  <span className="supporting-copy">
+                    {cursorUsageCopy.csvAvailable}
+                  </span>
+                ) : null}
+              </nav>
+            </section>
+          ) : null}
         </section>
       ) : null}
-
-      {progressSurface === "fullPage" &&
-      provider.providerId === "sub2api-api-key" &&
-      aggregateState &&
-      onRefreshAccount ? (
-        <DeploymentComparison
-          i18n={i18n}
-          state={aggregateState}
-          onRefreshAccount={onRefreshAccount}
-        />
-      ) : null}
-
       {progressSurface === "fullPage" && aggregateState ? (
-        <UsageExport
-          i18n={i18n}
-          providerId={provider.providerId}
-          state={aggregateState}
-        />
-      ) : null}
-
-      {provider.providerId === "codex-personal-page" ? (
-        <section className="status-card" data-provider-usage-history-detail="">
-          {provider.usageHistory ? (
-            <UsageHistoryDetail
-              copy={usageHistoryCopy}
-              history={provider.usageHistory}
-              formatCapturedAt={(value) => i18n.formatTemporalValue(value) ?? value}
-              moduleOrder={visibleUsageHistoryModuleOrder}
-            />
-          ) : (
-            <p className="supporting-copy">{usageHistoryCopy.noData}</p>
-          )}
-        </section>
-      ) : null}
-
-      {provider.providerId === "cursor-personal-page" && provider.cursorUsage ? (
         <section
-          className="status-card cursor-usage-detail"
-          data-cursor-usage-detail=""
+          className="detail-section"
+          aria-labelledby="provider-exports-heading"
         >
-          <CursorUsageSummary
-            copy={cursorUsageCopy}
-            density="detail"
-            locale={i18n.resolvedLocale}
-            providerId={provider.providerId}
-            surface="fullPage"
-            usage={provider.cursorUsage}
-          />
-          <nav
-            aria-label={cursorUsageCopy.sourceLinksLabel}
-            className="cursor-usage-source-actions"
-          >
-            <a
-              className="text-button text-button--inline"
-              href="https://cursor.com/dashboard/usage"
-              rel="noreferrer"
-              target="_blank"
-            >
-              {cursorUsageCopy.usagePage}
-            </a>
-            <a
-              className="text-button text-button--inline"
-              href="https://cursor.com/dashboard/spending"
-              rel="noreferrer"
-              target="_blank"
-            >
-              {cursorUsageCopy.spendingPage}
-            </a>
-            {provider.usageSummary?.includes("CSV export available") ? (
-              <span className="supporting-copy">
-                {cursorUsageCopy.csvAvailable}
-              </span>
-            ) : null}
-          </nav>
+          <h2 id="provider-exports-heading" className="section-title">
+            {groups.exports}
+          </h2>
+          {progressSurface === "fullPage" &&
+          provider.providerId === "sub2api-api-key" &&
+          aggregateState &&
+          onRefreshAccount ? (
+            <DeploymentComparison
+              i18n={i18n}
+              state={aggregateState}
+              onRefreshAccount={onRefreshAccount}
+            />
+          ) : null}
+
+          {progressSurface === "fullPage" && aggregateState ? (
+            <UsageExport
+              i18n={i18n}
+              providerId={provider.providerId}
+              state={aggregateState}
+            />
+          ) : null}
         </section>
       ) : null}
+      <ProviderDetailSourceInfo provider={provider} i18n={i18n} />
     </main>
   );
 }
