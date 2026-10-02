@@ -26,7 +26,7 @@ export type MaterialSelectOption<TValue extends string = string> = {
   label: string;
 };
 
-type MaterialSelectProps<TValue extends string> = {
+export type MaterialSelectProps<TValue extends string> = {
   label: string;
   value: TValue;
   options: Array<MaterialSelectOption<TValue>>;

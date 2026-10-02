@@ -7,6 +7,7 @@ import process from "node:process";
 
 import { resolveBuildPaths } from "./lib/build-paths.mjs";
 import { isKnownReactDomInnerHtmlWarning } from "./lib/firefox-react-dom-warning.mjs";
+import { knownMaterialWarningKind, verifyMaterialWarningSources } from "./lib/firefox-material-warning.mjs";
 
 const projectRoot = process.cwd();
 const { firefoxDir } = resolveBuildPaths({ projectRoot });
@@ -17,7 +18,7 @@ const webExtBin = path.join(
   process.platform === "win32" ? "web-ext.cmd" : "web-ext",
 );
 
-const expectedKnownWarningCount = 2;
+const expectedKnownWarningCount = 4;
 
 const result = spawnSync(
   webExtBin,
@@ -56,18 +57,20 @@ const reactDomBundle = await readFile(
   path.join(firefoxDir, "assets/usage-progress.js"),
   "utf8",
 );
-const knownWarnings = warnings.filter((warning) =>
-  isKnownReactDomInnerHtmlWarning(warning, reactDomBundle),
-);
-const unexpectedWarnings = warnings.filter(
-  (warning) => !isKnownReactDomInnerHtmlWarning(warning, reactDomBundle),
-);
+const materialBundle = await readFile(path.join(firefoxDir, "assets/material-controls.js"), "utf8");
+const materialSourcesMatch = await verifyMaterialWarningSources(projectRoot);
+const classify = (warning) => isKnownReactDomInnerHtmlWarning(warning, reactDomBundle)
+  ? "react-dom" : materialSourcesMatch ? knownMaterialWarningKind(warning, materialBundle) : null;
+const knownWarnings = warnings.filter((warning) => classify(warning));
+const unexpectedWarnings = warnings.filter((warning) => !classify(warning));
+const materialKinds = new Set(knownWarnings.map(classify).filter((kind) => kind !== "react-dom"));
 
 if (
   result.status !== 0 ||
   errors.length > 0 ||
   notices.length > 0 ||
   unexpectedWarnings.length > 0 ||
+  materialKinds.size !== 2 ||
   knownWarnings.length !== expectedKnownWarningCount
 ) {
   console.error("firefox lint baseline failed");
@@ -80,6 +83,7 @@ if (
         warnings: warnings.length,
         knownWarnings: knownWarnings.length,
         expectedKnownWarningCount,
+        materialSourcesMatch,
         unexpectedWarnings,
       },
       null,
@@ -93,5 +97,5 @@ if (
 }
 
 console.log(
-  `firefox lint baseline passed: 0 errors, 0 notices, ${knownWarnings.length} verified React DOM warnings.`,
+  `firefox lint baseline passed: 0 errors, 0 notices, ${knownWarnings.length} verified library warnings (2 React DOM, 1 Lit static template, 1 MDUI DOM factory).`,
 );

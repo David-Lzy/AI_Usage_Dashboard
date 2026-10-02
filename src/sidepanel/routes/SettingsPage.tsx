@@ -47,7 +47,8 @@ import {
   SettingsOverviewSection,
 } from "../components/SettingsSections";
 import { AdaptiveControlGrid } from "../components/AdaptiveControlGrid";
-import { MaterialSelect } from "../components/MaterialSelect";
+import { FusionSelect as MaterialSelect } from "../components/material-ui/FusionControls";
+import { useFusionTheme } from "../components/material-ui/fusion-theme";
 import { SettingsQuickSetupSection } from "../components/SettingsQuickSetupSection";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { Toast } from "../components/Toast";
@@ -292,6 +293,7 @@ export function SettingsPage({
 }: SettingsPageProps) {
   const routeFocusKey = getSettingsRouteFocusKey(routeFocus);
   const settingsShellRef = useRef<HTMLElement>(null);
+  useFusionTheme(settingsShellRef);
   const lastScrolledRouteFocusKeyRef = useRef<string | null>(null);
   const {
     codexAnalyticsApiKeyInput,
@@ -466,7 +468,7 @@ export function SettingsPage({
   ].filter((label): label is string => Boolean(label));
 
   return (
-    <main className="app-shell settings-shell" ref={settingsShellRef}>
+    <main className="app-shell settings-shell fusion-theme" ref={settingsShellRef}>
       <TopBar
         title={i18n.t("settings.topbar.title")}
         subtitle={i18n.t("settings.topbar.subtitle")}

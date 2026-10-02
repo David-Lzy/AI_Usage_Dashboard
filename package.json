@@ -298,6 +298,7 @@
     "qa:production-state:browser": "./scripts/with-preferred-node.sh node ./scripts/check-production-state-browser.mjs"
   },
   "dependencies": {
+    "mdui": "2.1.5",
     "papaparse": "^5.7.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

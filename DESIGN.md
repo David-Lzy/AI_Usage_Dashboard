@@ -118,6 +118,15 @@ for an incremental production migration, not a claim about the published 0.2.1
 interface. Validate MDUI 2.1.5 in real Chrome and Firefox extensions before using
 its adapters across the application; prototype results are not that validation.
 
+The initial production adapter is scoped to Settings under
+`src/sidepanel/components/material-ui/`. It maps the existing resolved theme
+tokens rather than generating another palette, and bundles MDUI/Lit in a lazy
+Settings-only chunk. Native field labels and select-menu access require a small,
+version-bound compatibility layer. Keep its controlled-value, keyboard and
+real-extension browser gates when changing the dependency; see the
+[testing guide](Doc/testing/README.md). This foundation does not mean that all
+pages have already migrated.
+
 - Settings has five categories: Accounts & Connections, Usage & Notifications,
   Appearance & Display, General, Data & Backup. At 1100px and wider, use a roughly
   220px category rail; below that, use a category dropdown. Only the selected

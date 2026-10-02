@@ -244,10 +244,48 @@ and verifies each reported warning's exact React DOM context; any different
 reported HTML assignment fails. A source test also forbids raw HTML insertion
 APIs in production application code. Neither check suppresses the warnings or
 skips linting the bundle.
+The settings-only MDUI/Lit chunk adds two reviewed warnings: Lit's static
+template construction and MDUI's DOM factory. The latter is reached by library
+ripple markup and a library-owned form button type, not by labels, values or
+Provider responses. React text children and Lit property bindings remain text;
+application source may not call raw HTML sinks, Lit unsafe HTML directives, or
+the MDUI jQuery factory. The baseline checks the two exact bundle contexts and
+hashes of the reviewed dependency source files; a new location or changed source
+fails. The current baseline is therefore **four visible warnings**, not zero.
+
+The unreleased B fusion adapter has separate source and real-extension gates:
+
+```sh
+node scripts/check-material-ui-browser.mjs
+export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-material-qa-XXXXXX)"
+npm run firefox:build
+node scripts/check-material-ui-extension.mjs \
+  --chrome="$AI_USAGE_BUILD_ROOT/chrome" \
+  --firefox="$AI_USAGE_BUILD_ROOT/firefox"
+```
+
+The source gate covers 14 locales, both resolved themes, narrow/desktop layouts,
+controlled rejection, required values, keyboard menus and production palette
+mapping. The real-extension gate uses fresh profiles, offline Chrome and Firefox,
+and real background-confirmed preference writes. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE`
+and `GECKODRIVER` when the installed binaries differ. Gecko's temporary profile
+is created by the driver; its privileged test context is used only to make that
+owned browser offline and resolve the temporary add-on's UUID. The shared RDP
+browser and user profiles are never attached. Both browsers may hide resource
+timing entries for extension resources. Chrome additionally records actual
+parsed script URLs through CDP, requiring an observed Settings vendor script
+and an observed Popup entry without that vendor. Offline loading and the source
+network gate provide complementary checks, not a claim based on an empty timing
+list. Firefox's owned test window removes the browser chrome minimum width;
+the gate asserts the actual content viewport, not just the requested window size.
+Artifacts are retained under ignored `tmp/output/playwright/material-ui*`.
+
 The runtime message catalog is built as a separate synchronous chunk so the
 shared application chunk stays below Vite's 500 kB warning limit. This changes
 chunk boundaries, not total downloaded code; do not infer a speedup from the
 absence of a size warning.
+MDUI is a separate Settings-only lazy chunk. Confirm that a cold Popup does not
+request `material-controls.js`; compare total bytes as well as chunk sizes.
 
 Extension CPU profiling uses an ignored local artifact directory:
 

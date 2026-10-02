@@ -73,6 +73,18 @@ as part of command cleanup.
 
 ## UI Control Rhythm
 
+Settings-only MDUI 2.1.5 controls live in
+`src/sidepanel/components/material-ui/`. Keep the dependency lazy with Settings;
+do not import it into quota calculations, background logic or Popup startup.
+The adapter maps the existing theme tokens, not a second palette. Public CSS
+Parts style controls. The small version-bound compatibility module handles
+MDUI's missing input ARIA forwarding and select-menu access; dependency upgrades
+must rerun its browser and extension gates before changing the pin.
+See [testing guidance](Doc/testing/README.md) for the commands and reviewed
+Firefox linter limitations. Do not use raw HTML or jQuery HTML construction in
+application code. Distributed dependency notices are in
+[Third-Party Notices](THIRD_PARTY_NOTICES.md).
+
 Gateway view calculations live in
 [`api-gateway-metering-presentation.ts`](src/shared/api-gateway-metering-presentation.ts),
 separate from the

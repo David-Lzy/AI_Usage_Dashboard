@@ -1,5 +1,5 @@
 import { execSync } from "node:child_process";
-import { readdir, readFile, rename, writeFile } from "node:fs/promises";
+import { copyFile, readdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { crx } from "@crxjs/vite-plugin";
@@ -109,6 +109,10 @@ function stableExtensionBuildOutputPlugin() {
       assertConfiguredChromeBuildOutDir(buildPaths, config.root, config.build.outDir);
     },
     async closeBundle() {
+      await copyFile(
+        path.join(buildPaths.projectRoot, "THIRD_PARTY_NOTICES.md"),
+        path.join(buildPaths.chromeDir, "THIRD_PARTY_NOTICES.md"),
+      );
       await rewriteHtmlEntryToStableFile(
         buildPaths.chromeDir,
         path.join("src/popup/index.html"),
@@ -172,6 +176,10 @@ export default defineConfig({
         chunkFileNames: "assets/[name].js",
         manualChunks(id) {
           const moduleId = normalizeRollupId(id);
+          // Settings loads this component runtime lazily; Popup never imports it.
+          if (/\/node_modules\/(?:mdui|@mdui\/[^/]+|lit|lit-html|lit-element|@lit\/[^/]+|@lit-labs\/[^/]+)\//.test(moduleId)) {
+            return "material-controls";
+          }
           if (
             moduleId.includes("/src/shared/runtime-message-catalog-data/") ||
             moduleId.endsWith("/src/shared/runtime-message-catalogs.ts")
