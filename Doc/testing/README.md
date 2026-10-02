@@ -255,6 +255,15 @@ fails. The current baseline is therefore **four visible warnings**, not zero.
 
 The unreleased B fusion adapter has separate source and real-extension gates:
 
+`node scripts/check-settings-category-browser.mjs --extension=<isolated-chrome>`
+checks the five-category shell in an actual extension profile across 14 locales,
+light/dark and 390/1440px. It covers old links, back/forward, independent category
+scroll, retained pairing/credential drafts, secret-free navigation storage,
+portal dismissal and visible connection-row geometry. Use `--locales=en,de,ar`
+for focused reruns. It runs offline with the screenshot runtime lock; screenshots
+are synthetic evidence, not user account data. Pairing and bridge failures remain
+covered separately by `check-local-companion-browser.mjs` and controller tests.
+
 ```sh
 node scripts/check-material-ui-browser.mjs
 export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-material-qa-XXXXXX)"

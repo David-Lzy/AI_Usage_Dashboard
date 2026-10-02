@@ -85,7 +85,9 @@ describe("SettingsPreferencesSection", () => {
     const html = renderPreferencesSection();
     const usageStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.usageNotifications}"`);
     const appearanceStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.appearance}"`);
-    const usageHtml = html.slice(usageStart, appearanceStart);
+    const dataStart = html.indexOf(`id="${SETTINGS_SECTION_IDS.data}"`);
+    const usageHtml = html.slice(usageStart, dataStart);
+    const dataHtml = html.slice(dataStart, appearanceStart);
     const appearanceHtml = html.slice(appearanceStart);
 
     expect(usageStart).toBeGreaterThan(-1);
@@ -95,7 +97,9 @@ describe("SettingsPreferencesSection", () => {
     expect(usageHtml).toContain('data-settings-custom-number-field="warning-threshold"');
     expect(usageHtml).toContain('data-quota-notifications=""');
     expect(usageHtml).toContain("quota-notification-settings--embedded");
-    expect(usageHtml).toContain('data-configuration-backup=""');
+    expect(dataStart).toBeGreaterThan(usageStart);
+    expect(dataHtml).toContain('data-configuration-backup=""');
+    expect(usageHtml).not.toContain('data-configuration-backup=""');
     expect(usageHtml).toContain("In-app warning threshold");
     expect(appearanceHtml).toContain('data-color-choice-dropdown="accent-color"');
     expect(appearanceHtml).toContain('data-settings-material-select="motion-mode"');

@@ -7,6 +7,7 @@ import {
   type SetStateAction,
 } from "react";
 import { createPortal } from "react-dom";
+import { useControlVisibility } from "../../shared/control-visibility";
 
 import type { AppSettings } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
@@ -263,6 +264,7 @@ export function ToolbarPopupPreview({
     () => floatingPosition ?? getInitialFloatingPreviewPosition(),
   );
   const [isDragging, setIsDragging] = useState(false);
+  const panelVisible = useControlVisibility();
   const normalizedPreviewRemainingPercent = normalizePreviewRemainingPercent(
     previewRemainingPercent,
   );
@@ -411,6 +413,7 @@ export function ToolbarPopupPreview({
     />
   );
 
+  if (!panelVisible) return null;
   if (placement === "floating") {
     const floatingPreview = (
       <aside

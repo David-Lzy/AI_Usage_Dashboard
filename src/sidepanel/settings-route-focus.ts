@@ -18,11 +18,21 @@ export function getSettingsRouteFocusElement(
       return (
         documentRef.querySelector<HTMLElement>(
           `[data-credential-provider-id="${routeFocus.providerId}"]`,
-        ) ?? documentRef.getElementById(SETTINGS_SECTION_IDS.providerDisplay)
+        ) ??
+        documentRef.querySelector<HTMLElement>(
+          `[data-quick-setup-provider-id="${routeFocus.providerId}"]`,
+        ) ??
+        documentRef.getElementById(SETTINGS_SECTION_IDS.quickSetup)
       );
     case "source-provider":
-      return documentRef.querySelector<HTMLElement>(
-        `.source-card[data-provider-id="${routeFocus.providerId}"]`,
+      return (
+        documentRef.querySelector<HTMLElement>(
+          `.source-card[data-provider-id="${routeFocus.providerId}"]`,
+        ) ??
+        documentRef.querySelector<HTMLElement>(
+          `[data-quick-setup-provider-id="${routeFocus.providerId}"]`,
+        ) ??
+        documentRef.getElementById(SETTINGS_SECTION_IDS.quickSetup)
       );
   }
 }

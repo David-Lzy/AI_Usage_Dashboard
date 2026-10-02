@@ -1,4 +1,5 @@
-import { useEffect, type ChangeEvent } from "react";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { useEffect, type ChangeEvent, type ReactNode } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -41,8 +42,12 @@ import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { QuotaNotificationSettings } from "./QuotaNotificationSettings";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
+import type { SettingsCategory } from "../settings-categories";
+import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 
 type SettingsPreferencesSectionProps = {
+  activeCategory?: SettingsCategory;
+  themeControl?: ReactNode;
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
   sectionId?: string;
@@ -72,9 +77,7 @@ type SettingsPreferencesSectionProps = {
   onToolbarIconCustomImageDataUrlChange: (
     toolbarIconCustomImageDataUrl: string | null,
   ) => void;
-  onFullPageProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
+  onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
   onPopupCircularProgressItemsPerRowChange: (
     itemsPerRow: PopupCircularProgressItemsPerRow,
@@ -90,9 +93,7 @@ type SettingsPreferencesSectionProps = {
   ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
-  onSidebarProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
+  onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onResetTimeDisplayModeChange?: (
     resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
   ) => void;
@@ -106,6 +107,8 @@ type SettingsPreferencesSectionProps = {
 };
 
 export function SettingsPreferencesSection({
+  activeCategory,
+  themeControl,
   i18n,
   providers,
   sectionId,
@@ -269,12 +272,8 @@ export function SettingsPreferencesSection({
         selectionModeLabel={i18n.t(
           "settings.preferences.action_badge_mode_label",
         )}
-        automaticLabel={i18n.t(
-          "settings.preferences.action_badge_mode_auto",
-        )}
-        manualLabel={i18n.t(
-          "settings.preferences.action_badge_mode_manual",
-        )}
+        automaticLabel={i18n.t("settings.preferences.action_badge_mode_auto")}
+        manualLabel={i18n.t("settings.preferences.action_badge_mode_manual")}
         labelAccessory={
           <MaterialInfoTooltip className="settings-preferences__field-note">
             {`${i18n.t("settings.preferences.action_badge_helper")} ${i18n.t(
@@ -366,9 +365,10 @@ export function SettingsPreferencesSection({
 
   return (
     <>
-      <section
+      <ControlVisibilityBoundary as="section"
         className="status-card settings-section-anchor settings-usage-notifications"
         id={usageSectionId}
+        hidden={activeCategory !== undefined && activeCategory !== "usage"}
       >
         <p className="section-label">
           {settingsCopy.layout.sections.usageNotifications}
@@ -414,7 +414,13 @@ export function SettingsPreferencesSection({
           i18n={i18n}
           warningThresholdPercent={settings.warningThresholdPercent}
         />
+      </ControlVisibilityBoundary>
 
+      <ControlVisibilityBoundary as="section"
+        id={SETTINGS_SECTION_IDS.data}
+        className="settings-section-anchor settings-data"
+        hidden={activeCategory !== undefined && activeCategory !== "data"}
+      >
         <ConfigurationBackupControls
           copy={settingsCopy.configurationBackup}
           onExportJson={onExportConfiguration}
@@ -423,14 +429,21 @@ export function SettingsPreferencesSection({
           onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
           onResetToInitialConfiguration={onResetConfigurationToInitial}
         />
-      </section>
+      </ControlVisibilityBoundary>
 
-      <section className="status-card settings-section-anchor" id={sectionId}>
-        <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
+      <ControlVisibilityBoundary as="section"
+        className="status-card settings-section-anchor"
+        id={sectionId}
+        hidden={activeCategory !== undefined && activeCategory !== "appearance"}
+      >
+        <p className="section-label">
+          {i18n.t("settings.preferences.eyebrow")}
+        </p>
         <AdaptiveControlGrid
           className="settings-grid settings-grid--balanced-settings"
           measurementLabels={basePreferenceMeasurementLabels}
         >
+          {themeControl}
           <AccentColorSelect
             label={i18n.t("settings.preferences.accent_preset_label")}
             themePreset={settings.themePreset}
@@ -513,7 +526,7 @@ export function SettingsPreferencesSection({
           onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
           onUiFontFamilyChange={onUiFontFamilyChange}
         />
-      </section>
+      </ControlVisibilityBoundary>
     </>
   );
 }

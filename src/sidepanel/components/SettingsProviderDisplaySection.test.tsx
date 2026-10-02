@@ -29,7 +29,7 @@ describe("SettingsProviderDisplaySection", () => {
 
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.providerDisplay}"`);
     expect(html).toContain('data-settings-provider-display-section=""');
-    expect(html).toContain('data-codex-local-settings=""');
+    expect(html).not.toContain('data-codex-local-settings=""');
     expect(html).toContain(">Provider display settings<");
     expect(html).toContain("Manage provider order and visible quota progress items");
     expect(html).toContain('data-provider-order-preferences=""');
@@ -41,10 +41,10 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
     expect(html).toContain('data-usage-history-preferences=""');
-    expect(html).toContain('data-sub2api-deployment-settings=""');
+    expect(html).not.toContain('data-sub2api-deployment-settings=""');
     expect(html).toContain('data-api-gateway-module-preferences=""');
     expect(html.match(/data-api-gateway-module-row=/g)).toHaveLength(12);
-    expect(html).toContain("Sub2API connections");
+    expect(html).not.toContain("Sub2API connections");
     expect(html).toContain("Show history modules by surface");
     expect(html).toContain(
       "Choose and order personal usage and turns independently",

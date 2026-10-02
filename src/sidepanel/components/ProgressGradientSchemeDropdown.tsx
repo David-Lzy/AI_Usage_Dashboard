@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useRef,
@@ -79,9 +80,11 @@ export function ProgressGradientSchemeDropdown({
   const labelId = "progress-gradient-scheme-label";
   const buttonId = "progress-gradient-scheme-button";
   const menuId = "progress-gradient-scheme-menu";
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(
     () => Boolean(sessionPopoverId) && activePopover?.id === sessionPopoverId,
   );
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
   const {
@@ -298,7 +301,7 @@ export function ProgressGradientSchemeDropdown({
       }
     : undefined;
 
-  const menu = isOpen ? (
+  const menu = isOpen && panelVisible ? (
     <div
       ref={menuRef}
       id={menuId}

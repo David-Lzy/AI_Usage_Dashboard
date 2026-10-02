@@ -101,7 +101,7 @@ export function TopBar({
               </span>
             </button>
           ) : null}
-          <button className="icon-button" type="button" onClick={onSecondaryAction}>
+          <button className="icon-button" type="button" aria-label={secondaryActionLabel} title={secondaryActionLabel} onClick={onSecondaryAction}>
             {secondaryActionIconName ? (
               <MaterialActionIcon
                 className="top-app-bar__action-icon"
@@ -115,6 +115,8 @@ export function TopBar({
           <button
             className="icon-button icon-button--primary"
             type="button"
+            aria-label={primaryActionLabel}
+            title={primaryActionLabel}
             onClick={onPrimaryAction}
           >
             {primaryActionIconName ? (

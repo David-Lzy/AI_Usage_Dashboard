@@ -26,12 +26,12 @@ describe("settings route focus", () => {
     ).toBe(fallback);
   });
 
-  it("falls back to Provider display settings for a credential form", () => {
+  it("falls back to Accounts and Connections for a credential form", () => {
     const fallback = {} as HTMLElement;
     const documentRef = {
       querySelector: () => null,
       getElementById: (id: string) =>
-        id === SETTINGS_SECTION_IDS.providerDisplay ? fallback : null,
+        id === SETTINGS_SECTION_IDS.quickSetup ? fallback : null,
     } as unknown as Document;
 
     expect(

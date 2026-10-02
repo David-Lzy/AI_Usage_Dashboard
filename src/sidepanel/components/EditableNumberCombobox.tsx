@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useId,
@@ -105,7 +106,9 @@ export function EditableNumberCombobox({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const selectedIndex = options.findIndex((option) => option.value === value);
   const [draftValue, setDraftValue] = useState(formatDraftValue(value));
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [activeIndex, setActiveIndex] = useState(
     selectedIndex >= 0 ? selectedIndex : 0,
   );

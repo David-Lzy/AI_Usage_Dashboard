@@ -10,10 +10,12 @@ import "./fusion-controls.css";
 import type { MaterialSelectProps } from "../MaterialSelect";
 import { MaterialActionIcon } from "../../../shared/components/MaterialActionIcon";
 import { FormFieldLabel } from "../FormFieldLabel";
+import { useControlVisibility } from "../../../shared/control-visibility";
 import { shouldPreservePopoverForSurfaceSwitch } from "../../surface-switch-intent";
 import { adjacentTabStop, getFieldInput, getSelectDropdown, labelFieldInput, restoreRequiredSelectValue, type FusionFieldElement } from "./mdui-compat";
 
 export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
+  const panelVisible = useControlVisibility();
   const { label, value, options, fieldIdPrefix, disabled, labelAccessory, labelHidden } = props;
   const id = `${fieldIdPrefix}-${useId()}`;
   const ref = useRef<HTMLElementTagNameMap["mdui-select"]>(null);
@@ -26,12 +28,13 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
     let cancelled = false;
     void element.updateComplete.then(() => {
       const dropdown = getSelectDropdown(element);
+      if (!cancelled && dropdown && !panelVisible) { dropdown.open = false; return; }
       if (!cancelled && dropdown && props.sessionPopoverId && props.activePopover) {
         dropdown.open = props.activePopover.id === props.sessionPopoverId;
       }
     });
     return () => { cancelled = true; };
-  }, [props.activePopover?.id, props.sessionPopoverId]);
+  }, [props.activePopover?.id, props.sessionPopoverId, panelVisible]);
   useEffect(() => {
     const element = ref.current!;
     let stopped = false;

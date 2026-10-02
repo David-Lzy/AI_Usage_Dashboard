@@ -248,11 +248,12 @@ disable local notification preferences. Delivery is at-most-once: durable event
 state precedes the OS request, so an OS rejection, a superseding capture or a
 crash may suppress an alert instead of replaying it. OS display is not guaranteed.
 
-### Settings Organization (Unreleased Migration Target)
+### Settings Organization (Unreleased Migration)
 
-The next Settings organization uses five task-oriented categories. This target
-does not describe the published 0.2.1 layout documented above; production
-compatibility and feature parity must be verified before the replacement ships.
+The migration branch implements five task-oriented Settings categories. This
+does not describe the published 0.2.1 layout documented above. The category shell
+and connection workflows have moved; the remaining control presentation and
+persistence feedback are separate migration steps, not completed features.
 
 | Category | Primary editing responsibility |
 | --- | --- |
@@ -275,6 +276,22 @@ backend-confirmed pending/success/failure feedback; the redundant global saved
 toast is not a substitute for persistence. Local-only presentation preferences
 must report their own persistence result rather than an invented backend response.
 Explicit credential, pairing, import and reset operations remain explicit.
+
+Accounts & Connections uses compact Personal/Web and API lists instead of a
+carousel. Configure expands the existing Provider actions and forms. Codex local
+pairing belongs to the enabled Codex connection; Sub2API deployment editing
+belongs to its API row. Connection configuration is no longer under display
+preferences. Advanced credentials and source diagnostics retain their existing
+display-level rules and direct-link access. The generic local bridges remain
+Developer/Debug-only; ordinary Codex pairing and custom sources keep their prior
+availability.
+
+Switching categories or collapsing a connection keeps its form mounted and
+retains unsaved drafts in component memory. It does not submit those drafts or
+copy them into navigation/session storage. Floating menus and previews follow
+the hidden panel, so they cannot cover another category. Browser back/forward
+and old section/Provider/credential/source routes remain supported; a missing
+connection target falls back to Accounts & Connections, not display settings.
 
 The redesign does not change Provider data meaning, refresh strategy, source
 eligibility, optional permission boundaries or account/credential isolation.
