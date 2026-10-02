@@ -7,6 +7,7 @@ import {
   MOTION_MODE_OPTIONS,
   normalizeMotionMode,
   resolveMotionMode,
+  resolveMotionProfile,
 } from "./motion-preferences";
 
 const tokensCss = readFileSync(
@@ -21,8 +22,9 @@ describe("motion preferences", () => {
 
   it("exposes motion options in settings display order", () => {
     expect(MOTION_MODE_OPTIONS.map((option) => option.value)).toEqual([
-      "system",
       "full",
+      "system",
+      "expressive",
       "reduced",
     ]);
   });
@@ -30,6 +32,7 @@ describe("motion preferences", () => {
   it("preserves supported motion modes", () => {
     expect(normalizeMotionMode("system")).toBe("system");
     expect(normalizeMotionMode("full")).toBe("full");
+    expect(normalizeMotionMode("expressive")).toBe("expressive");
     expect(normalizeMotionMode("reduced")).toBe("reduced");
   });
 
@@ -49,6 +52,7 @@ describe("motion preferences", () => {
     };
 
     expect(resolveMotionMode("full", reducedMotionReader)).toBe("full");
+    expect(resolveMotionMode("expressive", reducedMotionReader)).toBe("full");
     expect(
       resolveMotionMode("reduced", {
         matchMedia: () => ({ matches: false }),
@@ -60,6 +64,16 @@ describe("motion preferences", () => {
         matchMedia: () => ({ matches: false }),
       }),
     ).toBe("full");
+  });
+
+  it("resolves stronger motion independently of the system preference", () => {
+    for (const matches of [false, true]) {
+      const reader = { matchMedia: () => ({ matches }) };
+      expect(resolveMotionProfile("full", reader)).toBe("standard");
+      expect(resolveMotionProfile("expressive", reader)).toBe("expressive");
+      expect(resolveMotionProfile("reduced", reader)).toBe("reduced");
+      expect(resolveMotionProfile("system", reader)).toBe(matches ? "reduced" : "standard");
+    }
   });
 
   it("uses one resolved root state to reduce all CSS motion", () => {

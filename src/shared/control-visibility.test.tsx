@@ -4,6 +4,13 @@ import { ControlVisibilityBoundary, useControlVisibility } from "./control-visib
 import { MaterialSelect } from "../sidepanel/components/MaterialSelect";
 
 describe("control visibility", () => {
+  it("keeps an empty animated region logically inaccessible when closed", () => {
+    const html = renderToStaticMarkup(<ControlVisibilityBoundary animate hidden id="empty-region" />);
+    expect(html).toContain('data-motion-disclosure="true"');
+    expect(html).toContain('inert=""');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('hidden=""');
+  });
   it("retains mounted children while propagating hidden ancestors", () => {
     function Probe() { return <output>{String(useControlVisibility())}</output>; }
     const html = renderToStaticMarkup(<ControlVisibilityBoundary hidden><ControlVisibilityBoundary><Probe /></ControlVisibilityBoundary></ControlVisibilityBoundary>);

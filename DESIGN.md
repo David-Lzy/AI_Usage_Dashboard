@@ -225,9 +225,16 @@ explains state changes; it does not decorate idle surfaces.
 
 - Use short shared durations and easing for menus, collapse, route entry, and
   direct manipulation feedback.
-- The global animation preference is authoritative: `On` enables supported
-  product motion, `Reduced` removes nonessential motion, and `Follow system`
-  follows the browser or operating-system preference.
+- The branch motion preference has four choices: `Default` (`full`, 120-280ms),
+  `Follow system` (`system`), `More` (`expressive`, 180-360ms), and `Reduced`
+  (`reduced`). Default and More deliberately override OS reduced motion;
+  Follow system respects it. Reduced removes nonessential movement. Existing
+  full/system/reduced choices and portable backups keep their meaning.
+- Shared CSS, WAAPI and Settings-only MDUI timing resolve from one root profile.
+  Presence separates visual completion from logical visibility: closing content
+  becomes inert and leaves the accessibility tree immediately, while mounted
+  forms retain drafts. Superseded, backgrounded or unmounted animations cannot
+  finish a newer interaction. No idle decorative animation is introduced.
 - Continuous movement is limited to explicit browsing or overflow behavior.
   It pauses on hover and focus and remains manually operable.
 - Loading feedback must not replace cached useful content with a full visual

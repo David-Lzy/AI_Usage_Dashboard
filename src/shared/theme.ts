@@ -9,6 +9,7 @@ import {
   normalizeMotionMode,
   REDUCED_MOTION_QUERY,
   resolveMotionMode,
+  resolveMotionProfile,
 } from "./motion-preferences";
 import {
   DEFAULT_UI_FONT_FAMILY,
@@ -631,6 +632,7 @@ export function applyThemeSettings(
     normalizedSettings.motionMode,
     reader,
   );
+  root.dataset.motionProfile = resolveMotionProfile(normalizedSettings.motionMode, reader);
 
   if (normalizedSettings.themePreset === "custom") {
     if (normalizedSettings.themeCustomSeedHex) {

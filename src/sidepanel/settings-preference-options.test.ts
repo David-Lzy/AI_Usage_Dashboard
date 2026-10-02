@@ -37,8 +37,9 @@ describe("buildSettingsPreferenceOptions", () => {
       label: "By local time",
     });
     expect(options.motionModeOptions).toEqual([
+      { value: "full", label: "Default" },
       { value: "system", label: "Follow system" },
-      { value: "full", label: "On" },
+      { value: "expressive", label: "More" },
       { value: "reduced", label: "Reduced" },
     ]);
     expect(options.uiFontFamilyOptions).toEqual([
@@ -119,7 +120,7 @@ describe("buildSettingsPreferenceOptions", () => {
     });
     expect(options.motionModeOptions).toContainEqual({
       value: "full",
-      label: "开启",
+      label: "默认",
     });
   });
 });

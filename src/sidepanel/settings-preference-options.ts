@@ -77,6 +77,7 @@ export function buildSettingsPreferenceOptions({
   const motionModeOptionLabels: Record<MotionMode, string> = {
     system: i18n.t("settings.preferences.motion_mode.system"),
     full: i18n.t("settings.preferences.motion_mode.full"),
+    expressive: i18n.t("settings.preferences.motion_mode.expressive"),
     reduced: i18n.t("settings.preferences.motion_mode.reduced"),
   };
   const toolbarIconModeOptionLabels: Record<ToolbarIconMode, string> = {

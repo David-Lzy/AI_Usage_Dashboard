@@ -11,10 +11,10 @@
   --mdui-typescale-body-large-tracking: 0;
   --mdui-typescale-body-medium-tracking: 0;
   --mdui-typescale-label-large-tracking: 0;
-  --mdui-motion-duration-short4: 180ms;
-  --mdui-motion-duration-medium1: 180ms;
-  --mdui-motion-duration-medium2: 180ms;
-  --mdui-motion-duration-medium4: 180ms;
+  --mdui-motion-duration-short4: var(--app-motion-duration-fast);
+  --mdui-motion-duration-medium1: var(--app-motion-duration-medium);
+  --mdui-motion-duration-medium2: var(--app-motion-duration-medium);
+  --mdui-motion-duration-medium4: var(--app-motion-duration-medium);
 }
 .fusion-field { min-width: 0; gap: 8px; }
 .fusion-field > .form-field__label { font-size: 14px; line-height: 20px; }

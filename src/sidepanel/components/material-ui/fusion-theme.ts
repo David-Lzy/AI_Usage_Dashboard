@@ -45,6 +45,7 @@ export function syncFusionThemeTokens(scope: HTMLElement): void {
     if (channels) scope.style.setProperty(`--mdui-color-${role}`, channels);
   }
   scope.dataset.fusionMotion = document.documentElement.dataset.motionResolved ?? "full";
+  scope.dataset.fusionMotionProfile = document.documentElement.dataset.motionProfile ?? "standard";
   scope.style.colorScheme = document.documentElement.dataset.themeResolved ?? "light";
 }
 
@@ -57,7 +58,7 @@ export function useFusionTheme(scope: RefObject<HTMLElement | null>): void {
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: [
       "style", "data-theme-resolved", "data-theme-preset", "data-theme-custom-seed-hex",
-      "data-ui-font-family", "data-motion-resolved",
+      "data-ui-font-family", "data-motion-resolved", "data-motion-profile",
     ] });
     return () => observer.disconnect();
   }, [scope]);

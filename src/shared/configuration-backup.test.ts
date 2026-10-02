@@ -10,6 +10,15 @@ import {
 import { readAppState, writeAppState } from "./storage";
 
 describe("configuration backup", () => {
+  it.each(["full", "system", "expressive", "reduced"] as const)("round-trips the %s motion choice without migration", (motionMode) => {
+    const source = { ...SAMPLE_APP_STATE, settings: { ...SAMPLE_APP_STATE.settings, motionMode } };
+    const backup = parseConfigurationBackupJson(JSON.stringify(buildConfigurationBackup(source)));
+    expect(backup.ok).toBe(true);
+    if (!backup.ok) throw new Error(backup.error);
+    const restored = applyConfigurationBackupToState(SAMPLE_APP_STATE, backup.backup);
+    expect(restored.settings.motionMode).toBe(motionMode);
+  });
+
   it("exports only portable configuration fields", () => {
     const backup = buildConfigurationBackup({
       ...SAMPLE_APP_STATE,

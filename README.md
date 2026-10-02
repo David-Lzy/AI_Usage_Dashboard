@@ -140,6 +140,12 @@ Appearance keeps the existing customization options, with separate editing
 targets for Popup, Sidebar and Full Page. Ordinary preferences report confirmed
 saves and retain failed changes for retry.
 
+The preview branch adds four animation choices: **Default**, **Follow system**,
+**More**, and **Reduced**. Default remains enabled and, like More, plays even
+when the OS requests reduced motion. Follow system honors that preference.
+Existing saved animation choices are preserved. These changes are not yet a
+claim about the published Store package.
+
 ![Unreleased B fusion Settings](./Doc/Assets/ai-usage-dashboard-settings-fusion.png)
 
 The same branch now has a compact Dashboard and Sidebar, with operational

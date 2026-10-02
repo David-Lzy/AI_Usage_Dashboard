@@ -175,6 +175,7 @@ describe("theme helpers", () => {
     expect(root.dataset.uiFontFamily).toBe("default");
     expect(root.dataset.motionMode).toBe("full");
     expect(root.dataset.motionResolved).toBe("full");
+    expect(root.dataset.motionProfile).toBe("standard");
     expect(root.style.colorScheme).toBe("light");
   });
 
@@ -204,6 +205,10 @@ describe("theme helpers", () => {
     );
     expect(root.dataset.motionMode).toBe("system");
     expect(root.dataset.motionResolved).toBe("reduced");
+    expect(root.dataset.motionProfile).toBe("reduced");
+    applyThemeSettings({ motionMode: "expressive" }, root, reader);
+    expect(root.dataset.motionResolved).toBe("full");
+    expect(root.dataset.motionProfile).toBe("expressive");
   });
 
   it("tracks live system motion changes only in Follow System mode", () => {
