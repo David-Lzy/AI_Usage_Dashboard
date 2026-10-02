@@ -1,6 +1,6 @@
 # AI Usage Dashboard Design Contract
 
-Date: 2026-07-28
+Date: 2026-10-02
 
 This document defines the maintained visual and interaction contract for the
 extension. It is intentionally specific to AI Usage Dashboard: a compact,
@@ -109,6 +109,36 @@ control language.
   neighboring cards.
 
 ## Responsive Layout
+
+### B Fusion Migration Target (Unreleased)
+
+The accepted visual direction keeps the existing font, blue accent and semantic
+light/dark roles, while simplifying navigation and grouping. This is the target
+for an incremental production migration, not a claim about the published 0.2.1
+interface. Validate MDUI 2.1.5 in real Chrome and Firefox extensions before using
+its adapters across the application; prototype results are not that validation.
+
+- Settings has five categories: Accounts & Connections, Usage & Notifications,
+  Appearance & Display, General, Data & Backup. At 1100px and wider, use a roughly
+  220px category rail; below that, use a category dropdown. Only the selected
+  category is visible, with retained drafts, scroll and compatible old links.
+- Settings titles use 22px, field values 16px and labels 14px. Fields retain the
+  familiar 56px height and 18px radius; regular/compact actions use 44/36px.
+  Use shared variables and public component APIs/Parts, not library source edits.
+- Global appearance, surface layout, visible content and toolbar are distinct
+  appearance groups. Keep all existing customizations and independent Popup,
+  Sidebar and Full Page values; prototype controls are only a small subset.
+- Ordinary preferences remain immediate updates. Show saved only after the
+  relevant persistence acknowledgement, with honest pending/error feedback.
+  Credentials, pairing, imports and resets remain explicit operations.
+- Compact headers, dividers and constrained form widths replace oversized
+  section frames and nested cards. Dashboard, Sidebar, detail and Popup share
+  visual roles but retain their own density and interaction model.
+- Preserve existing data/progress/chart components and their calculations.
+  Mock services, in-memory Save All, static grouping examples and fixed demo
+  countdowns must never replace production behavior.
+
+### Surface Density
 
 The UI has three density contexts rather than one desktop breakpoint:
 
@@ -225,4 +255,3 @@ current commands and ignored evidence paths.
 This document is original project guidance. External design collections may be
 used as audit inspiration, but Material behavior, this repository's source, and
 verified browser output remain authoritative.
-

@@ -248,6 +248,40 @@ disable local notification preferences. Delivery is at-most-once: durable event
 state precedes the OS request, so an OS rejection, a superseding capture or a
 crash may suppress an alert instead of replaying it. OS display is not guaranteed.
 
+### Settings Organization (Unreleased Migration Target)
+
+The next Settings organization uses five task-oriented categories. This target
+does not describe the published 0.2.1 layout documented above; production
+compatibility and feature parity must be verified before the replacement ships.
+
+| Category | Primary editing responsibility |
+| --- | --- |
+| Accounts & Connections | Enable Providers, choose accounts, grant existing optional access, configure credentials/page sources, Codex local pairing and Sub2API deployments |
+| Usage & Notifications | Default refresh, in-app warning, separate system-notification threshold/scopes and optional quota pace estimate |
+| Appearance & Display | Global theme/font/motion, per-surface layout, visible/orderable content, progress customization and toolbar badge/icon |
+| General | Interface language, existing display levels and product/about links |
+| Data & Backup | Explicit JSON export/import, Chrome Sync save/restore and configuration reset |
+
+There is one primary editing location per setting; shortcuts navigate to it.
+The wide category rail becomes a dropdown below 1100px. Category changes retain
+unsaved inputs and scroll without submitting forms or persisting secrets in
+navigation state. Existing section, Provider, credential and source links map
+to their new category and retain their target.
+
+All existing values and storage boundaries remain compatible. Light/dark/system/
+time themes, custom colors, fonts, motion, all Popup modes and independent surface
+configuration are retained. Ordinary preferences keep immediate writes and gain
+backend-confirmed pending/success/failure feedback; the redundant global saved
+toast is not a substitute for persistence. Local-only presentation preferences
+must report their own persistence result rather than an invented backend response.
+Explicit credential, pairing, import and reset operations remain explicit.
+
+The redesign does not change Provider data meaning, refresh strategy, source
+eligibility, optional permission boundaries or account/credential isolation.
+Prototype mock services, memory saves, static groups and fixed timers are not
+production implementations. See the [design contract](../../DESIGN.md#b-fusion-migration-target-unreleased)
+for the shared visual target and real-extension compatibility gate.
+
 ### Setup State
 
 Setup state describes whether a source entry has enough user action, permission, credentials, or source binding to attempt a truthful sync.
