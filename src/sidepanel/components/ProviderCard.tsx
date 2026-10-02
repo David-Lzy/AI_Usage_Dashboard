@@ -38,6 +38,7 @@ import {
 import { buildProviderSourceDisplayLocalizedCopy } from "../../shared/provider-source-display-localized-copy";
 import { ProviderServiceStatus } from "../../shared/components/ProviderServiceStatus";
 import { TechnicalText } from "../../shared/components/TechnicalText";
+import { MaterialActionIcon } from "../../shared/components/MaterialActionIcon";
 import {
   createDefaultProviderServiceStatusVisibilityBySurface,
   getProviderServiceStatusForProvider,
@@ -237,7 +238,7 @@ export function ProviderCard({
         {!hasCursorUsage && !isClaudePersonal && !hasApiGatewayMetering ? (
           <section
             className="provider-card__summary"
-            aria-label={`${provider.providerLabel} usage summary`}
+            aria-label={`${provider.providerLabel}: ${providerDetailCopy.sections.usage}`}
           >
             <p className="provider-card__usage-label">{usageLabel}</p>
             <div className="provider-card__summary-details">
@@ -275,7 +276,7 @@ export function ProviderCard({
         {isClaudePersonal ? (
           <section
             className="provider-card__product-context"
-            aria-label={`${provider.providerLabel} sync context`}
+            aria-label={`${provider.providerLabel}: ${providerDetailCopy.sections.syncStatus}`}
           >
             <div className="provider-card__product-context-meta">
               <span className="meta-chip">{localizedLastSyncLabel}</span>
@@ -443,6 +444,7 @@ export function ProviderCard({
               )
             }
           >
+            <MaterialActionIcon name="tab" />
             {providerDetailCopy.notes.openSourcePageAction}
           </button>
         ) : null}
@@ -452,6 +454,7 @@ export function ProviderCard({
             type="button"
             onClick={() => onRefresh(provider.providerId)}
           >
+            <MaterialActionIcon name="refresh" />
             {i18n.t("common.actions.refresh")}
           </button>
         ) : null}

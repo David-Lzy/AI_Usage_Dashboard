@@ -164,6 +164,12 @@ The UI has three density contexts rather than one desktop breakpoint:
   use an explicit Provider browsing mode.
 - Dashboard, Provider detail, and Settings use available width for scanning but
   constrain line length and keep related controls together.
+- The migrated Dashboard uses an unframed compact header and a four-value
+  operational summary (two columns on narrow surfaces), without introductory
+  hero copy. Full Page uses two Provider columns when its content width permits;
+  Sidebar stays single-column. Repeated Provider boundaries use an 8px radius,
+  while nested usage sections use dividers, not additional floating cards.
+  Header commands retain accessible names when narrow layouts show only icons.
 
 General rules:
 

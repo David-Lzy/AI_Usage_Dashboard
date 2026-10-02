@@ -253,8 +253,10 @@ crash may suppress an alert instead of replaying it. OS display is not guarantee
 The migration branch implements five task-oriented Settings categories. This
 does not describe the published 0.2.1 layout documented above. The category shell
 and connection workflows have moved, and ordinary preferences now show actual
-save acknowledgements. All five Settings categories are functional. Dashboard,
-Sidebar, detail and Popup alignment remain separate migration steps.
+save acknowledgements. All five Settings categories are functional. Dashboard
+and Sidebar use compact headers, operational summaries and responsive Provider
+lists; data, order, per-surface preferences and recovery actions are unchanged.
+Provider detail and Popup alignment remain separate migration steps.
 
 | Category | Primary editing responsibility |
 | --- | --- |

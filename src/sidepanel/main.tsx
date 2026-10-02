@@ -31,6 +31,7 @@ import "./theme/theme-recovery.css";
 import "./theme/usage-progress.css";
 import "./theme/provider-card.css";
 import "./theme/provider-carousel.css";
+import "./theme/fusion-surfaces.css";
 
 const rootElement = document.getElementById("root")!;
 

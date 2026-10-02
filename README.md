@@ -142,6 +142,12 @@ saves and retain failed changes for retry.
 
 ![Unreleased B fusion Settings](./Doc/Assets/ai-usage-dashboard-settings-fusion.png)
 
+The same branch now has a compact Dashboard and Sidebar, with operational
+summaries and responsive Provider lists. This screenshot uses synthetic values,
+not a live account or the published Store version.
+
+![Unreleased B fusion Dashboard](./Doc/Assets/ai-usage-dashboard-dashboard-fusion.png)
+
 _Branch preview using synthetic QA data, not the published 0.2.1 Store interface.
 The earlier screenshot above is retained for the published layout._
 

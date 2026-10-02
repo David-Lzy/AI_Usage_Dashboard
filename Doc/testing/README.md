@@ -17,6 +17,13 @@ Status note:
 
 ## Public Verification
 
+The migration Dashboard/Sidebar matrix uses
+`node scripts/check-fusion-dashboard-browser.mjs --extension=<isolated Chrome build>`.
+It covers 14 locales, light/dark, 390/900/1440px, keyboard detail/back and Settings
+navigation, empty setup, unchanged snapshots, and an English 200% zoom probe.
+Fixtures are synthetic, in owned offline profiles. It never attaches to RDP or
+grants host permissions. Evidence goes to `tmp/output/playwright/fusion-dashboard/`.
+
 `qa:surface:browser` and `qa:surface:extension` are the maintained surface entrypoints
 (556/565 aliases are retained). Focused commands are `qa:shared-ui:browser`,
 `qa:sync-state:browser`, and `qa:production-state:browser`; the last requires an

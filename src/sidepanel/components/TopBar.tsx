@@ -8,7 +8,9 @@ import { markSurfaceSwitchIntent } from "../surface-switch-intent";
 
 type TopBarProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
+  compact?: boolean;
+  brandIcon?: boolean;
   themeActionLabel?: string;
   themeActionTitle?: string;
   themeActionIconName?: MaterialActionIconName;
@@ -31,6 +33,8 @@ type TopBarProps = {
 export function TopBar({
   title,
   subtitle,
+  compact = false,
+  brandIcon = false,
   themeActionLabel = "Dark",
   themeActionTitle = "Switch to dark mode",
   themeActionIconName,
@@ -51,12 +55,21 @@ export function TopBar({
 }: TopBarProps) {
   return (
     <header
-      className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}`}
+      className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}${compact ? " top-app-bar--compact" : ""}`}
       data-i18n-layout-contract="top-app-bar"
     >
       <div className="top-app-bar__main">
         <div className="top-app-bar__title">
-          <p className="top-app-bar__eyebrow">{subtitle}</p>
+          {brandIcon ? (
+            <img
+              className="top-app-bar__brand"
+              src="/icons/icon32.png"
+              alt=""
+              width={32}
+              height={32}
+            />
+          ) : null}
+          {subtitle ? <p className="top-app-bar__eyebrow">{subtitle}</p> : null}
           <h1 className="top-app-bar__headline">{title}</h1>
         </div>
 
