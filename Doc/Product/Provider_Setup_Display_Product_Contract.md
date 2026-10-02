@@ -332,6 +332,9 @@ copy them into navigation/session storage. Floating menus and previews follow
 the hidden panel, so they cannot cover another category. Browser back/forward
 and old section/Provider/credential/source routes remain supported; a missing
 connection target falls back to Accounts & Connections, not display settings.
+Initial session restoration does not briefly expose the default category before
+the saved category. A failed session read leaves the default category usable;
+an explicit newer deep link wins over an older pending session read.
 
 The redesign does not change Provider data meaning, refresh strategy, source
 eligibility, optional permission boundaries or account/credential isolation.

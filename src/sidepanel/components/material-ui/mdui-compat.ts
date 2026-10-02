@@ -25,6 +25,42 @@ export function getSelectDropdown(element: Select) {
   return element.shadowRoot?.querySelector("mdui-dropdown") ?? null;
 }
 
+export function installSelectTopLayer(
+  dropdown: NonNullable<ReturnType<typeof getSelectDropdown>>,
+) {
+  const panel =
+    dropdown.shadowRoot?.querySelector<HTMLElement>('[part="panel"]');
+  if (!panel || typeof panel.showPopover !== "function") return () => {};
+  // MDUI positions its fixed panel in viewport coordinates. Container queries
+  // establish a different containing block, so keep the slot in the top layer.
+  panel.popover = "manual";
+  Object.assign(panel.style, {
+    margin: "0",
+    padding: "0",
+    border: "0",
+    background: "transparent",
+    overflow: "visible",
+  });
+  const open = () => {
+    if (!panel.isConnected) return;
+    panel.hidden = false;
+    if (!panel.matches(":popover-open")) panel.showPopover();
+  };
+  const closed = () => {
+    // A previous close animation can finish after a new open and hide the slot.
+    if (dropdown.open) open();
+    else if (panel.matches(":popover-open")) panel.hidePopover();
+  };
+  dropdown.addEventListener("open", open);
+  dropdown.addEventListener("closed", closed);
+  if (dropdown.open) open();
+  return () => {
+    dropdown.removeEventListener("open", open);
+    dropdown.removeEventListener("closed", closed);
+    if (panel.matches(":popover-open")) panel.hidePopover();
+  };
+}
+
 export function setControlledSelectValue(element: Select, value: string): void {
   element.value = value;
   // Lit can skip its child-property assignment when a refused user selection
@@ -69,6 +105,30 @@ export async function labelFieldInput(
   // directly to assistive technology, without duplicating visible helper text.
   if (description) input.setAttribute("aria-description", description);
   else input.removeAttribute("aria-description");
+}
+
+export async function labelSelectMenu(
+  element: Select,
+  label: string,
+  valueLabel: string,
+) {
+  const input = await getFieldInput(element);
+  const menu = element.shadowRoot?.querySelector("mdui-menu");
+  if (!element.isConnected || !input || !menu) return;
+  // MDUI moves DOM focus into its menu. Use the menu-button pattern rather
+  // than claiming combobox semantics without an active-descendant model.
+  input.type = "button";
+  input.style.textAlign = "start";
+  input.style.minWidth = "0";
+  input.style.textOverflow = "ellipsis";
+  // The library's flex wrapper otherwise keeps a long button's intrinsic width.
+  if (input.parentElement) input.parentElement.style.minWidth = "0";
+  input.setAttribute("role", "button");
+  input.setAttribute("aria-label", `${label}: ${valueLabel}`);
+  input.setAttribute("aria-haspopup", "menu");
+  menu.setAttribute("role", "menu");
+  menu.setAttribute("aria-label", label);
+  if ("ariaControlsElements" in input) input.ariaControlsElements = [menu];
 }
 
 export function restoreRequiredSelectValue<T extends string>(

@@ -124,13 +124,18 @@ tokens rather than generating another palette, and bundles MDUI/Lit in a lazy
 Settings-only chunk. Native field labels and select-menu access require a small,
 version-bound compatibility layer. Keep its controlled-value, keyboard and
 real-extension browser gates when changing the dependency; see the
-[testing guide](Doc/testing/README.md). This foundation does not mean that all
-pages have already migrated.
+[testing guide](Doc/testing/README.md). Settings, Dashboard, Sidebar, Provider
+detail and Popup now follow this contract on the migration branch. MDUI controls
+remain Settings-only; sharing the visual language does not require loading that
+library in the compact Popup or replacing existing quota/chart components.
 
 - Settings has five categories: Accounts & Connections, Usage & Notifications,
   Appearance & Display, General, Data & Backup. At 1100px and wider, use a roughly
   220px category rail; below that, use a category dropdown. Only the selected
   category is visible, with retained drafts, scroll and compatible old links.
+  During asynchronous category restoration, reserve the content layout but keep
+  it hidden and inert until the saved category or a safe fallback is resolved.
+  A newer deep link takes precedence over a pending restoration.
 - Settings titles use 22px, field values 16px and labels 14px. Fields retain the
   familiar 56px height and 18px radius; regular/compact actions use 44/36px.
   Use shared variables and public component APIs/Parts, not library source edits.

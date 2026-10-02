@@ -99,8 +99,53 @@ try {
       assert.equal(await page.evaluate(() => window.__quotaQa.getStore()?.preferences.enabled ?? false), false);
       await page.evaluate(() => { window.__quotaQa.deny = false; });
       async function selectMode(value) {
+        await control.locator(':scope[aria-busy="false"]').waitFor();
+        await page.waitForFunction(
+          () =>
+            !document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
+        await modeField.locator("mdui-select").evaluate(async (element) => {
+          const dropdown = element.shadowRoot.querySelector("mdui-dropdown");
+          await dropdown.updateComplete;
+          await Promise.all(
+            dropdown
+              .getAnimations({ subtree: true })
+              .filter((animation) =>
+                Number.isFinite(
+                  animation.effect?.getComputedTiming().endTime,
+                ),
+              )
+              .map((animation) => animation.finished.catch(() => undefined)),
+          );
+        });
         await mode.click();
+        await page.waitForFunction(
+          () =>
+            document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
         await modeField.locator(`mdui-menu-item[value="${value}"]`).click();
+        await page.waitForFunction(
+          () =>
+            !document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
+        await control.locator(':scope[aria-busy="false"]').waitFor();
+        await modeField.locator('mdui-select').evaluate(async (element) => {
+          const dropdown = element.shadowRoot.querySelector('mdui-dropdown');
+          const panel = dropdown.shadowRoot.querySelector('[part="panel"]');
+          if (panel.matches(':popover-open')) await new Promise((resolve) => dropdown.addEventListener('closed', resolve, { once: true }));
+        });
       }
       await selectMode("on");
       await page.waitForFunction(() => window.__quotaQa.getStore()?.preferences.enabled === true);

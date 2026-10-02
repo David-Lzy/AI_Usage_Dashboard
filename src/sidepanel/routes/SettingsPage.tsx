@@ -310,6 +310,7 @@ export function SettingsPage({
     setCodexSessionTokenInput,
     setCodexWorkspaceIdInput,
     activeCategory,
+    isCategoryRestoring,
     selectCategory,
     scrollToSettingsTop,
     i18n,
@@ -531,7 +532,13 @@ export function SettingsPage({
         onSecondaryAction={onBack}
       />
 
-      <div className="settings-category-layout">
+      <div
+        className="settings-category-layout"
+        data-category-restoring={isCategoryRestoring}
+        aria-busy={isCategoryRestoring}
+        aria-hidden={isCategoryRestoring || undefined}
+        inert={isCategoryRestoring}
+      >
         <SettingsCategoryNavigation
           locale={i18n.resolvedLocale}
           label={settingsCopy.layout.sectionsAria}

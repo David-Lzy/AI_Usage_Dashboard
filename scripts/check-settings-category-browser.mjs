@@ -145,6 +145,12 @@ try {
                 position: getComputedStyle(el).position,
               })),
             direction: document.documentElement.dir,
+            headerOverlap: (() => {
+              const title = document.querySelector('.top-app-bar__headline').getBoundingClientRect();
+              const actions = document.querySelector('.top-app-bar__actions').getBoundingClientRect();
+              return Math.min(title.right, actions.right) - Math.max(title.left, actions.left) > 1 &&
+                Math.min(title.bottom, actions.bottom) - Math.max(title.top, actions.top) > 1;
+            })(),
             railIcons: [
               ...document.querySelectorAll(".settings-category-rail svg"),
             ]
@@ -185,6 +191,7 @@ try {
             `${name}/${label}: page overflow ${JSON.stringify(layout)}`,
           );
           assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
+          assert.equal(layout.headerOverlap, false, `${name}/${label}: header title/actions overlap`);
           assert(
             layout.railIcons.every((icon) => icon.fill === icon.color),
             `${name}: rail icon does not use semantic foreground`,

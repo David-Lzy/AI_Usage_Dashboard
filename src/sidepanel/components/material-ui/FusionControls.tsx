@@ -22,7 +22,9 @@ import {
   adjacentTabStop,
   getFieldInput,
   getSelectDropdown,
+  installSelectTopLayer,
   labelFieldInput,
+  labelSelectMenu,
   restoreRequiredSelectValue,
   setControlledSelectValue,
   type FusionFieldElement,
@@ -47,8 +49,13 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
     if (ref.current) setControlledSelectValue(ref.current, value);
   });
   useEffect(() => {
-    if (ref.current) void labelFieldInput(ref.current, label, "", false);
-  }, [label]);
+    if (ref.current)
+      void labelSelectMenu(
+        ref.current,
+        label,
+        options.find((option) => option.value === value)?.label ?? value,
+      );
+  }, [label, value, options]);
   useEffect(() => {
     const element = ref.current!;
     let cancelled = false;
@@ -84,6 +91,9 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
       const dropdown = getSelectDropdown(element);
       const input = await getFieldInput(element);
       if (stopped || !dropdown || !input) return;
+      await dropdown.updateComplete;
+      if (stopped) return;
+      const detachTopLayer = installSelectTopLayer(dropdown);
       input.setAttribute("aria-haspopup", "menu");
       input.setAttribute("aria-expanded", String(dropdown.open));
       const open = () => {
@@ -102,6 +112,7 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
       dropdown.addEventListener("open", open);
       dropdown.addEventListener("close", close);
       detach = () => {
+        detachTopLayer();
         dropdown.removeEventListener("open", open);
         dropdown.removeEventListener("close", close);
       };
@@ -150,7 +161,7 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
       }
       const target = event.composedPath()[0];
       if (!dropdown || !(target instanceof HTMLInputElement)) return;
-      if (["ArrowDown", "ArrowUp", " "].includes(event.key)) {
+      if (["ArrowDown", "ArrowUp", " ", "Enter"].includes(event.key)) {
         event.preventDefault();
         dropdown.open = true;
       }
@@ -196,7 +207,12 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
           <MaterialActionIcon name="keyboard-arrow-down" />
         </span>
         {options.map((option) => (
-          <mdui-menu-item key={option.value} value={option.value}>
+          <mdui-menu-item
+            key={option.value}
+            value={option.value}
+            role="menuitemradio"
+            aria-checked={option.value === value ? "true" : "false"}
+          >
             {option.label}
           </mdui-menu-item>
         ))}

@@ -25,6 +25,9 @@ export function useSettingsCategoryNavigation(
   const [category, setCategory] = useState<SettingsCategory>(() =>
     getSettingsCategoryForFocus(focus),
   );
+  const [isCategoryRestoring, setIsCategoryRestoring] = useState(
+    !focus && typeof window !== "undefined",
+  );
   const positions = useRef<Partial<Record<SettingsCategory, number>>>({});
   const current = useRef(category);
   const userNavigated = useRef(false);
@@ -49,7 +52,10 @@ export function useSettingsCategoryNavigation(
           );
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (active) setIsCategoryRestoring(false);
+      });
     return () => {
       active = false;
     };
@@ -58,6 +64,7 @@ export function useSettingsCategoryNavigation(
   useBrowserLayoutEffect(() => {
     if (previousFocusKey.current === focusKey) return;
     previousFocusKey.current = focusKey;
+    setIsCategoryRestoring(false);
     if (ownFocusKey.current === focusKey) {
       ownFocusKey.current = null;
       return;
@@ -117,6 +124,7 @@ export function useSettingsCategoryNavigation(
     if (next === category) return;
     positions.current[category] = window.scrollY;
     userNavigated.current = true;
+    setIsCategoryRestoring(false);
     pendingTarget.current = undefined;
     const nextFocus: SettingsRouteFocus = {
       kind: "section",
@@ -132,6 +140,7 @@ export function useSettingsCategoryNavigation(
 
   return {
     activeCategory: category,
+    isCategoryRestoring,
     activeSettingsSection: SETTINGS_CATEGORY_SECTIONS[category],
     selectCategory,
     scrollToSettingsTop: () =>

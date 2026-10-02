@@ -39,6 +39,10 @@
 }
 .settings-fusion .top-app-bar__actions .icon-button {
   min-height: 40px;
+  width: auto;
+  inline-size: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 .settings-fusion h1,
 .settings-category-heading {
@@ -51,6 +55,9 @@
   grid-template-columns: 220px minmax(0, 1fr);
   gap: 32px;
   align-items: start;
+}
+.settings-category-layout[data-category-restoring="true"] {
+  visibility: hidden;
 }
 .settings-category-rail {
   position: sticky;
@@ -310,7 +317,7 @@
     display: block;
     max-width: 480px;
     position: sticky;
-    top: var(--settings-header-offset);
+    top: calc(var(--settings-header-offset) - 24px);
     z-index: 8;
     background: var(--md-sys-color-surface);
     padding-block: 4px 12px;
@@ -322,7 +329,7 @@
     margin-inline-start: 0;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .settings-save-feedback {
     width: 100%;
     flex: 0 0 100%;
@@ -347,6 +354,20 @@
     inline-size: 28px;
     padding: 4px;
   }
+  .settings-fusion .top-app-bar {
+    flex-wrap: wrap;
+  }
+  .settings-fusion .top-app-bar__actions .icon-button {
+    min-width: 40px;
+    width: 40px;
+    inline-size: 40px;
+    padding: 8px;
+  }
+  .settings-fusion .top-app-bar__action-label {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
   .settings-fusion {
     padding-inline: 16px;
   }
@@ -373,18 +394,6 @@
   }
   .settings-connection__body {
     padding-inline-start: 0;
-  }
-  .settings-fusion .top-app-bar {
-    flex-wrap: wrap;
-  }
-  .settings-fusion .top-app-bar__actions .icon-button {
-    min-width: 40px;
-    width: 40px;
-    inline-size: 40px;
-    padding: 8px;
-  }
-  .settings-fusion .top-app-bar__action-label {
-    display: none;
   }
 }
 body:has(.settings-fusion) {

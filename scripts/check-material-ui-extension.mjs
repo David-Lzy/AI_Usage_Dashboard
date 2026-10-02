@@ -18,7 +18,21 @@ const configurations = [
   { locale: "en", theme: "light", width: 1440 },
   { locale: "zh-CN", theme: "dark", width: 390 },
   { locale: "ar", theme: "dark", width: 1440 },
+  { locale: "de", theme: "light", width: 360 },
 ];
+
+function readLanguageMenu() {
+  const select = document.querySelector('[data-fusion-field="locale-preference"] mdui-select');
+  const dropdown = select?.shadowRoot?.querySelector('mdui-dropdown');
+  const panel = dropdown?.shadowRoot?.querySelector('[part="panel"]');
+  if (!panel?.matches(':popover-open')) return null;
+  const menu = select.shadowRoot.querySelector('mdui-menu');
+  const rect = menu.getBoundingClientRect();
+  return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: innerWidth, height: innerHeight };
+}
+function checkMenuBounds(bounds) {
+  assert(bounds && bounds.left >= -1 && bounds.right <= bounds.width + 1 && bounds.top >= -1 && bounds.bottom <= bounds.height + 1, JSON.stringify(bounds));
+}
 
 function readControl() {
   const select = document.querySelector('[data-fusion-field="settings-user-level"] mdui-select');
@@ -31,6 +45,8 @@ function readControl() {
     theme: document.documentElement.dataset.themeResolved, direction: document.documentElement.dir,
     fonts: [...document.fonts].map((font) => font.family),
     viewportWidth: innerWidth, required: input.required,
+    role: input.getAttribute("role"), inputType: input.type, hasPopup: input.getAttribute("aria-haspopup"),
+    controlsMenu: input.ariaControlsElements?.[0] === select.shadowRoot.querySelector("mdui-menu"),
     resources: performance.getEntriesByType("resource").map((entry) => entry.name),
   };
 }
@@ -67,6 +83,10 @@ async function chromeGate() {
       assert(control.fieldWidth > 50 && control.primary && control.theme === config.theme);
       assert.equal(control.value, "basic");
       assert.equal(control.required, true);
+      assert.equal(control.role, "button");
+      assert.equal(control.inputType, "button");
+      assert.equal(control.hasPopup, "menu");
+      assert.equal(control.controlsMenu, true);
       assert.equal(control.viewportWidth, config.width);
       assert.equal(control.direction, config.locale === "ar" ? "rtl" : "ltr");
       const extensionScripts = [...scripts].filter((url) => url.startsWith(extensionOrigin));
@@ -74,10 +94,20 @@ async function chromeGate() {
       assert(![...scripts].some((url) => /^https?:/.test(url)), "Remote extension script");
       const field = page.locator('[data-fusion-field="settings-user-level"]');
       await field.locator("input:not(.hidden-input)").click();
+      const ax = await debuggerSession.send("Accessibility.getFullAXTree");
+      assert(ax.nodes.some((node) => !node.ignored && node.role?.value === "menu"));
+      assert(ax.nodes.some((node) => !node.ignored && node.role?.value === "menuitemradio"));
+      assert(ax.nodes.some((node) => !node.ignored && node.role?.value === "button" && node.name?.value === control.label));
       await field.locator('mdui-menu-item[value="advanced"]').click();
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.value === "advanced");
       await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.getAttribute('data-settings-save-status') === 'saved');
       assert.equal(await worker.evaluate(async (key) => (await chrome.storage.local.get(key))[key].settings.userLevel, stateKey), "advanced");
+      const language = page.locator('[data-fusion-field="locale-preference"]');
+      await language.locator('input:not(.hidden-input)').click();
+      await page.waitForFunction(readLanguageMenu);
+      checkMenuBounds(await page.evaluate(readLanguageMenu));
+      await page.keyboard.press('Escape');
+      await language.locator('mdui-menu').waitFor({ state: 'hidden' });
       await page.screenshot({ path: path.join(output, `chrome-${config.locale}.png`) });
       results.chrome.push({ ...config, ...control, scripts: extensionScripts, saved: true });
       await page.close();
@@ -177,15 +207,21 @@ async function firefoxGate() {
       assert(control.fieldWidth > 50 && control.primary && control.theme === config.theme, JSON.stringify(control));
       assert.equal(control.value, "basic");
       assert.equal(control.required, true);
+      assert.equal(control.role, "button");
+      assert.equal(control.inputType, "button");
+      assert.equal(control.hasPopup, "menu");
+      assert.equal(control.controlsMenu, true);
       assert.equal(control.viewportWidth, config.width, "Firefox actual viewport differs from requested test width");
       assert.equal(control.direction, config.locale === "ar" ? "rtl" : "ltr");
       const input = await evaluate(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select').shadowRoot.querySelector("mdui-text-field").shadowRoot.querySelector("input"));
+      assert.equal(await command(`/element/${input["element-6066-11e4-a52e-4f735466cecf"]}/computedrole`, undefined, "GET"), "button");
       await command(`/element/${input["element-6066-11e4-a52e-4f735466cecf"]}/click`, {});
       await until(() => {
         const dropdown = document.querySelector('[data-fusion-field="settings-user-level"] mdui-select').shadowRoot.querySelector("mdui-dropdown");
         return (dropdown.wrappedJSObject ?? dropdown).open;
       });
       const item = await evaluate(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-menu-item[value="advanced"]'));
+      assert.equal(await command(`/element/${item["element-6066-11e4-a52e-4f735466cecf"]}/computedrole`, undefined, "GET"), "menuitemradio");
       await command(`/element/${item["element-6066-11e4-a52e-4f735466cecf"]}/click`, {});
       await until(() => {
         const select = document.querySelector('[data-fusion-field="settings-user-level"] mdui-select');
@@ -194,6 +230,15 @@ async function firefoxGate() {
       await until(() => document.querySelector('[data-settings-save-status]')?.getAttribute('data-settings-save-status') === 'saved');
       const saved = await command("/execute/async", { script: `const done=arguments[arguments.length-1];browser.storage.local.get(${JSON.stringify(stateKey)}).then(x=>done(x[${JSON.stringify(stateKey)}].settings.userLevel));`, args: [] });
       assert.equal(saved, "advanced");
+      const languageInput = await evaluate(() => document.querySelector('[data-fusion-field="locale-preference"] mdui-select').shadowRoot.querySelector('mdui-text-field').shadowRoot.querySelector('input'));
+      await command(`/element/${languageInput["element-6066-11e4-a52e-4f735466cecf"]}/click`, {});
+      checkMenuBounds(await until(readLanguageMenu));
+      const selectedLanguage = await evaluate(() => {
+        const select = document.querySelector('[data-fusion-field="locale-preference"] mdui-select');
+        return [...select.querySelectorAll('mdui-menu-item')].find((item) => item.getAttribute('value') === (select.wrappedJSObject ?? select).value);
+      });
+      await command(`/element/${selectedLanguage["element-6066-11e4-a52e-4f735466cecf"]}/click`, {});
+      await until(() => !document.querySelector('[data-fusion-field="locale-preference"] mdui-select').shadowRoot.querySelector('mdui-dropdown').shadowRoot.querySelector('[part="panel"]').matches(':popover-open'));
       const screenshot = await command("/screenshot", undefined, "GET");
       await writeFile(path.join(output, `firefox-${config.locale}.png`), Buffer.from(screenshot, "base64"));
       results.firefox.push({ ...config, ...control, saved: true });

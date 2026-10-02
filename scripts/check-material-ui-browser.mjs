@@ -43,12 +43,28 @@ try {
       await input.waitFor();
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.shadowRoot?.querySelector("mdui-text-field")?.shadowRoot?.querySelector("input")?.hasAttribute("aria-label"));
       assert(await input.getAttribute("aria-label"));
+      assert.equal(await input.getAttribute("role"), "button");
+      assert.equal(await input.getAttribute("type"), "button");
+      assert.equal(await input.getAttribute("aria-haspopup"), "menu");
+      assert((await input.getAttribute("aria-label")).includes(await input.inputValue()));
       assert.equal(await input.evaluate((element) => element.required), true);
       assert.equal(await field.getAttribute("data-session-popover-id"), "settings-user-level");
+      for (const key of ["Enter", "Space"]) {
+        await input.focus();
+        await page.keyboard.press(key);
+        await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.shadowRoot?.querySelector("mdui-dropdown")?.open === true);
+        await field.getByRole("menu").waitFor({ state: "visible" });
+        await page.keyboard.press("Escape");
+        await field.getByRole("menu").waitFor({ state: "hidden" });
+      }
       await input.focus();
       await page.keyboard.press("ArrowDown");
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.shadowRoot?.querySelector("mdui-dropdown")?.open === true);
       const items = field.locator("mdui-menu-item");
+      assert.equal(await field.getByRole("menu").count(), 1);
+      assert.equal(await field.getByRole("menuitemradio").count(), await items.count());
+      assert.equal(await field.getByRole("menuitemradio", { checked: true }).count(), 1,
+        JSON.stringify(await items.evaluateAll((elements) => elements.map((item) => ({ value: item.getAttribute('value'), checked: item.getAttribute('aria-checked'), role: item.getAttribute('role') })))));
       const focusIs = (locator) => locator.evaluate((item) => new Promise((resolve, reject) => {
         const deadline = performance.now() + 2000;
         const check = () => item === document.activeElement ? resolve(true)
@@ -66,6 +82,7 @@ try {
       await page.keyboard.press("ArrowDown");
       await items.nth(1).click();
       await page.waitForFunction(() => document.querySelector('[data-fusion-field="settings-user-level"] mdui-select')?.value === "advanced");
+      assert.equal(await items.nth(1).getAttribute("aria-checked"), "true");
       await input.click();
       await items.nth(1).click();
       assert.equal(await select.evaluate((element) => element.value), "advanced", `${name}: required current value`);
@@ -176,6 +193,19 @@ try {
       results.push({ name, bounds, palettes: palettes.length, fonts, overflow });
       console.log(`MDUI source gate ${name}: passed`);
     } catch (error) {
+      const overflowElements = await page.evaluate(() => {
+        const elements = [];
+        const visit = (root) => {
+          for (const element of root.querySelectorAll('*')) {
+            const rect = element.getBoundingClientRect();
+            if (rect.width && (rect.right > innerWidth + 1 || rect.left < -1)) elements.push({ tag: element.tagName, part: element.getAttribute('part'), class: element.className, right: rect.right, width: rect.width, minWidth: getComputedStyle(element).minWidth, inlineStyle: element.getAttribute('style') });
+            if (element.shadowRoot) visit(element.shadowRoot);
+          }
+        };
+        visit(document);
+        return elements;
+      });
+      await writeFile(path.join(output, `${name}-overflow.json`), JSON.stringify(overflowElements, null, 2));
       await page.screenshot({ path: path.join(output, `${name}-failure.png`), fullPage: true });
       throw error;
     } finally { await page.close(); }

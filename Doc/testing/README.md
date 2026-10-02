@@ -289,7 +289,8 @@ both themes, three preferred widths, all progress styles, all browsing modes,
 corner/shadow settings, theme-menu bounds, keyboard dismissal/focus and unchanged
 quota snapshots. Screenshots are captured directly from the action target. This
 uses Chromium's headless action UI, not the user's shared desktop; it does not
-claim an interactive desktop screen-reader review. The full 14-locale mode and
+claim an interactive desktop screen-reader review. Pass all 14 supported locale
+codes through `--locales` for the 336-case native matrix. The separate
 automatic/manual scrolling matrix remains `check-popup-modes.mjs`.
 
 `node scripts/check-settings-category-browser.mjs --extension=<isolated-chrome>`
@@ -312,6 +313,34 @@ and system-theme changes. The profile is offline and seeded with synthetic
 snapshots; no real Provider or permission request is made. The pre-existing
 theme and customization unit suites retain time-boundary, image validation,
 font, color and backup-schema coverage.
+
+`node scripts/check-fusion-upgrade.mjs --baseline=<isolated-0.2.1-build> --extension=<isolated-candidate>`
+creates its own extension copy and browser profile, exports a synthetic baseline
+backup, then replaces only that owned copy with the candidate. It checks all 34
+AppSettings fields, account/usage preservation, unchanged permissions, importing
+the old backup, legacy links, delayed/rejected category restoration and a newer
+deep link winning an in-flight restoration. It also checks time-theme boundaries,
+system-theme changes, custom font/accent, reduced motion, accessible names and
+200% real browser zoom. The clock used for time boundaries is resumed before
+zoom so animation-frame layout observers run normally. The profile is offline;
+neither a user profile nor a loaded `dist/` directory is accepted as an output.
+This is a code-upgrade compatibility test, not a Store upgrade or version bump.
+Evidence lives under `tmp/output/playwright/fusion-upgrade/`.
+
+The i18n source matrix navigates each legacy Settings target before checking
+sticky-header clearance, and opens the real language menu in General. Hidden
+categories are not skipped to make the checks pass. Deep-link navigation owns
+scrolling; the harness waits for stable page/anchor/header geometry instead of
+issuing a competing scroll, and reports an unsettled layout as a failure.
+Notification browser tests
+await both persistence and the visible control's busy state before the next
+action; they still exercise real pointer/keyboard activation and verify the
+optional permission request stays in that user gesture. OS notification delivery
+alone is replaced by the test transport.
+
+Automated keyboard, accessibility-tree and zoom checks do not substitute for
+manual screen-reader testing. That remains a documented release-validation gap
+when an assistive-technology runtime is not available on the QA host.
 
 ```sh
 node scripts/check-material-ui-browser.mjs
@@ -336,6 +365,21 @@ and an observed Popup entry without that vendor. Offline loading and the source
 network gate provide complementary checks, not a claim based on an empty timing
 list. Firefox's owned test window removes the browser chrome minimum width;
 the gate asserts the actual content viewport, not just the requested window size.
+Both browser gates also open the full language menu, including a German 360px
+case. The version-bound adapter places MDUI's fixed-position panel in a manual
+native popover so Settings container queries cannot offset it from the viewport.
+Library keyboard/dismissal behavior is retained; close/unmount cleanup is tested.
+The select trigger uses a native input button with a name containing both the
+field label and its current choice. The popup is a menu of checked radio items;
+it is not mislabeled as a textbox or a combobox with incompatible focus behavior.
+Enter/Space/arrows open it, Home/End move menu focus, Escape restores the trigger,
+and Tab exits to the next field. Controlled rejection and the select's hidden
+required-value control remain intact. The version-bound adapter constrains the
+internal flex wrapper so long button values truncate without pushing the arrow
+outside the field. Chrome's accessibility tree and Firefox's computed roles
+are checked, including the cross-shadow menu relationship where supported.
+This follows the [menu-button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/),
+not a claim of completed manual screen-reader certification.
 Artifacts are retained under ignored `tmp/output/playwright/material-ui*`.
 
 The runtime message catalog is built as a separate synchronous chunk so the
@@ -397,6 +441,27 @@ host load and the build-content hash. Set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing extension-capable Chromium binary
 when the Playwright-managed browser is unavailable; no browser is installed by
 these commands. A single host run is not a user-facing speed claim or a CI budget.
+
+B fusion's Settings dependency and additional surface styles increase total
+package size even though Popup does not load the Material controls chunk.
+Active-glide renderer CPU also increased in migration comparisons; keep those
+unfavorable samples alongside idle, hover-paused and reduced-motion results.
+Do not describe the redesign as a performance improvement or infer one from
+smaller individual chunks. No fixed latency/CPU budget was agreed for this
+migration; quiet-host, browser/GPU and battery measurements remain separate
+release-performance work, not results established by these renderer samples.
+
+The final migration benchmark used the same Node 25.9.0, Chromium
+153.0.8010.12 and synthetic fixture as its baseline. Twelve scenarios each
+contain ten cold and ten warm navigation samples: median ranges were
+553-898ms cold and 149-300ms warm, versus 469-766ms and 147-225ms before migration.
+Three 30-second renderer samples per mode produced median one-core CPU usage
+of 1.68% idle, 11.55% active glide, 1.45% hover-paused and 1.21% reduced motion
+(baseline 1.45%, 7.74%, 1.71% and 1.35%). Chrome ZIP size increased from
+801,873 to 860,919 bytes (+7.36%). These costs are explicitly accepted for the
+migration, not described as speedups; no numeric release performance SLO was
+defined. Reports retain every sample and variance. Shared-host load limits
+causal interpretation, and this is not a GPU, battery or browser-launch test.
 
 The older `perf:extension:profile` remains available for broader surface or explicit
 PID investigations, accepts `--extension`/`--output`, and now uses unique output
