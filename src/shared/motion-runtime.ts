@@ -1,4 +1,4 @@
-import { MOTION_PROFILES, type MotionProfile } from "./motion-preferences";
+import { MOTION_PROFILES, normalizeMotionMode, type MotionProfile } from "./motion-preferences";
 
 type MotionSpeed = "fast" | "medium" | "slow";
 type MotionSubscription = { listeners: Set<() => void>; stop: () => void };
@@ -13,7 +13,7 @@ export function readMotion(element: MotionElement) {
     doc.documentElement.dataset.motionResolved === "reduced"
     ? "reduced"
     : value === "expressive" ? "expressive" : "standard";
-  return { profile, ...MOTION_PROFILES[profile] };
+  return { profile, mode: normalizeMotionMode(doc.documentElement.dataset.motionMode), ...MOTION_PROFILES[profile] };
 }
 
 export function observeMotionEnvironment(doc: Document, listener: () => void) {
@@ -24,7 +24,7 @@ export function observeMotionEnvironment(doc: Document, listener: () => void) {
     const observer = new MutationObserver(notify);
     observer.observe(doc.documentElement, {
       attributes: true,
-      attributeFilter: ["data-motion-profile", "data-motion-resolved", "dir"],
+      attributeFilter: ["data-motion-mode", "data-motion-profile", "data-motion-resolved", "dir"],
     });
     doc.addEventListener("visibilitychange", notify);
     environment = { listeners, stop: () => {
@@ -89,7 +89,8 @@ export function animateMotion(
   owners.set(channel, cancel);
   element.dataset.motionActive = channel;
   detach = observeMotionEnvironment(element.ownerDocument, () => {
-    if (readMotion(element).profile !== motion.profile ||
+    const current = readMotion(element);
+    if (current.profile !== motion.profile || current.mode !== motion.mode ||
         element.ownerDocument.visibilityState === "hidden") complete();
   });
   void animation.finished.then(complete, () => {});

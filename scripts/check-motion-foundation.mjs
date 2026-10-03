@@ -28,6 +28,16 @@ try {
       const { ControlVisibilityBoundary } = await import("/src/shared/control-visibility.tsx");
       const { DEFAULT_THEME_SETTINGS, applyThemeSettings } = await import("/src/shared/theme.ts");
       applyThemeSettings({ ...DEFAULT_THEME_SETTINGS, themeMode: "light", motionMode }, document.documentElement, window);
+      window.__motionAnimationEvidence = [];
+      const animate = Element.prototype.animate;
+      Element.prototype.animate = function(frames, timing) {
+        const animation = animate.call(this, frames, timing);
+        if (this.id === "motion-body") window.__motionAnimationEvidence.push({
+          duration: timing.duration, frames: animation.effect.getKeyframes().map((frame) => frame.height),
+          startedAt: performance.now(),
+        });
+        return animation;
+      };
       document.querySelector("#root").hidden = true;
       const host = document.createElement("main");
       host.style.cssText = "margin:24px;display:grid;gap:16px;max-width:600px";
@@ -61,7 +71,9 @@ try {
     assert.equal(intermediate.active > 0, !reduced, JSON.stringify({ mode, system, intermediate }));
     await page.evaluate(() => window.__motionLong(true));
     await page.waitForTimeout(45);
-    const retarget = await body.evaluate((element) => element.getAnimations().map((animation) => ({ duration: animation.effect.getTiming().duration, frames: animation.effect.getKeyframes().map((frame) => frame.height) })));
+    // Record creation in the browser: remote sampling may occur after a valid
+    // short transition finishes, even when the content changed mid-animation.
+    const retarget = await page.evaluate(() => window.__motionAnimationEvidence);
     if (!reduced) assert(retarget.some((animation) => Number.parseFloat(animation.frames.at(-1)) > 600), "Async content retargets during the same entrance");
     await page.waitForTimeout(400);
     await page.locator("#motion-draft").fill("edited draft");
@@ -95,7 +107,36 @@ try {
     assert.equal(await page.locator("#motion-draft").inputValue(), "edited draft");
     await page.evaluate(() => window.__motionRoot.unmount());
     assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.effect?.target?.closest?.("#motion-body")).length), 0);
-    results.push({ mode, system, profile, intermediate, retarget, rapidInterruptions: "pass", drafts: "retained", focus: "returned", modeChange: "settled", unmount: "clean" });
+    const equivalentModeChanges = system === "no-preference" && mode === "full" ? await page.evaluate(async () => {
+      const { animateMotion } = await import("/src/shared/motion-runtime.ts");
+      const root = document.documentElement;
+      root.dataset.motionProfile = "standard";
+      root.dataset.motionResolved = "full";
+      const results = [];
+      for (const [from, to] of [["full", "system"], ["system", "full"]]) {
+        root.dataset.motionMode = from;
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        const node = document.createElement("span");
+        document.body.append(node);
+        let completed = 0;
+        const stop = animateMotion(node, [{ opacity: 0 }, { opacity: 1 }], { onFinish: () => completed++ });
+        const animation = node.getAnimations()[0];
+        animation.pause();
+        root.dataset.motionMode = to;
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        results.push({ from, to, profile: root.dataset.motionProfile, state: animation.playState, completed });
+        stop?.();
+        node.remove();
+      }
+      return results;
+    }) : [];
+    results.push({ mode, system, profile, intermediate, retarget, equivalentModeChanges,
+      rapidInterruptions: "pass", drafts: "retained", focus: "returned", modeChange: "settled", unmount: "clean" });
+    for (const change of equivalentModeChanges) {
+      assert.equal(change.profile, "standard");
+      assert.equal(change.state, "idle", "Changing a choice cancels its predecessor even when intensity is unchanged");
+      assert.equal(change.completed, 1);
+    }
     await page.close();
   }
   assert.deepEqual(errors, []);

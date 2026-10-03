@@ -84,17 +84,49 @@ try {
             h(UsageHistorySvg, { compact: true, data, kind: "area", label: "Synthetic usage", locale: "en", unit: "turns" }));
         }
         window.__motionRoot = ReactDOM.createRoot(host);
+        window.__progressStyleReads = 0;
+        window.__progressStyleCaptures = [];
+        window.__progressLayoutReads = [];
+        window.__progressKeyframes = [];
+        const computedStyle = window.getComputedStyle;
+        window.getComputedStyle = (...args) => {
+          const style = computedStyle(...args);
+          if (new Error().stack.includes("/src/shared/use-progress-motion.ts")) {
+            window.__progressStyleReads++;
+            window.__progressStyleCaptures.push({ width: style.width, dash: style.strokeDasharray,
+              percent: style.getPropertyValue(args[0].matches(".usage-progress__ring")
+                ? "--usage-progress-percent" : "--usage-progress-ring-percent").trim() });
+          }
+          return style;
+        };
+        const bounds = Element.prototype.getBoundingClientRect;
+        Element.prototype.getBoundingClientRect = function (...args) {
+          const rect = bounds.apply(this, args);
+          if (new Error().stack.includes("/src/shared/use-progress-motion.ts")) window.__progressLayoutReads.push(rect.width);
+          return rect;
+        };
+        const animate = Element.prototype.animate;
+        Element.prototype.animate = function (keyframes, options) {
+          if (this.closest("#quota-fixture")) window.__progressKeyframes.push(structuredClone(keyframes));
+          return animate.call(this, keyframes, options);
+        };
         window.__motionRoot.render(h(Fixture));
         window.scrollTo(0, 0);
       }, { mode });
       const reduced = mode === "reduced" || mode === "system" && system === "reduce";
       await settle(page);
+      const initialProgressStyleReads = await page.evaluate(() => window.__progressStyleReads);
+      assert.equal(initialProgressStyleReads, 0, "Initial/static progress must not force computed-style reads");
+      assert.equal(await page.evaluate(() => window.__progressLayoutReads.length), 0, "Initial/static progress must not force bounds reads");
       const progress = [];
       for (const style of ["line", "circle", "circle-soft", "circle-gauge"]) {
         await page.evaluate((style) => { window.__style(style); window.__progressReset(); window.__account("A"); }, style);
         await frames(page);
+        const readsBefore = await page.evaluate(() => ({ styles: window.__progressStyleReads, bounds: window.__progressLayoutReads.length }));
         await page.evaluate(() => window.__progressPatch({ remaining: 65, used: 35 }));
         await frames(page);
+        assert.deepEqual(await page.evaluate(() => ({ styles: window.__progressStyleReads, bounds: window.__progressLayoutReads.length })), readsBefore,
+          `${style}: a non-interrupted update must not force style or bounds reads`);
         const mid = await page.locator("#quota-fixture").evaluate((element) => ({
           value: element.querySelector('[role="progressbar"]').getAttribute("aria-valuenow"),
           text: element.textContent,
@@ -104,10 +136,23 @@ try {
         assert.equal(mid.value, "65");
         assert(mid.text.includes("65"), "Numeric label is current during interpolation");
         assert.equal(mid.animations > 0, !reduced, JSON.stringify({ mode, system, style, mid }));
+        let retarget = null;
         if (!reduced) {
           await page.evaluate(() => window.__progressPatch({ remaining: 55, used: 45 }));
           await frames(page);
           assert.equal(await page.locator('#quota-fixture [role="progressbar"]').getAttribute("aria-valuenow"), "55");
+          retarget = await page.evaluate(() => ({ reads: window.__progressStyleReads, bounds: window.__progressLayoutReads.length,
+            capture: window.__progressStyleCaptures.at(-1), parentWidth: window.__progressLayoutReads.at(-1),
+            frames: window.__progressKeyframes.at(-1) }));
+          assert.equal(retarget.reads - readsBefore.styles, 1, `${style}: capture the interrupted fill exactly once`);
+          assert.equal(retarget.bounds - readsBefore.bounds, style === "line" ? 1 : 0, `${style}: bounds are needed only for an interrupted line`);
+          if (style === "line") {
+            assert.equal(retarget.frames[0].width, `${parseFloat(retarget.capture.width) / retarget.parentWidth * 100}%`);
+          } else if (style === "circle-gauge") {
+            assert.equal(retarget.frames[0].strokeDasharray, retarget.capture.dash);
+          } else {
+            assert.equal(retarget.frames[0][style === "circle" ? "--usage-progress-percent" : "--usage-progress-ring-percent"], retarget.capture.percent);
+          }
         }
         await settle(page);
         for (const [name, patch] of [
@@ -123,8 +168,10 @@ try {
         await page.evaluate(() => { window.__progressReset(); window.__account("A"); }); await frames(page);
         await page.evaluate(() => { window.__account("B"); window.__progressPatch({ remaining: 35, used: 65 }); }); await frames(page);
         assert.equal(await page.locator('#quota-fixture [data-motion-active="progress"]').count(), 0, "Account switch is immediate");
-        progress.push({ style, mid, invalidTransitions: "immediate" });
+        progress.push({ style, mid, retarget, invalidTransitions: "immediate" });
       }
+      const interruptedProgressStyleReads = await page.evaluate(() => window.__progressStyleReads);
+      assert.equal(interruptedProgressStyleReads, reduced ? 0 : 4, "Each animated style captures exactly one interrupted visual position");
       await page.locator("#row-A").focus();
       await page.evaluate(() => window.__order(["C", "B", "A"])); await frames(page);
       assert.equal(await page.evaluate(() => document.activeElement.id), "row-A");
@@ -168,7 +215,8 @@ try {
       assert.equal(await page.locator("[data-motion-active]").count(), 0, "Background return does not replay old animations");
       await page.screenshot({ path: path.join(output, `${system}-${mode}.png`), fullPage: true });
       await page.evaluate(() => { window.__motionRoot.unmount(); window.__stopMotionTheme(); });
-      results.push({ mode, system, progress, reordered, chart, background: "settled", drafts: "retained", portals: "closed" });
+      results.push({ mode, system, progress, initialProgressStyleReads, interruptedProgressStyleReads,
+        reordered, chart, background: "settled", drafts: "retained", portals: "closed" });
       await page.close();
       console.log(`PASS ${system}/${mode}`);
     }

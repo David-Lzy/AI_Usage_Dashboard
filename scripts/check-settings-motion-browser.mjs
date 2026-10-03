@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+import { SUPPORTED_RDP_CAPTURE_LOCALES } from "./lib/rdp-extension-locale-route.mjs";
 
 const arg = (name) => process.argv.find((value) => value.startsWith(`${name}=`))?.slice(name.length + 1);
 assert(arg("--extension"), "Pass an isolated --extension=<Chrome build>");
@@ -11,6 +12,8 @@ assert(!extension.startsWith(path.resolve("dist") + path.sep), "Do not replace o
 const locales = arg("--locales")?.split(",") ?? ["en", "zh-CN", "ar"];
 const widths = arg("--widths")?.split(",").map(Number) ?? [390, 1440];
 const modes = arg("--modes")?.split(",") ?? ["full", "expressive"];
+assert(locales.every((locale) => SUPPORTED_RDP_CAPTURE_LOCALES.includes(locale)), "Use supported extension locales");
+assert(modes.every((mode) => ["full", "system", "expressive", "reduced"].includes(mode)), "Use supported motion modes");
 const record = process.argv.includes("--record");
 const root = path.resolve("tmp/output/playwright/settings-motion");
 await mkdir(root, { recursive: true });

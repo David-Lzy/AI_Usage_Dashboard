@@ -128,6 +128,8 @@ try {
     `${origin}/src/sidepanel/index.html?surface=full-page#settings`,
   );
   await helper.locator(".settings-fusion").waitFor();
+  const windowId = await helper.evaluate(async () => (await chrome.windows.getCurrent()).id);
+  assert(Number.isInteger(windowId), "The owned browser window must be identified");
   const session = await context.newCDPSession(helper);
   const styles = ["line", "circle", "circle-soft", "circle-gauge"];
   const modes = ["collapsible", "single", "switch", "scroll"];
@@ -182,7 +184,7 @@ try {
               }),
             state,
           );
-          await worker.evaluate(() => chrome.action.openPopup());
+          await worker.evaluate((windowId) => chrome.action.openPopup({ windowId }), windowId);
           await helper.waitForFunction(() =>
             chrome.extension
               .getViews({ type: "popup" })[0]
@@ -226,6 +228,7 @@ try {
               overflow: document.documentElement.scrollWidth - innerWidth,
               cards: document.querySelectorAll(".popup-provider-card").length,
               theme: document.documentElement.dataset.themeResolved,
+              motionProfile: document.documentElement.dataset.motionProfile,
               locale: document.documentElement.lang,
               dir: document.documentElement.dir,
               style: document.querySelector(".popup-provider-card__progress")
@@ -280,6 +283,26 @@ try {
                 ),
             );
             if (size === "compact") assert.equal(layout.shadow, "none");
+            if (layout.motionProfile === "expressive") {
+              const ripple = await evaluate(() => {
+                const button = document.querySelector(".popup-header__theme-menu > button");
+                const box = button.getBoundingClientRect();
+                button.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true,
+                  clientX: box.left + box.width / 2, clientY: box.top + box.height / 2 }));
+                return button.querySelectorAll(".app-motion-ripple").length;
+              });
+              assert(ripple > 0, "More feedback must bind after the asynchronous Popup mount");
+              const settled = await evaluate(async () => {
+                const animations = [...document.querySelectorAll(".app-motion-ripple")]
+                  .flatMap((ink) => ink.getAnimations());
+                const durations = animations.map((animation) => animation.effect.getTiming().duration);
+                await Promise.all(animations.map((animation) => animation.finished.catch(() => {})));
+                await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                return { durations, remaining: document.querySelectorAll(".app-motion-ripple").length };
+              });
+              assert(settled.durations.every((duration) => Number(duration) <= 360), JSON.stringify(settled));
+              assert.equal(settled.remaining, 0);
+            }
             const shot = await native.send("Page.captureScreenshot", {
               format: "png",
             });

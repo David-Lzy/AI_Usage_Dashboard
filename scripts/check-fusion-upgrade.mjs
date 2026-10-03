@@ -14,6 +14,8 @@ assert(
 );
 const baseline = path.resolve(arg("--baseline"));
 const candidate = path.resolve(arg("--extension"));
+const motionMode = arg("--motion-mode") ?? "reduced";
+assert(["full", "system", "reduced"].includes(motionMode), "Test a legacy motion choice");
 for (const source of [baseline, candidate])
   assert(
     !source.startsWith(path.resolve("dist") + path.sep),
@@ -29,6 +31,7 @@ const report = {
   passed: false,
   baseline,
   candidate,
+  motionMode,
   errors: [],
   remoteRequests: [],
 };
@@ -85,7 +88,7 @@ try {
   await runtime.page.waitForFunction(
     () => document.title === "AI Usage Dashboard Screenshot Seed Applied",
   );
-  const update = await runtime.page.evaluate(() =>
+  const update = await runtime.page.evaluate((motionMode) =>
     chrome.runtime.sendMessage({
       type: "app:update-settings",
       settings: {
@@ -97,7 +100,7 @@ try {
         themePreset: "custom",
         themeCustomSeedHex: "#327c72",
         uiFontFamily: "serif",
-        motionMode: "reduced",
+        motionMode,
         popupProgressStyle: "circle-gauge",
         sidebarProgressStyle: "circle",
         fullPageProgressStyle: "line",
@@ -106,7 +109,7 @@ try {
         actionBadgeRotationIntervalSeconds: 180,
         progressThicknessPx: 7,
       },
-    }),
+    }), motionMode,
   );
   assert.equal(update.ok, true);
   const before = await read(runtime.page);
@@ -118,7 +121,7 @@ try {
   );
   assert.equal(before.settings.warningThresholdPercent, 73);
   await runtime.page.goto(
-    `${runtime.origin}/src/sidepanel/index.html?surface=full-page#settings`,
+    `${runtime.origin}/src/sidepanel/index.html?surface=full-page#settings/section/settings-data`,
   );
   const downloadPromise = runtime.page.waitForEvent("download");
   await runtime.page
@@ -421,7 +424,7 @@ try {
     await themed.evaluate(
       () => document.documentElement.dataset.motionResolved,
     ),
-    "reduced",
+    motionMode === "full" ? "full" : "reduced",
   );
   const field = themed
     .locator(".fusion-field")

@@ -146,6 +146,13 @@ when the OS requests reduced motion. Follow system honors that preference.
 Existing saved animation choices are preserved. These changes are not yet a
 claim about the published Store package.
 
+Navigation, menus, expandable settings, save feedback and Provider changes share
+the same motion profile across Settings, Dashboard, Sidebar, detail and Popup.
+More adds short grouped entrances and stronger interaction feedback. Quota
+labels and accessible values update immediately; stale, unknown, failed or reset
+data is not animated as a numeric progression. Backgrounded transitions settle,
+and idle pages do not play decorative loops.
+
 ![Unreleased B fusion Settings](./Doc/Assets/ai-usage-dashboard-settings-fusion.png)
 
 The same branch now has a compact Dashboard and Sidebar, with operational

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useInsertionEffect, useRef, useState } from "react";
 
 import type { AppMessage } from "../shared/app-message-types";
 import type { AppState } from "../providers/types";
@@ -164,7 +164,8 @@ export function useStandardAppRuntime(
     [],
   );
 
-  useLayoutEffect(() => {
+  // Install dynamic root styles before child layout and motion reads.
+  useInsertionEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
       return undefined;
     }

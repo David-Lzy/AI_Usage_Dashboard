@@ -30,7 +30,7 @@ export function useMotionEntrance(ref: RefObject<MotionElement | null>, key: unk
 }
 
 export function useSurfaceMotion(ref: RefObject<HTMLElement | null>, key: unknown) {
-  useMotionInteractions(ref);
+  useMotionInteractions(ref, key);
   useBrowserLayoutEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -135,7 +135,7 @@ export function useMotionSelection(
   }, [ref, indicatorRef, value]);
 }
 
-export function useMotionInteractions(ref: RefObject<HTMLElement | null>) {
+export function useMotionInteractions(ref: RefObject<HTMLElement | null>, mountKey?: unknown) {
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -182,5 +182,5 @@ export function useMotionInteractions(ref: RefObject<HTMLElement | null>) {
     };
     root.addEventListener("change", checked);
     return () => { root.removeEventListener("pointerdown", ripple); root.removeEventListener("keydown", ripple); root.removeEventListener("change", checked); for (const stop of active) stop(); };
-  }, [ref]);
+  }, [ref, mountKey]);
 }

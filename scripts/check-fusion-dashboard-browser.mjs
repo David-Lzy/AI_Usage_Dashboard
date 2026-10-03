@@ -16,6 +16,10 @@ assert(
   "Do not use a loaded build",
 );
 const locales = arg("--locales")?.split(",") ?? SUPPORTED_RDP_CAPTURE_LOCALES;
+const motionMode = arg("--motion-mode") ?? "reduced";
+const systemMotion = arg("--system-motion") ?? "reduce";
+assert(["full", "system", "expressive", "reduced"].includes(motionMode), "Unknown motion mode");
+assert(["reduce", "no-preference"].includes(systemMotion), "Unknown system motion preference");
 const root = path.resolve("tmp/output/playwright/fusion-dashboard");
 await mkdir(root, { recursive: true });
 const output = await mkdtemp(path.join(root, "run-"));
@@ -46,7 +50,7 @@ const context = await chromium.launchPersistentContext(
   {
     headless: true,
     offline: true,
-    reducedMotion: "reduce",
+    reducedMotion: systemMotion,
     timezoneId: "UTC",
     ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
@@ -109,6 +113,17 @@ try {
       ]) {
         const name = `${locale}-${theme}-${width}`;
         const page = await context.newPage();
+        await page.addInitScript(() => {
+          window.__initialSurfaceMotion = [];
+          const animate = Element.prototype.animate;
+          Element.prototype.animate = function (frames, options) {
+            if (this.matches("h1, .dashboard-summary, [data-motion-group]")) window.__initialSurfaceMotion.push({
+              mode: document.documentElement.dataset.motionMode, profile: document.documentElement.dataset.motionProfile,
+              duration: options.duration, target: this.tagName,
+            });
+            return animate.call(this, frames, options);
+          };
+        });
         page.setDefaultTimeout(15000);
         await page.setViewportSize({ width, height: 900 });
         page.on("pageerror", (error) =>
@@ -128,7 +143,7 @@ try {
           ...state.settings,
           locale,
           themeMode: theme,
-          motionMode: "reduced",
+          motionMode,
           sidebarProgressStyle: "line",
           fullPageProgressStyle: "circle-soft",
         };
@@ -164,6 +179,14 @@ try {
             .first()
             .waitFor();
           await page.evaluate(() => document.fonts.ready);
+          const initialMotion = await page.evaluate(() => window.__initialSurfaceMotion);
+          const reduced = motionMode === "reduced" || motionMode === "system" && systemMotion === "reduce";
+          if (reduced) assert.equal(initialMotion.length, 0, "Reduced preferences must apply before child entrances");
+          else {
+            assert(initialMotion.length > 0, "Initial entrance is present");
+            assert(initialMotion.every((row) => row.mode === motionMode && row.profile === (motionMode === "expressive" ? "expressive" : "standard")),
+              JSON.stringify({ name, motionMode, initialMotion }));
+          }
           await page.waitForFunction(() =>
             document
               .getAnimations()
@@ -233,6 +256,17 @@ try {
           await page.locator(".settings-fusion").waitFor();
           await page.goBack();
           await page.locator(".dashboard-fusion").waitFor();
+          if (!reduced) await page.screenshot({
+            path: path.join(output, `${name}-navigation-entry.png`),
+            fullPage: true,
+          });
+          await page.waitForFunction(() =>
+            !document.querySelector('[data-motion-active="entry"]') &&
+            document.getAnimations().every((animation) => animation.playState !== "running"),
+          );
+          const settledOpacity = await page.locator("h1, .dashboard-summary, .provider-card")
+            .evaluateAll((elements) => elements.map((element) => getComputedStyle(element).opacity));
+          assert(settledOpacity.every((opacity) => opacity === "1"), "Navigation entrances fully reveal content");
           await page.screenshot({
             path: path.join(output, `${name}.png`),
             fullPage: true,
@@ -275,6 +309,8 @@ try {
             name,
             surface,
             layout,
+            initialMotion,
+            settledOpacity,
             snapshotUnchanged: true,
             navigation: true,
           });

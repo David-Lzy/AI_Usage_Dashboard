@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { chromium } from "playwright";
+import { chromium, firefox } from "playwright";
 import { startSourceQaServer } from "./lib/source-qa-server.mjs";
 import { SUPPORTED_RDP_CAPTURE_LOCALES } from "./lib/rdp-extension-locale-route.mjs";
 
@@ -9,18 +9,22 @@ const root = path.resolve("tmp/output/playwright/material-ui");
 await mkdir(root, { recursive: true });
 const output = await mkdtemp(path.join(root, "run-"));
 const server = await startSourceQaServer();
-const browser = await chromium.launch({ headless: true,
-  ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+const engine = process.argv.find((value) => value.startsWith("--browser="))?.slice(10) ?? "chromium";
+assert(["chromium", "firefox"].includes(engine), "Use --browser=chromium or firefox");
+const browser = await (engine === "firefox" ? firefox : chromium).launch({ headless: true,
+  ...(engine === "firefox" ? {} : process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
     ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
     : { channel: "chrome" }),
 });
 const results = [];
 const errors = [];
 const remoteRequests = [];
+const systemMotion = process.argv.find((value) => value.startsWith("--system-motion="))?.slice(16) ?? "reduce";
+assert(["reduce", "no-preference"].includes(systemMotion), "Use a valid OS motion preference");
 const locales = process.env.FUSION_QA_SMOKE ? ["en"] : SUPPORTED_RDP_CAPTURE_LOCALES;
 try {
   for (const locale of locales) for (const theme of ["light", "dark"]) for (const width of [390, 1440]) {
-    const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme, reducedMotion: "reduce" });
+    const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme, reducedMotion: systemMotion });
     const name = `${locale}-${theme}-${width}`;
     page.on("pageerror", (error) => errors.push({ name, message: error.message }));
     await page.route("**/*", (route) => {
@@ -213,7 +217,7 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(remoteRequests, []);
 } finally {
-  await writeFile(path.join(output, "result.json"), JSON.stringify({ results, errors, remoteRequests }, null, 2));
+  await writeFile(path.join(output, "result.json"), JSON.stringify({ engine, systemMotion, browserVersion: browser.version(), results, errors, remoteRequests }, null, 2));
   await browser.close();
   await server.close();
   console.log(`Evidence: ${output}`);

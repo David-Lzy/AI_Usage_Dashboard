@@ -1,6 +1,6 @@
 # Testing Documentation
 
-Date: 2026-05-18
+Date: 2026-10-03
 
 Document class:
 
@@ -20,11 +20,36 @@ Status note:
 Motion source checks use isolated static-resource-only servers:
 `node scripts/check-motion-foundation.mjs` tests all four modes with OS reduce
 on/off, interrupted disclosure, dynamic content, retained drafts and focus;
+it also checks Default/Follow system choice changes with unchanged intensity,
+using paused synthetic animations so natural completion cannot hide a failure.
 `node scripts/check-cross-surface-motion.mjs` tests continuous fresh quota fills,
 immediate invalid/account/reset transitions, reordering, menus, charts and
 background recovery. The latter also accepts `--browser=firefox` when its
 Playwright runner is installed. Source evidence supplements, not replaces,
 packaged-extension and native-action checks.
+Progress probes assert zero hook style/bounds reads on initial and ordinary
+updates, then check each of the four styles' interrupted capture and exact first
+retarget keyframe. These counters exist only in QA, not the extension package.
+These source QA servers disable file watching/HMR. For a long-lived preview,
+start a fresh isolated server after source changes; reopening an old server can
+reuse transformed modules. Preserve an old tab when it contains unsaved drafts.
+The root theme injector installs dynamic styles before child layout/motion
+effects, using React's [style insertion hook](https://react.dev/reference/react/useInsertionEffect).
+It touches only the stable document root, not component refs or React state.
+`check-fusion-dashboard-browser.mjs --motion-mode=expressive` verifies first-load
+entrances use the saved choice, not a temporary Default profile.
+`--system-motion=no-preference` additionally covers System's normal-motion path;
+the default layout matrix remains Reduced with OS reduction enabled.
+Animated navigation checks retain intermediate frames separately, then wait for
+actual completion and assert final content opacity before end-state screenshots.
+
+`node scripts/check-material-ui-motion.mjs` checks fresh MDUI menu, checkbox
+and button interactions for all eight OS/mode combinations, including Reduced
+while the OS requests normal motion. It accepts `--browser=firefox`. Inherited
+timing tokens and nested Shadow DOM animation durations are checked separately;
+the adapter settles MDUI's fixed-duration feedback through browser animation
+APIs without modifying the library. `check-material-ui-browser.mjs` also accepts
+`--browser=firefox` and `--system-motion=no-preference` for control regressions.
 
 `node scripts/check-settings-motion-browser.mjs --extension=<isolated Chrome build> --record`
 checks Default/More in en/zh-CN/ar, both themes and 390/1440px; `--locales` can
@@ -34,6 +59,10 @@ separate from real Provider services and OS delivery. Native toolbar coverage
 uses `check-fusion-native-popup.mjs --extension=<isolated Chrome build>`;
 `--motion-mode=full` or `expressive` checks a selected animated profile instead
 of the default static-layout (`reduced`) regression.
+More additionally probes pointer feedback after asynchronous first mounting,
+checks its <=360ms duration and waits for actual animation completion/paint
+before asserting cleanup, rather than sampling across the remote-debugging
+connection after a fixed sleep.
 
 `node scripts/check-fusion-detail-browser.mjs --extension=<isolated Chrome build>`
 checks the migrated detail hierarchy using synthetic Codex history and two
@@ -460,6 +489,31 @@ host load and the build-content hash. Set
 when the Playwright-managed browser is unavailable; no browser is installed by
 these commands. A single host run is not a user-facing speed claim or a CI budget.
 
+For the motion follow-up, add `--baseline-extension=<isolated baseline build>`
+to compare against a saved build on the same machine. Baseline/current order
+alternates on each iteration, with one owned browser at a time. Each pair uses
+the same synthetic fixture and Chromium binary. Warm samples in comparison mode
+are one repeat per cold profile, rather than ten opens from the first profile.
+Keep every run, including failed gates; do not run builds, tests or other browser
+matrices concurrently with measured samples. The readiness test opens the Popup
+extension URL; native action-bubble geometry has its separate QA gate.
+
+Comparison mode enforces ten cold/warm samples per startup scenario and three
+30-second renderer samples per CPU scenario. Default startup may increase by at
+most the larger of 10% or 50ms; idle, hover-paused and reduced CPU by 0.5 single-core
+percentage points; continuous glide by 10%. `--smoke` only checks the harness and
+never qualifies these gates. Subset reruns remain explicit, not silent retries.
+`--startup-repeats=40 --cpu-repeats=6` declares a larger complete matrix before
+sampling to reduce shared-host variance. Startup counts must be 10-100 and CPU
+counts 3-12; CPU windows stay 30 seconds. Smoke counts cannot be overridden.
+Keep unfavorable runs and every raw sample. Never combine different build,
+fixture or browser fingerprints or select only favorable cases.
+
+`node scripts/check-motion-bundle-budget.mjs` enforces an 8KiB gzip limit on the
+entire minified shared motion implementation and lazy MDUI theme adapter,
+including pre-existing helpers, with React external. This is a conservative upper bound for added shared motion
+JavaScript, not the total extension ZIP delta. It records exact module inputs.
+
 B fusion's Settings dependency and additional surface styles increase total
 package size even though Popup does not load the Material controls chunk.
 Active-glide renderer CPU also increased in migration comparisons; keep those
@@ -480,6 +534,31 @@ of 1.68% idle, 11.55% active glide, 1.45% hover-paused and 1.21% reduced motion
 migration, not described as speedups; no numeric release performance SLO was
 defined. Reports retain every sample and variance. Shared-host load limits
 causal interpretation, and this is not a GPU, battery or browser-launch test.
+
+### Motion Acceptance
+
+The 2026-10-03 motion comparison uses the accepted B fusion build as its
+baseline, not the pre-migration interface. All 28 agreed gates pass in one
+immutable, same-host alternating comparison: 40 cold and 40 warm samples per
+build in each of 12 startup scenarios, plus six 30-second windows per build in
+each of four CPU scenarios. Cold median increments range from -148.65 to
+-23.80ms; warm increments range from -19.00 to +11.55ms.
+
+| Renderer CPU Scenario | Baseline | Motion Build | Increment |
+| --- | --- | --- | --- |
+| Idle | 2.166% | 2.043% | -0.123 percentage points |
+| Continuous glide | 10.159% | 8.413% | -1.747 percentage points |
+| Hover-paused | 1.779% | 2.255% | +0.476 percentage points |
+| Reduced | 1.582% | 1.469% | -0.112 percentage points |
+
+Hover-paused passes with only 0.024 percentage points of margin against the
+0.5-point limit. Keep this small margin visible in future regression work.
+The conservative shared-motion-plus-lazy-adapter bound is 6,367 gzip bytes
+(limit 8,192); Chrome ZIP grows from 860,919 to 868,138 bytes. Node 25.9.0 and
+Chromium 153.0.8010.12 are unchanged between builds. Earlier failed reports and
+all raw observations are retained, never pooled across changed build hashes.
+The shared host had substantial background load: these are acceptance results,
+not causal speedup claims or guarantees for GPU, battery or other machines.
 
 The older `perf:extension:profile` remains available for broader surface or explicit
 PID investigations, accepts `--extension`/`--output`, and now uses unique output

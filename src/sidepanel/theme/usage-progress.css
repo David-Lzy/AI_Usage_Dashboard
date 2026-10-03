@@ -1,13 +1,3 @@
-@keyframes app-progress-indeterminate-shift {
-  from {
-    background-position: 0 0;
-  }
-
-  to {
-    background-position: 48px 0;
-  }
-}
-
 .usage-progress {
   display: grid;
   gap: var(--app-space-2);

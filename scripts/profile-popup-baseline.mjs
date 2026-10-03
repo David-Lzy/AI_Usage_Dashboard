@@ -8,20 +8,25 @@ import { chromium } from "playwright";
 import { createServer } from "vite";
 import { findBrowserRootPid, getExtensionRendererRows, resolveClockTicksPerSecond, sampleRendererCpu } from "./lib/extension-cpu-sampling.mjs";
 import { summarizeMeasurements } from "./lib/performance-statistics.mjs";
+import { evaluateMotionPerformance, resolveMotionSampling } from "./lib/motion-performance-gates.mjs";
 
 const arg = (name) => process.argv.find((value) => value.startsWith(`${name}=`))?.slice(name.length + 1);
 assert(arg("--extension"), "Pass --extension=<isolated Chrome build>");
 const extensionPath = path.resolve(arg("--extension"));
-const manifest = JSON.parse(await readFile(path.join(extensionPath, "manifest.json"), "utf8"));
+const baselinePath = arg("--baseline-extension") ? path.resolve(arg("--baseline-extension")) : null;
+const builds = [];
+for (const [id, directory] of baselinePath ? [["baseline", baselinePath], ["current", extensionPath]] : [["current", extensionPath]]) {
+  assert(!directory.startsWith(path.resolve("dist") + path.sep), "Use isolated builds, not a user-loaded extension");
+  builds.push({ id, directory, manifest: JSON.parse(await readFile(path.join(directory, "manifest.json"), "utf8")) });
+}
 const smoke = process.argv.includes("--smoke");
 const cpuOnly = process.argv.includes("--cpu-only");
 const startupOnly = process.argv.includes("--startup-only");
 assert(!(cpuOnly && startupOnly), "Choose only one measurement subset");
 const cpuScenarios = arg("--cpu-scenarios")?.split(",") ?? ["idle", "glide", "hover-paused", "reduced"];
 assert(cpuScenarios.length && cpuScenarios.every((id) => ["idle", "glide", "hover-paused", "reduced"].includes(id)), "Unknown CPU scenario");
-const repeats = smoke ? 1 : 10;
-const cpuRepeats = smoke ? 1 : 3;
-const intervalMs = smoke ? 1000 : 30000;
+const { repeats, cpuRepeats, intervalMs } = resolveMotionSampling({ smoke,
+  startupCount: arg("--startup-repeats"), cpuCount: arg("--cpu-repeats") });
 const outputRoot = path.resolve(arg("--output") ?? "tmp/output/playwright/popup-performance");
 await mkdir(outputRoot, { recursive: true });
 const output = await mkdtemp(path.join(outputRoot, "run-"));
@@ -51,13 +56,13 @@ function fixtureFor({ locale, width, count, mode = "collapsible", reduced = fals
   return fixture;
 }
 
-async function launch(id, config) {
-  const profile = path.join(output, "profiles", id);
+async function launch(id, config, build = builds.at(-1)) {
+  const profile = path.join(output, "profiles", `${build.id}-${id}`);
   const context = await chromium.launchPersistentContext(profile, {
     ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : { channel: "chromium" }),
     headless: true, offline: true, viewport: { width: config.width, height: 760 },
     reducedMotion: config.reduced ? "reduce" : "no-preference",
-    args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`],
+    args: [`--disable-extensions-except=${build.directory}`, `--load-extension=${build.directory}`],
   });
   try {
     browserVersion = context.browser()?.version();
@@ -84,19 +89,19 @@ async function launch(id, config) {
       }
       throw new Error("QA fixture did not settle before the measurement");
     }, { stateKey, lockKey, fixture: fixtureFor(config) });
-    fixturePreparation.push({ id, ...preparation });
-    return { context, profile, extensionId: new URL(worker.url()).host };
+    fixturePreparation.push({ id, variant: build.id, ...preparation });
+    return { context, profile, extensionId: new URL(worker.url()).host, build };
   } catch (error) { await context.close(); throw error; }
 }
 
 async function openPopup(runtime, config) {
   const page = await runtime.context.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto(`chrome-extension://${runtime.extensionId}/${manifest.action.default_popup}`, { waitUntil: "domcontentloaded" });
+  await page.goto(`chrome-extension://${runtime.extensionId}/${runtime.build.manifest.action.default_popup}`, { waitUntil: "domcontentloaded" });
   try {
     await page.waitForFunction(({ count, locale }) => document.querySelectorAll(".popup-provider-card").length === count && document.documentElement.lang === locale, config);
   } catch (error) {
-    await page.screenshot({ path: path.join(output, "startup-failure.png") });
+    await page.screenshot({ path: path.join(output, `${runtime.build.id}-startup-failure.png`) });
     errors.push(await page.evaluate(() => JSON.stringify({ cards: document.querySelectorAll(".popup-provider-card").length,
       locale: document.documentElement.lang, ready: document.readyState, host: document.documentElement.dataset.popupHost ?? "page" })));
     throw error;
@@ -167,20 +172,21 @@ async function verifyMotion(page, id) {
   }
 }
 
-async function filesUnder(dir) {
+async function filesUnder(dir, buildRoot = dir) {
   const result = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const filename = path.join(dir, entry.name);
-    if (entry.isDirectory()) result.push(...await filesUnder(filename));
-    else if (entry.isFile()) result.push({ path: path.relative(extensionPath, filename), bytes: (await stat(filename)).size });
+    if (entry.isDirectory()) result.push(...await filesUnder(filename, buildRoot));
+    else if (entry.isFile()) result.push({ path: path.relative(buildRoot, filename), bytes: (await stat(filename)).size });
   }
   return result;
 }
 
 const report = {
   status: "running", smoke, subset: cpuOnly ? "cpu" : startupOnly ? "startup" : "all", generatedAt: new Date().toISOString(),
+  sampling: { startupRepeats: repeats, cpuRepeats, intervalMs },
   revision: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
-  extensionPath, fixtureSha256: createHash("sha256").update(JSON.stringify(baseFixture)).digest("hex"),
+  extensionPath, baselinePath, comparison: Boolean(baselinePath), fixtureSha256: createHash("sha256").update(JSON.stringify(baseFixture)).digest("hex"),
   environment: { node: process.version, platform: os.platform(), release: os.release(), arch: os.arch(), cpu: os.cpus()[0]?.model, logicalCpus: os.cpus().length, memoryBytes: os.totalmem(), loadAverage: os.loadavg(), clockTicksPerSecond, headless: true, offline: true },
   workingTreeStatus: execFileSync("git", ["status", "--short"], { encoding: "utf8" }).trim(), fixturePreparation,
   definitions: {
@@ -189,6 +195,7 @@ const report = {
     warm: "Repeated new popup pages in the same browser/profile after the cold open; pages closed between opens.",
     cpu: "Owned extension renderer user+system ticks only, percent of one core; excludes browser/GPU processes; PID continuity required. Other-host load is uncontrolled.",
     fixture: "Existing explicit toolbar-first synthetic preset, one or three cards, dark theme; not a benchmark of every possible chart/account workload.",
+    comparison: "Baseline/current order alternates every iteration, using fresh separate profiles and one browser at a time. Compared content opens through its extension URL; native action-bubble layout is verified separately.",
   },
   startup: [], cpu: [], errors,
 };
@@ -200,51 +207,76 @@ try {
   for (const locale of locales) for (const width of [320, 392]) for (const count of [1, 3]) {
     const config = { locale, width, count };
     const id = `${locale}-${width}-${count}`;
-    const cold = [], warm = [];
+    const measurements = new Map(builds.map((build) => [build.id, { cold: [], warm: [] }]));
     for (let iteration = 0; iteration < repeats; iteration++) {
-      const runtime = await launch(`${id}-${iteration}`, config);
-      try {
-        const first = await openPopup(runtime, config);
-        cold.push(first.measurement);
-        if (iteration === 0) await first.page.screenshot({ path: path.join(output, `${id}.png`), animations: "disabled", fullPage: true });
-        await first.page.close();
-        if (iteration === 0) for (let repeat = 0; repeat < repeats; repeat++) {
-          const next = await openPopup(runtime, config);
-          warm.push(next.measurement);
-          await next.page.close();
-        }
-      } finally { await runtime.context.close(); }
+      const ordered = iteration % 2 ? [...builds].reverse() : builds;
+      for (const build of ordered) {
+        const runtime = await launch(`${id}-${iteration}`, config, build);
+        const { cold, warm } = measurements.get(build.id);
+        try {
+          const first = await openPopup(runtime, config);
+          cold.push(first.measurement);
+          if (iteration === 0) await first.page.screenshot({ path: path.join(output, `${build.id}-${id}.png`), animations: "disabled", fullPage: true });
+          await first.page.close();
+          const warmRepeats = baselinePath ? 1 : iteration === 0 ? repeats : 0;
+          for (let repeat = 0; repeat < warmRepeats; repeat++) {
+            const next = await openPopup(runtime, config);
+            warm.push(next.measurement);
+            await next.page.close();
+          }
+        } finally { await runtime.context.close(); }
+      }
     }
-    report.startup.push({ ...config, cold, warm, coldSummary: summarizeMeasurements(cold.map((row) => row.readyMs)), warmSummary: summarizeMeasurements(warm.map((row) => row.readyMs)) });
-    console.log(`startup ${id}: cold ${report.startup.at(-1).coldSummary.median.toFixed(1)}ms, warm ${report.startup.at(-1).warmSummary.median.toFixed(1)}ms`);
+    for (const build of builds) {
+      const { cold, warm } = measurements.get(build.id);
+      const row = { ...config, variant: build.id, cold, warm, coldSummary: summarizeMeasurements(cold.map((row) => row.readyMs)), warmSummary: summarizeMeasurements(warm.map((row) => row.readyMs)) };
+      report.startup.push(row);
+      console.log(`startup ${build.id} ${id}: cold ${row.coldSummary.median.toFixed(1)}ms, warm ${row.warmSummary.median.toFixed(1)}ms`);
+    }
     await writeFile(path.join(output, "result.json"), JSON.stringify(report, null, 2));
   }
   for (const id of startupOnly ? [] : cpuScenarios) {
     const config = { locale: "en", width: 392, count: 3, mode: id === "idle" ? "collapsible" : "scroll", reduced: id === "reduced" };
-    const runtime = await launch(`cpu-${id}`, config);
-    try {
-      const rootPid = await findBrowserRootPid(runtime.profile);
-      const { page } = await openPopup(runtime, config);
-      await verifyMotion(page, id);
-      const before = await motionSnapshot(page);
-      const samples = [];
-      for (let index = 0; index < cpuRepeats; index++) {
-        const sample = await sampleRendererCpu(() => getExtensionRendererRows(rootPid), { intervalMs, clockTicksPerSecond });
-        assert(sample.coverageComplete, "CPU renderer continuity unavailable; missing data must not be zero");
-        samples.push(sample);
-        console.log(`cpu ${id} ${index + 1}/${cpuRepeats}: ${sample.cpuPercent.toFixed(2)}% over ${sample.elapsedSeconds.toFixed(1)}s`);
+    const cpuRows = new Map(builds.map((build) => [build.id, { id, ...config, variant: build.id, samples: [], observations: [] }]));
+    const iterations = baselinePath ? cpuRepeats : 1;
+    for (let iteration = 0; iteration < iterations; iteration++) {
+      const ordered = iteration % 2 ? [...builds].reverse() : builds;
+      for (const build of ordered) {
+        const runtime = await launch(`cpu-${id}-${iteration}`, config, build);
+        try {
+          const rootPid = await findBrowserRootPid(runtime.profile);
+          const { page } = await openPopup(runtime, config);
+          await verifyMotion(page, id);
+          const before = await motionSnapshot(page);
+          const row = cpuRows.get(build.id);
+          for (let index = 0; index < (baselinePath ? 1 : cpuRepeats); index++) {
+            const sample = await sampleRendererCpu(() => getExtensionRendererRows(rootPid), { intervalMs, clockTicksPerSecond });
+            assert(sample.coverageComplete, "CPU renderer continuity unavailable; missing data must not be zero");
+            row.samples.push(sample);
+            console.log(`cpu ${build.id} ${id} ${row.samples.length}/${cpuRepeats}: ${sample.cpuPercent.toFixed(2)}% over ${sample.elapsedSeconds.toFixed(1)}s`);
+          }
+          const after = await motionSnapshot(page);
+          await verifyMotion(page, id);
+          row.observations.push({ iteration, rootPid, profile: runtime.profile, before, after, loadAverage: os.loadavg() });
+          if (iteration === 0) await page.screenshot({ path: path.join(output, `${build.id}-cpu-${id}.png`) });
+        } finally { await runtime.context.close(); }
       }
-      const after = await motionSnapshot(page);
-      await verifyMotion(page, id);
-      await page.screenshot({ path: path.join(output, `cpu-${id}.png`) });
-      report.cpu.push({ id, ...config, rootPid, profile: runtime.profile, before, after, samples, loadAverage: os.loadavg(), summary: summarizeMeasurements(samples.map((row) => row.cpuPercent)) });
-      await writeFile(path.join(output, "result.json"), JSON.stringify(report, null, 2));
-    } finally { await runtime.context.close(); }
+    }
+    for (const row of cpuRows.values()) report.cpu.push({ ...row, summary: summarizeMeasurements(row.samples.map((sample) => sample.cpuPercent)) });
+    await writeFile(path.join(output, "result.json"), JSON.stringify(report, null, 2));
   }
-  const files = await filesUnder(extensionPath);
-  const contentHash = createHash("sha256");
-  for (const file of [...files].sort((a, b) => a.path.localeCompare(b.path))) contentHash.update(file.path).update("\0").update(await readFile(path.join(extensionPath, file.path))).update("\0");
-  report.build = { sha256: contentHash.digest("hex"), bytes: files.reduce((sum, file) => sum + file.bytes, 0), fileCount: files.length, largest: files.sort((a, b) => b.bytes - a.bytes).slice(0, 15), archiveBytes: arg("--archive") ? (await stat(path.resolve(arg("--archive")))).size : null };
+  for (const build of builds) {
+    const files = await filesUnder(build.directory);
+    const contentHash = createHash("sha256");
+    for (const file of [...files].sort((a, b) => a.path.localeCompare(b.path))) contentHash.update(file.path).update("\0").update(await readFile(path.join(build.directory, file.path))).update("\0");
+    const archive = arg(build.id === "baseline" ? "--baseline-archive" : "--archive");
+    report[build.id === "baseline" ? "baselineBuild" : "build"] = { sha256: contentHash.digest("hex"), bytes: files.reduce((sum, file) => sum + file.bytes, 0), fileCount: files.length, largest: files.sort((a, b) => b.bytes - a.bytes).slice(0, 15), archiveBytes: archive ? (await stat(path.resolve(archive))).size : null };
+  }
+  if (baselinePath) {
+    report.gates = evaluateMotionPerformance(report.startup, report.cpu);
+    report.gates.preliminary = smoke;
+    if (!smoke) assert(report.gates.passed, JSON.stringify(report.gates, null, 2));
+  }
   assert.deepEqual(errors, []);
   report.status = "passed";
 } catch (error) {

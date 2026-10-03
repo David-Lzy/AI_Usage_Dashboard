@@ -23,11 +23,12 @@ the generated `dist/firefox/` package without changing the Chrome build output.
 Use `npm run firefox:lint:baseline` before Firefox-targeted changes are sent so
 the known local beta lint warnings do not drift.
 
-The current Firefox local-beta baseline is zero errors and two generated-bundle
-`UNSAFE_VAR_ASSIGNMENT` warnings for React runtime `innerHTML` handling. These
-are third-party runtime warnings in the built bundle, not extension code that
-injects provider or user content. Treat any additional warning or any error as
-a regression until it is investigated.
+The current Firefox local-beta baseline is zero errors and four reviewed
+generated-bundle warnings: two React DOM `innerHTML` assignments, one Lit
+static-template assignment and one MDUI element-factory construction. These are
+third-party runtime warnings, not application code that injects Provider or user
+content. `firefox:lint:baseline` verifies their exact library contexts; treat
+any additional warning or error as a regression until it is investigated.
 
 ## Before Sending Changes
 
