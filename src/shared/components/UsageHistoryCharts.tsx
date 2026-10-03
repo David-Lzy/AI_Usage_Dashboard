@@ -19,6 +19,8 @@ import {
   type UsageHistoryChartData,
 } from "../usage-history-chart-data";
 import { TechnicalText } from "./TechnicalText";
+import { useMotionEntrance } from "../use-motion-effects";
+import { ControlVisibilityBoundary } from "../control-visibility";
 import "./usage-history-charts.css";
 
 export type UsageHistoryChartCopy = {
@@ -237,6 +239,8 @@ export function UsageHistorySvg({
   locale: string;
   compact: boolean;
 }) {
+  const chartRef = useRef<SVGSVGElement>(null);
+  useMotionEntrance(chartRef, JSON.stringify([kind, data.dates, data.series]), true);
   const width = 720;
   const height = compact ? 90 : 176;
   const top = compact ? 6 : 12;
@@ -248,6 +252,7 @@ export function UsageHistorySvg({
 
   return (
     <svg
+      ref={chartRef}
       className={`usage-history-chart usage-history-chart--${kind}${compact ? " usage-history-chart--compact" : ""}`}
       role="img"
       aria-label={`${label}, ${formatDateRange(data, locale)}`}
@@ -346,6 +351,8 @@ export function UsageCompositionSvg({
   label: string;
   locale: string;
 }) {
+  const chartRef = useRef<SVGSVGElement>(null);
+  useMotionEntrance(chartRef, JSON.stringify([data.dates, data.series]), true);
   const width = 720;
   const height = compact ? 68 : 104;
   const top = compact ? 4 : 8;
@@ -369,6 +376,7 @@ export function UsageCompositionSvg({
 
   return (
     <svg
+      ref={chartRef}
       aria-label={accessibleLabel}
       className={`usage-composition-chart${compact ? " usage-composition-chart--compact" : ""}`}
       preserveAspectRatio="none"
@@ -637,10 +645,11 @@ export function UsageHistoryCompact({
           />
         </button>
       </header>
-      <div
+      <ControlVisibilityBoundary
         id={contentId}
         className="usage-history-compact__content"
         hidden={!isExpanded}
+        animate
       >
         {data.dates.length > 0 ? (
           <>
@@ -671,7 +680,7 @@ export function UsageHistoryCompact({
         ) : (
           <p className="supporting-copy">{copy.noData}</p>
         )}
-      </div>
+      </ControlVisibilityBoundary>
     </section>
   );
 }

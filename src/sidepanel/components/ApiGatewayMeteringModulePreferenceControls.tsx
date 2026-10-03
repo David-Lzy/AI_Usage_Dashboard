@@ -1,4 +1,5 @@
-import { useState, type DragEvent, type KeyboardEvent } from "react";
+import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   ApiGatewayMeteringDisplayPreferences,
@@ -36,6 +37,8 @@ export function ApiGatewayMeteringModulePreferenceControls({
   value: ApiGatewayMeteringDisplayPreferences;
   onChange: (value: ApiGatewayMeteringDisplayPreferences) => void;
 }) {
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, value]));
   const [draggedModule, setDraggedModule] = useState<DraggedModule | null>(
     null,
   );
@@ -82,6 +85,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="api-gateway-module-preferences"
       data-api-gateway-module-preferences=""
     >
@@ -126,6 +130,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                     <li
                       className="provider-order-list__item api-gateway-module-preferences__item"
                       data-api-gateway-module-row={preference.id}
+                      data-motion-key={`${surface}:${preference.id}`}
                       draggable
                       key={preference.id}
                       tabIndex={0}

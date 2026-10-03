@@ -7,6 +7,7 @@ import { getProviderDiagnosticPresentation } from "../../shared/provider-diagnos
 import { getProviderDetailGroupsCopy } from "../../shared/provider-detail-groups-copy";
 import { TechnicalText } from "../../shared/components/TechnicalText";
 import type { ProviderViewModel } from "../view-models";
+import { MotionDetails } from "../../shared/components/MotionDetails";
 
 export function ProviderDetailSourceInfo({
   provider,
@@ -53,11 +54,12 @@ export function ProviderDetailSourceInfo({
     getProviderDiagnosticPresentation(provider.sourceFallbackDiagnostic, i18n);
 
   return (
-    <details
+    <MotionDetails
       className="detail-section detail-source-info"
       data-provider-source-info=""
+      summary={groups.source}
+      summaryProps={{ className: "section-title" }}
     >
-      <summary className="section-title">{groups.source}</summary>
       <div className="detail-source-info__body">
         <div className="detail-grid">
           <div className="detail-field">
@@ -374,6 +376,6 @@ export function ProviderDetailSourceInfo({
           </div>
         ) : null}
       </div>
-    </details>
+    </MotionDetails>
   );
 }

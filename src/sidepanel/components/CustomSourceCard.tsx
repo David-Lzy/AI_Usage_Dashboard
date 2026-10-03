@@ -83,6 +83,8 @@ export function CustomSourceCard({
 
   return (
     <article
+      data-motion-key={source.sourceId}
+      data-motion-group=""
       className={`provider-card provider-card--custom provider-card--${source.displayTone}`}
       data-custom-source-id={source.sourceId}
     >

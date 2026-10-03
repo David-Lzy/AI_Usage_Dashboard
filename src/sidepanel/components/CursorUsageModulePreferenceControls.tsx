@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type { DisplaySurface } from "../../providers/types";
 import {
@@ -31,6 +32,8 @@ export function CursorUsageModulePreferenceControls({
   const [preferences, setPreferences] = useState<CursorUsageUiPreferences>(() =>
     readCursorUsageUiPreferences(),
   );
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, preferences]));
   const copy = buildCursorUsageLocalizedCopy(locale);
   const [saveStatus, setSaveStatus] = useState<SettingsSaveStatus>("idle");
   const moduleLabels: Record<CursorUsageUiModuleId, string> = {
@@ -47,6 +50,7 @@ export function CursorUsageModulePreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="usage-history-preferences cursor-usage-preferences"
       data-cursor-usage-preferences=""
     >
@@ -93,6 +97,7 @@ export function CursorUsageModulePreferenceControls({
                       className="provider-progress-list__item usage-history-preferences__item"
                       data-i18n-layout-contract="compact-order-row"
                       data-cursor-usage-module-row={preference.id}
+                      data-motion-key={`${surface}:${preference.id}`}
                       key={preference.id}
                     >
                       <span

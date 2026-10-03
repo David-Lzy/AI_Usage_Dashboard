@@ -69,7 +69,7 @@ import { SettingsProviderConnectionControls } from "../components/SettingsProvid
 import { DiagnosticsExportControl } from "../components/DiagnosticsExportControl";
 import { getSettingsCategoryCopy } from "../../shared/settings-category-localized-copy";
 import "./settings-fusion.css";
-import { useMotionInteractions } from "../../shared/use-motion-effects";
+import { useSurfaceMotion } from "../../shared/use-motion-effects";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -295,7 +295,7 @@ export function SettingsPage({
   const routeFocusKey = getSettingsRouteFocusKey(routeFocus);
   const settingsShellRef = useRef<HTMLElement>(null);
   useFusionTheme(settingsShellRef);
-  useMotionInteractions(settingsShellRef);
+  useSurfaceMotion(settingsShellRef, "settings");
   const {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
@@ -505,6 +505,7 @@ export function SettingsPage({
 
   return (
     <main
+      data-motion-owned=""
       className="app-shell settings-shell fusion-theme settings-fusion"
       ref={settingsShellRef}
     >

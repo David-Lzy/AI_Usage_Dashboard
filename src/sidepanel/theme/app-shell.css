@@ -93,6 +93,36 @@ html[data-app-direction="rtl"][data-full-page-entry="sidebar-expand"] .app-shell
   animation-delay: 120ms;
 }
 
+.app-shell[data-motion-owned],
+.app-shell[data-motion-owned] > * {
+  animation: none !important;
+}
+
+:is(.fusion-surface, .popup-shell, .provider-card, .popup-provider-card, .detail-context, .meta-chip) {
+  transition: background-color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    border-color var(--app-motion-duration-fast) var(--app-motion-easing-standard),
+    color var(--app-motion-duration-fast) var(--app-motion-easing-standard);
+}
+
+[data-motion-details] > summary { cursor: pointer; }
+[data-motion-details] > div { display: flow-root; }
+[data-motion-details] > div[hidden] { display: none; }
+[data-motion-details] > summary::marker { content: ""; }
+[data-motion-details] > summary::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-inline-end: 10px;
+  border-inline-end: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--app-motion-duration-medium) var(--app-motion-easing-emphasized);
+}
+[data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
+:root[dir="rtl"] [data-motion-details] > summary::before { transform: rotate(135deg); }
+:root[dir="rtl"] [data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
+
 :root[data-motion-resolved="reduced"] .app-shell > *,
 :root[data-motion-resolved="reduced"].full-page-shell .app-shell,
 :root[data-motion-resolved="reduced"][data-full-page-entry="popup-expand"]

@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useMotionLayout, useSurfaceMotion } from "../../shared/use-motion-effects";
 import type {
   ProviderAccountsByProvider,
   AppLocalePreference,
@@ -105,6 +107,9 @@ export function DashboardPage({
   onRefreshCustomSource,
   onSelectProviderAccount,
 }: DashboardPageProps) {
+  const pageRef = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  useSurfaceMotion(pageRef, progressSurface);
   const i18n = createRuntimeI18n(
     localePreference,
     typeof window !== "undefined" ? window : undefined,
@@ -142,8 +147,12 @@ export function DashboardPage({
     return 0;
   });
 
+  useMotionLayout(listRef, sourceCards.map((card) => card.sourceId).join(","));
+
   return (
     <main
+      ref={pageRef}
+      data-motion-owned=""
       className="app-shell fusion-surface dashboard-fusion"
       data-dashboard-surface={progressSurface}
     >
@@ -191,6 +200,7 @@ export function DashboardPage({
 
         {sourceCards.length > 0 ? (
           <div
+            ref={listRef}
             className="provider-shell-list"
             aria-label={i18n.t("dashboard.providers.aria")}
           >

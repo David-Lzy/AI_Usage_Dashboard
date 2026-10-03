@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useMotionEntrance } from "../shared/use-motion-effects";
+import { ControlVisibilityBoundary } from "../shared/control-visibility";
 
 import type {
   PopupCircularProgressItemsPerRow,
@@ -159,6 +161,7 @@ export function PopupFeaturedProviderList({
   getSettingsFocusForProvider,
   onAction,
 }: PopupFeaturedProviderListProps) {
+  const listRef = useRef<HTMLElement>(null);
   const [activeProviderCardId, setActiveProviderCardId] = useState<
     string | null
   >(
@@ -212,6 +215,9 @@ export function PopupFeaturedProviderList({
   );
   const accountPresentationCopy =
     getProviderAccountPresentationLocalizedCopy(i18n.resolvedLocale);
+  useMotionEntrance(listRef, usesSingleProviderStage && activeCard
+    ? `${providerBrowsingMode}:${getPopupProviderCardId(activeCard)}:${providerAccounts[activeCard.provider.providerId]?.activeAccountId}`
+    : providerBrowsingMode, true);
 
   const navigateProvider = (direction: PopupProviderNavigationDirection) => {
     if (cards.length === 0) {
@@ -230,7 +236,7 @@ export function PopupFeaturedProviderList({
   }
 
   return (
-    <section className="popup-quota-section" aria-label={ariaLabel}>
+    <section ref={listRef} className="popup-quota-section" aria-label={ariaLabel}>
       <div
         ref={
           providerBrowsingMode === "scroll" ? autoGlideViewportRef : undefined
@@ -371,6 +377,7 @@ export function PopupFeaturedProviderList({
               provider.apiGatewayMetering !== undefined;
             const providerProgress = (
               <PopupProviderProgress
+                accountId={providerAccountId}
                 provider={provider}
                 progressColorAppearance={progressColorAppearance}
                 progressColorBands={progressColorBands}
@@ -447,7 +454,7 @@ export function PopupFeaturedProviderList({
                   index === 0 ? "popup-first-provider-card" : undefined
                 }
               >
-                <div className="popup-provider-card__header">
+                <div className="popup-provider-card__header" data-motion-group="">
                   <div className="popup-provider-card__identity">
                     <div className="popup-provider-card__title-row">
                       <div className="popup-provider-card__provider-and-deployment">
@@ -581,8 +588,12 @@ export function PopupFeaturedProviderList({
                   </div>
                 </div>
 
-                {!isCardCollapsed ? (
-                  <>
+                <ControlVisibilityBoundary
+                  id={`popup-provider-content-${cardId}`}
+                  className="popup-provider-card__content"
+                  hidden={isCardCollapsed}
+                  animate
+                >
                     {hasProviderProgress ? (
                       <div
                         className={`popup-provider-card__progress popup-provider-card__progress--${progressDisplayStyle}`}
@@ -672,11 +683,11 @@ export function PopupFeaturedProviderList({
                         status={providerServiceStatus}
                       />
                     ) : null}
-                  </>
-                ) : null}
+                </ControlVisibilityBoundary>
                 {providerBrowsingMode === "collapsible" ? (
                   <button
                     aria-expanded={!isCardCollapsed}
+                    aria-controls={`popup-provider-content-${cardId}`}
                     aria-label={i18n.t(
                       isCardCollapsed
                         ? "popup.providers.expand_card"

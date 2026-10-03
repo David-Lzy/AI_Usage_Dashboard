@@ -3,9 +3,10 @@ import { MOTION_PROFILES, type MotionProfile } from "./motion-preferences";
 type MotionSpeed = "fast" | "medium" | "slow";
 type MotionSubscription = { listeners: Set<() => void>; stop: () => void };
 const environments = new WeakMap<Document, MotionSubscription>();
-const running = new WeakMap<HTMLElement, Map<string, () => void>>();
+export type MotionElement = HTMLElement | SVGElement;
+const running = new WeakMap<MotionElement, Map<string, () => void>>();
 
-export function readMotion(element: HTMLElement) {
+export function readMotion(element: MotionElement) {
   const doc = element.ownerDocument;
   const value = doc.documentElement.dataset.motionProfile;
   const profile: MotionProfile = doc.visibilityState === "hidden" ||
@@ -44,7 +45,7 @@ export function observeMotionEnvironment(doc: Document, listener: () => void) {
 // Each channel has one owner. A cancelled predecessor cannot complete a newer
 // disclosure or navigation, including when its finished promise already resolved.
 export function animateMotion(
-  element: HTMLElement,
+  element: MotionElement,
   frames: Keyframe[],
   options: {
     channel?: string;

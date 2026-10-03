@@ -148,7 +148,7 @@ try {
             popupSizePreset: size,
             popupProgressStyle: style,
             popupProviderBrowsingMode: modes[index],
-            motionMode: "reduced",
+            motionMode: arg("--motion-mode") ?? "reduced",
             popupCornerStyle:
               size === "compact"
                 ? "square"

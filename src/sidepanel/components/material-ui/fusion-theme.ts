@@ -25,7 +25,9 @@ export function readColorChannels(
 
 export function syncFusionThemeTokens(scope: HTMLElement): void {
   const profile = document.documentElement.dataset.motionProfile ?? "standard";
-  if (scope.dataset.fusionMotionProfile && scope.dataset.fusionMotionProfile !== profile) {
+  const resolved = document.visibilityState === "hidden" || document.documentElement.dataset.motionSuspended === "true"
+    ? "reduced" : document.documentElement.dataset.motionResolved ?? "full";
+  if (scope.dataset.fusionMotionProfile && (scope.dataset.fusionMotionProfile !== profile || scope.dataset.fusionMotion !== resolved)) {
     const settle = (root: HTMLElement | ShadowRoot) => {
       for (const animation of root.getAnimations({ subtree: true })) {
         if (Number.isFinite(animation.effect?.getComputedTiming().endTime)) {
@@ -56,7 +58,7 @@ export function syncFusionThemeTokens(scope: HTMLElement): void {
     const channels = readColorChannels(context, style.getPropertyValue(token).trim());
     if (channels) scope.style.setProperty(`--mdui-color-${role}`, channels);
   }
-  scope.dataset.fusionMotion = document.documentElement.dataset.motionResolved ?? "full";
+  scope.dataset.fusionMotion = resolved;
   scope.dataset.fusionMotionProfile = profile;
   scope.style.colorScheme = document.documentElement.dataset.themeResolved ?? "light";
 }
@@ -70,7 +72,7 @@ export function useFusionTheme(scope: RefObject<HTMLElement | null>): void {
     const observer = new MutationObserver(sync);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: [
       "style", "data-theme-resolved", "data-theme-preset", "data-theme-custom-seed-hex",
-      "data-ui-font-family", "data-motion-resolved", "data-motion-profile",
+      "data-ui-font-family", "data-motion-resolved", "data-motion-profile", "data-motion-suspended",
     ] });
     return () => observer.disconnect();
   }, [scope]);

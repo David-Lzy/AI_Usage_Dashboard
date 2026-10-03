@@ -17,6 +17,24 @@ Status note:
 
 ## Public Verification
 
+Motion source checks use isolated static-resource-only servers:
+`node scripts/check-motion-foundation.mjs` tests all four modes with OS reduce
+on/off, interrupted disclosure, dynamic content, retained drafts and focus;
+`node scripts/check-cross-surface-motion.mjs` tests continuous fresh quota fills,
+immediate invalid/account/reset transitions, reordering, menus, charts and
+background recovery. The latter also accepts `--browser=firefox` when its
+Playwright runner is installed. Source evidence supplements, not replaces,
+packaged-extension and native-action checks.
+
+`node scripts/check-settings-motion-browser.mjs --extension=<isolated Chrome build> --record`
+checks Default/More in en/zh-CN/ar, both themes and 390/1440px; `--locales` can
+expand the matrix. It retains intermediate-frame evidence and optional WebM
+recordings. Fixtures and simulated permission/notification results are clearly
+separate from real Provider services and OS delivery. Native toolbar coverage
+uses `check-fusion-native-popup.mjs --extension=<isolated Chrome build>`;
+`--motion-mode=full` or `expressive` checks a selected animated profile instead
+of the default static-layout (`reduced`) regression.
+
 `node scripts/check-fusion-detail-browser.mjs --extension=<isolated Chrome build>`
 checks the migrated detail hierarchy using synthetic Codex history and two
 Sub2API deployments in owned offline extension profiles. The 14-locale matrix

@@ -1,4 +1,5 @@
-import { useState, type DragEvent, type KeyboardEvent } from "react";
+import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   DisplaySurface,
@@ -46,6 +47,8 @@ export function UsageHistoryModulePreferenceControls({
   value: UsageHistoryModulesBySurface;
   onChange: (value: UsageHistoryModulesBySurface) => void;
 }) {
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, value]));
   const [draggedModule, setDraggedModule] =
     useState<DraggedHistoryModule | null>(null);
   const copy = buildUsageHistoryLocalizedCopy(locale);
@@ -121,6 +124,7 @@ export function UsageHistoryModulePreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="usage-history-preferences"
       data-usage-history-preferences=""
     >
@@ -177,6 +181,7 @@ export function UsageHistoryModulePreferenceControls({
                           className="provider-progress-list__item usage-history-preferences__item"
                           data-i18n-layout-contract="compact-order-row"
                           data-usage-history-module-row={preference.id}
+                          data-motion-key={`${provider.id}:${surface}:${preference.id}`}
                           draggable
                           tabIndex={0}
                           aria-label={settingsCopy.progressItems.rowAria(

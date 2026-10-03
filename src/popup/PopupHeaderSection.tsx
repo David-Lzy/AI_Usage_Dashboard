@@ -1,3 +1,5 @@
+import { ControlVisibilityBoundary } from "../shared/control-visibility";
+import { useMotionMenu } from "../shared/use-motion-effects";
 import {
   useEffect,
   useId,
@@ -104,6 +106,8 @@ export function PopupHeaderSection({
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const themeMenuId = useId();
   const themeMenuRef = useRef<HTMLDivElement>(null);
+  const themeOptionsRef = useRef<HTMLDivElement>(null);
+  useMotionMenu(themeOptionsRef, isThemeMenuOpen && !areActionsCollapsed);
   const themeButtonRef = useRef<HTMLButtonElement>(null);
   const collapseButtonRef = useRef<HTMLButtonElement>(null);
   const initialMenuFocus = useRef(0);
@@ -164,6 +168,7 @@ export function PopupHeaderSection({
 
   return (
     <section
+      data-motion-group=""
       className={`status-card popup-header${
         areActionsCollapsed ? " popup-header--actions-collapsed" : ""
       }${isSurfaceCollapsed ? " popup-header--surface-collapsed" : ""}`}
@@ -191,15 +196,17 @@ export function PopupHeaderSection({
           {hideProviderFeedback}
         </div>
       ) : null}
-      <div
+      <ControlVisibilityBoundary
         id="popup-header-actions"
         className="popup-header__actions"
         hidden={areActionsCollapsed}
+        animate
       >
         <button
           className="icon-button popup-header__icon-action popup-header__icon-action--refresh"
           type="button"
           disabled={isRefreshing}
+          aria-busy={isRefreshing || undefined}
           data-popup-refresh="true"
           aria-label={refreshTitle}
           title={refreshTitle}
@@ -249,6 +256,7 @@ export function PopupHeaderSection({
           </button>
           <div
             id={themeMenuId}
+            ref={themeOptionsRef}
             className="popup-header__theme-mode-menu"
             role="menu"
             aria-label={runtimeI18n.t(
@@ -347,7 +355,7 @@ export function PopupHeaderSection({
         >
           <PopupMaterialIcon name="settings" />
         </button>
-      </div>
+      </ControlVisibilityBoundary>
     </section>
   );
 }

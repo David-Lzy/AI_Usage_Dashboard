@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useSurfaceMotion } from "../shared/use-motion-effects";
 
 import type {
   AppLocalePreference,
@@ -87,6 +88,8 @@ export function PopupApp() {
   const [loadState, setLoadState] = useState<PopupLoadState>({
     status: "loading",
   });
+  const pageRef = useRef<HTMLElement>(null);
+  useSurfaceMotion(pageRef, loadState.status);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const refreshInFlightRef = useRef(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
@@ -563,6 +566,8 @@ export function PopupApp() {
 
   return (
     <main
+      ref={pageRef}
+      data-motion-owned=""
       className={`app-shell popup-shell${
         hasFeaturedProviderCards ? " popup-shell--quota-first" : ""
       }`}

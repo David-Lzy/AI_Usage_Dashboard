@@ -1,4 +1,5 @@
-import { useMemo, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMemo, useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   DisplaySurface,
@@ -40,6 +41,8 @@ export function ProviderOrderPreferenceControls({
   providers,
   onChange,
 }: ProviderOrderPreferenceControlsProps) {
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, providerOrderBySurface]));
   const [draggedProvider, setDraggedProvider] = useState<{
     surface: DisplaySurface;
     providerId: DashboardSourceId;
@@ -124,6 +127,7 @@ export function ProviderOrderPreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="provider-order-preferences"
       data-provider-order-preferences=""
     >
@@ -177,6 +181,7 @@ export function ProviderOrderPreferenceControls({
                         key={providerId}
                         className="provider-order-list__item"
                         data-provider-order-row={providerId}
+                        data-motion-key={`${surface}:${providerId}`}
                         draggable
                         tabIndex={0}
                         aria-label={copy.rowAria(

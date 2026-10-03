@@ -208,7 +208,7 @@
   gap: 2px;
 }
 
-.usage-history-compact__content:not([hidden]) {
+.usage-history-compact__content:not([hidden]):not([data-motion-disclosure]) {
   animation: app-disclosure-enter var(--app-motion-duration-medium)
     var(--app-motion-easing-standard) both;
 }

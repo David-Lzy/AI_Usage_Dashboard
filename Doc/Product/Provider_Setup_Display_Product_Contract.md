@@ -319,6 +319,21 @@ selection movement, native-button ripples and short success feedback, not idle
 decoration. Failed saves and denied notification permission remain real states;
 motion cannot turn them into successful operations.
 
+Dashboard, Sidebar, Provider detail and Popup use the same finite motion profile
+on the unreleased branch. Incoming content, explicit selection, disclosures and
+list reordering retain stable keys and focus. Popup auto-glide speed and its
+hover/manual controls are unchanged. Unknown quota is static, not a perpetual
+decorative loading animation.
+
+Quota labels and ARIA values always show the current result immediately. Only
+the decorative fill interpolates between successful observations with a proven
+same account/source/window identity, unchanged unit/limit, increasing capture
+time and a still-current reset time. Unknown capture/identity, stale data,
+failure, account/source switch or a refill/reset skips interpolation. History
+updates fade the actual new geometry; they do not invent intermediate data.
+Background entry and profile changes settle/cancel finite motion and never
+replay old transitions on return.
+
 General retains language and display-level gating. Data & Backup separates JSON,
 Chrome Sync and reset actions; import validation and reset confirmation are
 unchanged. Export does not include credentials, snapshots or machine pairing.

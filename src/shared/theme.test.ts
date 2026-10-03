@@ -18,6 +18,22 @@ import {
 } from "./theme";
 
 describe("theme helpers", () => {
+  it("settles finite motion in the background and cleans up the listener", () => {
+    const finish = vi.fn(), cancel = vi.fn(), addEventListener = vi.fn(), removeEventListener = vi.fn();
+    const doc = { visibilityState: "hidden", addEventListener, removeEventListener,
+      getAnimations: () => [
+        { finish, cancel, effect: { getTiming: () => ({ iterations: 1 }) } },
+        { finish: () => { throw new Error("Must not finish ongoing loading"); }, effect: { getTiming: () => ({ iterations: Infinity }) } },
+      ],
+    } as unknown as Document;
+    const root = { dataset: {} as Record<string, string | undefined>, ownerDocument: doc };
+    const stop = startThemeSettingsSync({ ...DEFAULT_THEME_SETTINGS, themeMode: "light" }, root);
+    expect(root.dataset.motionSuspended).toBe("true");
+    expect(finish).toHaveBeenCalledOnce();
+    expect(cancel).not.toHaveBeenCalled();
+    stop();
+    expect(removeEventListener).toHaveBeenCalledWith("visibilitychange", addEventListener.mock.calls[0][1]);
+  });
   it("normalizes unsupported theme values back to system", () => {
     expect(normalizeThemeMode("system")).toBe("system");
     expect(normalizeThemeMode("light")).toBe("light");

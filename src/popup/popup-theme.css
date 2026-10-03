@@ -407,7 +407,7 @@ body.popup-page .popup-header--surface-collapsed {
   transform: translateX(-50%);
 }
 
-.popup-header__theme-mode-menu:not([hidden]) {
+.popup-header__theme-mode-menu:not([hidden]):not([data-motion-owned]) {
   animation: popup-menu-enter var(--app-motion-duration-medium)
     var(--app-motion-easing-standard) both;
 }
@@ -800,6 +800,18 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   gap: 0;
   padding-block: var(--app-space-2);
 }
+
+.popup-provider-card__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.popup-header__icon-action--refresh[aria-busy="true"] svg {
+  animation: popup-refresh-pending 900ms linear infinite;
+}
+@keyframes popup-refresh-pending { to { transform: rotate(360deg); } }
 
 .popup-provider-card--collapsed .popup-provider-card__identity {
   gap: 0;

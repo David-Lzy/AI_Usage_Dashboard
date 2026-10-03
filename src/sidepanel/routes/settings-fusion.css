@@ -153,24 +153,6 @@
 .codex-local-settings__guide-toggle svg { transition: transform var(--app-motion-duration-medium) var(--app-motion-easing-emphasized); }
 .settings-connection__row button[aria-expanded="true"] svg { transform: rotate(180deg); }
 .codex-local-settings__guide-toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
-[data-motion-details] > summary { cursor: pointer; }
-[data-motion-details] > div { display: flow-root; }
-[data-motion-details] > div[hidden] { display: none; }
-[data-motion-details] > summary::marker { content: ""; }
-[data-motion-details] > summary::before {
-  content: "";
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-inline-end: 10px;
-  border-inline-end: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(-45deg);
-  transition: transform var(--app-motion-duration-medium) var(--app-motion-easing-emphasized);
-}
-[data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
-:root[dir="rtl"] [data-motion-details] > summary::before { transform: rotate(135deg); }
-:root[dir="rtl"] [data-motion-details] > summary[aria-expanded="true"]::before { transform: rotate(45deg); }
 .settings-fusion .status-card,
 .settings-fusion .settings-provider-display {
   border: 0;

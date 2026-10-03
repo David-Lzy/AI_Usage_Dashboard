@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 import type {
   ApiGatewayMeteringDisplayPreferences,
   AppLocalePreference,
@@ -95,6 +97,9 @@ export function ProviderCard({
   onRefresh,
   onSelectProviderAccount,
 }: ProviderCardProps) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const accountId = providerAccounts[provider.providerId]?.activeAccountId ?? null;
+  useMotionEntrance(bodyRef, accountId, true);
   const i18n = createRuntimeI18n(
     localePreference,
     typeof window !== "undefined" ? window : undefined,
@@ -206,6 +211,8 @@ export function ProviderCard({
 
   return (
     <article
+      data-motion-key={provider.providerId}
+      data-motion-group=""
       className={`provider-card provider-card--${cardSurfaceTone}`}
       data-provider-id={provider.providerId}
     >
@@ -234,7 +241,7 @@ export function ProviderCard({
         </div>
       </header>
 
-      <div className="provider-card__body">
+      <div ref={bodyRef} className="provider-card__body">
         {!hasCursorUsage && !isClaudePersonal && !hasApiGatewayMetering ? (
           <section
             className="provider-card__summary"
@@ -261,6 +268,7 @@ export function ProviderCard({
               progressItemsBySurface={progressItemsBySurface}
               progressThicknessPx={progressThicknessPx}
               provider={provider}
+              accountId={accountId}
               resetTimeDisplayMode={resetTimeDisplayMode}
               surface={progressSurface}
             />

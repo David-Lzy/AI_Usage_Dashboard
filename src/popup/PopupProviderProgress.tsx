@@ -20,6 +20,7 @@ type PopupProviderProgressProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   provider: ProviderViewModel;
+  accountId?: string | null;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
 };
 
@@ -32,6 +33,7 @@ export function PopupProviderProgress({
   progressItemsBySurface,
   progressThicknessPx,
   provider,
+  accountId,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
 }: PopupProviderProgressProps) {
   return (
@@ -45,6 +47,7 @@ export function PopupProviderProgress({
       progressItemsBySurface={progressItemsBySurface}
       progressThicknessPx={progressThicknessPx}
       provider={provider}
+      accountId={accountId}
       resetTimeDisplayMode={resetTimeDisplayMode}
       surface="popup"
     />

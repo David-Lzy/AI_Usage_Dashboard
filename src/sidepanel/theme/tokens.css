@@ -756,3 +756,10 @@
   transition-delay: 0ms !important;
   transition-duration: 0.001ms !important;
 }
+
+:root[data-motion-suspended="true"] *,
+:root[data-motion-suspended="true"] *::before,
+:root[data-motion-suspended="true"] *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
+}

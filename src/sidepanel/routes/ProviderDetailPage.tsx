@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useSurfaceMotion } from "../../shared/use-motion-effects";
 import type {
   ApiGatewayMeteringDisplayPreferences,
   AppLocalePreference,
@@ -128,6 +130,9 @@ export function ProviderDetailPage({
   onRefreshAccount,
   onSelectProviderAccount = () => undefined,
 }: ProviderDetailPageProps) {
+  const pageRef = useRef<HTMLElement>(null);
+  const accountId = providerAccounts?.[provider.providerId]?.activeAccountId ?? null;
+  useSurfaceMotion(pageRef, `${provider.providerId}:${accountId}`);
   const i18n = createRuntimeI18n(
     localePreference,
     typeof window !== "undefined" ? window : undefined,
@@ -255,7 +260,7 @@ export function ProviderDetailPage({
         : "detail-note--neutral";
 
   return (
-    <main className="app-shell fusion-surface provider-detail-fusion">
+    <main ref={pageRef} data-motion-owned="" className="app-shell fusion-surface provider-detail-fusion">
       <TopBar
         title={provider.providerLabel}
         compact
@@ -288,6 +293,7 @@ export function ProviderDetailPage({
 
       <section
         className="detail-context"
+        data-motion-group=""
         data-theme-stability-surface="provider-detail-sync-status-card"
       >
         <div className="detail-context__identity">
@@ -337,6 +343,7 @@ export function ProviderDetailPage({
 
       <section
         className="detail-recovery"
+        data-motion-group=""
         aria-label={copy.sections.syncStatus}
       >
         {provider.permissionStatus === "missing" ? (
@@ -455,6 +462,7 @@ export function ProviderDetailPage({
         </div>
         {hasProviderProgressItems ? (
           <ProviderProgressItemList
+            accountId={accountId}
             displayStyle={progressDisplayStyle}
             i18n={i18n}
             progressColorAppearance={progressColorAppearance}
