@@ -162,6 +162,64 @@ try {
     assert.equal(await page.evaluate(() => window.__motionQa.tests), 1);
     await navigate("appearance");
     await page.waitForTimeout(400);
+    const motionSelections = [];
+    for (const choice of [mode === "expressive" ? "full" : "expressive", "system", "reduced", "full", "expressive", mode]) {
+      const current = await page.locator('[data-fusion-field="motion-mode"] mdui-select').evaluate((element) => element.value);
+      const writesBefore = await page.evaluate(() => window.__motionQa.writes.length);
+      await choose("motion-mode", choice);
+      await page.waitForFunction((expected) => document.querySelector('[data-fusion-field="motion-mode"] mdui-select')?.value === expected, choice);
+      if (current !== choice) {
+        await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "pending");
+        assert.equal(await page.locator('[data-fusion-field="motion-mode"] mdui-select').evaluate((element) => element.value), choice, `${name}: pending save must not reset the selected motion mode`);
+      } else assert.equal(await page.evaluate(() => window.__motionQa.writes.length), writesBefore, `${name}: reselecting the current motion mode must not write`);
+      await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved");
+      assert.equal(await worker.evaluate(async (key) => (await chrome.storage.local.get(key))[key].settings.motionMode, stateKey), choice, `${name}: selected motion mode must be persisted`);
+      motionSelections.push(choice);
+    }
+    const motionKeyboardSelections = [];
+    const motionField = page.locator('[data-fusion-field="motion-mode"]');
+    for (const [choice, key] of [["system", "Space"], ["expressive", "Space"], ["full", "Enter"], [mode, "Enter"]]) {
+      const current = await motionField.locator("mdui-select").evaluate((element) => element.value);
+      const writesBefore = await page.evaluate(() => window.__motionQa.writes.length);
+      await motionField.locator("input:not(.hidden-input)").focus();
+      await page.keyboard.press(key);
+      await motionField.getByRole("menu").waitFor({ state: "visible" });
+      const focusValue = (expected) => page.waitForFunction((expected) => document.activeElement?.matches(`[data-fusion-field="motion-mode"] mdui-menu-item[value="${expected}"]`), expected);
+      await page.waitForFunction(() => document.activeElement?.matches('[data-fusion-field="motion-mode"] mdui-menu-item'));
+      await page.keyboard.press("Home");
+      const choices = ["full", "system", "expressive", "reduced"];
+      await focusValue(choices[0]);
+      const index = choices.indexOf(choice);
+      for (let step = 0; step < index; step++) {
+        await page.keyboard.press("ArrowDown");
+        await focusValue(choices[step + 1]);
+      }
+      await page.keyboard.press(key);
+      if (current !== choice) {
+        await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "pending");
+        assert.equal(await motionField.locator("mdui-select").evaluate((element) => element.value), choice,
+          `${name}: keyboard motion draft must survive the pending save`);
+      } else assert.equal(await page.evaluate(() => window.__motionQa.writes.length), writesBefore,
+        `${name}: reselecting the current keyboard choice must not write`);
+      await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved");
+      assert.equal(await worker.evaluate(async (key) => (await chrome.storage.local.get(key))[key].settings.motionMode, stateKey), choice,
+        `${name}: keyboard motion mode must be persisted`);
+      assert.equal(await motionField.locator("input:not(.hidden-input)").inputValue(),
+        (await motionField.locator(`mdui-menu-item[value="${choice}"]`).textContent()).trim());
+      await motionField.getByRole("menu").waitFor({ state: "hidden" });
+      motionKeyboardSelections.push({ choice, key });
+    }
+    await page.evaluate(() => { window.__motionQa.reject = true; });
+    const failedMotion = mode === "expressive" ? "full" : "expressive";
+    await choose("motion-mode", failedMotion);
+    await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "error");
+    assert.equal(await page.locator('[data-fusion-field="motion-mode"] mdui-select').evaluate((element) => element.value), failedMotion, `${name}: a failed save must retain the motion draft for retry`);
+    assert.equal(await worker.evaluate(async (key) => (await chrome.storage.local.get(key))[key].settings.motionMode, stateKey), mode, `${name}: a failed save must not change persisted motion`);
+    await page.evaluate(() => { window.__motionQa.reject = false; });
+    await page.locator('[data-settings-save-status] button').click();
+    await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved");
+    await choose("motion-mode", mode);
+    await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved");
     const details = page.locator(".settings-progress-editor");
     await details.locator(":scope > summary").click();
     await page.waitForTimeout(45);
@@ -192,12 +250,19 @@ try {
     await page.waitForTimeout(400);
     await page.waitForFunction(() => !document.querySelector(".app-motion-ripple"), undefined, { timeout: 2000 });
     assert.equal(await pairing.inputValue(), "ABCD-1234");
+    await page.reload();
+    await page.locator(".settings-category-heading").waitFor();
+    await navigate("appearance");
+    await page.waitForFunction((expected) => document.querySelector('[data-fusion-field="motion-mode"] mdui-select')?.value === expected && document.documentElement.dataset.motionMode === expected, mode);
+    await navigate("connections");
+    await page.waitForTimeout(400);
+    await page.waitForFunction(() => !document.querySelector(".app-motion-ripple"), undefined, { timeout: 2000 });
     const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth - innerWidth, direction: document.documentElement.dir, leftover: document.querySelectorAll(".app-motion-ripple").length }));
     assert(layout.overflow <= 1, `${name}: ${JSON.stringify(layout)}`);
     assert.equal(layout.direction, locale === "ar" ? "rtl" : "ltr");
     assert.equal(layout.leftover, 0);
     await page.screenshot({ path: path.join(output, `${name}.png`) });
-    report.cases.push({ name, intermediate, entry, categoryMotion, layout, permissionDenied: "pass", independentThresholds: "pass", paused: "pass", drafts: "retained", saveRetry: "pass", rapidDetails: "pass" });
+    report.cases.push({ name, intermediate, entry, categoryMotion, layout, permissionDenied: "pass", independentThresholds: "pass", paused: "pass", drafts: "retained", saveRetry: "pass", rapidDetails: "pass", motionSelections, motionKeyboardSelections, motionFailedDraftRetry: "pass", motionReload: "pass" });
     console.log(`PASS ${name}`);
     const video = page.video();
     await page.close();

@@ -39,6 +39,7 @@ describe("MDUI production adapter", () => {
     dropdown.open = true;
     dropdown.dispatchEvent(new Event("open"));
     expect(panel.popover).toBe("manual");
+    expect(panel.style).toMatchObject({ right: "auto", bottom: "auto" });
     expect(panel.hidden).toBe(false);
     expect(shown).toBe(true);
     dropdown.dispatchEvent(new Event("close"));

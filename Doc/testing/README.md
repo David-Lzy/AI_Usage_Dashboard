@@ -50,6 +50,11 @@ timing tokens and nested Shadow DOM animation durations are checked separately;
 the adapter settles MDUI's fixed-duration feedback through browser animation
 APIs without modifying the library. `check-material-ui-browser.mjs` also accepts
 `--browser=firefox` and `--system-motion=no-preference` for control regressions.
+It selects all four motion choices through the real Settings controls, verifies
+their saved values, checks Space/Enter commits and rejected controlled values,
+and reloads the source preview with More still selected. Check the visible label,
+application mode and persisted mode together: MDUI's internal selection alone
+is not evidence that the application accepted a keyboard activation.
 
 `node scripts/check-settings-motion-browser.mjs --extension=<isolated Chrome build> --record`
 checks Default/More in en/zh-CN/ar, both themes and 390/1440px; `--locales` can
@@ -63,6 +68,11 @@ More additionally probes pointer feedback after asynchronous first mounting,
 checks its <=360ms duration and waits for actual animation completion/paint
 before asserting cleanup, rather than sampling across the remote-debugging
 connection after a fixed sleep.
+The Settings gate also clicks and keyboard-selects motion choices with delayed
+saves, checks that pending or failed saves do not reset the selected draft,
+retries failures, and verifies the persisted choice after reloading the packaged
+extension. Menu probes verify the Motion menu stays anchored in RTL as well as
+remaining within the viewport.
 
 `node scripts/check-fusion-detail-browser.mjs --extension=<isolated Chrome build>`
 checks the migrated detail hierarchy using synthetic Codex history and two

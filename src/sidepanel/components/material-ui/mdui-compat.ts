@@ -34,7 +34,11 @@ export function installSelectTopLayer(
   // MDUI positions its fixed panel in viewport coordinates. Container queries
   // establish a different containing block, so keep the slot in the top layer.
   panel.popover = "manual";
+  // Popover's default opposite insets overconstrain MDUI's physical left/top
+  // coordinates; in Firefox RTL, right: 0 wins and moves the menu off its field.
   Object.assign(panel.style, {
+    right: "auto",
+    bottom: "auto",
     margin: "0",
     padding: "0",
     border: "0",

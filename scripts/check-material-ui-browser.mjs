@@ -12,7 +12,8 @@ const server = await startSourceQaServer();
 const engine = process.argv.find((value) => value.startsWith("--browser="))?.slice(10) ?? "chromium";
 assert(["chromium", "firefox"].includes(engine), "Use --browser=chromium or firefox");
 const browser = await (engine === "firefox" ? firefox : chromium).launch({ headless: true,
-  ...(engine === "firefox" ? {} : process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+  ...(engine === "firefox" ? process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE
+    ? { executablePath: process.env.PLAYWRIGHT_FIREFOX_EXECUTABLE } : {} : process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
     ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
     : { channel: "chrome" }),
 });
@@ -21,7 +22,9 @@ const errors = [];
 const remoteRequests = [];
 const systemMotion = process.argv.find((value) => value.startsWith("--system-motion="))?.slice(16) ?? "reduce";
 assert(["reduce", "no-preference"].includes(systemMotion), "Use a valid OS motion preference");
-const locales = process.env.FUSION_QA_SMOKE ? ["en"] : SUPPORTED_RDP_CAPTURE_LOCALES;
+const requestedLocales = process.argv.find((value) => value.startsWith("--locales="))?.slice(10);
+const locales = requestedLocales?.split(",") ?? (process.env.FUSION_QA_SMOKE ? ["en"] : SUPPORTED_RDP_CAPTURE_LOCALES);
+assert(locales.every((locale) => SUPPORTED_RDP_CAPTURE_LOCALES.includes(locale)), "Use supported extension locales");
 try {
   for (const locale of locales) for (const theme of ["light", "dark"]) for (const width of [390, 1440]) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: theme, reducedMotion: systemMotion });
@@ -106,6 +109,74 @@ try {
       });
       assert.equal(restoredAnchor, true, "Existing surface session can locate the adapter field");
 
+      await page.evaluate(() => { location.hash = "#settings/section/settings-appearance"; });
+      const motionField = page.locator('[data-fusion-field="motion-mode"]');
+      await motionField.locator("input:not(.hidden-input)").waitFor();
+      await page.evaluate(() => {
+        window.__motionSelectionProbe = { expected: null, clicks: [], writes: [] };
+        document.addEventListener("click", (event) => {
+          const select = document.querySelector('[data-fusion-field="motion-mode"] mdui-select');
+          if (!event.composedPath().includes(select)) return;
+          const item = event.composedPath().find((node) => node instanceof HTMLElement && node.tagName === "MDUI-MENU-ITEM");
+          window.__motionSelectionProbe.clicks.push({ value: item?.value, selected: select?.value, time: performance.now() });
+        }, true);
+        const setItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function(key, value) {
+          if (key === "ai-usage-dashboard.app-state") {
+            try { window.__motionSelectionProbe.writes.push({ mode: JSON.parse(value)?.settings.motionMode, time: performance.now() }); } catch {}
+          }
+          return setItem.call(this, key, value);
+        };
+      });
+      const motionChoices = ["full", "expressive", "system", "reduced", "expressive"];
+      for (const choice of motionChoices) {
+        await page.evaluate((expected) => { window.__motionSelectionProbe.expected = expected; }, choice);
+        await motionField.locator("input:not(.hidden-input)").click();
+        await page.waitForFunction(() => {
+          const select = document.querySelector('[data-fusion-field="motion-mode"] mdui-select');
+          const dropdown = select?.shadowRoot?.querySelector("mdui-dropdown");
+          const panel = dropdown?.shadowRoot?.querySelector('[part="panel"]');
+          if (!dropdown?.open || !panel?.matches(":popover-open") || panel.inert) return false;
+          const menu = select.shadowRoot.querySelector("mdui-menu").getBoundingClientRect();
+          const trigger = select.getBoundingClientRect();
+          return menu.left >= -1 && menu.right <= innerWidth + 1 && menu.top >= -1 && menu.bottom <= innerHeight + 1 &&
+            Math.abs(menu.left - trigger.left) <= 1;
+        });
+        await motionField.locator(`mdui-menu-item[value="${choice}"]`).click();
+        await page.waitForFunction((expected) => document.querySelector('[data-fusion-field="motion-mode"] mdui-select')?.value === expected &&
+          document.documentElement.dataset.motionMode === expected &&
+          document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved", choice);
+        assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("ai-usage-dashboard.app-state"))?.settings.motionMode), choice, `${name}: source preview must persist the selected motion mode`);
+        assert.equal(await motionField.locator(`mdui-menu-item[value="${choice}"]`).getAttribute("aria-checked"), "true");
+      }
+      const motionKeyboardChoices = [];
+      for (const [choice, key] of [["full", "Space"], ["expressive", "Space"], ["system", "Enter"], ["expressive", "Enter"]]) {
+        await page.evaluate((expected) => { window.__motionSelectionProbe.expected = expected; }, `${choice}:${key}`);
+        await motionField.locator("input:not(.hidden-input)").focus();
+        await page.keyboard.press(key);
+        await motionField.getByRole("menu").waitFor({ state: "visible" });
+        await page.waitForFunction(() => document.activeElement?.matches('[data-fusion-field="motion-mode"] mdui-menu-item'));
+        await page.keyboard.press("Home");
+        await focusIs(motionField.locator("mdui-menu-item").first());
+        const index = ["full", "system", "expressive", "reduced"].indexOf(choice);
+        for (let step = 0; step < index; step++) {
+          await page.keyboard.press("ArrowDown");
+          await focusIs(motionField.locator("mdui-menu-item").nth(step + 1));
+        }
+        await focusIs(motionField.locator(`mdui-menu-item[value="${choice}"]`));
+        await page.keyboard.press(key);
+        await page.waitForFunction((expected) => document.documentElement.dataset.motionMode === expected &&
+          document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved", choice, { timeout: 5000 });
+        assert.equal(await motionField.locator("input:not(.hidden-input)").inputValue(),
+          (await motionField.locator(`mdui-menu-item[value="${choice}"]`).textContent()).trim(), `${name}: visible keyboard choice`);
+        assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("ai-usage-dashboard.app-state"))?.settings.motionMode), choice,
+          `${name}: keyboard activation must commit, not only update MDUI's internal selection`);
+        await motionField.getByRole("menu").waitFor({ state: "hidden" });
+        motionKeyboardChoices.push({ choice, key });
+      }
+      await page.reload();
+      await page.waitForFunction(() => document.querySelector('[data-fusion-field="motion-mode"] mdui-select')?.value === "expressive" && document.documentElement.dataset.motionProfile === "expressive");
+
       await page.evaluate(async () => {
         const { default: React } = await import("/__qa/react.js");
         const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
@@ -143,6 +214,19 @@ try {
       await rejected.locator("input:not(.hidden-input)").click();
       await rejected.locator('mdui-menu-item[value="on"]').click();
       assert.equal(await page.evaluate(() => window.__fusionRejectedAttempts), 2, "Rejected selection must remain selectable again");
+      for (const key of ["Space", "Enter"]) {
+        await rejected.locator("input:not(.hidden-input)").focus();
+        await page.keyboard.press(key);
+        await rejected.getByRole("menu").waitFor({ state: "visible" });
+        await page.waitForFunction(() => document.activeElement?.matches('[data-fusion-field="rejected"] mdui-menu-item'));
+        await page.keyboard.press("End");
+        await focusIs(rejected.locator('mdui-menu-item[value="on"]'));
+        await page.keyboard.press(key);
+        await rejected.getByRole("menu").waitFor({ state: "hidden" });
+        assert.equal(await rejected.locator("mdui-select").evaluate((element) => element.value), "off",
+          "Denied keyboard preference must remain controlled");
+      }
+      assert.equal(await page.evaluate(() => window.__fusionRejectedAttempts), 4, "Keyboard commits must invoke the permission callback exactly once");
       const number = page.getByRole("spinbutton", { name: "Used percent" });
       await rejected.locator("input:not(.hidden-input)").click();
       await page.waitForFunction(() => document.activeElement?.matches('[data-fusion-field="rejected"] mdui-menu-item'));
@@ -194,9 +278,21 @@ try {
       assert(fonts.every((row) => row.actual === row.expected), JSON.stringify(fonts));
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       assert(overflow <= 1, `${name}: horizontal overflow ${overflow}`);
-      results.push({ name, bounds, palettes: palettes.length, fonts, overflow });
+      results.push({ name, bounds, palettes: palettes.length, fonts, overflow, motionChoices, motionKeyboardChoices, motionReload: "pass" });
       console.log(`MDUI source gate ${name}: passed`);
     } catch (error) {
+      const selection = await page.evaluate(() => {
+        const select = document.querySelector('[data-fusion-field="motion-mode"] mdui-select');
+        const dropdown = select?.shadowRoot?.querySelector("mdui-dropdown");
+        const panel = dropdown?.shadowRoot?.querySelector('[part="panel"]');
+        return { probe: window.__motionSelectionProbe, selected: select?.value,
+          visibleValue: select?.shadowRoot?.querySelector("mdui-text-field")?.value,
+          menuValue: select?.shadowRoot?.querySelector("mdui-menu")?.value,
+          open: dropdown?.open, inert: panel?.inert, rootMode: document.documentElement.dataset.motionMode,
+          saveStatus: document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus,
+          storedMode: JSON.parse(localStorage.getItem("ai-usage-dashboard.app-state"))?.settings.motionMode };
+      });
+      await writeFile(path.join(output, `${name}-selection.json`), JSON.stringify(selection, null, 2));
       const overflowElements = await page.evaluate(() => {
         const elements = [];
         const visit = (root) => {

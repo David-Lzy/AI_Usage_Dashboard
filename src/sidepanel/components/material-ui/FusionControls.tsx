@@ -122,7 +122,7 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
         dropdown.removeEventListener("close", close);
       };
     });
-    const activate = (event: MouseEvent) => {
+    const activate = (event: MouseEvent | KeyboardEvent) => {
       const item = event
         .composedPath()
         .find(
@@ -130,7 +130,7 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
             target instanceof HTMLElement &&
             target.tagName === "MDUI-MENU-ITEM",
         );
-      if (!item || !element.contains(item)) return;
+      if (!item || !element.contains(item)) return false;
       // Handle activation before MDUI toggles its uncontrolled menu selection.
       // This keeps denied/async values controlled and permission requests inside
       // the original pointer or keyboard user gesture.
@@ -155,9 +155,13 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
         if (element.isConnected)
           setControlledSelectValue(element, current.current.value);
       });
+      return true;
     };
     const keydown = (event: KeyboardEvent) => {
       if (current.current.disabled) return;
+      // MDUI handles Space without a click; capture both activation keys before
+      // its menu changes only the internal value and bypasses our controlled draft.
+      if ([" ", "Enter"].includes(event.key) && activate(event)) return;
       const dropdown = getSelectDropdown(element);
       if (event.key === "Tab" && dropdown?.open) {
         // Keep native tab order instead of MDUI's default extra stop on trigger.
@@ -172,17 +176,18 @@ export function FusionSelect<T extends string>(props: MaterialSelectProps<T>) {
       if (!dropdown || !(target instanceof HTMLInputElement)) return;
       if (["ArrowDown", "ArrowUp", " ", "Enter"].includes(event.key)) {
         event.preventDefault();
+        event.stopPropagation();
         dropdown.open = true;
       }
     };
     element.addEventListener("click", activate, true);
-    element.addEventListener("keydown", keydown);
+    element.addEventListener("keydown", keydown, true);
     return () => {
       stopped = true;
       detach();
       document.removeEventListener("pointerdown", pointer, true);
       element.removeEventListener("click", activate, true);
-      element.removeEventListener("keydown", keydown);
+      element.removeEventListener("keydown", keydown, true);
     };
   }, []);
   return (
