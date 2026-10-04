@@ -16,7 +16,7 @@ Status note:
 - AI Usage Dashboard has a live Chrome Web Store listing
 - a direct public-page fetch displayed `0.2.1` on 2026-10-04 UTC;
   authenticated Store API status reports manifest `0.2.1.0` as `PUBLISHED`
-  at 100%, with no submitted revision at that checkpoint
+  at 100%, and submitted manifest `0.2.2.0` as `PENDING_REVIEW` at 100%
 - GitHub Release `v0.2.2` is stable and provides verified browser-specific
   packages and checksums; its Chrome manifest is `0.2.2.0`
 - the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
@@ -26,8 +26,9 @@ Status note:
 - the 2026-09-24 `PENDING_REVIEW` observation for 0.2.1 is historical and
   superseded by the publication confirmation above
 - GitHub 0.2.2 was released on 2026-10-04 UTC. The Store API accepted its exact
-  tag-scoped package as an uploaded draft; listing metadata and review submission
-  remain pending. It is not a public Store release.
+  tag-scoped package once; updated listing metadata was verified and the
+  Dashboard accepted one review request with automatic publication after
+  approval selected. It is not yet a public Store release.
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -40,14 +41,24 @@ Status note:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
 - On 2026-10-04 UTC, the public listing displayed `0.2.1` and an update date
   of September 25, 2026. The authenticated API confirmed manifest `0.2.1.0`
-  as `PUBLISHED` at 100%, with no submitted revision.
+  as `PUBLISHED` at 100%. The later post-submission query confirmed manifest
+  `0.2.2.0` as `PENDING_REVIEW` at 100%; the public page still displayed 0.2.1.
 - [GitHub Release v0.2.2](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.2)
   was published on 2026-10-04 UTC. Main and tag Actions passed; both downloaded
   browser ZIPs matched the published SHA256SUMS and passed ZIP integrity checks.
   The tag workflow did not perform Store upload because repository credentials
   are absent. A separate authenticated local upload returned `SUCCEEDED` for
-  `0.2.2.0`; the subsequent status still reported `0.2.1.0` as `PUBLISHED`
-  at 100% with no submitted revision. Metadata and review are not yet complete.
+  `0.2.2.0`. Before submission, status reported `0.2.1.0` as `PUBLISHED`
+  at 100% with no submitted revision; that was the uploaded-draft checkpoint.
+  The Developer Dashboard then saved and verified all 14 descriptions, five
+  localized screenshot sets, five global English screenshots and the aligned
+  packaged icon. Existing matching promotional tiles were retained. The optional
+  notification permission explanation was corrected to describe the configured
+  used-percentage threshold; no package or permission change was made.
+  At approximately 05:27 UTC on 2026-10-04, the Dashboard accepted one review
+  request with automatic publication after approval selected. Authenticated
+  API status confirmed submitted `0.2.2.0` as `PENDING_REVIEW` at 100%, while
+  `0.2.1.0` remained `PUBLISHED` at 100%. No second ZIP upload occurred.
 - A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
   `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
   manifest `0.2.0.14` as `PUBLISHED` at 100%; a fresh API check on
@@ -173,11 +184,10 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Apply and verify the prepared 0.2.2 screenshots and copy, then submit the
-  existing uploaded draft in one review request. Do not re-upload the accepted
-  tag package merely to resume metadata work.
-- After submission, verify both authenticated API publication state and
-  public-page rollout before calling 0.2.2 available on the Store. Keep
+- Await the review result without repeating the accepted upload or review
+  request. The updated 0.2.2 copy and images are part of the submitted revision.
+- Verify both authenticated API publication state and public-page rollout
+  before calling 0.2.2 available on the Store. Keep
   uploaded, submitted, and published states distinct.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
 - Keep personal upload operations and generated screenshot working files under

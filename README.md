@@ -17,7 +17,8 @@ provider data to a project-owned server.
 
 Version 0.2.2 is available on GitHub with the unified interface and four motion
 choices described below. The Chrome Web Store still serves 0.2.1; the 0.2.2
-package is uploaded as a draft, not submitted for review or available from the Store.
+update was submitted for review on October 4, 2026 and is not yet available
+from the Store.
 
 ![AI Usage Dashboard 0.2.2](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
 
