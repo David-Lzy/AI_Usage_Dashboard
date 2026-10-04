@@ -26,9 +26,10 @@ Status note:
 - the 2026-09-24 `PENDING_REVIEW` observation for 0.2.1 is historical and
   superseded by the publication confirmation above
 - GitHub 0.2.2 was released on 2026-10-04 UTC. The Store API accepted its exact
-  tag-scoped package once; updated listing metadata was verified and the
-  Dashboard accepted one review request with automatic publication after
-  approval selected. It is not yet a public Store release.
+  tag-scoped package once. The initial review rejected a long brand list as
+  keyword stuffing. Corrected descriptions were verified in all 14 fields,
+  and the same package was resubmitted without another upload. Automatic
+  publication after approval remains selected. It is not yet a public Store release.
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -59,6 +60,17 @@ Status note:
   request with automatic publication after approval selected. Authenticated
   API status confirmed submitted `0.2.2.0` as `PENDING_REVIEW` at 100%, while
   `0.2.1.0` remained `PUBLISHED` at 100%. No second ZIP upload occurred.
+  At approximately 05:39 UTC, a fresh query returned `REJECTED`. The Dashboard
+  identified keyword stuffing (`Yellow Argon`), quoting the supported-brand
+  paragraph. The six maintained descriptions removed the long brand list and
+  enumerated non-affiliation disclaimer without changing source-quality or
+  privacy explanations. The eight English-fallback fields received the same
+  correction. All 14 fields passed exact readback and saved-state checks.
+  At approximately 06:02 UTC, the Dashboard accepted the authorized
+  description-only resubmission with automatic publication after approval.
+  The authenticated API again confirmed `0.2.2.0` as `PENDING_REVIEW` at 100%
+  and `0.2.1.0` as `PUBLISHED` at 100%. Package, permissions, screenshots,
+  icon and promotional tiles were unchanged; the ZIP was not uploaded again.
 - A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
   `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
   manifest `0.2.0.14` as `PUBLISHED` at 100%; a fresh API check on
@@ -184,8 +196,10 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Await the review result without repeating the accepted upload or review
-  request. The updated 0.2.2 copy and images are part of the submitted revision.
+- Await the corrected submission's review result without repeating the accepted
+  upload or review request. The updated 0.2.2 copy and images are part of the
+  submitted revision. If rejected, inspect the specific reason before choosing
+  a further recovery action; do not blindly upload or resubmit.
 - Verify both authenticated API publication state and public-page rollout
   before calling 0.2.2 available on the Store. Keep
   uploaded, submitted, and published states distinct.

@@ -4,7 +4,7 @@ Use o popup da barra para conferir rapidamente e o painel lateral ou dashboard c
 
 A interface compacta em estilo Material organiza as configurações em Contas e conexões, Uso e notificações, Aparência e exibição, Geral e Dados e backup. A navegação se adapta à largura e preserva os rascunhos. O retorno de salvamento reflete o resultado real. Há quatro níveis de animação: Padrão, Seguir o sistema, Mais e Reduzidas. Os limites de aviso na interface e de notificações do sistema continuam independentes.
 
-Ele funciona com fluxos como Codex, Cursor, Claude Personal, análises organizacionais do Claude Code, Gemini Code Assist e gateways compatíveis com Sub2API configurados pelo usuário, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
+As fontes conectadas são identificadas como leituras exatas, informações parciais, janelas de cota, orientações de política ou dados indisponíveis. A documentação do projeto explica as fontes compatíveis e suas limitações.
 
 Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de páginas, snapshots em cache, arquivos de importação/exportação e dados do Chrome Sync ficam no seu perfil do Chrome.
 
@@ -58,7 +58,7 @@ AI Usage Dashboard foi desenhado de forma conservadora:
 • configurações e dados em cache ficam no seu perfil do Chrome, a menos que você os exporte
 • o Companion do Codex só funciona após iniciar e parear manualmente no mesmo computador; a extensão não o instala nem inicia
 
-Este não é um produto oficial da OpenAI, Cursor, Anthropic, Google, JetBrains ou de qualquer outro provider.
+Esta é uma extensão desenvolvida de forma independente, não um produto oficial de qualquer serviço conectado.
 
 Código aberto
 
