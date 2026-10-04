@@ -18,15 +18,18 @@ Status note:
 ## Current Submission Copy
 
 The product-description files are the maintained 0.2.2 Store submission copy.
-This revision is being prepared, not yet submitted or public. Version 0.2.1
+GitHub 0.2.2 is released and its verified tag package is uploaded to the Store
+as a draft, not yet submitted or public. Listing metadata still awaits the
+separate Dashboard update. Version 0.2.1
 was confirmed published through the authenticated API and public listing on
 2026-10-04 UTC. The descriptions use a short abstract first
 because the store UI folds the description after the opening lines. The five
-updated locale screenshot sets and the global English fallback use explicit
+prepared locale screenshot sets and the global English fallback use explicit
 illustrative QA data captured from the current extension; they do not present
-simulated balances as live account values. Other Store locales use the updated
-English overview and global screenshots, except Traditional Chinese, which has
-its own updated overview.
+simulated balances as live account values. The prepared copy for other Store
+locales uses the updated English overview and global screenshots, except
+Traditional Chinese, which has its own updated overview. Preparation does not
+prove that these materials are already applied to the live listing.
 
 - [English product description](./Chrome_Web_Store_Product_Description_en-US.md)
 - [Simplified Chinese product description](./Chrome_Web_Store_Product_Description_zh-CN.md)

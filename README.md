@@ -15,9 +15,9 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
-Version 0.2.1 is available on the Chrome Web Store and GitHub. Version 0.2.2
-prepares the unified interface and four motion choices described below;
-its release and Store review state are tracked separately at the end of this page.
+Version 0.2.2 is available on GitHub with the unified interface and four motion
+choices described below. The Chrome Web Store still serves 0.2.1; the 0.2.2
+package is uploaded as a draft, not submitted for review or available from the Store.
 
 ![AI Usage Dashboard 0.2.2](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
 
@@ -52,7 +52,8 @@ panel use the same normalized provider state.
 
 1. Install the extension from the Chrome Web Store.
 2. Open the toolbar popup and choose **Settings**.
-3. Open **Accounts & Connections** to enable only the providers you use.
+3. Open **Accounts & Connections** to enable only the providers you use
+   (**Quick Setup** in the currently published Store version 0.2.1).
 4. Grant optional host access or add an API credential only when that source
    requires it.
 5. Return to the popup, side panel, or full-page dashboard for daily checks.
@@ -244,12 +245,13 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
   displays `0.2.1`, verified on 2026-10-04 UTC. The authenticated Store API
   reports manifest `0.2.1.0` as `PUBLISHED` at 100%, with no pending submission.
 - Source package version: `0.2.2`; Chrome manifest version: `0.2.2.0`.
-- GitHub Release [`v0.2.1`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.1)
+- GitHub Release [`v0.2.2`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.2)
   is stable and provides verified Chrome and unsigned Firefox local-beta
-  packages plus `SHA256SUMS.txt`. Its tag workflow passed on 2026-09-24 UTC.
-- Version 0.2.2 is being prepared for GitHub and Store review. It unifies the
-  interface, reorganizes Settings and adds four motion profiles. The published
-  0.2.1 package remains the Store baseline until a new revision is approved.
+  packages plus `SHA256SUMS.txt`. Its tag workflow and downloaded hashes passed
+  on 2026-10-04 UTC.
+- The Store API accepted the exact 0.2.2 tag package as a draft on 2026-10-04
+  UTC. Listing metadata and review submission remain pending; upload is not
+  submission or publication. The published 0.2.1 package remains the Store baseline.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 
