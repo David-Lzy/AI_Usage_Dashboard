@@ -17,16 +17,17 @@ Status note:
 - a direct public-page fetch displayed `0.2.1` on 2026-10-04 UTC;
   authenticated Store API status reports manifest `0.2.1.0` as `PUBLISHED`
   at 100%, with no submitted revision at that checkpoint
-- GitHub Release `v0.2.1` is stable and provides verified browser-specific
-  packages and checksums; its Chrome manifest is `0.2.1.0`
+- GitHub Release `v0.2.2` is stable and provides verified browser-specific
+  packages and checksums; its Chrome manifest is `0.2.2.0`
 - the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
   updated listing and images were saved in the Developer Dashboard and the
   revision was submitted for review once with automatic publication after
   approval selected
 - the 2026-09-24 `PENDING_REVIEW` observation for 0.2.1 is historical and
   superseded by the publication confirmation above
-- source version 0.2.2 is being prepared with a unified interface, five settings
-  categories and four motion levels; it is not yet a GitHub or Store release
+- GitHub 0.2.2 was released on 2026-10-04 UTC. The Store API accepted its exact
+  tag-scoped package as an uploaded draft; listing metadata and review submission
+  remain pending. It is not a public Store release.
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -40,6 +41,13 @@ Status note:
 - On 2026-10-04 UTC, the public listing displayed `0.2.1` and an update date
   of September 25, 2026. The authenticated API confirmed manifest `0.2.1.0`
   as `PUBLISHED` at 100%, with no submitted revision.
+- [GitHub Release v0.2.2](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.2)
+  was published on 2026-10-04 UTC. Main and tag Actions passed; both downloaded
+  browser ZIPs matched the published SHA256SUMS and passed ZIP integrity checks.
+  The tag workflow did not perform Store upload because repository credentials
+  are absent. A separate authenticated local upload returned `SUCCEEDED` for
+  `0.2.2.0`; the subsequent status still reported `0.2.1.0` as `PUBLISHED`
+  at 100% with no submitted revision. Metadata and review are not yet complete.
 - A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
   `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
   manifest `0.2.0.14` as `PUBLISHED` at 100%; a fresh API check on
@@ -165,8 +173,9 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Prepare the 0.2.2 screenshots and copy from its actual extension UI, then
-  submit the exact verified GitHub tag package in one review request.
+- Apply and verify the prepared 0.2.2 screenshots and copy, then submit the
+  existing uploaded draft in one review request. Do not re-upload the accepted
+  tag package merely to resume metadata work.
 - After submission, verify both authenticated API publication state and
   public-page rollout before calling 0.2.2 available on the Store. Keep
   uploaded, submitted, and published states distinct.
