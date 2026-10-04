@@ -4,7 +4,7 @@ Use the toolbar popup for a quick check, or open the side panel and full-page da
 
 The compact Material-style interface organizes settings into Accounts & Connections, Usage & Notifications, Appearance & Display, General, and Data & Backup. Navigation adapts to the available width and keeps your drafts. Save feedback reflects the actual result. Choose Default, Follow system, More, or Reduced motion; the in-app warning and system-notification thresholds remain independent.
 
-It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
+Connected sources are clearly labeled as exact readings, partial information, quota windows, policy-only guidance, or unavailable data. The project documentation explains supported sources and their limitations.
 
 It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.
 
@@ -58,7 +58,7 @@ AI Usage Dashboard is conservative by design:
 • settings and cached data stay in your Chrome profile unless you export them
 • the optional Codex Companion runs only when you start and pair it on the same computer; the extension does not install or launch it
 
-This is not an official product from OpenAI, Cursor, Anthropic, Google, JetBrains, or any other provider.
+This is an independently developed extension, not an official product of any connected service.
 
 Open source
 
