@@ -12,6 +12,7 @@ import { getCustomSourceCardCopy } from "../../shared/custom-source-card-localiz
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { createRuntimeI18n } from "../../shared/i18n";
 import { StatusBadge } from "./StatusBadge";
+import { MaterialActionIcon } from "../../shared/components/MaterialActionIcon";
 import { UsageFactsList } from "./UsageFactsList";
 
 type CustomSourceCardProps = {
@@ -82,6 +83,8 @@ export function CustomSourceCard({
 
   return (
     <article
+      data-motion-key={source.sourceId}
+      data-motion-group=""
       className={`provider-card provider-card--custom provider-card--${source.displayTone}`}
       data-custom-source-id={source.sourceId}
     >
@@ -160,6 +163,7 @@ export function CustomSourceCard({
           type="button"
           onClick={onOpenSettings}
         >
+          <MaterialActionIcon name="settings" />
           {copy.openSettings}
         </button>
         <button
@@ -167,6 +171,7 @@ export function CustomSourceCard({
           type="button"
           onClick={onRefresh}
         >
+          <MaterialActionIcon name="refresh" />
           {copy.refresh}
         </button>
       </footer>

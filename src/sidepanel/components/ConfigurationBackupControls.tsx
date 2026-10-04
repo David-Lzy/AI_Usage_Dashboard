@@ -55,38 +55,53 @@ export function ConfigurationBackupControls({
       </div>
 
       <div className="configuration-backup-controls__actions">
-        <button className="text-button" type="button" onClick={onExportJson}>
-          {copy.exportJson}
-        </button>
-        <label className="text-button configuration-backup-controls__import">
-          <span>{copy.importJson}</span>
-          <input
-            type="file"
-            accept="application/json,.json"
-            onChange={handleImportFileChange}
-          />
-        </label>
-        <button
-          className="text-button"
-          type="button"
-          onClick={onSaveToChromeSync}
-        >
-          {copy.saveToChromeSync}
-        </button>
-        <button
-          className="text-button"
-          type="button"
-          onClick={onRestoreFromChromeSync}
-        >
-          {copy.restoreFromChromeSync}
-        </button>
-        <button
-          className="text-button"
-          type="button"
-          onClick={onResetToInitialConfiguration}
-        >
-          {copy.resetToInitial}
-        </button>
+        <div className="configuration-backup-controls__action-group">
+          <button
+            className="text-button text-button--outlined"
+            type="button"
+            data-backup-action="export"
+            onClick={onExportJson}
+          >
+            {copy.exportJson}
+          </button>
+          <label className="text-button configuration-backup-controls__import">
+            <span>{copy.importJson}</span>
+            <input
+              type="file"
+              data-backup-action="import"
+              accept="application/json,.json"
+              onChange={handleImportFileChange}
+            />
+          </label>
+        </div>
+        <div className="configuration-backup-controls__action-group">
+          <button
+            className="text-button text-button--outlined"
+            type="button"
+            data-backup-action="sync-save"
+            onClick={onSaveToChromeSync}
+          >
+            {copy.saveToChromeSync}
+          </button>
+          <button
+            className="text-button text-button--outlined"
+            type="button"
+            data-backup-action="sync-restore"
+            onClick={onRestoreFromChromeSync}
+          >
+            {copy.restoreFromChromeSync}
+          </button>
+        </div>
+        <div className="configuration-backup-controls__action-group configuration-backup-controls__reset">
+          <button
+            className="text-button"
+            type="button"
+            data-backup-action="reset"
+            onClick={onResetToInitialConfiguration}
+          >
+            {copy.resetToInitial}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 See AI coding quotas before they interrupt your work. AI Usage Dashboard brings source-visible limits, reset times, spending, and sync health into one Chrome extension.
 
-Use the toolbar popup for a quick check, or open the side panel and full-page dashboard for details. Quick Setup is first in Settings, so you can connect only the sources you use.
+Use the toolbar popup for a quick check, or open the side panel and full-page dashboard for details. Settings starts with Accounts & Connections, so you can connect only the sources you use.
+
+The compact Material-style interface organizes settings into Accounts & Connections, Usage & Notifications, Appearance & Display, General, and Data & Backup. Navigation adapts to the available width and keeps your drafts. Save feedback reflects the actual result. Choose Default, Follow system, More, or Reduced motion; the in-app warning and system-notification thresholds remain independent.
 
 It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable.
 

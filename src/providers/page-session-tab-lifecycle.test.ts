@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   closeOpenedPageSessionTab,
@@ -9,6 +9,8 @@ import {
 } from "./page-session-tab-lifecycle";
 
 describe("page-session tab lifecycle helpers", () => {
+  afterEach(() => vi.useRealTimers());
+
   it("normalizes disabled, boolean, and object reload options", () => {
     const customOptions = {
       bypassCache: false,
@@ -23,6 +25,7 @@ describe("page-session tab lifecycle helpers", () => {
   });
 
   it("reloads with bypass cache by default and returns the loaded tab", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     const reload = vi.fn<NonNullable<PageSessionTabLifecycleTabsApi["reload"]>>();
     const get = vi
       .fn<NonNullable<PageSessionTabLifecycleTabsApi["get"]>>()

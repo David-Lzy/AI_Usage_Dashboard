@@ -21,8 +21,11 @@ import {
   type QuotaNotificationChange,
   type QuotaNotificationPreferences,
 } from "../../shared/quota-notifications";
-import { MaterialSelect } from "./MaterialSelect";
+import { FusionSelect } from "./material-ui/FusionControls";
+import { getSettingsSaveCopy } from "../../shared/settings-save-localized-copy";
+import { SettingsSaveFeedback } from "./SettingsSaveFeedback";
 import "./QuotaNotificationSettings.css";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
 
 type NotificationMode = "off" | "on" | "paused";
 
@@ -52,6 +55,9 @@ export function QuotaNotificationSettings({
     String(warningThresholdPercent),
   );
   const permissionRequestPendingRef = useRef(false);
+  const [failedChanges, setFailedChanges] = useState<QuotaNotificationChange[] | null>(null);
+  const failedChangesRef = useRef(failedChanges);
+  failedChangesRef.current = failedChanges;
   const accounts = useMemo(
     () => listQuotaNotificationAccounts(state).filter((account) => account.windows.length > 0),
     [state],
@@ -66,7 +72,9 @@ export function QuotaNotificationSettings({
           return;
         }
         setView(nextView);
-        setThresholdDraft(String(nextView.preferences.thresholdPercent));
+        if (!failedChangesRef.current?.some((change) => change.type === "threshold")) {
+          setThresholdDraft(String(nextView.preferences.thresholdPercent));
+        }
         setStatus(null);
       } catch {
         if (active) {
@@ -95,15 +103,20 @@ export function QuotaNotificationSettings({
       : "on";
 
   async function save(changes: QuotaNotificationChange | QuotaNotificationChange[]) {
+    const pendingChanges = Array.isArray(changes) ? changes : [changes];
+    let completed = 0;
     setBusy(true);
     setStatus(null);
+    setFailedChanges(null);
     try {
-      for (const change of Array.isArray(changes) ? changes : [changes]) {
+      for (const change of pendingChanges) {
         const nextView = await updateQuotaNotificationSettings(change);
+        completed += 1;
         setView(nextView);
         setThresholdDraft(String(nextView.preferences.thresholdPercent));
       }
     } catch {
+      setFailedChanges(pendingChanges.slice(completed));
       setStatus(copy.saveFailed);
     } finally {
       setBusy(false);
@@ -197,7 +210,7 @@ export function QuotaNotificationSettings({
     }
   }
 
-  const statusMessage = status ?? getStatusMessage(view, copy);
+  const statusMessage = failedChanges ? null : status ?? getStatusMessage(view, copy);
 
   return (
     <section
@@ -214,7 +227,7 @@ export function QuotaNotificationSettings({
         </div>
       )}
 
-      <MaterialSelect<NotificationMode>
+      <FusionSelect<NotificationMode>
         label={copy.title}
         labelHidden={!embedded}
         value={mode}
@@ -234,15 +247,16 @@ export function QuotaNotificationSettings({
             {statusMessage ?? copy.loading}
           </p>
         ) : null
-      ) : (
-        <div className="quota-notification-settings__body">
+      ) : null}
+      {preferences ? (
+        <ControlVisibilityBoundary animate hidden={!preferences.enabled} className="quota-notification-settings__body" data-motion-focus-target={'[data-fusion-field="quota-notification-mode"] mdui-select'}>
           <div className="quota-notification-settings__general">
             <fieldset
               className="quota-notification-settings__controls"
               disabled={controlsDisabled}
             >
               <label className="form-field quota-notification-settings__threshold">
-                <span className="form-field__label">{copy.threshold}</span>
+                <span className="form-field__label">{getSettingsSaveCopy(i18n.resolvedLocale).notificationThreshold}</span>
                 <span className="quota-notification-settings__number-control">
                   <input
                     className="form-field__control"
@@ -253,6 +267,7 @@ export function QuotaNotificationSettings({
                     inputMode="numeric"
                     value={thresholdDraft}
                     data-notification-action="threshold"
+                    aria-invalid={failedChanges?.some((change) => change.type === "threshold") || undefined}
                     onBlur={commitThreshold}
                     onChange={(event) => setThresholdDraft(event.currentTarget.value)}
                     onKeyDown={handleThresholdKeyDown}
@@ -358,6 +373,15 @@ export function QuotaNotificationSettings({
               )}
             </div>
           </fieldset>
+        </ControlVisibilityBoundary>
+      ) : null}
+      {failedChanges && (
+        <div className="quota-notification-settings__save-feedback">
+          <SettingsSaveFeedback
+            status="error"
+            locale={i18n.resolvedLocale}
+            onRetry={() => void save(failedChanges)}
+          />
         </div>
       )}
     </section>

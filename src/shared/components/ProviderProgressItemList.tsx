@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useRef, type CSSProperties } from "react";
 
 import type {
   DisplaySurface,
@@ -26,6 +26,8 @@ import {
 import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-copy";
 import { UsageProgress } from "./UsageProgress";
 import { CodexEstimateStrip } from "./CodexEstimateStrip";
+import { buildProgressMotionSample } from "../progress-motion";
+import { useProgressMotion } from "../use-progress-motion";
 
 type ProviderProgressItemListProps = {
   density?: "compact" | "detail";
@@ -37,6 +39,7 @@ type ProviderProgressItemListProps = {
   progressItemsBySurface: ProgressItemsBySurface;
   progressThicknessPx: number;
   provider: ProviderViewModel;
+  accountId?: string | null;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   surface: DisplaySurface;
 };
@@ -127,6 +130,7 @@ export function ProviderProgressItemList({
   progressItemsBySurface,
   progressThicknessPx,
   provider,
+  accountId,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   surface,
 }: ProviderProgressItemListProps) {
@@ -135,6 +139,10 @@ export function ProviderProgressItemList({
     surface,
     progressItemsBySurface,
   );
+  const listRef = useRef<HTMLDivElement>(null);
+  useProgressMotion(listRef, visibleProgressItems.map((item) =>
+    buildProgressMotionSample(provider, item, accountId, displayStyle),
+  ));
 
   if (visibleProgressItems.length === 0) {
     return null;
@@ -161,6 +169,7 @@ export function ProviderProgressItemList({
 
   const list = (
     <div
+      ref={listRef}
       className={listClassName}
       data-single-circular-progress={
         hasSingleCircularProgressItem ? "" : undefined

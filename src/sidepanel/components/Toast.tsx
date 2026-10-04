@@ -1,6 +1,8 @@
 import type { RuntimeI18n } from "../../shared/i18n";
 import { buildNavigationLocalizedCopy } from "../../shared/navigation-localized-copy";
 import { createDefaultOperatorRuntimeI18n } from "../operator-runtime-i18n";
+import { useRef } from "react";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 
 type ToastProps = {
   i18n?: RuntimeI18n;
@@ -18,9 +20,11 @@ export function Toast({
   onDismiss,
 }: ToastProps) {
   const copy = buildNavigationLocalizedCopy(i18n);
+  const ref = useRef<HTMLElement | null>(null);
+  useMotionEntrance(ref, `${tone}:${title}:${message}`);
 
   return (
-    <section className={`toast toast--${tone}`} role="status" aria-live="polite">
+    <section ref={ref} data-motion-owned="" className={`toast toast--${tone}`} role="status" aria-live="polite">
       <div className="toast__content">
         <p className="toast__title">{title}</p>
         <p className="supporting-copy">{message}</p>

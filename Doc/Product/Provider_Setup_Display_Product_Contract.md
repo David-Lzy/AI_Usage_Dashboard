@@ -204,7 +204,7 @@ converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
 
 ### Quota Notifications (0.2.1 Source)
 
-Settings places **Quick Setup** immediately below the top navigation, with its
+The 0.2.1 layout places **Quick Setup** immediately below the top navigation, with its
 navigation chip first. **Overview** follows, then the peer **Usage &
 Notifications** and **Appearance** modules. Usage & Notifications contains the default sync interval,
 the in-app warning threshold, quota notification controls, and configuration
@@ -247,6 +247,123 @@ not accumulate a notification backlog. Configuration import, restore and reset
 disable local notification preferences. Delivery is at-most-once: durable event
 state precedes the OS request, so an OS rejection, a superseding capture or a
 crash may suppress an alert instead of replaying it. OS display is not guaranteed.
+
+### Settings Organization (0.2.2)
+
+The 0.2.2 source implements five task-oriented Settings categories, superseding
+the 0.2.1 layout documented above. Store availability is tracked separately. The category shell
+and connection workflows have moved, and ordinary preferences now show actual
+save acknowledgements. All five Settings categories are functional. Dashboard
+and Sidebar use compact headers, operational summaries and responsive Provider
+lists; data, order, per-surface preferences and recovery actions are unchanged.
+Provider detail now separates quota/reset, trends/statistics, comparison/export
+and source/diagnostics. Account and source context, successful capture time and
+actionable failures remain visible before the technical disclosure. History and
+export retain their own collection times and eligibility rules. Opening metadata
+does not reset analysis selections; the existing Debug diagnostics export stays
+in Accounts & Connections. Popup now shares the flat toolbar and section-divider
+language, while retaining all four browsing modes, progress styles and saved
+size/corner/shadow preferences. Native action views honor the three preferred
+widths; page previews continue to adapt within their existing size bounds.
+
+| Category | Primary editing responsibility |
+| --- | --- |
+| Accounts & Connections | Enable Providers, choose accounts, grant existing optional access, configure credentials/page sources, Codex local pairing and Sub2API deployments |
+| Usage & Notifications | Default refresh, in-app warning, separate system-notification threshold/scopes and optional quota pace estimate |
+| Appearance & Display | Global theme/font/motion, per-surface layout, visible/orderable content, progress customization and toolbar badge/icon |
+| General | Interface language, existing display levels and product/about links |
+| Data & Backup | Explicit JSON export/import, Chrome Sync save/restore and configuration reset |
+
+There is one primary editing location per setting; shortcuts navigate to it.
+The wide category rail becomes a dropdown below 1100px. Category changes retain
+unsaved inputs and scroll without submitting forms or persisting secrets in
+navigation state. Existing section, Provider, credential and source links map
+to their new category and retain their target.
+
+All existing values and storage boundaries remain compatible. Light/dark/system/
+time themes, custom colors, fonts, motion, all Popup modes and independent surface
+configuration are retained. Ordinary preferences keep immediate writes. The
+Settings header shows pending, saved or failed only from the background response;
+there is no global Save button. A failed preference stays in the current UI draft
+for explicit retry, without entering exports or persistent navigation state.
+Per-setting request ownership prevents stale success/failure replies from
+overwriting newer inputs or clearing an unrelated failed field. Category changes
+retain this feedback; reloading discards unconfirmed drafts. Explicit imports and
+restores supersede older drafts, without clearing edits made after they began.
+Leaving Settings while a write is pending does not suppress a later error toast.
+Local-only presentation preferences
+must report their own persistence result rather than an invented backend response.
+Explicit credential, pairing, import and reset operations remain explicit.
+Notification controls retain their own permission, pending/error and test status.
+Both thresholds are labeled as used percentages: in-app/toolbar warning and
+system-notification triggering are independent values. Denied enablement restores
+Off and can be retried through a new explicit user gesture.
+Failed notification writes expose an explicit retry for the unacknowledged
+changes; an unsaved notification threshold stays marked invalid until confirmed.
+
+Appearance has four unframed groups: global appearance, surface layout, visible
+content and toolbar. The surface selector targets Popup, Sidebar or Full Page;
+only that surface's layout and content editors are shown, without copying values
+to the others. Popup deployment presentation belongs to its layout controls;
+the deployment connection form provides a navigation shortcut. Reset-time format
+is explicitly global. Progress bands, gradients, thickness and image-derived
+colors are retained in an expandable editor. The existing synthetic Popup
+preview remains available, with all three widths and its sample-value control.
+Theme mode, accent, font and motion stay global, including system/time resolution.
+The interface offers Default, Follow system, More and Reduced motion.
+Category selection updates logical visibility immediately, restores its scroll
+position, then introduces incoming content. Mounted connection drafts survive
+category changes. Disclosure closing is inert immediately; visual completion
+does not delay portal closure or saved/error feedback. More adds bounded
+selection movement, native-button ripples and short success feedback, not idle
+decoration. Failed saves and denied notification permission remain real states;
+motion cannot turn them into successful operations.
+
+Dashboard, Sidebar, Provider detail and Popup use the same finite motion profile
+in 0.2.2. Incoming content, explicit selection, disclosures and
+list reordering retain stable keys and focus. Popup auto-glide speed and its
+hover/manual controls are unchanged. Unknown quota is static, not a perpetual
+decorative loading animation.
+
+Quota labels and ARIA values always show the current result immediately. Only
+the decorative fill interpolates between successful observations with a proven
+same account/source/window identity, unchanged unit/limit, increasing capture
+time and a still-current reset time. Unknown capture/identity, stale data,
+failure, account/source switch or a refill/reset skips interpolation. History
+updates fade the actual new geometry; they do not invent intermediate data.
+Background entry and profile changes settle/cancel finite motion and never
+replay old transitions on return.
+
+General retains language and display-level gating. Data & Backup separates JSON,
+Chrome Sync and reset actions; import validation and reset confirmation are
+unchanged. Export does not include credentials, snapshots or machine pairing.
+Cursor's local-only module preferences report actual local storage failure and
+retain the draft for retry, independently of background-confirmed preferences.
+
+Accounts & Connections uses compact Personal/Web and API lists instead of a
+carousel. Configure expands the existing Provider actions and forms. Codex local
+pairing belongs to the enabled Codex connection; Sub2API deployment editing
+belongs to its API row. Connection configuration is no longer under display
+preferences. Advanced credentials and source diagnostics retain their existing
+display-level rules and direct-link access. The generic local bridges remain
+Developer/Debug-only; ordinary Codex pairing and custom sources keep their prior
+availability.
+
+Switching categories or collapsing a connection keeps its form mounted and
+retains unsaved drafts in component memory. It does not submit those drafts or
+copy them into navigation/session storage. Floating menus and previews follow
+the hidden panel, so they cannot cover another category. Browser back/forward
+and old section/Provider/credential/source routes remain supported; a missing
+connection target falls back to Accounts & Connections, not display settings.
+Initial session restoration does not briefly expose the default category before
+the saved category. A failed session read leaves the default category usable;
+an explicit newer deep link wins over an older pending session read.
+
+The redesign does not change Provider data meaning, refresh strategy, source
+eligibility, optional permission boundaries or account/credential isolation.
+Prototype mock services, memory saves, static groups and fixed timers are not
+production implementations. See the [design contract](../../DESIGN.md#b-fusion-interface-022)
+for the shared visual target and real-extension compatibility gate.
 
 ### Setup State
 
@@ -297,8 +414,8 @@ Display eligibility plus dashboard display visibility determines whether a provi
 ### Quick Setup
 
 - Quick Setup is the source-entry display and setup entry point.
-- Quick Setup is the first Settings section and first top navigation item;
-  its existing section ID remains the deep-link target.
+- The compact Accounts & Connections category is first in 0.2.2; the former
+  Quick Setup section ID remains a compatible deep link to that category.
 - Quick Setup must not be hidden behind Advanced, Developer, or Debug display levels.
 - Quick Setup should show personal/page/policy source entries by default.
 - Team/Enterprise/API source entries should be available through an explicit "show Team/API providers" control so personal users are not overloaded.

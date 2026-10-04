@@ -1,6 +1,6 @@
 # Store Documentation
 
-Date: 2026-09-24
+Date: 2026-10-04
 
 Document class:
 
@@ -17,8 +17,10 @@ Status note:
 
 ## Current Submission Copy
 
-The product-description files are the maintained 0.2.1 Store submission copy.
-The revision is under review, not yet public. They use a short abstract first
+The product-description files are the maintained 0.2.2 Store submission copy.
+This revision is being prepared, not yet submitted or public. Version 0.2.1
+was confirmed published through the authenticated API and public listing on
+2026-10-04 UTC. The descriptions use a short abstract first
 because the store UI folds the description after the opening lines. The five
 updated locale screenshot sets and the global English fallback use explicit
 illustrative QA data captured from the current extension; they do not present
@@ -32,7 +34,8 @@ its own updated overview.
 - [Japanese product description](./Chrome_Web_Store_Product_Description_ja.md)
 - [Latin American Spanish product description](./Chrome_Web_Store_Product_Description_es-419.md)
 - [Brazilian Portuguese product description](./Chrome_Web_Store_Product_Description_pt-BR.md)
-- [0.2.1 update notes](./Chrome_Web_Store_Update_Notes_0.2.1.md)
+- [0.2.2 update notes](./Chrome_Web_Store_Update_Notes_0.2.2.md)
+- [Historical 0.2.1 update notes](./Chrome_Web_Store_Update_Notes_0.2.1.md)
 
 ## Source References
 

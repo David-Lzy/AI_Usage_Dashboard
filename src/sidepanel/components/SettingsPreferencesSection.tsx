@@ -1,13 +1,16 @@
-import { useEffect, type ChangeEvent } from "react";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { useState, type ChangeEvent, type ReactNode } from "react";
 
 import type {
   ActionBadgeSelections,
   ActionBadgeSelectionMode,
   AppState,
   AppSettings,
+  DisplaySurface,
   PopupCircularProgressItemsPerRow,
   PopupCornerStyle,
   PopupProviderBrowsingMode,
+  PopupProviderAccountPresentationMode,
   PopupShadowStyle,
   PopupSizePreset,
   ProgressColorAppearance,
@@ -38,11 +41,28 @@ import { AccentColorSelect } from "./AccentColorSelect";
 import { ConfigurationBackupControls } from "./ConfigurationBackupControls";
 import { EditableNumberCombobox } from "./EditableNumberCombobox";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
-import { MaterialSelect } from "./MaterialSelect";
+import { FusionSelect as MaterialSelect } from "./material-ui/FusionControls";
+import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePreferenceControls";
+import { getSettingsAppearanceCopy } from "../../shared/settings-appearance-localized-copy";
+import { buildQuotaPaceLocalizedCopy } from "../../shared/quota-pace-localized-copy";
 import { QuotaNotificationSettings } from "./QuotaNotificationSettings";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
+import type { SettingsCategory } from "../settings-categories";
+import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
+import { getSettingsSaveCopy } from "../../shared/settings-save-localized-copy";
+import { getProviderAccountPresentationLocalizedCopy } from "../../shared/provider-account-presentation-localized-copy";
+import { resolvePopupProviderAccountPresentationMode } from "../../shared/provider-account-presentation";
+import { SUB2API_PROVIDER_ID } from "../../shared/sub2api-deployments";
+import { MotionDetails } from "../../shared/components/MotionDetails";
 
 type SettingsPreferencesSectionProps = {
+  onPopupProviderAccountPresentationModeChange?: (
+    providerId: ProviderSetting["id"],
+    mode: PopupProviderAccountPresentationMode,
+  ) => void;
+  displayControls?: (surface: DisplaySurface) => ReactNode;
+  activeCategory?: SettingsCategory;
+  themeControl?: ReactNode;
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
   sectionId?: string;
@@ -72,9 +92,7 @@ type SettingsPreferencesSectionProps = {
   onToolbarIconCustomImageDataUrlChange: (
     toolbarIconCustomImageDataUrl: string | null,
   ) => void;
-  onFullPageProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
+  onFullPageProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onPopupCornerStyleChange: (cornerStyle: PopupCornerStyle) => void;
   onPopupCircularProgressItemsPerRowChange: (
     itemsPerRow: PopupCircularProgressItemsPerRow,
@@ -90,9 +108,7 @@ type SettingsPreferencesSectionProps = {
   ) => void;
   onProgressColorBandsChange: (progressColorBands: ProgressColorBand[]) => void;
   onProgressThicknessPxChange: (progressThicknessPx: number) => void;
-  onSidebarProgressStyleChange: (
-    progressStyle: ProgressDisplayStyle,
-  ) => void;
+  onSidebarProgressStyleChange: (progressStyle: ProgressDisplayStyle) => void;
   onResetTimeDisplayModeChange?: (
     resetTimeDisplayMode: AppSettings["resetTimeDisplayMode"],
   ) => void;
@@ -106,6 +122,10 @@ type SettingsPreferencesSectionProps = {
 };
 
 export function SettingsPreferencesSection({
+  onPopupProviderAccountPresentationModeChange,
+  displayControls,
+  activeCategory,
+  themeControl,
   i18n,
   providers,
   sectionId,
@@ -147,6 +167,10 @@ export function SettingsPreferencesSection({
   onUiFontFamilyChange,
   onWarningThresholdChange,
 }: SettingsPreferencesSectionProps) {
+  const [editingSurface, setEditingSurface] = useState<DisplaySurface>("popup");
+  const [progressEditorOpen, setProgressEditorOpen] = useState(false);
+  const appearanceCopy = getSettingsAppearanceCopy(i18n.resolvedLocale);
+  const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
   const {
     actionBadgeOptions,
     actionBadgeRotationIntervalErrorText,
@@ -185,10 +209,8 @@ export function SettingsPreferencesSection({
     setActivePopover,
     setToolbarPopupPreviewOpen,
     setToolbarPopupPreviewPosition,
-    setUiMoreOpen,
     toolbarPopupPreviewOpen,
     toolbarPopupPreviewPosition,
-    uiMoreOpen,
   } = surfaceSessionState;
   const popupCircularRowCountHelperText = i18n.t(
     "settings.preferences.popup_circular_row_count_helper",
@@ -246,18 +268,8 @@ export function SettingsPreferencesSection({
   function handleToolbarPopupPreviewToggle() {
     const nextOpen = !toolbarPopupPreviewOpen;
 
-    if (nextOpen) {
-      setUiMoreOpen(true);
-    }
-
     setToolbarPopupPreviewOpen(nextOpen);
   }
-
-  useEffect(() => {
-    if (settings.themePreset === "custom") {
-      setUiMoreOpen(true);
-    }
-  }, [settings.themePreset]);
 
   const toolbarPreferenceControls = (
     <>
@@ -269,12 +281,8 @@ export function SettingsPreferencesSection({
         selectionModeLabel={i18n.t(
           "settings.preferences.action_badge_mode_label",
         )}
-        automaticLabel={i18n.t(
-          "settings.preferences.action_badge_mode_auto",
-        )}
-        manualLabel={i18n.t(
-          "settings.preferences.action_badge_mode_manual",
-        )}
+        automaticLabel={i18n.t("settings.preferences.action_badge_mode_auto")}
+        manualLabel={i18n.t("settings.preferences.action_badge_mode_manual")}
         labelAccessory={
           <MaterialInfoTooltip className="settings-preferences__field-note">
             {`${i18n.t("settings.preferences.action_badge_helper")} ${i18n.t(
@@ -366,9 +374,11 @@ export function SettingsPreferencesSection({
 
   return (
     <>
-      <section
+      <ControlVisibilityBoundary
+        as="section"
         className="status-card settings-section-anchor settings-usage-notifications"
         id={usageSectionId}
+        hidden={activeCategory !== undefined && activeCategory !== "usage"}
       >
         <p className="section-label">
           {settingsCopy.layout.sections.usageNotifications}
@@ -391,7 +401,7 @@ export function SettingsPreferencesSection({
           />
 
           <EditableNumberCombobox
-            label={i18n.t("settings.preferences.warning_threshold_label")}
+            label={getSettingsSaveCopy(i18n.resolvedLocale).inAppThreshold}
             value={settings.warningThresholdPercent}
             minimum={WARNING_THRESHOLD_MIN_PERCENT}
             maximum={WARNING_THRESHOLD_MAX_PERCENT}
@@ -414,7 +424,30 @@ export function SettingsPreferencesSection({
           i18n={i18n}
           warningThresholdPercent={settings.warningThresholdPercent}
         />
+        <label
+          className="settings-preferences__binary-setting settings-quota-estimate"
+          data-quota-pace-forecast-setting=""
+        >
+          <input
+            checked={settings.quotaPaceForecastEnabled}
+            type="checkbox"
+            onChange={(event) =>
+              onQuotaPaceForecastEnabledChange(event.currentTarget.checked)
+            }
+          />
+          <span className="settings-preferences__binary-setting-copy">
+            <strong>{quotaPaceCopy.settingLabel}</strong>
+            <span>{quotaPaceCopy.settingDetail}</span>
+          </span>
+        </label>
+      </ControlVisibilityBoundary>
 
+      <ControlVisibilityBoundary
+        as="section"
+        id={SETTINGS_SECTION_IDS.data}
+        className="settings-section-anchor settings-data"
+        hidden={activeCategory !== undefined && activeCategory !== "data"}
+      >
         <ConfigurationBackupControls
           copy={settingsCopy.configurationBackup}
           onExportJson={onExportConfiguration}
@@ -423,62 +456,125 @@ export function SettingsPreferencesSection({
           onRestoreFromChromeSync={onRestoreConfigurationFromChromeSync}
           onResetToInitialConfiguration={onResetConfigurationToInitial}
         />
-      </section>
+      </ControlVisibilityBoundary>
 
-      <section className="status-card settings-section-anchor" id={sectionId}>
-        <p className="section-label">{i18n.t("settings.preferences.eyebrow")}</p>
-        <AdaptiveControlGrid
-          className="settings-grid settings-grid--balanced-settings"
-          measurementLabels={basePreferenceMeasurementLabels}
+      <ControlVisibilityBoundary
+        as="section"
+        className="status-card settings-section-anchor"
+        id={sectionId}
+        hidden={activeCategory !== undefined && activeCategory !== "appearance"}
+      >
+        <section
+          className="settings-appearance-group"
+          data-settings-appearance-group="global"
         >
-          <AccentColorSelect
-            label={i18n.t("settings.preferences.accent_preset_label")}
-            themePreset={settings.themePreset}
-            themeCustomSeedHex={settings.themeCustomSeedHex}
-            themePresetOptions={themePresetOptions}
-            copy={settingsCopy.colorChoices}
-            activePopover={activePopover}
-            onActivePopoverChange={setActivePopover}
-            onThemePresetChange={onThemePresetChange}
-            onThemeCustomSeedChange={onThemeCustomSeedChange}
-          />
+          <h2>{appearanceCopy.global}</h2>
+          <AdaptiveControlGrid
+            className="settings-grid settings-grid--balanced-settings"
+            measurementLabels={basePreferenceMeasurementLabels}
+          >
+            {themeControl}
+            <AccentColorSelect
+              label={i18n.t("settings.preferences.accent_preset_label")}
+              themePreset={settings.themePreset}
+              themeCustomSeedHex={settings.themeCustomSeedHex}
+              themePresetOptions={themePresetOptions}
+              copy={settingsCopy.colorChoices}
+              activePopover={activePopover}
+              onActivePopoverChange={setActivePopover}
+              onThemePresetChange={onThemePresetChange}
+              onThemeCustomSeedChange={onThemeCustomSeedChange}
+            />
 
-          <MaterialSelect
-            label={i18n.t("settings.preferences.motion_mode_label")}
-            value={settings.motionMode}
-            fieldIdPrefix="motion-mode"
-            sessionPopoverId="motion-mode"
-            activePopover={activePopover}
-            onActivePopoverChange={setActivePopover}
-            options={motionModeOptions}
-            onChange={onMotionModeChange}
-          />
+            <MaterialSelect
+              label={i18n.t("settings.preferences.motion_mode_label")}
+              value={settings.motionMode}
+              fieldIdPrefix="motion-mode"
+              sessionPopoverId="motion-mode"
+              activePopover={activePopover}
+              onActivePopoverChange={setActivePopover}
+              options={motionModeOptions}
+              onChange={onMotionModeChange}
+            />
 
-          <MaterialSelect
-            label={i18n.t(
-              "settings.preferences.popup_provider_browsing_mode_label",
-            )}
-            value={settings.popupProviderBrowsingMode}
-            fieldIdPrefix="popup-provider-browsing-mode"
-            sessionPopoverId="popup-provider-browsing-mode"
-            activePopover={activePopover}
-            onActivePopoverChange={setActivePopover}
-            options={popupProviderBrowsingModeOptions}
-            onChange={onPopupProviderBrowsingModeChange}
-          />
-        </AdaptiveControlGrid>
+            <MaterialSelect
+              label={i18n.t("settings.preferences.ui_font_label")}
+              value={settings.uiFontFamily}
+              fieldIdPrefix="ui-font-family"
+              sessionPopoverId="ui-font-family"
+              activePopover={activePopover}
+              onActivePopoverChange={setActivePopover}
+              options={uiFontFamilyOptions}
+              onChange={onUiFontFamilyChange}
+              labelAccessory={
+                <MaterialInfoTooltip>{uiFontHelperText}</MaterialInfoTooltip>
+              }
+            />
+          </AdaptiveControlGrid>
+          <MotionDetails
+            className="settings-progress-editor"
+            open={progressEditorOpen}
+            onOpenChange={setProgressEditorOpen}
+            summary={settingsCopy.progressAppearance.sectionLabel}
+          >
+              <ProgressAppearancePreferenceControls
+                copy={settingsCopy.progressAppearance}
+                colorChoiceCopy={settingsCopy.colorChoices}
+                thicknessPx={settings.progressThicknessPx}
+                colorAppearance={settings.progressColorAppearance}
+                colorBands={settings.progressColorBands}
+                activePopover={activePopover}
+                onActivePopoverChange={setActivePopover}
+                onThicknessPxChange={onProgressThicknessPxChange}
+                onColorAppearanceChange={onProgressColorAppearanceChange}
+                onColorBandsChange={onProgressColorBandsChange}
+              />
+          </MotionDetails>
+        </section>
 
         <SettingsUiMoreSection
+          popupAccountPresentationControls={
+            (providerAccounts?.[SUB2API_PROVIDER_ID]?.accounts.length ?? 0) >
+            1 ? (
+              <MaterialSelect
+                fieldIdPrefix="sub2api-popup-account-presentation"
+                label={
+                  getProviderAccountPresentationLocalizedCopy(
+                    i18n.resolvedLocale,
+                  ).label
+                }
+                value={resolvePopupProviderAccountPresentationMode(
+                  settings.popupProviderAccountPresentationByProvider,
+                  SUB2API_PROVIDER_ID,
+                )}
+                options={(["select", "cycle", "cards"] as const).map(
+                  (value) => ({
+                    value,
+                    label: getProviderAccountPresentationLocalizedCopy(
+                      i18n.resolvedLocale,
+                    )[value],
+                  }),
+                )}
+                onChange={(mode) =>
+                  onPopupProviderAccountPresentationModeChange?.(
+                    SUB2API_PROVIDER_ID,
+                    mode,
+                  )
+                }
+              />
+            ) : null
+          }
+          surface={editingSurface}
+          onSurfaceChange={setEditingSurface}
+          displayControls={displayControls?.(editingSurface)}
           i18n={i18n}
           settings={settings}
           settingsCopy={settingsCopy}
-          uiMoreOpen={uiMoreOpen}
           toolbarPopupPreviewOpen={toolbarPopupPreviewOpen}
           popupPreviewRemainingPercent={popupPreviewRemainingPercent}
           toolbarPopupPreviewPosition={toolbarPopupPreviewPosition}
           activePopover={activePopover}
           popupCircularRowCountHelperText={popupCircularRowCountHelperText}
-          uiFontHelperText={uiFontHelperText}
           progressDisplayStyleOptions={progressDisplayStyleOptions}
           popupCircularProgressItemsPerRowOptions={
             popupCircularProgressItemsPerRowOptionsForSelect
@@ -486,12 +582,11 @@ export function SettingsPreferencesSection({
           popupSizePresetOptions={popupSizePresetOptions}
           popupCornerStyleOptions={popupCornerStyleOptions}
           popupShadowStyleOptions={popupShadowStyleOptions}
-          uiFontFamilyOptions={uiFontFamilyOptions}
+          popupProviderBrowsingModeOptions={popupProviderBrowsingModeOptions}
           toolbarPreferenceControls={toolbarPreferenceControls}
           toolbarPreferenceMeasurementLabels={
             toolbarPreferenceMeasurementLabels
           }
-          onToggleUiMore={() => setUiMoreOpen((current) => !current)}
           onToggleToolbarPopupPreview={handleToolbarPopupPreviewToggle}
           onCloseToolbarPopupPreview={() => setToolbarPopupPreviewOpen(false)}
           onPreviewRemainingPercentChange={setPopupPreviewRemainingPercent}
@@ -505,15 +600,11 @@ export function SettingsPreferencesSection({
           onPopupProgressStyleChange={onPopupProgressStyleChange}
           onPopupShadowStyleChange={onPopupShadowStyleChange}
           onPopupSizePresetChange={onPopupSizePresetChange}
-          onProgressColorAppearanceChange={onProgressColorAppearanceChange}
-          onProgressColorBandsChange={onProgressColorBandsChange}
-          onProgressThicknessPxChange={onProgressThicknessPxChange}
+          onPopupProviderBrowsingModeChange={onPopupProviderBrowsingModeChange}
           onSidebarProgressStyleChange={onSidebarProgressStyleChange}
           onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
-          onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
-          onUiFontFamilyChange={onUiFontFamilyChange}
         />
-      </section>
+      </ControlVisibilityBoundary>
     </>
   );
 }

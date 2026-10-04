@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type { DisplaySurface } from "../../providers/types";
 import {
@@ -14,20 +15,27 @@ import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialIcon } from "./MaterialIcon";
+import { SettingsSaveFeedback } from "./SettingsSaveFeedback";
+import type { SettingsSaveStatus } from "../settings-save-feedback";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
 
 export function CursorUsageModulePreferenceControls({
+  surface: selectedSurface,
   locale,
   settingsCopy,
 }: {
+  surface?: DisplaySurface;
   locale: ResolvedAppLocale;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
 }) {
   const [preferences, setPreferences] = useState<CursorUsageUiPreferences>(() =>
     readCursorUsageUiPreferences(),
   );
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, preferences]));
   const copy = buildCursorUsageLocalizedCopy(locale);
+  const [saveStatus, setSaveStatus] = useState<SettingsSaveStatus>("idle");
   const moduleLabels: Record<CursorUsageUiModuleId, string> = {
     billing_summary: copy.billingSummary,
     usage_history: copy.recentUsage,
@@ -35,11 +43,14 @@ export function CursorUsageModulePreferenceControls({
 
   const updatePreferences = (nextPreferences: CursorUsageUiPreferences) => {
     setPreferences(nextPreferences);
-    writeCursorUsageUiPreferences(nextPreferences);
+    setSaveStatus(
+      writeCursorUsageUiPreferences(nextPreferences) ? "saved" : "error",
+    );
   };
 
   return (
     <section
+      ref={rootRef}
       className="usage-history-preferences cursor-usage-preferences"
       data-cursor-usage-preferences=""
     >
@@ -51,9 +62,10 @@ export function CursorUsageModulePreferenceControls({
         </div>
       </div>
       <div className="usage-history-preferences__surface-grid">
-        {SURFACES.map((surface) => {
+        {(selectedSurface ? [selectedSurface] : SURFACES).map((surface) => {
           const surfacePreferences = preferences[surface];
-          const surfaceLabel = settingsCopy.progressItems.surfaceLabels[surface];
+          const surfaceLabel =
+            settingsCopy.progressItems.surfaceLabels[surface];
           const visibleCount = surfacePreferences.filter(
             (preference) => preference.visible,
           ).length;
@@ -64,7 +76,9 @@ export function CursorUsageModulePreferenceControls({
               key={surface}
             >
               <div className="provider-progress-surface__header">
-                <p className="provider-progress-surface__title">{surfaceLabel}</p>
+                <p className="provider-progress-surface__title">
+                  {surfaceLabel}
+                </p>
                 <span className="meta-chip">
                   {settingsCopy.progressItems.visibleCount(
                     visibleCount,
@@ -83,6 +97,7 @@ export function CursorUsageModulePreferenceControls({
                       className="provider-progress-list__item usage-history-preferences__item"
                       data-i18n-layout-contract="compact-order-row"
                       data-cursor-usage-module-row={preference.id}
+                      data-motion-key={`${surface}:${preference.id}`}
                       key={preference.id}
                     >
                       <span
@@ -177,6 +192,11 @@ export function CursorUsageModulePreferenceControls({
           );
         })}
       </div>
+      <SettingsSaveFeedback
+        status={saveStatus}
+        locale={locale}
+        onRetry={() => updatePreferences(preferences)}
+      />
     </section>
   );
 }

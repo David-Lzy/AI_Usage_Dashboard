@@ -5,6 +5,7 @@ export const SETTINGS_SECTION_IDS = {
   appearance: "settings-appearance",
   providerDisplay: "settings-provider-display",
   advanced: "settings-advanced",
+  data: "settings-data",
 } as const;
 
 export type SettingsSectionId =

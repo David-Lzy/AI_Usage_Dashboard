@@ -200,7 +200,7 @@ details[open] > .source-card__details-toggle::after {
   overflow: hidden;
 }
 
-.source-card__details[open] .source-card__details-body {
+.source-card__details[open]:not([data-motion-details]) .source-card__details-body {
   animation: app-disclosure-enter var(--app-motion-duration-medium)
     var(--app-motion-easing-standard) both;
 }

@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import { Fragment, type FormEvent } from "react";
 
 import type {
   ApiKeyProviderId,
@@ -29,6 +29,8 @@ export type CredentialProviderSection = {
 };
 
 type SettingsCredentialsSectionProps = {
+  embedded?: boolean;
+  providerFilter?: ProviderId;
   codexAnalyticsApiKeyInput: string;
   codexProvider: (ProviderSetting & { id: "codex-enterprise-api" }) | null;
   codexSessionLabels: {
@@ -76,6 +78,8 @@ type SettingsCredentialsSectionProps = {
 };
 
 export function SettingsCredentialsSection({
+  embedded = false,
+  providerFilter,
   codexAnalyticsApiKeyInput,
   codexProvider,
   codexSessionLabels,
@@ -236,7 +240,10 @@ export function SettingsCredentialsSection({
                 <div className="credential-card">
                   <p className="supporting-copy">{labels.codexHelpText}</p>
 
-                  <form className="credential-form" onSubmit={onSaveCodexConfig}>
+                  <form
+                    className="credential-form"
+                    onSubmit={onSaveCodexConfig}
+                  >
                     <div className="credential-secret-row">
                       <label className="form-field">
                         <span className="form-field__label">
@@ -259,7 +266,9 @@ export function SettingsCredentialsSection({
                               : labels.codexAnalyticsPlaceholderMissing
                           }
                           onChange={(event) =>
-                            onCodexAnalyticsApiKeyInputChange(event.target.value)
+                            onCodexAnalyticsApiKeyInputChange(
+                              event.target.value,
+                            )
                           }
                         />
                       </label>
@@ -315,7 +324,9 @@ export function SettingsCredentialsSection({
                       <button
                         className="text-button"
                         type="button"
-                        disabled={codexProvider.credentialStatus !== "configured"}
+                        disabled={
+                          codexProvider.credentialStatus !== "configured"
+                        }
                         onClick={onClearCodexConfig}
                       >
                         {labels.clearStoredConfig}
@@ -336,83 +347,99 @@ export function SettingsCredentialsSection({
   );
 
   return (
-    <section className="dashboard-section settings-section-anchor" id={sectionId}>
-      <div className="dashboard-section__header">
-        <div>
-          <p className="section-label">{eyebrow}</p>
-          <div className="section-title-with-info">
-            <h2 className="section-title">{title}</h2>
-            <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
-          </div>
-        </div>
-      </div>
-
-      <article
-        className="status-card"
-        data-credential-provider-id="codex-session-token"
-      >
+    <section
+      className="dashboard-section settings-section-anchor"
+      id={sectionId}
+    >
+      {!embedded ? (
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">{labels.sectionLabel}</p>
-            <h2 className="section-title">{codexSessionLabels.title}</h2>
-          </div>
-          <p className="meta-chip">{codexSessionLabels.state}</p>
-        </div>
-
-        <div className="credential-card">
-          <p className="supporting-copy">{codexSessionLabels.help}</p>
-          <form className="credential-form" onSubmit={onSaveCodexSessionToken}>
-            <label className="form-field">
-              <span className="form-field__label">
-                {codexSessionLabels.input}
-              </span>
-              <input
-                className="form-field__control"
-                data-codex-session-token-input=""
-                type="password"
-                autoComplete="off"
-                spellCheck={false}
-                value={codexSessionTokenInput}
-                placeholder={codexSessionLabels.placeholder}
-                onChange={(event) =>
-                  onCodexSessionTokenInputChange(event.target.value)
-                }
-              />
-            </label>
-
-            <div className="credential-actions">
-              <button
-                className="text-button"
-                type="submit"
-                disabled={!codexSessionTokenInput.trim()}
-              >
-                {codexSessionLabels.save}
-              </button>
-              <button
-                className="text-button"
-                type="button"
-                onClick={onClearCodexSessionToken}
-              >
-                {codexSessionLabels.clear}
-              </button>
+            <p className="section-label">{eyebrow}</p>
+            <div className="section-title-with-info">
+              <h2 className="section-title">{title}</h2>
+              <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
             </div>
-          </form>
-          <p className="supporting-copy">{codexSessionLabels.footer}</p>
+          </div>
         </div>
-      </article>
+      ) : null}
 
-      <ProviderCarousel
-        ariaLabel={title}
-        initialIndex={
-          focusedCredentialIndex > -1
-            ? focusedCredentialIndex
-            : (carouselIndex ?? 0)
-        }
-        items={credentialItems}
-        i18n={i18n}
-        textDirection={textDirection}
-        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
-      />
+      {!providerFilter || providerFilter === "codex-personal-page" ? (
+        <article
+          className="status-card"
+          data-credential-provider-id="codex-session-token"
+        >
+          <div className="dashboard-section__header">
+            <div>
+              <p className="section-label">{labels.sectionLabel}</p>
+              <h2 className="section-title">{codexSessionLabels.title}</h2>
+            </div>
+            <p className="meta-chip">{codexSessionLabels.state}</p>
+          </div>
+
+          <div className="credential-card">
+            <p className="supporting-copy">{codexSessionLabels.help}</p>
+            <form
+              className="credential-form"
+              onSubmit={onSaveCodexSessionToken}
+            >
+              <label className="form-field">
+                <span className="form-field__label">
+                  {codexSessionLabels.input}
+                </span>
+                <input
+                  className="form-field__control"
+                  data-codex-session-token-input=""
+                  type="password"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={codexSessionTokenInput}
+                  placeholder={codexSessionLabels.placeholder}
+                  onChange={(event) =>
+                    onCodexSessionTokenInputChange(event.target.value)
+                  }
+                />
+              </label>
+
+              <div className="credential-actions">
+                <button
+                  className="text-button"
+                  type="submit"
+                  disabled={!codexSessionTokenInput.trim()}
+                >
+                  {codexSessionLabels.save}
+                </button>
+                <button
+                  className="text-button"
+                  type="button"
+                  onClick={onClearCodexSessionToken}
+                >
+                  {codexSessionLabels.clear}
+                </button>
+              </div>
+            </form>
+            <p className="supporting-copy">{codexSessionLabels.footer}</p>
+          </div>
+        </article>
+      ) : null}
+
+      {embedded ? (
+        credentialItems
+          .filter((item) => !providerFilter || item.id === providerFilter)
+          .map((item) => <Fragment key={item.id}>{item.content}</Fragment>)
+      ) : (
+        <ProviderCarousel
+          ariaLabel={title}
+          initialIndex={
+            focusedCredentialIndex > -1
+              ? focusedCredentialIndex
+              : (carouselIndex ?? 0)
+          }
+          items={credentialItems}
+          i18n={i18n}
+          textDirection={textDirection}
+          onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
+        />
+      )}
     </section>
   );
 }

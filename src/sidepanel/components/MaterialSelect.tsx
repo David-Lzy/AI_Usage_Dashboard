@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useId,
@@ -26,7 +27,7 @@ export type MaterialSelectOption<TValue extends string = string> = {
   label: string;
 };
 
-type MaterialSelectProps<TValue extends string> = {
+export type MaterialSelectProps<TValue extends string> = {
   label: string;
   value: TValue;
   options: Array<MaterialSelectOption<TValue>>;
@@ -84,9 +85,11 @@ export function MaterialSelect<TValue extends string>({
   const menuRef = useRef<HTMLDivElement | null>(null);
   const selectedIndex = options.findIndex((option) => option.value === value);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : options[0];
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(
     () => Boolean(sessionPopoverId) && activePopover?.id === sessionPopoverId,
   );
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
   const [activeIndex, setActiveIndex] = useState(
@@ -359,7 +362,7 @@ export function MaterialSelect<TValue extends string>({
       }
     : undefined;
 
-  const menu = isOpen ? (
+  const menu = isOpen && panelVisible ? (
     <div
       ref={menuRef}
       id={listboxId}

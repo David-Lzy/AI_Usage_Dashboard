@@ -150,7 +150,7 @@ export type ResetTimeDisplayMode =
   | "date_and_weekday";
 export type ThemePreset = "default" | "meadow" | "sunset" | "custom";
 export type UiFontFamily = "default" | "system" | "serif" | "mono";
-export type MotionMode = "system" | "full" | "reduced";
+export type MotionMode = "system" | "full" | "expressive" | "reduced";
 export type AppLocalePreference =
   | "system"
   | "en"

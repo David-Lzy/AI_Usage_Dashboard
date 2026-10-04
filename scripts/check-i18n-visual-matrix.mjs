@@ -66,7 +66,7 @@ const routes = {
   settings: {
     id: "settings",
     path: "/src/sidepanel/index.html?surface=full-page#settings",
-    readySelector: "#settings-appearance",
+    readySelector: '.settings-category-layout[data-category-restoring="false"]',
   },
 };
 const mimeTypes = {
@@ -589,6 +589,9 @@ async function collectLayoutSnapshot(page, routeId, expectedDir, expectedTheme) 
         ".dashboard-section",
         ".form-field",
         ".material-select",
+        ".fusion-field",
+        "mdui-select",
+        "mdui-text-field",
         ".popup-shell",
         ".progress-gradient-scheme-dropdown__option",
         ".provider-card",
@@ -1036,15 +1039,34 @@ async function collectStickyOverlapSnapshot(page, routeId) {
     }
 
     await page.evaluate((selector) => {
-      document.querySelector(selector)?.scrollIntoView({
-        block: "start",
-        inline: "nearest",
-      });
+      location.hash = `#settings/section/${selector.slice(1)}`;
     }, anchor);
+    await page.locator(anchor).waitFor({ state: "visible" });
+
+    // The deep-link handler owns scrolling; another scroll races its animation.
     await page.waitForTimeout(250);
+    const settled = await page.evaluate(async (selector) => {
+      let previous = null;
+      let stableFrames = 0;
+      const deadline = performance.now() + 5000;
+      while (stableFrames < 8 && performance.now() < deadline) {
+        await new Promise(requestAnimationFrame);
+        const current = [
+          window.scrollY,
+          document.querySelector(selector)?.getBoundingClientRect().top,
+          document.querySelector(".top-app-bar")?.getBoundingClientRect().bottom,
+          document.documentElement.scrollHeight,
+        ];
+        stableFrames = previous && current.every((value, index) =>
+          Number.isFinite(value) && Math.abs(value - previous[index]) < 0.5,
+        ) ? stableFrames + 1 : 0;
+        previous = current;
+      }
+      return stableFrames >= 8;
+    }, anchor);
 
     snapshots.push(
-      await page.evaluate((selector) => {
+      await page.evaluate(({ selector, settled }) => {
         const topBar = document.querySelector(".top-app-bar");
         const anchorElement = document.querySelector(selector);
         const topBarRect = topBar?.getBoundingClientRect();
@@ -1054,6 +1076,7 @@ async function collectStickyOverlapSnapshot(page, routeId) {
 
         return {
           selector,
+          settled,
           anchorTop,
           topBarBottom,
           overlap:
@@ -1061,7 +1084,7 @@ async function collectStickyOverlapSnapshot(page, routeId) {
             typeof topBarBottom === "number" &&
             anchorTop < topBarBottom - 4,
         };
-      }, anchor),
+      }, { selector: anchor, settled }),
     );
   }
 
@@ -1080,9 +1103,13 @@ async function collectSettingsLocaleMenuSnapshot(
     return null;
   }
 
+  await page.evaluate(() => {
+    location.hash = "#settings/section/settings-overview";
+  });
+  await page.locator("#settings-overview").waitFor({ state: "visible" });
   const triggerSelector =
-    '[data-settings-material-select="locale-preference"] button[role="combobox"]';
-  const menuSelector = '.material-select__menu[role="listbox"]';
+    '[data-fusion-field="locale-preference"] input:not(.hidden-input)';
+  const menuSelector = '[data-fusion-field="locale-preference"] mdui-menu';
 
   await page.locator(triggerSelector).scrollIntoViewIfNeeded();
   await page.locator(triggerSelector).click();
@@ -1101,9 +1128,7 @@ async function collectSettingsLocaleMenuSnapshot(
   );
   await page.screenshot({ path: screenshotPath, fullPage: false });
 
-  const snapshot = await page.evaluate((selector) => {
-    const menu = document.querySelector(selector);
-
+  const snapshot = await page.locator(menuSelector).evaluate((menu) => {
     if (!(menu instanceof HTMLElement)) {
       return {
         screenshotPath: "",
@@ -1122,7 +1147,10 @@ async function collectSettingsLocaleMenuSnapshot(
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const rect = menu.getBoundingClientRect();
-    const clippedOptions = Array.from(menu.querySelectorAll('[role="option"]'))
+    const options = Array.from(
+      menu.getRootNode().host.querySelectorAll("mdui-menu-item"),
+    );
+    const clippedOptions = options
       .filter((option) => option instanceof HTMLElement)
       .map((option) => {
         const optionRect = option.getBoundingClientRect();
@@ -1153,6 +1181,11 @@ async function collectSettingsLocaleMenuSnapshot(
     const topOverflow = Math.max(0, -rect.top);
     const bottomOverflow = Math.max(0, rect.bottom - viewportHeight);
     const issues = [];
+    if (options.length < 14)
+      issues.push({
+        code: "settings_locale_menu_options_missing",
+        message: "The language menu omitted supported locales.",
+      });
 
     if (leftOverflow > 1 || rightOverflow > 1) {
       issues.push({
@@ -1189,7 +1222,7 @@ async function collectSettingsLocaleMenuSnapshot(
       clippedOptions,
       issues,
     };
-  }, menuSelector);
+  });
 
   await page.keyboard.press("Escape");
   await page.waitForSelector(menuSelector, { state: "hidden", timeout: 5_000 });
@@ -1286,6 +1319,10 @@ async function captureMatrixEntry(
       code: "sticky_header_overlap",
       message: `${entry.selector} top ${entry.anchorTop}px is under top bar bottom ${entry.topBarBottom}px.`,
     }));
+  stickyIssues.push(...stickyOverlap.filter((entry) => !entry.settled).map((entry) => ({
+    code: "settings_scroll_unsettled",
+    message: `${entry.selector} layout did not settle after deep-link navigation.`,
+  })));
   const settingsLocaleMenu = await collectSettingsLocaleMenuSnapshot(
     page,
     outputDir,

@@ -1,6 +1,6 @@
 # GitHub Release Push And Notes Guide
 
-Date: 2026-09-24
+Date: 2026-10-04
 
 Document class:
 
@@ -151,9 +151,10 @@ listing internal phase numbers, private TODO names, local machine paths,
 operator notes, screenshot evidence, upload receipts, or personal review
 history.
 
-The 0.2.1 tag uses a version-specific stable summary and highlights. Later
-versions fall back to generic package notes until their own copy is reviewed;
-do not reuse the 0.2.1 feature list as a claim about another release.
+The 0.2.1 and 0.2.2 tags use version-specific stable summaries and highlights.
+The 0.2.2 notes cover the unified interface, five Settings categories, four motion
+choices and selection/RTL fixes, not a change to Provider data or permissions.
+Other versions fall back to generic package notes until their own copy is reviewed.
 
 ## Claim Boundaries
 

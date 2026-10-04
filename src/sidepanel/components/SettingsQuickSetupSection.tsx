@@ -1,100 +1,102 @@
-import { useEffect, useState } from "react";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { useEffect, useState, type ReactNode } from "react";
 
 import type {
-  ProviderId,
   CredentialProviderId,
-  ProviderTone,
+  ProviderId,
   ProviderSetting,
   ProviderSnapshot,
   SettingsUserLevel,
 } from "../../providers/types";
 import { getProviderDefinition } from "../../providers/provider-definitions";
-import type { ResolvedTextDirection, RuntimeI18n } from "../../shared/i18n";
+import type { RuntimeI18n } from "../../shared/i18n";
 import { getRecommendedFirstSetupProvider } from "../../shared/first-provider-setup";
 import { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
+import { getSettingsCategoryCopy } from "../../shared/settings-category-localized-copy";
 import type { ProviderSourceDisplayCopy } from "../../shared/provider-sources";
-import type { SettingsQuickSetupActionModel } from "../settings-view-models";
-import { buildSettingsQuickSetupCardModel } from "../settings-view-models";
+import { MaterialActionIcon } from "../../shared/components/MaterialActionIcon";
 import {
-  ProviderCarousel,
-  type ProviderCarouselItem,
-} from "./ProviderCarousel";
-import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+  buildSettingsQuickSetupCardModel,
+  type SettingsQuickSetupActionModel,
+} from "../settings-view-models";
+import { FusionCheckbox } from "./material-ui/FusionControls";
+import { MotionDetails } from "../../shared/components/MotionDetails";
 
-type SettingsQuickSetupSectionProps = {
+type Props = {
   activeSessionPageAttachAvailable: boolean;
   focusedProviderId?: ProviderId | null;
+  routeFocusKey?: string | null;
   i18n: RuntimeI18n;
   providers: ProviderSetting[];
   providerSourceDisplayCopy: ProviderSourceDisplayCopy;
-  carouselIndex?: number;
   sectionId?: string;
   sessionPageNavigationAvailable: boolean;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   snapshots: ProviderSnapshot[];
-  textDirection?: ResolvedTextDirection;
   userLevel: SettingsUserLevel;
+  renderConfiguration?: (provider: ProviderSetting) => ReactNode;
   onAttachActiveSessionPage: (providerId: ProviderId) => void;
   onClearPageBinding: (providerId: ProviderId) => void;
   onOpenCredentialSettings: (providerId: CredentialProviderId) => void;
-  onCarouselIndexChange?: (index: number) => void;
   onOpenSessionPage: (providerId: ProviderId) => void;
   onTogglePermission: (providerId: ProviderId) => void;
   onToggleProvider: (providerId: ProviderId) => void;
 };
 
+type Group = "personal" | "api";
+const groupFor = (id: ProviderId): Group =>
+  getProviderDefinition(id).connectionMode === "credential"
+    ? "api"
+    : "personal";
+
 export function SettingsQuickSetupSection({
   activeSessionPageAttachAvailable,
   focusedProviderId = null,
+  routeFocusKey,
   i18n,
   providers,
   providerSourceDisplayCopy,
-  carouselIndex,
   sectionId,
   sessionPageNavigationAvailable,
   settingsCopy,
   snapshots,
-  textDirection = "ltr",
   userLevel,
+  renderConfiguration,
   onAttachActiveSessionPage,
   onClearPageBinding,
   onOpenCredentialSettings,
-  onCarouselIndexChange,
   onOpenSessionPage,
   onTogglePermission,
   onToggleProvider,
-}: SettingsQuickSetupSectionProps) {
-  const focusedProviderGroup = focusedProviderId
-    ? getQuickSetupProviderGroup(focusedProviderId)
-    : "personal";
-  const [providerGroup, setProviderGroup] = useState<QuickSetupProviderGroup>(
-    focusedProviderGroup,
+}: Props) {
+  const [group, setGroup] = useState<Group>(
+    focusedProviderId ? groupFor(focusedProviderId) : "personal",
+  );
+  const [openProviderId, setOpenProviderId] = useState<ProviderId | null>(
+    () =>
+      focusedProviderId ??
+      (providers.every((provider) => !provider.displayEnabled)
+        ? (getRecommendedFirstSetupProvider(providers)?.id ?? null)
+        : null),
   );
   useEffect(() => {
     if (focusedProviderId) {
-      setProviderGroup(getQuickSetupProviderGroup(focusedProviderId));
+      setGroup(groupFor(focusedProviderId));
+      setOpenProviderId(focusedProviderId);
     }
-  }, [focusedProviderId]);
+  }, [focusedProviderId, routeFocusKey]);
+  const copy = getSettingsCategoryCopy(i18n.resolvedLocale);
+  const firstSetup = providers.every((provider) => !provider.displayEnabled)
+    ? getRecommendedFirstSetupProvider(providers)
+    : null;
   const snapshotMap = new Map(
     snapshots.map((snapshot) => [snapshot.providerId, snapshot]),
   );
-  const personalProviders = providers.filter(
-    (provider) => getQuickSetupProviderGroup(provider.id) === "personal",
-  );
-  const apiProviders = providers.filter(
-    (provider) => getQuickSetupProviderGroup(provider.id) === "api",
-  );
-  const quickSetupProviders =
-    providerGroup === "api" ? apiProviders : personalProviders;
-  const enabledProviders = quickSetupProviders.filter(
-    (provider) => provider.displayEnabled,
-  );
-  const firstSetupProvider =
-    enabledProviders.length === 0
-      ? getRecommendedFirstSetupProvider(providers)
-      : null;
 
-  function runAction(provider: ProviderSetting, action: SettingsQuickSetupActionModel) {
+  function runAction(
+    provider: ProviderSetting,
+    action: SettingsQuickSetupActionModel,
+  ) {
     switch (action.id) {
       case "enable_provider":
       case "disable_provider":
@@ -117,8 +119,7 @@ export function SettingsQuickSetupSection({
         break;
     }
   }
-
-  function isActionDisabled(
+  function actionDisabled(
     provider: ProviderSetting,
     action: SettingsQuickSetupActionModel,
   ) {
@@ -137,337 +138,199 @@ export function SettingsQuickSetupSection({
     }
   }
 
-  function renderProviderCard(
-    provider: ProviderSetting,
-    snapshot: ProviderSnapshot,
-    isStarter: boolean,
-  ) {
-    const model = buildSettingsQuickSetupCardModel(
-      provider,
-      snapshot,
-      settingsCopy,
-      userLevel,
-      providerSourceDisplayCopy,
-    );
-    const secondaryActions = model.secondaryActions.filter(
-      (action, index, actions) =>
-        actions.findIndex((candidate) => candidate.id === action.id) === index,
-    );
-    const starterProviderLabel = isStarter
-      ? getProviderDefinition(provider.id).shortLabel
-      : provider.label;
-
-    return (
-      <article
-        className={`quick-setup-card ${
-          isStarter ? "quick-setup-card--starter" : ""
-        }`.trim()}
-        data-quick-setup-provider-id={provider.id}
-        data-quick-setup-first-provider-id={isStarter ? provider.id : undefined}
+  return (
+    <section
+      className="dashboard-section settings-section-anchor settings-connections"
+      id={sectionId}
+    >
+      <div
+        className="quick-setup-section__provider-groups"
+        role="group"
+        aria-label={settingsCopy.quickSetup.title}
+        data-quick-setup-provider-groups=""
       >
-        <div className="quick-setup-card__header">
-          <div>
-            {isStarter ? (
-              <p className="section-label">
-                {settingsCopy.quickSetup.firstProvider.eyebrow}
-              </p>
-            ) : null}
-            <p className="quick-setup-card__provider">
-              {isStarter
-                ? settingsCopy.quickSetup.firstProvider.title(
-                    starterProviderLabel,
-                  )
-                : model.providerLabel}
-            </p>
-            <p className="supporting-copy">
-              {isStarter
-                ? settingsCopy.quickSetup.firstProvider.detail(
-                    starterProviderLabel,
-                  )
-                : model.helperText}
-            </p>
-          </div>
-          <span
-            className={getQuickSetupStatusClassName(
-              isStarter ? "neutral" : model.statusTone,
-            )}
+        {(["personal", "api"] as const).map((value) => (
+          <button
+            key={value}
+            className="quick-setup-section__provider-group"
+            type="button"
+            aria-pressed={group === value}
+            data-quick-setup-provider-group={value}
+            onClick={() => setGroup(value)}
           >
-            {isStarter
-              ? settingsCopy.quickSetup.firstProvider.statusLabel
-              : model.statusLabel}
-          </span>
-        </div>
-
-        <div className="quick-setup-card__fields">
-          <label
-            className="switch-row quick-setup-card__visibility"
-            data-visibility-provider-id={provider.id}
-            data-visibility-enabled={provider.displayEnabled ? "true" : "false"}
-          >
-            <div>
-              <p className="switch-row__title">
-                {settingsCopy.quickSetup.visibilityLabel}
-              </p>
-              <p className="supporting-copy">
-                {provider.displayEnabled
-                  ? settingsCopy.quickSetup.actions.disableProvider
-                  : settingsCopy.quickSetup.actions.enableProvider}
-              </p>
-            </div>
-            <input
-              className="switch-row__control"
-              type="checkbox"
-              checked={provider.displayEnabled}
-              data-visibility-toggle={provider.id}
-              onChange={() => onToggleProvider(provider.id)}
-            />
-          </label>
-
-          <div className="source-card__field">
-            <p className="source-card__label">
-              {settingsCopy.quickSetup.currentSetupLabel}
-            </p>
-            <p className="source-card__value">{model.currentSetupValue}</p>
-          </div>
-
-          <div className="source-card__field">
-            <p className="source-card__label">
-              {settingsCopy.quickSetup.nextStepLabel}
-            </p>
-            <p className="source-card__value">
-              {isStarter
-                ? settingsCopy.quickSetup.firstProvider.action(
-                    starterProviderLabel,
-                  )
-                : model.nextStepValue}
-            </p>
-          </div>
-
-          {model.pageStatusValue ? (
-            <div className="source-card__field">
-              <p className="source-card__label">
-                {settingsCopy.quickSetup.pageStatusLabel}
-              </p>
-              <p className="source-card__value">{model.pageStatusValue}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div
-          className="quick-setup-card__source-modes"
-          data-quick-setup-source-modes={provider.id}
-        >
-          <div className="quick-setup-card__source-modes-header">
-            <p className="source-card__label">
-              {settingsCopy.sources.preferenceLabel}
-            </p>
-            <p className="source-card__value">{model.sourcePreferenceValue}</p>
-          </div>
-          <div className="quick-setup-card__source-mode-list">
-            {model.sourceModes.map((sourceMode) => (
-              <article
-                key={sourceMode.id}
-                className="quick-setup-card__source-mode"
-                data-quick-setup-source-mode={sourceMode.id}
-                data-quick-setup-source-mode-current={
-                  sourceMode.isCurrent ? "true" : "false"
-                }
-              >
-                <div className="quick-setup-card__source-mode-title-row">
-                  <p className="quick-setup-card__source-mode-title">
-                    {sourceMode.label}
-                  </p>
-                  {sourceMode.isCurrent ? (
-                    <span className="meta-chip">
-                      {settingsCopy.quickSetup.currentSetupLabel}
-                    </span>
-                  ) : null}
-                </div>
-                <div className="quick-setup-card__source-mode-chips">
-                  {sourceMode.chips.map((chip) => (
-                    <span
-                      key={chip.label}
-                      className={getQuickSetupStatusClassName(chip.tone)}
-                    >
-                      {chip.label}
-                    </span>
-                  ))}
-                </div>
-                <p className="supporting-copy">{sourceMode.detail}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        {model.primaryAction || secondaryActions.length > 0 ? (
-          <div className="credential-actions quick-setup-card__actions">
-            {model.primaryAction ? (
-              <button
-                className="text-button"
-                type="button"
-                data-quick-setup-primary-action={model.primaryAction.id}
-                disabled={isActionDisabled(provider, model.primaryAction)}
-                onClick={() => runAction(provider, model.primaryAction!)}
-              >
-                {isStarter && model.primaryAction.id === "enable_provider"
-                  ? settingsCopy.quickSetup.firstProvider.action(
-                      starterProviderLabel,
-                    )
-                  : model.primaryAction.label}
-              </button>
-            ) : null}
-
-            {secondaryActions.map((action) => (
-              <button
-                key={action.id}
-                className="text-button"
-                type="button"
-                data-quick-setup-secondary-action={action.id}
-                disabled={isActionDisabled(provider, action)}
-                onClick={() => runAction(provider, action)}
-              >
-                {action.label}
-              </button>
-            ))}
-            {getProviderDefinition(provider.id).connectionMode ===
-            "credential" ? (
-              <button
-                className="text-button text-button--outlined"
-                type="button"
-                data-quick-setup-credential-link={provider.id}
-                onClick={() =>
-                  onOpenCredentialSettings(provider.id as CredentialProviderId)
-                }
-              >
-                {settingsCopy.quickSetup.configureConnection}
-              </button>
-            ) : null}
-          </div>
-        ) : getProviderDefinition(provider.id).connectionMode ===
-          "credential" ? (
-          <div className="credential-actions quick-setup-card__actions">
-            <button
-              className="text-button text-button--outlined"
-              type="button"
-              data-quick-setup-credential-link={provider.id}
-              onClick={() =>
-                onOpenCredentialSettings(provider.id as CredentialProviderId)
+            <span>
+              {value === "personal"
+                ? settingsCopy.quickSetup.personalProviders
+                : settingsCopy.quickSetup.apiProviders}
+            </span>
+            <span className="quick-setup-section__provider-group-count">
+              {
+                providers.filter((provider) => groupFor(provider.id) === value)
+                  .length
+              }
+            </span>
+          </button>
+        ))}
+      </div>
+      <div className="settings-connection-list">
+        {providers.map((provider) => {
+          const snapshot = snapshotMap.get(provider.id);
+          const model = snapshot
+            ? buildSettingsQuickSetupCardModel(
+                provider,
+                snapshot,
+                settingsCopy,
+                userLevel,
+                providerSourceDisplayCopy,
+              )
+            : null;
+          const actions = model
+            ? [model.primaryAction, ...model.secondaryActions]
+                .filter(
+                  (action): action is SettingsQuickSetupActionModel => !!action,
+                )
+                .filter(
+                  (action, index, items) =>
+                    items.findIndex((item) => item.id === action.id) === index,
+                )
+            : [];
+          const definition = getProviderDefinition(provider.id);
+          const open = openProviderId === provider.id;
+          const bodyId = `settings-connection-${provider.id}`;
+          return (
+            <article
+              className="settings-connection"
+              key={provider.id}
+              hidden={groupFor(provider.id) !== group}
+              data-quick-setup-provider-id={provider.id}
+              data-quick-setup-first-provider-id={
+                firstSetup?.id === provider.id ? provider.id : undefined
               }
             >
-              {settingsCopy.quickSetup.configureConnection}
-            </button>
-          </div>
-        ) : null}
-      </article>
-    );
-  }
-
-  const quickSetupItems: ProviderCarouselItem[] = quickSetupProviders.flatMap((provider) => {
-      const snapshot = snapshotMap.get(provider.id);
-      const isStarter =
-        firstSetupProvider !== null && provider.id === firstSetupProvider.id;
-
-      return snapshot
-        ? [
-            {
-              id: provider.id,
-              label: provider.label,
-              content: renderProviderCard(provider, snapshot, isStarter),
-            },
-          ]
-        : [];
-    });
-  const focusedQuickSetupIndex = quickSetupItems.findIndex(
-    (item) => item.id === focusedProviderId,
-  );
-  const firstSetupIndex = quickSetupItems.findIndex(
-    (item) => item.id === firstSetupProvider?.id,
-  );
-
-  return (
-    <section className="dashboard-section settings-section-anchor" id={sectionId}>
-      <div className="dashboard-section__header quick-setup-section__header">
-        <div>
-          <p className="section-label">{settingsCopy.quickSetup.eyebrow}</p>
-          <div className="section-title-with-info">
-            <h2 className="section-title">{settingsCopy.quickSetup.title}</h2>
-            <MaterialInfoTooltip>
-              {settingsCopy.quickSetup.detail}
-            </MaterialInfoTooltip>
-          </div>
-        </div>
-        <div
-          className="quick-setup-section__provider-groups"
-          role="group"
-          aria-label={settingsCopy.quickSetup.title}
-          data-quick-setup-provider-groups=""
-        >
-          <button
-            className="quick-setup-section__provider-group"
-            type="button"
-            aria-pressed={providerGroup === "personal"}
-            data-quick-setup-provider-group="personal"
-            onClick={() => setProviderGroup("personal")}
-          >
-            <span>{settingsCopy.quickSetup.personalProviders}</span>
-            <span className="quick-setup-section__provider-group-count">
-              {personalProviders.length}
-            </span>
-          </button>
-          <button
-            className="quick-setup-section__provider-group"
-            type="button"
-            aria-pressed={providerGroup === "api"}
-            data-quick-setup-provider-group="api"
-            onClick={() => setProviderGroup("api")}
-          >
-            <span>{settingsCopy.quickSetup.apiProviders}</span>
-            <span className="quick-setup-section__provider-group-count">
-              {apiProviders.length}
-            </span>
-          </button>
-        </div>
+              <div className="settings-connection__row">
+                <span
+                  className="settings-connection__monogram"
+                  aria-hidden="true"
+                >
+                  {definition.shortLabel.slice(0, 1)}
+                </span>
+                <div className="settings-connection__name">
+                  <h3>{definition.shortLabel}</h3>
+                  <p className="supporting-copy">{provider.label}</p>
+                </div>
+                {model ? (
+                  <span
+                    className={`meta-chip settings-connection__status ${model.statusTone === "error" ? "meta-chip--error" : model.statusTone === "warning" ? "meta-chip--warning" : ""}`}
+                  >
+                    {model.statusLabel}
+                  </span>
+                ) : null}
+                <div
+                  data-visibility-provider-id={provider.id}
+                  data-visibility-enabled={
+                    provider.displayEnabled ? "true" : "false"
+                  }
+                >
+                  <FusionCheckbox
+                    checked={provider.displayEnabled}
+                    onChange={() => onToggleProvider(provider.id)}
+                  >
+                    {settingsCopy.quickSetup.visibilityLabel}
+                  </FusionCheckbox>
+                </div>
+                <button
+                  className="text-button settings-connection__configure"
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={bodyId}
+                  aria-label={`${copy.configure}: ${provider.label}`}
+                  onClick={() => setOpenProviderId(open ? null : provider.id)}
+                >
+                  {copy.configure}
+                  <MaterialActionIcon
+                    name="keyboard-arrow-down"
+                  />
+                </button>
+              </div>
+              <ControlVisibilityBoundary
+                animate
+                id={bodyId}
+                className="settings-connection__body"
+                hidden={!open || groupFor(provider.id) !== group}
+              >
+                {firstSetup?.id === provider.id ? (
+                  <p>
+                    {settingsCopy.quickSetup.firstProvider.title(
+                      definition.shortLabel,
+                    )}
+                  </p>
+                ) : null}
+                {model ? (
+                  <p className="supporting-copy">{model.helperText}</p>
+                ) : null}
+                <div className="credential-actions">
+                  {actions.map((action, index) => (
+                    <button
+                      key={action.id}
+                      className="text-button"
+                      type="button"
+                      data-quick-setup-primary-action={
+                        index === 0 ? action.id : undefined
+                      }
+                      data-quick-setup-secondary-action={
+                        index > 0 ? action.id : undefined
+                      }
+                      disabled={actionDisabled(provider, action)}
+                      onClick={() => runAction(provider, action)}
+                    >
+                      {action.label}
+                    </button>
+                  ))}
+                  {definition.connectionMode === "credential" ? (
+                    <button
+                      className="text-button"
+                      type="button"
+                      data-quick-setup-credential-link={provider.id}
+                      onClick={() =>
+                        onOpenCredentialSettings(
+                          provider.id as CredentialProviderId,
+                        )
+                      }
+                    >
+                      {settingsCopy.quickSetup.configureConnection}
+                    </button>
+                  ) : null}
+                </div>
+                {renderConfiguration?.(provider)}
+                {model ? (
+                  <MotionDetails
+                    className="settings-connection__source-modes"
+                    data-quick-setup-source-modes={provider.id}
+                    summary={<>{settingsCopy.quickSetup.currentSetupLabel}: {model.currentSetupValue}</>}
+                  >
+                    <p>
+                      {settingsCopy.sources.preferenceLabel}:{" "}
+                      {model.sourcePreferenceValue}
+                    </p>
+                    {model.sourceModes.map((mode) => (
+                      <div
+                        key={mode.id}
+                        data-quick-setup-source-mode={mode.id}
+                        data-quick-setup-source-mode-current={String(
+                          mode.isCurrent,
+                        )}
+                      >
+                        <h4>{mode.label}</h4>
+                        <p className="supporting-copy">{mode.detail}</p>
+                      </div>
+                    ))}
+                  </MotionDetails>
+                ) : null}
+              </ControlVisibilityBoundary>
+            </article>
+          );
+        })}
       </div>
-
-      <ProviderCarousel
-        key={providerGroup}
-        ariaLabel={settingsCopy.quickSetup.title}
-        initialIndex={
-          focusedQuickSetupIndex > -1
-            ? focusedQuickSetupIndex
-            : carouselIndex !== undefined
-              ? carouselIndex
-            : firstSetupIndex > -1
-              ? firstSetupIndex
-              : 0
-        }
-        items={quickSetupItems}
-        i18n={i18n}
-        textDirection={textDirection}
-        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
-      />
     </section>
   );
-}
-
-type QuickSetupProviderGroup = "personal" | "api";
-
-function getQuickSetupProviderGroup(
-  providerId: ProviderId,
-): QuickSetupProviderGroup {
-  return getProviderDefinition(providerId).connectionMode === "credential"
-    ? "api"
-    : "personal";
-}
-
-function getQuickSetupStatusClassName(
-  tone: ProviderTone,
-) {
-  return `meta-chip ${
-    tone === "error"
-      ? "meta-chip--error"
-      : tone === "warning"
-        ? "meta-chip--warning"
-        : ""
-  }`.trim();
 }

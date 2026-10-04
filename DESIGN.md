@@ -1,6 +1,6 @@
 # AI Usage Dashboard Design Contract
 
-Date: 2026-07-28
+Date: 2026-10-04
 
 This document defines the maintained visual and interaction contract for the
 extension. It is intentionally specific to AI Usage Dashboard: a compact,
@@ -110,16 +110,81 @@ control language.
 
 ## Responsive Layout
 
+### B Fusion Interface (0.2.2)
+
+The accepted visual direction keeps the existing font, blue accent and semantic
+light/dark roles, while simplifying navigation and grouping. This contract is
+implemented in the 0.2.2 source. Store publication is tracked separately.
+MDUI 2.1.5 has real Chrome and Firefox compatibility gates; prototype results
+are not a substitute for those gates.
+
+The initial production adapter is scoped to Settings under
+`src/sidepanel/components/material-ui/`. It maps the existing resolved theme
+tokens rather than generating another palette, and bundles MDUI/Lit in a lazy
+Settings-only chunk. Native field labels and select-menu access require a small,
+version-bound compatibility layer. Keep its controlled-value, keyboard and
+real-extension browser gates when changing the dependency; see the
+[testing guide](Doc/testing/README.md). Settings, Dashboard, Sidebar, Provider
+detail and Popup follow this contract. MDUI controls
+remain Settings-only; sharing the visual language does not require loading that
+library in the compact Popup or replacing existing quota/chart components.
+
+- Settings has five categories: Accounts & Connections, Usage & Notifications,
+  Appearance & Display, General, Data & Backup. At 1100px and wider, use a roughly
+  220px category rail; below that, use a category dropdown. Only the selected
+  category is visible, with retained drafts, scroll and compatible old links.
+  During asynchronous category restoration, reserve the content layout but keep
+  it hidden and inert until the saved category or a safe fallback is resolved.
+  A newer deep link takes precedence over a pending restoration.
+- Settings titles use 22px, field values 16px and labels 14px. Fields retain the
+  familiar 56px height and 18px radius; regular/compact actions use 44/36px.
+  Use shared variables and public component APIs/Parts, not library source edits.
+- Global appearance, surface layout, visible content and toolbar are distinct
+  appearance groups. Keep all existing customizations and independent Popup,
+  Sidebar and Full Page values; prototype controls are only a small subset.
+  Use one surface selector for layout and visible-content editors. Keep the
+  global reset-time format explicitly labeled, and place detailed progress
+  colors in an expandable subgroup. A connection form links to presentation
+  settings rather than duplicating the editor. Back-to-top is an inline footer
+  action in Settings so it cannot cover narrow controls.
+- Ordinary preferences remain immediate updates. Show saved only after the
+  relevant persistence acknowledgement, with honest pending/error feedback.
+  Credentials, pairing, imports and resets remain explicit operations.
+- Compact headers, dividers and constrained form widths replace oversized
+  section frames and nested cards. Dashboard, Sidebar, detail and Popup share
+  visual roles but retain their own density and interaction model.
+- Preserve existing data/progress/chart components and their calculations.
+  Mock services, in-memory Save All, static grouping examples and fixed demo
+  countdowns must never replace production behavior.
+
+### Surface Density
+
 The UI has three density contexts rather than one desktop breakpoint:
 
 - Popup is a stable compact viewport whose width tokens are defined in
   [tokens.css](src/sidepanel/theme/tokens.css). It prioritizes current quota and
   immediate actions; detailed diagnostics belong elsewhere.
+  Native action views use the preferred 344/392/520px width without a viewport
+  sizing feedback loop; source/tab previews retain their responsive bounds.
+  Its flat toolbar, dividers and fixed Provider title size align with B fusion,
+  while saved card corner/shadow preferences and all browsing modes remain intact.
 - Sidebar must tolerate narrow and tall browser layouts. Controls reduce column
   count before labels become unreadable, and repeated content may collapse or
   use an explicit Provider browsing mode.
 - Dashboard, Provider detail, and Settings use available width for scanning but
   constrain line length and keep related controls together.
+- The migrated Dashboard uses an unframed compact header and a four-value
+  operational summary (two columns on narrow surfaces), without introductory
+  hero copy. Full Page uses two Provider columns when its content width permits;
+  Sidebar stays single-column. Repeated Provider boundaries use an 8px radius,
+  while nested usage sections use dividers, not additional floating cards.
+  Header commands retain accessible names when narrow layouts show only icons.
+- Provider detail starts with account/source context and the actual successful
+  capture time. Quota/reset, trends/statistics and comparison/export are separate
+  unframed sections. Source/technical metadata is an accessible disclosure;
+  errors, stale bindings, source recovery and unknown capture time stay outside
+  it. Opening or closing metadata must not remount analysis controls or reset
+  their selected account/range. Do not substitute attempt time for capture time.
 
 General rules:
 
@@ -160,9 +225,16 @@ explains state changes; it does not decorate idle surfaces.
 
 - Use short shared durations and easing for menus, collapse, route entry, and
   direct manipulation feedback.
-- The global animation preference is authoritative: `On` enables supported
-  product motion, `Reduced` removes nonessential motion, and `Follow system`
-  follows the browser or operating-system preference.
+- The motion preference has four choices: `Default` (`full`, 120-280ms),
+  `Follow system` (`system`), `More` (`expressive`, 180-360ms), and `Reduced`
+  (`reduced`). Default and More deliberately override OS reduced motion;
+  Follow system respects it. Reduced removes nonessential movement. Existing
+  full/system/reduced choices and portable backups keep their meaning.
+- Shared CSS, WAAPI and Settings-only MDUI timing resolve from one root profile.
+  Presence separates visual completion from logical visibility: closing content
+  becomes inert and leaves the accessibility tree immediately, while mounted
+  forms retain drafts. Superseded, backgrounded or unmounted animations cannot
+  finish a newer interaction. No idle decorative animation is introduced.
 - Continuous movement is limited to explicit browsing or overflow behavior.
   It pauses on hover and focus and remains manually operable.
 - Loading feedback must not replace cached useful content with a full visual
@@ -225,4 +297,3 @@ current commands and ignored evidence paths.
 This document is original project guidance. External design collections may be
 used as audit inspiration, but Material behavior, this repository's source, and
 verified browser output remain authoritative.
-

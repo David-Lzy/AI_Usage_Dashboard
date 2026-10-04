@@ -1,4 +1,6 @@
 import type { ProviderTone } from "../../providers/types";
+import { useRef } from "react";
+import { useMotionEntrance } from "../use-motion-effects";
 
 type StatusBadgeProps = {
   compact?: boolean;
@@ -22,9 +24,12 @@ export function StatusBadge({
   label,
   tone,
 }: StatusBadgeProps) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useMotionEntrance(ref, `${tone}:${label}`, true);
   if (compact) {
     return (
       <span
+        ref={ref}
         className={`status-chip status-chip--${tone} status-chip--compact`}
         aria-label={label}
         title={label}
@@ -34,5 +39,5 @@ export function StatusBadge({
     );
   }
 
-  return <span className={`status-chip status-chip--${tone}`}>{label}</span>;
+  return <span ref={ref} className={`status-chip status-chip--${tone}`}>{label}</span>;
 }

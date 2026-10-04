@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useRef } from "react";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { SettingsSaveFeedback } from "../components/SettingsSaveFeedback";
+import type { SettingsSaveStatus } from "../settings-save-feedback";
+import { useEffect, useRef } from "react";
 
 import type {
   ActionBadgeSelections,
@@ -37,29 +40,20 @@ import type {
   CustomSourceSetting,
   CustomSourceSyncState,
 } from "../../shared/custom-sources";
-import { getPreferredScrollBehavior } from "../motion";
-import {
-  SettingsBackToTopButton,
-  SettingsSectionNavigation,
-} from "../components/SettingsNavigation";
+import { SettingsBackToTopButton } from "../components/SettingsNavigation";
 import {
   SettingsCredentialsSection,
   SettingsOverviewSection,
 } from "../components/SettingsSections";
 import { AdaptiveControlGrid } from "../components/AdaptiveControlGrid";
-import { MaterialSelect } from "../components/MaterialSelect";
+import { FusionSelect as MaterialSelect } from "../components/material-ui/FusionControls";
+import { useFusionTheme } from "../components/material-ui/fusion-theme";
 import { SettingsQuickSetupSection } from "../components/SettingsQuickSetupSection";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { Toast } from "../components/Toast";
 import { TopBar } from "../components/TopBar";
-import {
-  settingsRouteFocusRequiresAdvanced,
-  type SettingsRouteFocus,
-} from "../route-state";
-import {
-  getSettingsRouteFocusElement,
-  getSettingsRouteFocusKey,
-} from "../settings-route-focus";
+import { type SettingsRouteFocus } from "../route-state";
+import { getSettingsRouteFocusKey } from "../settings-route-focus";
 import { SettingsSourceSection } from "../components/SettingsSourceSection";
 import { SettingsPreferencesSection } from "../components/SettingsPreferencesSection";
 import { SettingsProviderDisplaySection } from "../components/SettingsProviderDisplaySection";
@@ -70,6 +64,12 @@ import { MaterialInfoTooltip } from "../components/MaterialInfoTooltip";
 import { BUILD_INFO } from "../../shared/build-info";
 import { useSettingsPage } from "../use-settings-page";
 import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
+import { SettingsCategoryNavigation } from "../components/SettingsCategoryNavigation";
+import { SettingsProviderConnectionControls } from "../components/SettingsProviderConnectionControls";
+import { DiagnosticsExportControl } from "../components/DiagnosticsExportControl";
+import { getSettingsCategoryCopy } from "../../shared/settings-category-localized-copy";
+import "./settings-fusion.css";
+import { useSurfaceMotion } from "../../shared/use-motion-effects";
 
 type SettingsToast = {
   tone: "success" | "error";
@@ -97,7 +97,8 @@ type SettingsPageProps = {
   providerAccounts?: ProviderAccountsByProvider;
   toast: SettingsToast | null;
   onDismissToast: () => void;
-  onSavePreferences: () => void;
+  saveStatus?: SettingsSaveStatus;
+  onRetrySettingsSave?: () => void;
   onSyncIntervalChange: (minutes: number) => void;
   onLocalePreferenceChange: (locale: AppLocalePreference) => void;
   onUserLevelChange: (userLevel: AppSettings["userLevel"]) => void;
@@ -228,7 +229,8 @@ export function SettingsPage({
   providerAccounts,
   toast,
   onDismissToast,
-  onSavePreferences,
+  saveStatus = "idle",
+  onRetrySettingsSave = () => undefined,
   onSyncIntervalChange,
   onLocalePreferenceChange,
   onUserLevelChange,
@@ -292,7 +294,8 @@ export function SettingsPage({
 }: SettingsPageProps) {
   const routeFocusKey = getSettingsRouteFocusKey(routeFocus);
   const settingsShellRef = useRef<HTMLElement>(null);
-  const lastScrolledRouteFocusKeyRef = useRef<string | null>(null);
+  useFusionTheme(settingsShellRef);
+  useSurfaceMotion(settingsShellRef, "settings");
   const {
     codexAnalyticsApiKeyInput,
     codexWorkspaceIdInput,
@@ -308,8 +311,9 @@ export function SettingsPage({
     setCodexAnalyticsApiKeyInput,
     setCodexSessionTokenInput,
     setCodexWorkspaceIdInput,
-    activeSettingsSection,
-    scrollToSection,
+    activeCategory,
+    isCategoryRestoring,
+    selectCategory,
     scrollToSettingsTop,
     i18n,
     settingsCopy,
@@ -320,15 +324,8 @@ export function SettingsPage({
     showAdvancedContainer,
     codexProvider,
     credentialProviders,
-    settingsSectionNavItems,
     settingsSummaryItems,
-    advancedOpen,
-    setAdvancedOpen,
     settingsSurfaceSession,
-    advancedGroupCount,
-    quickSetupFocusedProviderId,
-    credentialFocusedProviderId,
-    sourceFocusedProviderId,
   } = useSettingsPage({
     settings,
     providers,
@@ -342,18 +339,33 @@ export function SettingsPage({
     onClearCodexSessionToken,
   });
 
+  const previousCategory = useRef(activeCategory);
+  useEffect(() => {
+    if (previousCategory.current === activeCategory) return;
+    previousCategory.current = activeCategory;
+    settingsSurfaceSession.preferences.setActivePopover(null);
+    settingsSurfaceSession.preferences.setToolbarPopupPreviewOpen(false);
+  }, [activeCategory]);
+
   useEffect(() => {
     const shell = settingsShellRef.current;
     const bar = shell?.querySelector<HTMLElement>(".top-app-bar");
+    const mobileNavigation = shell?.querySelector<HTMLElement>(
+      ".settings-category-mobile",
+    );
 
     if (!shell || !bar) {
       return;
     }
 
     const updateAnchorOffset = () => {
+      const headerOffset = Math.ceil(bar.getBoundingClientRect().height + 24);
+      shell.style.setProperty("--settings-header-offset", `${headerOffset}px`);
+      const navigationHeight =
+        mobileNavigation?.getBoundingClientRect().height ?? 0;
       shell.style.setProperty(
         "--settings-anchor-offset",
-        `${Math.ceil(bar.getBoundingClientRect().bottom + 16)}px`,
+        `${Math.ceil(headerOffset + navigationHeight + 16)}px`,
       );
     };
     updateAnchorOffset();
@@ -363,6 +375,7 @@ export function SettingsPage({
         ? null
         : new ResizeObserver(updateAnchorOffset);
     observer?.observe(bar);
+    if (mobileNavigation) observer?.observe(mobileNavigation);
     window.addEventListener("resize", updateAnchorOffset);
 
     return () => {
@@ -371,73 +384,6 @@ export function SettingsPage({
     };
   }, []);
 
-  useEffect(() => {
-    if (
-      !routeFocus ||
-      !routeFocusKey ||
-      !settingsSurfaceSession.hasRestored ||
-      typeof document === "undefined" ||
-      typeof window === "undefined"
-    ) {
-      if (!routeFocusKey) {
-        lastScrolledRouteFocusKeyRef.current = null;
-      }
-
-      return undefined;
-    }
-
-    if (lastScrolledRouteFocusKeyRef.current === routeFocusKey) {
-      return undefined;
-    }
-
-    if (settingsRouteFocusRequiresAdvanced(routeFocus) && !advancedOpen) {
-      return undefined;
-    }
-
-    const targetElement = getSettingsRouteFocusElement(routeFocus, document);
-
-    if (!targetElement) {
-      return undefined;
-    }
-
-    const frameId = window.requestAnimationFrame(() => {
-      targetElement.scrollIntoView({
-        block: "start",
-        behavior: getPreferredScrollBehavior(window, settings.motionMode),
-      });
-      lastScrolledRouteFocusKeyRef.current = routeFocusKey;
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [advancedOpen, routeFocusKey, settingsSurfaceSession.hasRestored]);
-
-  const handleSettingsCarouselIndexChange = useCallback(
-    (carouselId: string, index: number) => {
-      settingsSurfaceSession.setCarouselIndexById((current) =>
-        current[carouselId] === index
-          ? current
-          : {
-              ...current,
-              [carouselId]: index,
-            },
-      );
-    },
-    [settingsSurfaceSession.setCarouselIndexById],
-  );
-  const handleQuickSetupCarouselIndexChange = useCallback(
-    (index: number) => handleSettingsCarouselIndexChange("quickSetup", index),
-    [handleSettingsCarouselIndexChange],
-  );
-  const handleCredentialsCarouselIndexChange = useCallback(
-    (index: number) => handleSettingsCarouselIndexChange("credentials", index),
-    [handleSettingsCarouselIndexChange],
-  );
-  const handleSourcesCarouselIndexChange = useCallback(
-    (index: number) => handleSettingsCarouselIndexChange("sources", index),
-    [handleSettingsCarouselIndexChange],
-  );
   const userLevelOptions: Array<{
     value: AppSettings["userLevel"];
     label: string;
@@ -460,13 +406,109 @@ export function SettingsPage({
     },
   ];
   const overviewControlMeasurementLabels = [
-    userLevelOptions.find((option) => option.value === settings.userLevel)?.label,
+    userLevelOptions.find((option) => option.value === settings.userLevel)
+      ?.label,
     localeOptions.find((option) => option.value === settings.locale)?.label,
-    themeModeOptions.find((option) => option.value === settings.themeMode)?.label,
   ].filter((label): label is string => Boolean(label));
 
+  const categoryCopy = getSettingsCategoryCopy(i18n.resolvedLocale);
+  const focusedProviderId =
+    routeFocus && "providerId" in routeFocus ? routeFocus.providerId : null;
+  const renderConnectionConfiguration = (provider: ProviderSetting) => (
+    <>
+      <SettingsProviderConnectionControls
+        provider={provider}
+        snapshot={
+          snapshots.find((snapshot) => snapshot.providerId === provider.id) ??
+          null
+        }
+        locale={i18n.resolvedLocale}
+        settings={settings}
+        providerAccounts={providerAccounts}
+        onSelectAccount={onSelectProviderAccount}
+        onOpenPresentationSettings={() => selectCategory("appearance")}
+        onPopupAccountPresentationModeChange={
+          onPopupProviderAccountPresentationModeChange
+        }
+        onSave={onSaveSub2ApiDeployment}
+        onTest={onTestSub2ApiDeployment}
+        onDisconnect={onDisconnectSub2ApiDeployment}
+        onRemove={onRemoveSub2ApiDeployment}
+      />
+      {showAdvancedContainer ? (
+        <>
+          <SettingsCredentialsSection
+            embedded
+            providerFilter={provider.id}
+            i18n={i18n}
+            eyebrow={i18n.t("settings.credentials.eyebrow")}
+            title={i18n.t("settings.credentials.title")}
+            detail={i18n.t("settings.credentials.detail")}
+            credentialProviders={credentialProviders}
+            codexProvider={codexProvider}
+            credentialInputs={credentialInputs}
+            codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
+            codexWorkspaceIdInput={codexWorkspaceIdInput}
+            codexSessionTokenInput={codexSessionTokenInput}
+            labels={settingsCopy.credentials}
+            locale={i18n.resolvedLocale}
+            codexSessionLabels={{
+              title: i18n.t("settings.credentials.codex_session_title"),
+              state: i18n.t("settings.credentials.codex_session_state"),
+              help: i18n.t("settings.credentials.codex_session_help"),
+              input: i18n.t("settings.credentials.codex_session_input"),
+              placeholder: i18n.t(
+                "settings.credentials.codex_session_placeholder",
+              ),
+              save: i18n.t("settings.credentials.codex_session_save"),
+              clear: i18n.t("settings.credentials.codex_session_clear"),
+              footer: i18n.t("settings.credentials.codex_session_footer"),
+            }}
+            onSaveProviderApiKey={handleSaveProviderApiKey}
+            onClearProviderApiKey={handleClearProviderApiKey}
+            onTestProviderConnection={onTestProviderConnection}
+            onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
+            onSaveCodexConfig={handleSaveCodexConfig}
+            onClearCodexConfig={handleClearCodexConfig}
+            onSaveCodexSessionToken={handleSaveCodexSessionToken}
+            onClearCodexSessionToken={handleClearCodexSessionToken}
+            onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
+            onCodexSessionTokenInputChange={setCodexSessionTokenInput}
+            onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
+          />
+          <SettingsSourceSection
+            embedded
+            eyebrow={i18n.t("settings.sources.eyebrow")}
+            title={i18n.t("settings.sources.title")}
+            detail={i18n.t("settings.sources.detail")}
+            providers={[provider]}
+            providerAccounts={providerAccounts}
+            snapshots={snapshots}
+            i18n={i18n}
+            settingsCopy={settingsCopy}
+            userLevelVisibility={userLevelVisibility}
+            activePopover={settingsSurfaceSession.preferences.activePopover}
+            onActivePopoverChange={
+              settingsSurfaceSession.preferences.setActivePopover
+            }
+            sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+            activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
+            onSetSourcePreference={onSetSourcePreference}
+            onOpenSessionPage={onOpenSessionPage}
+            onAttachActiveSessionPage={onAttachActiveSessionPage}
+            onClearPageBinding={onClearPageBinding}
+          />
+        </>
+      ) : null}
+    </>
+  );
+
   return (
-    <main className="app-shell settings-shell" ref={settingsShellRef}>
+    <main
+      data-motion-owned=""
+      className="app-shell settings-shell fusion-theme settings-fusion"
+      ref={settingsShellRef}
+    >
       <TopBar
         title={i18n.t("settings.topbar.title")}
         subtitle={i18n.t("settings.topbar.subtitle")}
@@ -480,328 +522,270 @@ export function SettingsPage({
         expandActionIconName={surfaceActionIconName}
         secondaryActionLabel={i18n.t("common.actions.back")}
         secondaryActionIconName="keyboard-backspace"
-        primaryActionLabel={i18n.t("common.actions.save")}
-        primaryActionIconName="save"
-        sticky
-        bottomContent={
-          <SettingsSectionNavigation
-            ariaLabel={settingsCopy.layout.sectionsAria}
-            activeSectionId={activeSettingsSection}
-            items={settingsSectionNavItems}
-            motionMode={settings.motionMode}
-            onSelectSection={scrollToSection}
+        primaryActionContent={
+          <SettingsSaveFeedback
+            status={saveStatus}
+            locale={i18n.resolvedLocale}
+            onRetry={onRetrySettingsSave}
           />
         }
+        sticky
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onBack}
-        onPrimaryAction={onSavePreferences}
       />
 
-      <SettingsQuickSetupSection
-        focusedProviderId={quickSetupFocusedProviderId}
-        i18n={i18n}
-        sectionId={SETTINGS_SECTION_IDS.quickSetup}
-        providers={providers}
-        providerSourceDisplayCopy={providerSourceDisplayCopy}
-        snapshots={snapshots}
-        settingsCopy={settingsCopy}
-        textDirection={i18n.resolvedTextDirection}
-        userLevel={settings.userLevel}
-        carouselIndex={settingsSurfaceSession.carouselIndexById.quickSetup}
-        sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-        activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-        onCarouselIndexChange={handleQuickSetupCarouselIndexChange}
-        onToggleProvider={onToggleProvider}
-        onTogglePermission={onTogglePermission}
-        onOpenSessionPage={onOpenSessionPage}
-        onAttachActiveSessionPage={onAttachActiveSessionPage}
-        onClearPageBinding={onClearPageBinding}
-        onOpenCredentialSettings={onOpenCredentialSettings}
-      />
-
-      <SettingsOverviewSection
-        sectionId={SETTINGS_SECTION_IDS.overview}
-        ariaLabel={settingsCopy.layout.overview.aria}
-        detail={settingsCopy.layout.overview.detail}
-        eyebrow={settingsCopy.layout.overview.eyebrow}
-        items={settingsSummaryItems}
-        title={settingsCopy.layout.overview.title}
+      <div
+        className="settings-category-layout"
+        data-category-restoring={isCategoryRestoring}
+        aria-busy={isCategoryRestoring}
+        aria-hidden={isCategoryRestoring || undefined}
+        inert={isCategoryRestoring}
       >
-        <AdaptiveControlGrid
-          className="settings-overview__controls"
-          measurementLabels={overviewControlMeasurementLabels}
-        >
-          <div className="settings-overview__level-control">
-            <MaterialSelect
-              label={settingsCopy.layout.userLevel.label}
-              labelAccessory={
-                <MaterialInfoTooltip>
-                  {settingsCopy.layout.userLevel.helpText}
-                </MaterialInfoTooltip>
-              }
-              value={settings.userLevel}
-              fieldIdPrefix="settings-user-level"
-              sessionPopoverId="settings-user-level"
-              activePopover={settingsSurfaceSession.preferences.activePopover}
-              onActivePopoverChange={
-                settingsSurfaceSession.preferences.setActivePopover
-              }
-              options={userLevelOptions}
-              onChange={onUserLevelChange}
-            />
-          </div>
-          <MaterialSelect
-            label={i18n.t("settings.preferences.locale_label")}
-            value={settings.locale}
-            fieldIdPrefix="locale-preference"
-            sessionPopoverId="locale-preference"
-            activePopover={settingsSurfaceSession.preferences.activePopover}
-            onActivePopoverChange={
-              settingsSurfaceSession.preferences.setActivePopover
-            }
-            options={localeOptions}
-            onChange={onLocalePreferenceChange}
-          />
-          <MaterialSelect
-            label={i18n.t("settings.preferences.theme_mode_label")}
-            labelAccessory={
-              <MaterialInfoTooltip>
-                {i18n.t("settings.preferences.theme_mode_helper")}
-              </MaterialInfoTooltip>
-            }
-            value={settings.themeMode}
-            fieldIdPrefix="theme-mode"
-            sessionPopoverId="theme-mode"
-            activePopover={settingsSurfaceSession.preferences.activePopover}
-            onActivePopoverChange={
-              settingsSurfaceSession.preferences.setActivePopover
-            }
-            options={themeModeOptions}
-            onChange={onThemeModeChange}
-          />
-        </AdaptiveControlGrid>
-      </SettingsOverviewSection>
-
-      <SettingsPreferencesSection
-        sectionId={SETTINGS_SECTION_IDS.appearance}
-        usageSectionId={SETTINGS_SECTION_IDS.usageNotifications}
-        settings={settings}
-        providers={providers}
-        snapshots={snapshots}
-        providerAccounts={providerAccounts}
-        i18n={i18n}
-        settingsCopy={settingsCopy}
-        surfaceSessionState={settingsSurfaceSession.preferences}
-        userLevelVisibility={userLevelVisibility}
-        onSyncIntervalChange={onSyncIntervalChange}
-        onWarningThresholdChange={onWarningThresholdChange}
-        onMotionModeChange={onMotionModeChange}
-        onThemePresetChange={onThemePresetChange}
-        onUiFontFamilyChange={onUiFontFamilyChange}
-        onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
-        onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
-        onPopupProgressStyleChange={onPopupProgressStyleChange}
-        onSidebarProgressStyleChange={onSidebarProgressStyleChange}
-        onFullPageProgressStyleChange={onFullPageProgressStyleChange}
-        onPopupSizePresetChange={onPopupSizePresetChange}
-        onPopupProviderBrowsingModeChange={onPopupProviderBrowsingModeChange}
-        onPopupCornerStyleChange={onPopupCornerStyleChange}
-        onPopupCircularProgressItemsPerRowChange={
-          onPopupCircularProgressItemsPerRowChange
-        }
-        onPopupShadowStyleChange={onPopupShadowStyleChange}
-        onProgressThicknessPxChange={onProgressThicknessPxChange}
-        onProgressColorAppearanceChange={onProgressColorAppearanceChange}
-        onProgressColorBandsChange={onProgressColorBandsChange}
-        onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
-        onActionBadgeSelectionModeChange={onActionBadgeSelectionModeChange}
-        onActionBadgeRotationIntervalSecondsChange={
-          onActionBadgeRotationIntervalSecondsChange
-        }
-        onExportConfiguration={onExportConfiguration}
-        onImportConfigurationJson={onImportConfigurationJson}
-        onSaveConfigurationToChromeSync={onSaveConfigurationToChromeSync}
-        onRestoreConfigurationFromChromeSync={onRestoreConfigurationFromChromeSync}
-        onResetConfigurationToInitial={onResetConfigurationToInitial}
-        onToolbarIconModeChange={onToolbarIconModeChange}
-        onToolbarIconProviderIdChange={onToolbarIconProviderIdChange}
-        onToolbarIconCustomImageDataUrlChange={
-          onToolbarIconCustomImageDataUrlChange
-        }
-        onThemeCustomSeedChange={onSaveThemeCustomSeed}
-      />
-
-      <SettingsProviderDisplaySection
-        sectionId={SETTINGS_SECTION_IDS.providerDisplay}
-        settings={settings}
-        providers={providers}
-        providerSourceDisplayCopy={providerSourceDisplayCopy}
-        snapshots={snapshots}
-        providerAccounts={providerAccounts}
-        locale={i18n.resolvedLocale}
-        customSources={customSources}
-        customSourceStates={customSourceStates}
-        settingsCopy={settingsCopy}
-        providerProgressDetailsOpen={
-          settingsSurfaceSession.providerProgressDetailsOpen
-        }
-        onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
-        onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
-        onUsageHistoryModulesBySurfaceChange={
-          onUsageHistoryModulesBySurfaceChange
-        }
-        onProviderServiceStatusVisibilityBySurfaceChange={
-          onProviderServiceStatusVisibilityBySurfaceChange
-        }
-        onProviderProgressDetailsOpenChange={
-          settingsSurfaceSession.setProviderProgressDetailsOpen
-        }
-        onSelectProviderAccount={onSelectProviderAccount}
-        onPopupProviderAccountPresentationModeChange={
-          onPopupProviderAccountPresentationModeChange
-        }
-        onSaveSub2ApiDeployment={onSaveSub2ApiDeployment}
-        onTestSub2ApiDeployment={onTestSub2ApiDeployment}
-        onDisconnectSub2ApiDeployment={onDisconnectSub2ApiDeployment}
-        onRemoveSub2ApiDeployment={onRemoveSub2ApiDeployment}
-        onSub2ApiMeteringDisplayPreferencesChange={
-          onSub2ApiMeteringDisplayPreferencesChange
-        }
-      />
-
-      <CustomSourceSettingsSection
-        customSources={customSources}
-        customSourceStates={customSourceStates}
-        locale={i18n.resolvedLocale}
-        onChange={onCustomSourcesChange}
-      />
-
-      {userLevelVisibility.showExperimentalLocalIntegrations ? (
-        <>
-          <CodexBarDashboardBridgeSettings
-            customSources={customSources}
-            customSourceStates={customSourceStates}
-            locale={i18n.resolvedLocale}
-          />
-          <LocalCompanionBridgeSettings
-            customSources={customSources}
-            customSourceStates={customSourceStates}
-            locale={i18n.resolvedLocale}
-          />
-        </>
-      ) : null}
-
-      {showAdvancedContainer ? (
-        <section
-          className="status-card settings-section-anchor settings-advanced"
-          id={SETTINGS_SECTION_IDS.advanced}
-        >
-          <div className="dashboard-section__header">
-            <div>
-              <p className="section-label">{settingsCopy.layout.advanced.eyebrow}</p>
-              <div className="section-title-with-info">
-                <h2 className="section-title">
-                  {settingsCopy.layout.advanced.title}
-                </h2>
-                <MaterialInfoTooltip>
-                  {settingsCopy.layout.advanced.detail}
-                </MaterialInfoTooltip>
-              </div>
-            </div>
-          </div>
-
-          <details
-            className="source-card__details settings-advanced__details"
-            open={advancedOpen}
-            onToggle={(event) =>
-              setAdvancedOpen((event.currentTarget as HTMLDetailsElement).open)
-            }
+        <SettingsCategoryNavigation
+          locale={i18n.resolvedLocale}
+          label={settingsCopy.layout.sectionsAria}
+          value={activeCategory}
+          onChange={selectCategory}
+        />
+        <div className="settings-category-content">
+          <h2
+            className="settings-category-heading"
+            tabIndex={-1}
+            aria-live="polite"
+            aria-atomic="true"
           >
-            <summary className="source-card__details-toggle">
-              <span>
-                {advancedOpen
-                  ? settingsCopy.layout.advanced.hide
-                  : settingsCopy.layout.advanced.show}
-              </span>
-              <span className="meta-chip">
-                {settingsCopy.layout.advanced.itemCount(advancedGroupCount)}
-              </span>
-            </summary>
-
-            <div className="source-card__details-body settings-advanced__body">
-              <SettingsCredentialsSection
-                focusedProviderId={credentialFocusedProviderId}
-                i18n={i18n}
-                sectionId="settings-advanced-credentials"
-                eyebrow={i18n.t("settings.credentials.eyebrow")}
-                title={i18n.t("settings.credentials.title")}
-                detail={i18n.t("settings.credentials.detail")}
-                credentialProviders={credentialProviders}
-                codexProvider={codexProvider}
-                credentialInputs={credentialInputs}
-                codexAnalyticsApiKeyInput={codexAnalyticsApiKeyInput}
-                codexWorkspaceIdInput={codexWorkspaceIdInput}
-                codexSessionTokenInput={codexSessionTokenInput}
-                carouselIndex={settingsSurfaceSession.carouselIndexById.credentials}
-                labels={settingsCopy.credentials}
-                locale={i18n.resolvedLocale}
-                codexSessionLabels={{
-                  title: i18n.t("settings.credentials.codex_session_title"),
-                  state: i18n.t("settings.credentials.codex_session_state"),
-                  help: i18n.t("settings.credentials.codex_session_help"),
-                  input: i18n.t("settings.credentials.codex_session_input"),
-                  placeholder: i18n.t(
-                    "settings.credentials.codex_session_placeholder",
-                  ),
-                  save: i18n.t("settings.credentials.codex_session_save"),
-                  clear: i18n.t("settings.credentials.codex_session_clear"),
-                  footer: i18n.t("settings.credentials.codex_session_footer"),
-                }}
-                textDirection={i18n.resolvedTextDirection}
-                onCarouselIndexChange={handleCredentialsCarouselIndexChange}
-                onSaveProviderApiKey={handleSaveProviderApiKey}
-                onClearProviderApiKey={handleClearProviderApiKey}
-                onTestProviderConnection={onTestProviderConnection}
-                onProviderApiKeyInputChange={handleProviderApiKeyInputChange}
-                onSaveCodexConfig={handleSaveCodexConfig}
-                onClearCodexConfig={handleClearCodexConfig}
-                onSaveCodexSessionToken={handleSaveCodexSessionToken}
-                onClearCodexSessionToken={handleClearCodexSessionToken}
-                onCodexAnalyticsApiKeyInputChange={setCodexAnalyticsApiKeyInput}
-                onCodexSessionTokenInputChange={setCodexSessionTokenInput}
-                onCodexWorkspaceIdInputChange={setCodexWorkspaceIdInput}
+            {categoryCopy[activeCategory]}
+          </h2>
+          <ControlVisibilityBoundary
+            data-settings-category-panel="connections"
+            hidden={activeCategory !== "connections"}
+          >
+            {showAdvancedContainer ? (
+              <div
+                id={SETTINGS_SECTION_IDS.advanced}
+                className="settings-section-anchor"
               />
+            ) : null}
+            <SettingsQuickSetupSection
+              focusedProviderId={focusedProviderId}
+              routeFocusKey={routeFocusKey}
+              renderConfiguration={renderConnectionConfiguration}
+              i18n={i18n}
+              sectionId={SETTINGS_SECTION_IDS.quickSetup}
+              providers={providers}
+              providerSourceDisplayCopy={providerSourceDisplayCopy}
+              snapshots={snapshots}
+              settingsCopy={settingsCopy}
+              userLevel={settings.userLevel}
+              sessionPageNavigationAvailable={sessionPageNavigationAvailable}
+              activeSessionPageAttachAvailable={
+                activeSessionPageAttachAvailable
+              }
+              onToggleProvider={onToggleProvider}
+              onTogglePermission={onTogglePermission}
+              onOpenSessionPage={onOpenSessionPage}
+              onAttachActiveSessionPage={onAttachActiveSessionPage}
+              onClearPageBinding={onClearPageBinding}
+              onOpenCredentialSettings={onOpenCredentialSettings}
+            />
 
-              <SettingsSourceSection
-                focusedProviderId={sourceFocusedProviderId}
-                sectionId="settings-advanced-sources"
-                eyebrow={i18n.t("settings.sources.eyebrow")}
-                title={i18n.t("settings.sources.title")}
-                detail={i18n.t("settings.sources.detail")}
-                providers={providers}
-                providerAccounts={providerAccounts}
-                snapshots={snapshots}
+            <CustomSourceSettingsSection
+              customSources={customSources}
+              customSourceStates={customSourceStates}
+              locale={i18n.resolvedLocale}
+              onChange={onCustomSourcesChange}
+            />
+
+            {userLevelVisibility.showExperimentalLocalIntegrations ? (
+              <>
+                <CodexBarDashboardBridgeSettings
+                  customSources={customSources}
+                  customSourceStates={customSourceStates}
+                  locale={i18n.resolvedLocale}
+                />
+                <LocalCompanionBridgeSettings
+                  customSources={customSources}
+                  customSourceStates={customSourceStates}
+                  locale={i18n.resolvedLocale}
+                />
+              </>
+            ) : null}
+            {userLevelVisibility.showDebugDiagnostics ? (
+              <DiagnosticsExportControl
                 i18n={i18n}
+                state={{
+                  providers: snapshots,
+                  providerSettings: providers,
+                  providerAccounts,
+                }}
+              />
+            ) : null}
+          </ControlVisibilityBoundary>
+          <ControlVisibilityBoundary
+            data-settings-category-panel="general"
+            hidden={activeCategory !== "general"}
+          >
+            <SettingsOverviewSection
+              sectionId={SETTINGS_SECTION_IDS.overview}
+              ariaLabel={settingsCopy.layout.overview.aria}
+              detail={settingsCopy.layout.overview.detail}
+              eyebrow={settingsCopy.layout.overview.eyebrow}
+              items={settingsSummaryItems}
+              title={settingsCopy.layout.overview.title}
+            >
+              <AdaptiveControlGrid
+                className="settings-overview__controls"
+                measurementLabels={overviewControlMeasurementLabels}
+              >
+                <div className="settings-overview__level-control">
+                  <MaterialSelect
+                    label={settingsCopy.layout.userLevel.label}
+                    labelAccessory={
+                      <MaterialInfoTooltip>
+                        {settingsCopy.layout.userLevel.helpText}
+                      </MaterialInfoTooltip>
+                    }
+                    value={settings.userLevel}
+                    fieldIdPrefix="settings-user-level"
+                    sessionPopoverId="settings-user-level"
+                    activePopover={
+                      settingsSurfaceSession.preferences.activePopover
+                    }
+                    onActivePopoverChange={
+                      settingsSurfaceSession.preferences.setActivePopover
+                    }
+                    options={userLevelOptions}
+                    onChange={onUserLevelChange}
+                  />
+                </div>
+                <MaterialSelect
+                  label={i18n.t("settings.preferences.locale_label")}
+                  value={settings.locale}
+                  fieldIdPrefix="locale-preference"
+                  sessionPopoverId="locale-preference"
+                  activePopover={
+                    settingsSurfaceSession.preferences.activePopover
+                  }
+                  onActivePopoverChange={
+                    settingsSurfaceSession.preferences.setActivePopover
+                  }
+                  options={localeOptions}
+                  onChange={onLocalePreferenceChange}
+                />
+              </AdaptiveControlGrid>
+            </SettingsOverviewSection>
+          </ControlVisibilityBoundary>
+
+          <SettingsPreferencesSection
+            activeCategory={activeCategory}
+            onPopupProviderAccountPresentationModeChange={
+              onPopupProviderAccountPresentationModeChange
+            }
+            displayControls={(surface) => (
+              <SettingsProviderDisplaySection
+                surface={surface}
+                sectionId={SETTINGS_SECTION_IDS.providerDisplay}
+                settings={settings}
+                providers={providers}
+                providerSourceDisplayCopy={providerSourceDisplayCopy}
+                snapshots={snapshots}
+                providerAccounts={providerAccounts}
+                locale={i18n.resolvedLocale}
+                customSources={customSources}
+                customSourceStates={customSourceStates}
                 settingsCopy={settingsCopy}
-                carouselIndex={settingsSurfaceSession.carouselIndexById.sources}
-                userLevelVisibility={userLevelVisibility}
+                providerProgressDetailsOpen={
+                  settingsSurfaceSession.providerProgressDetailsOpen
+                }
+                onProviderOrderBySurfaceChange={onProviderOrderBySurfaceChange}
+                onProgressItemsBySurfaceChange={onProgressItemsBySurfaceChange}
+                onUsageHistoryModulesBySurfaceChange={
+                  onUsageHistoryModulesBySurfaceChange
+                }
+                onProviderServiceStatusVisibilityBySurfaceChange={
+                  onProviderServiceStatusVisibilityBySurfaceChange
+                }
+                onProviderProgressDetailsOpenChange={
+                  settingsSurfaceSession.setProviderProgressDetailsOpen
+                }
+                onSub2ApiMeteringDisplayPreferencesChange={
+                  onSub2ApiMeteringDisplayPreferencesChange
+                }
+              />
+            )}
+            themeControl={
+              <MaterialSelect
+                label={i18n.t("settings.preferences.theme_mode_label")}
+                labelAccessory={
+                  <MaterialInfoTooltip>
+                    {i18n.t("settings.preferences.theme_mode_helper")}
+                  </MaterialInfoTooltip>
+                }
+                value={settings.themeMode}
+                fieldIdPrefix="theme-mode"
+                sessionPopoverId="theme-mode"
                 activePopover={settingsSurfaceSession.preferences.activePopover}
                 onActivePopoverChange={
                   settingsSurfaceSession.preferences.setActivePopover
                 }
-                sessionPageNavigationAvailable={sessionPageNavigationAvailable}
-                activeSessionPageAttachAvailable={activeSessionPageAttachAvailable}
-                onCarouselIndexChange={handleSourcesCarouselIndexChange}
-                onSetSourcePreference={onSetSourcePreference}
-                onOpenSessionPage={onOpenSessionPage}
-                onAttachActiveSessionPage={onAttachActiveSessionPage}
-                onClearPageBinding={onClearPageBinding}
+                options={themeModeOptions}
+                onChange={onThemeModeChange}
               />
-            </div>
-          </details>
-        </section>
-      ) : null}
+            }
+            sectionId={SETTINGS_SECTION_IDS.appearance}
+            usageSectionId={SETTINGS_SECTION_IDS.usageNotifications}
+            settings={settings}
+            providers={providers}
+            snapshots={snapshots}
+            providerAccounts={providerAccounts}
+            i18n={i18n}
+            settingsCopy={settingsCopy}
+            surfaceSessionState={settingsSurfaceSession.preferences}
+            userLevelVisibility={userLevelVisibility}
+            onSyncIntervalChange={onSyncIntervalChange}
+            onWarningThresholdChange={onWarningThresholdChange}
+            onMotionModeChange={onMotionModeChange}
+            onThemePresetChange={onThemePresetChange}
+            onUiFontFamilyChange={onUiFontFamilyChange}
+            onResetTimeDisplayModeChange={onResetTimeDisplayModeChange}
+            onQuotaPaceForecastEnabledChange={onQuotaPaceForecastEnabledChange}
+            onPopupProgressStyleChange={onPopupProgressStyleChange}
+            onSidebarProgressStyleChange={onSidebarProgressStyleChange}
+            onFullPageProgressStyleChange={onFullPageProgressStyleChange}
+            onPopupSizePresetChange={onPopupSizePresetChange}
+            onPopupProviderBrowsingModeChange={
+              onPopupProviderBrowsingModeChange
+            }
+            onPopupCornerStyleChange={onPopupCornerStyleChange}
+            onPopupCircularProgressItemsPerRowChange={
+              onPopupCircularProgressItemsPerRowChange
+            }
+            onPopupShadowStyleChange={onPopupShadowStyleChange}
+            onProgressThicknessPxChange={onProgressThicknessPxChange}
+            onProgressColorAppearanceChange={onProgressColorAppearanceChange}
+            onProgressColorBandsChange={onProgressColorBandsChange}
+            onActionBadgeSelectionsChange={onActionBadgeSelectionsChange}
+            onActionBadgeSelectionModeChange={onActionBadgeSelectionModeChange}
+            onActionBadgeRotationIntervalSecondsChange={
+              onActionBadgeRotationIntervalSecondsChange
+            }
+            onExportConfiguration={onExportConfiguration}
+            onImportConfigurationJson={onImportConfigurationJson}
+            onSaveConfigurationToChromeSync={onSaveConfigurationToChromeSync}
+            onRestoreConfigurationFromChromeSync={
+              onRestoreConfigurationFromChromeSync
+            }
+            onResetConfigurationToInitial={onResetConfigurationToInitial}
+            onToolbarIconModeChange={onToolbarIconModeChange}
+            onToolbarIconProviderIdChange={onToolbarIconProviderIdChange}
+            onToolbarIconCustomImageDataUrlChange={
+              onToolbarIconCustomImageDataUrlChange
+            }
+            onThemeCustomSeedChange={onSaveThemeCustomSeed}
+          />
+        </div>
+      </div>
 
       {toast ? (
         <Toast
@@ -813,7 +797,7 @@ export function SettingsPage({
         />
       ) : null}
 
-      <section className="settings-about">
+      <section className="settings-about" hidden={activeCategory !== "general"}>
         <div className="settings-about__title">
           AI Usage Dashboard {BUILD_INFO.version}
         </div>
@@ -851,6 +835,7 @@ export function SettingsPage({
       </section>
 
       <SettingsBackToTopButton
+        inline
         label={i18n.t("settings.actions.back_to_top")}
         shortLabel={i18n.t("settings.actions.back_to_top_short")}
         onClick={scrollToSettingsTop}

@@ -1,3 +1,4 @@
+import { MotionDetails } from "../../shared/components/MotionDetails";
 import type {
   ProviderId,
   ProviderSetting,
@@ -324,13 +325,12 @@ export function SettingsSourceCard({
         ) : null}
 
         {userLevelVisibility.showDebugDiagnostics ? (
-          <details className="source-card__details">
-            <summary className="source-card__details-toggle">
+          <MotionDetails className="source-card__details" summaryProps={{ className: "source-card__details-toggle" }} summary={<>
               <span>{settingsCopy.sources.detailedDiagnostics}</span>
               <span className="meta-chip">
                 {settingsCopy.sources.itemCount(sourceCardModel.diagnosticsCount)}
               </span>
-            </summary>
+            </>}>
 
             <div className="source-card__details-body">
               {sourceCardModel.diagnosticGroups.map((group) => (
@@ -380,7 +380,7 @@ export function SettingsSourceCard({
                 </section>
               ))}
             </div>
-          </details>
+          </MotionDetails>
         ) : null}
       </div>
     </article>

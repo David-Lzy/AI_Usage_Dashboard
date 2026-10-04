@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-09-24
+Date: 2026-10-04
 
 Document class:
 
@@ -14,17 +14,19 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- a direct public-page fetch displayed `0.2.0-rc.14` on 2026-09-23 UTC;
-  authenticated Store API status reports manifest `0.2.0.14` as `PUBLISHED`
-  at 100% again on 2026-09-24 UTC
+- a direct public-page fetch displayed `0.2.1` on 2026-10-04 UTC;
+  authenticated Store API status reports manifest `0.2.1.0` as `PUBLISHED`
+  at 100%, with no submitted revision at that checkpoint
 - GitHub Release `v0.2.1` is stable and provides verified browser-specific
   packages and checksums; its Chrome manifest is `0.2.1.0`
 - the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
   updated listing and images were saved in the Developer Dashboard and the
   revision was submitted for review once with automatic publication after
   approval selected
-- authenticated Store API status on 2026-09-24 UTC reported `0.2.1.0` as
-  `PENDING_REVIEW` at 100% while `0.2.0.14` remained `PUBLISHED` at 100%
+- the 2026-09-24 `PENDING_REVIEW` observation for 0.2.1 is historical and
+  superseded by the publication confirmation above
+- source version 0.2.2 is being prepared with a unified interface, five settings
+  categories and four motion levels; it is not yet a GitHub or Store release
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -35,6 +37,9 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
+- On 2026-10-04 UTC, the public listing displayed `0.2.1` and an update date
+  of September 25, 2026. The authenticated API confirmed manifest `0.2.1.0`
+  as `PUBLISHED` at 100%, with no submitted revision.
 - A direct public-page fetch on 2026-09-23 at 15:20 UTC displayed
   `0.2.0-rc.14`. Authenticated Store API status at the same checkpoint reported
   manifest `0.2.0.14` as `PUBLISHED` at 100%; a fresh API check on
@@ -50,7 +55,8 @@ Status note:
   automatic publication after approval selected. A subsequent authenticated
   API check reported `0.2.1.0` as `PENDING_REVIEW` at 100%, while RC14 manifest
   `0.2.0.14` remained `PUBLISHED` at 100%. Submission does not prove public
-  availability.
+  availability. That review observation has since been superseded by the
+  2026-10-04 publication confirmation.
 - [GitHub Release v0.2.0-rc.14](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.0-rc.14)
   was checked on 2026-09-23 UTC. It is marked prerelease; both browser zips
   were downloaded and verified against its published `SHA256SUMS.txt`.
@@ -64,7 +70,8 @@ Status note:
   publication after approval selected.
 - Before approval, authenticated Store API status reported manifest
   `0.2.0.14` as `PENDING_REVIEW` while `0.2.0.13` remained published. That
-  review checkpoint is historical; RC14 is now the published version.
+  review checkpoint is historical; RC14 was subsequently published and is
+  now superseded by 0.2.1.
 
 ## Historical Submission Observations
 
@@ -137,7 +144,7 @@ At this milestone, the project has the following public-facing baseline:
 ## Quality Gate State
 
 Store availability is not a guarantee that every provider or environment is
-working. The published RC14 build hardens account-isolated sync, concurrent
+working. The published 0.2.1 build includes account-isolated sync, concurrent
 state writes, capture freshness, shared controls and production initialization.
 Ongoing risks include:
 
@@ -158,11 +165,11 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Monitor the submitted 0.2.1 revision and verify both authenticated API
-  publication state and public-page rollout before calling it available on the
-  Store. Keep uploaded, submitted, and published states distinct.
-- For the next version, refresh Store screenshots and copy from its actual
-  extension UI before submitting a new revision.
+- Prepare the 0.2.2 screenshots and copy from its actual extension UI, then
+  submit the exact verified GitHub tag package in one review request.
+- After submission, verify both authenticated API publication state and
+  public-page rollout before calling 0.2.2 available on the Store. Keep
+  uploaded, submitted, and published states distinct.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
 - Keep personal upload operations and generated screenshot working files under
   `.local/`.

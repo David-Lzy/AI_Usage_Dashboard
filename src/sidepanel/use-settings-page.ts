@@ -15,7 +15,7 @@ import {
   type SettingsRouteFocus,
 } from "./route-state";
 import { useSettingsCredentialDrafts } from "./use-settings-credential-drafts";
-import { useSettingsSectionNavigation } from "./use-settings-section-navigation";
+import { useSettingsCategoryNavigation } from "./use-settings-category-navigation";
 import { getSettingsUserLevelVisibility } from "./settings-user-level-visibility";
 import { useSettingsSurfaceSessionState } from "./use-settings-surface-session-state";
 
@@ -52,7 +52,7 @@ export function useSettingsPage({
     onSaveCodexSessionToken,
     onClearCodexSessionToken,
   });
-  const sectionNavigation = useSettingsSectionNavigation(settings.motionMode);
+  const sectionNavigation = useSettingsCategoryNavigation(routeFocus, settings.motionMode);
   const i18n = createRuntimeI18n(
     settings.locale,
     typeof window !== "undefined" ? window : undefined,

@@ -15,10 +15,11 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
-The 0.2.1 GitHub release is available now. The Store update is under review;
-the public Store may still serve RC14 until approval and rollout complete.
+Version 0.2.1 is available on the Chrome Web Store and GitHub. Version 0.2.2
+prepares the unified interface and four motion choices described below;
+its release and Store review state are tracked separately at the end of this page.
 
-![AI Usage Dashboard popup and Settings surfaces](./Doc/Assets/ai-usage-dashboard-readme-hero.png)
+![AI Usage Dashboard 0.2.2](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
 
 _Current extension UI with illustrative QA values. No real accounts or credentials are included._
 
@@ -40,7 +41,7 @@ _Current extension UI with illustrative QA values. No real accounts or credentia
 ## See It In Action
 
 <p align="center">
-  <img src="./Doc/Assets/ai-usage-dashboard-popup-demo.gif" width="340" alt="AI Usage Dashboard popup moving between quota rings, usage history, and Sub2API metrics">
+  <img src="./Doc/Assets/ai-usage-dashboard-popup-demo-0.2.2.gif" width="340" alt="AI Usage Dashboard 0.2.2 popup moving between quota rings, usage history, and Sub2API metrics with illustrative QA data">
 </p>
 
 The short loop shows the real toolbar popup moving from personal quota windows
@@ -51,7 +52,7 @@ panel use the same normalized provider state.
 
 1. Install the extension from the Chrome Web Store.
 2. Open the toolbar popup and choose **Settings**.
-3. Use **Quick Setup** to enable only the providers you use.
+3. Open **Accounts & Connections** to enable only the providers you use.
 4. Grant optional host access or add an API credential only when that source
    requires it.
 5. Return to the popup, side panel, or full-page dashboard for daily checks.
@@ -109,11 +110,14 @@ before connecting a provider or custom endpoint.
 
 ## Personalize The Dashboard
 
-- Quick Setup is the first Settings section and navigation item, so provider
-  selection is available before appearance and advanced controls.
-- Settings separates **Usage & Notifications** (sync interval, in-app warning,
-  optional system notifications, and configuration backup) from **Appearance**
-  (color, motion, popup browsing, and advanced UI controls). The in-app warning
+- Settings starts with **Accounts & Connections**, followed by **Usage &
+  Notifications**, **Appearance & Display**, **General**, and **Data & Backup**.
+  Wide pages use a category rail; narrow pages use a dropdown. Only the selected
+  category is shown, while connection drafts and category scroll positions remain.
+- Usage & Notifications groups sync interval, in-app warning and optional
+  system notifications. Data & Backup owns JSON and Chrome Sync operations;
+  Appearance & Display owns colors, motion, popup browsing and display controls.
+  The in-app warning
   and notification trigger percentages are independent. Notifications use a
   compact Off / On / Paused selector; account and threshold options appear when
   enabled.
@@ -121,16 +125,48 @@ before connecting a provider or custom endpoint.
   gradient shared by popup, side panel, full-page, detail, and preview surfaces.
 - Generate a gradient locally from a PNG, JPEG, or WebP image. Only the derived
   color stops are saved; the image and its metadata are not uploaded or stored.
-- Set motion to On, Reduced, or Follow system. On remains the default and can
-  keep app motion enabled when the operating system requests reduced motion.
+- Set motion to Default, Follow system, More, or Reduced. Default and More play
+  even when the operating system requests reduced motion; Follow system honors
+  that preference. Existing choices and backups retain their meaning.
 - Format quota resets as localized date and time, weekday and time, or both.
 - Enable the default-off quota pace estimate in Provider detail for fresh,
   fixed-duration windows. It is a local presentation estimate, not source data.
 
-![AI Usage Dashboard Settings Quick Setup](./Doc/Assets/ai-usage-dashboard-settings-quick-setup.png)
+### Unified Interface In 0.2.2
 
-_Settings Quick Setup preview rendered from synthetic QA snapshots. No real
-accounts, credentials, or usage evidence are included._
+Settings keeps the existing customization options, with separate editing
+targets for Popup, Sidebar and Full Page. Ordinary preferences report confirmed
+saves and retain failed changes for retry.
+
+Navigation, menus, expandable settings, save feedback and Provider changes share
+the same motion profile across Settings, Dashboard, Sidebar, detail and Popup.
+More adds short grouped entrances and stronger interaction feedback. Quota
+labels and accessible values update immediately; stale, unknown, failed or reset
+data is not animated as a numeric progression. Backgrounded transitions settle,
+and idle pages do not play decorative loops.
+
+![AI Usage Dashboard 0.2.2 Settings](./Doc/Assets/ai-usage-dashboard-settings-0.2.2.png)
+
+The Dashboard and Sidebar have operational
+summaries and responsive Provider lists. This screenshot uses synthetic values,
+not a live account.
+
+![AI Usage Dashboard 0.2.2 Dashboard](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
+
+Provider detail groups quota and reset, trends, comparison and export, and
+technical source information. Successful capture time and recovery actions stay
+visible when technical information is collapsed.
+
+![AI Usage Dashboard 0.2.2 Provider detail](./Doc/Assets/ai-usage-dashboard-detail-0.2.2.png)
+
+The native toolbar Popup uses the same visual language while keeping its four
+browsing modes, saved appearance and compact dimensions.
+
+![AI Usage Dashboard 0.2.2 native Popup](./Doc/Assets/ai-usage-dashboard-popup-0.2.2.png)
+
+_The 0.2.2 interface shown with synthetic QA data, not live account usage.
+The [0.2.1 Settings image](./Doc/Assets/ai-usage-dashboard-settings-quick-setup.png)
+is retained as historical material. Store review and rollout are tracked separately._
 
 ## Extend It
 
@@ -149,7 +185,7 @@ custom and never treated as an official provider result. See the
 
 Local companions are never installed, started, discovered, or updated by the
 extension. Generic accepted local rows remain separate custom sources. The
-0.2.1 source includes an opt-in, same-machine Codex CLI bridge for the built-in
+extension includes an opt-in, same-machine Codex CLI bridge for the built-in
 Codex Personal quota. After manual pairing, local-only mode can replace
 browser-page quota refreshes with local quota reads. API-equivalent estimates
 appear only after sufficient complete, priced observations; they are not
@@ -205,22 +241,15 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 ## Current Release State
 
 - The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
-  displays `0.2.0-rc.14`, verified by a direct public-page fetch on
-  2026-09-23 UTC. The authenticated Store API reports manifest `0.2.0.14`
-  as `PUBLISHED` at 100%.
-- Source package version: `0.2.1`; Chrome manifest version: `0.2.1.0`.
+  displays `0.2.1`, verified on 2026-10-04 UTC. The authenticated Store API
+  reports manifest `0.2.1.0` as `PUBLISHED` at 100%, with no pending submission.
+- Source package version: `0.2.2`; Chrome manifest version: `0.2.2.0`.
 - GitHub Release [`v0.2.1`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.1)
   is stable and provides verified Chrome and unsigned Firefox local-beta
   packages plus `SHA256SUMS.txt`. Its tag workflow passed on 2026-09-24 UTC.
-- RC14 remains the verified Store baseline. The 0.2.1 release adds the new
-  Settings organization, diagnostics, notifications, comparison, export, and
-  optional Codex local bridge; these are not Store features until the 0.2.1
-  package is separately published there.
-- The authenticated Store API accepted the `0.2.1.0` package upload on
-  2026-09-24 UTC. The updated listing text and images were saved in the
-  Developer Dashboard and submitted once for review. On 2026-09-24 UTC, the
-  Store API reported `0.2.1.0` as `PENDING_REVIEW` at 100%, while `0.2.0.14`
-  remained `PUBLISHED` at 100%.
+- Version 0.2.2 is being prepared for GitHub and Store review. It unifies the
+  interface, reorganizes Settings and adds four motion profiles. The published
+  0.2.1 package remains the Store baseline until a new revision is approved.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

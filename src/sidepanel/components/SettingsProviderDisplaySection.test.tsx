@@ -9,6 +9,37 @@ import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
 import { SettingsProviderDisplaySection } from "./SettingsProviderDisplaySection";
 
 describe("SettingsProviderDisplaySection", () => {
+  it.each(["popup", "sidebar", "fullPage"] as const)(
+    "shows only the selected %s editors without changing settings",
+    (surface) => {
+      const i18n = createRuntimeI18n("en");
+      const before = structuredClone(SAMPLE_APP_STATE.settings);
+      const html = renderToStaticMarkup(
+        <SettingsProviderDisplaySection
+          surface={surface}
+          settings={SAMPLE_APP_STATE.settings}
+          providers={SAMPLE_APP_STATE.providerSettings}
+          providerSourceDisplayCopy={buildProviderSourceDisplayLocalizedCopy(
+            i18n,
+          )}
+          snapshots={SAMPLE_APP_STATE.providers}
+          settingsCopy={buildSettingsLocalizedCopy(i18n)}
+          onProviderOrderBySurfaceChange={() => {}}
+          onProgressItemsBySurfaceChange={() => {}}
+        />,
+      );
+      expect(html).toContain(`data-settings-display-surface="${surface}"`);
+      expect(html.match(/data-provider-order-surface=/g)).toHaveLength(1);
+      expect(html.match(/data-api-gateway-module-row=/g)).toHaveLength(4);
+      for (const other of ["popup", "sidebar", "fullPage"].filter(
+        (item) => item !== surface,
+      )) {
+        expect(html).not.toContain(`data-provider-order-surface="${other}"`);
+        expect(html).not.toContain(`data-provider-progress-surface="${other}"`);
+      }
+      expect(SAMPLE_APP_STATE.settings).toEqual(before);
+    },
+  );
   it("renders provider display controls as a standalone Settings section", () => {
     const i18n = createRuntimeI18n("en", undefined);
     const settingsCopy = buildSettingsLocalizedCopy(i18n);
@@ -29,9 +60,11 @@ describe("SettingsProviderDisplaySection", () => {
 
     expect(html).toContain(`id="${SETTINGS_SECTION_IDS.providerDisplay}"`);
     expect(html).toContain('data-settings-provider-display-section=""');
-    expect(html).toContain('data-codex-local-settings=""');
-    expect(html).toContain(">Provider display settings<");
-    expect(html).toContain("Manage provider order and visible quota progress items");
+    expect(html).not.toContain('data-codex-local-settings=""');
+    expect(html).toContain(">Visible content<");
+    expect(html).toContain(
+      "Manage provider order and visible quota progress items",
+    );
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).toContain('data-provider-order-surface="popup"');
@@ -41,10 +74,10 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-provider-progress-surface="sidebar"');
     expect(html).toContain('data-provider-progress-surface="fullPage"');
     expect(html).toContain('data-usage-history-preferences=""');
-    expect(html).toContain('data-sub2api-deployment-settings=""');
+    expect(html).not.toContain('data-sub2api-deployment-settings=""');
     expect(html).toContain('data-api-gateway-module-preferences=""');
     expect(html.match(/data-api-gateway-module-row=/g)).toHaveLength(12);
-    expect(html).toContain("Sub2API connections");
+    expect(html).not.toContain("Sub2API connections");
     expect(html).toContain("Show history modules by surface");
     expect(html).toContain(
       "Choose and order personal usage and turns independently",
@@ -59,9 +92,7 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain(
       'data-usage-history-module-row="personal_usage_by_surface"',
     );
-    expect(html).toContain(
-      'data-i18n-layout-contract="compact-order-row"',
-    );
+    expect(html).toContain('data-i18n-layout-contract="compact-order-row"');
     expect(html).toContain('data-material-icon="keyboard-arrow-up"');
     expect(html).toContain('data-material-icon="keyboard-arrow-down"');
     expect(html).toContain('data-usage-history-module-row="turns_history"');
@@ -100,12 +131,8 @@ describe("SettingsProviderDisplaySection", () => {
     );
 
     expect(html).toContain('data-cursor-usage-preferences=""');
-    expect(html).toContain(
-      'data-cursor-usage-module-row="billing_summary"',
-    );
-    expect(html).toContain(
-      'data-cursor-usage-module-row="usage_history"',
-    );
+    expect(html).toContain('data-cursor-usage-module-row="billing_summary"');
+    expect(html).toContain('data-cursor-usage-module-row="usage_history"');
     expect(html.match(/data-cursor-usage-module-row=/g)).toHaveLength(6);
   });
 
@@ -168,7 +195,7 @@ describe("SettingsProviderDisplaySection", () => {
       'data-provider-progress-preference-provider="claude-code-team-page"',
     );
     const nextProviderStart = html.indexOf(
-      'data-provider-progress-preference-provider=',
+      "data-provider-progress-preference-provider=",
       claudeSectionStart + 1,
     );
     const claudeSection = html.slice(
@@ -176,9 +203,9 @@ describe("SettingsProviderDisplaySection", () => {
       nextProviderStart === -1 ? undefined : nextProviderStart,
     );
 
-    expect(claudeSection.match(/data-provider-progress-surface=/g)).toHaveLength(
-      3,
-    );
+    expect(
+      claudeSection.match(/data-provider-progress-surface=/g),
+    ).toHaveLength(3);
   });
 
   it("keeps hidden providers out of surface order and quota item controls", () => {
@@ -207,7 +234,9 @@ describe("SettingsProviderDisplaySection", () => {
     );
 
     expect(html).toContain("2 providers");
-    expect(html).not.toContain('data-provider-order-row="cursor-personal-page"');
+    expect(html).not.toContain(
+      'data-provider-order-row="cursor-personal-page"',
+    );
     expect(html).not.toContain(
       'data-provider-progress-preference-provider="cursor-personal-page"',
     );

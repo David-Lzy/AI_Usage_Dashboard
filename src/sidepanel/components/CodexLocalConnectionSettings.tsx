@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { sendAppMessage } from "../../shared/app-client";
 import {
@@ -15,6 +15,8 @@ import { MaterialIcon } from "./MaterialIcon";
 import { MaterialSelect } from "./MaterialSelect";
 
 import "./CodexLocalConnectionSettings.css";
+import { ControlVisibilityBoundary } from "../../shared/control-visibility";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 
 type Props = { locale: ResolvedAppLocale };
 const START_COMMAND = 'node scripts/local-companion-bridge.mjs --codex-home "ABSOLUTE_CODEX_HOME_PATH"';
@@ -28,6 +30,8 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [setupOpen, setSetupOpen] = useState(false);
+  const noticeRef = useRef<HTMLParagraphElement | null>(null);
+  useMotionEntrance(noticeRef, notice, true);
 
   useEffect(() => {
     let active = true;
@@ -88,7 +92,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
   const connected = Boolean(view?.status === "connected" && view.codexAvailable);
   const mode = view?.codexMode ?? "browser";
   return (
-    <div className="codex-local-settings" data-codex-local-settings="">
+    <div className="codex-local-settings" data-codex-local-settings="" aria-busy={busy}>
       <div className="codex-local-settings__heading">
         <div className="codex-local-settings__heading-main">
           <div className="codex-local-settings__title-row">
@@ -102,7 +106,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
                 data-codex-local-setup-toggle=""
                 onClick={() => setSetupOpen((open) => !open)}
               >
-                <MaterialIcon name={setupOpen ? "keyboard-arrow-down" : "keyboard-arrow-right"} />
+                <MaterialIcon name="keyboard-arrow-right" />
                 {copy.setupTitle}
               </button>
             ) : null}
@@ -114,7 +118,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
         </span>
       </div>
       {!connected ? (
-        <div className="codex-local-settings__guide" data-codex-local-setup="" id={setupId} hidden={!setupOpen}>
+        <ControlVisibilityBoundary animate className="codex-local-settings__guide" data-codex-local-setup="" id={setupId} hidden={!setupOpen}>
           <ol>
             <li>{copy.setupPrepare}</li>
             <li>
@@ -123,7 +127,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
             </li>
             <li>{copy.setupFinish}</li>
           </ol>
-        </div>
+        </ControlVisibilityBoundary>
       ) : null}
       <div className="codex-local-settings__mode">
         <MaterialSelect<CodexLocalSourceMode>
@@ -154,7 +158,7 @@ export function CodexLocalConnectionSettings({ locale }: Props) {
         {!connected ? <button className="text-button text-button--primary" type="button" disabled={busy} onClick={() => void pair()}>{copy.pair}</button> : null}
         {view?.status !== "disconnected" && view ? <button className="text-button" type="button" disabled={busy} onClick={() => void invoke({ action: "disconnect-codex" })}>{copy.disconnect}</button> : null}
       </div>
-      {notice ? <p className="codex-local-settings__notice" role="status">{notice}</p> : null}
+      {notice ? <p ref={noticeRef} className="codex-local-settings__notice" role="status">{notice}</p> : null}
     </div>
   );
 }

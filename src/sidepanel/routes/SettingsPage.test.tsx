@@ -3,15 +3,15 @@ import { describe, expect, it } from "vitest";
 
 import { SAMPLE_APP_STATE } from "../../shared/demo-state";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
-import {
-  SettingsPage,
-} from "./SettingsPage";
+import { SettingsPage } from "./SettingsPage";
 import {
   getSettingsRouteFocusElement,
   getSettingsRouteFocusKey,
 } from "../settings-route-focus";
 
-function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0]> = {}) {
+function renderSettingsPage(
+  overrides: Partial<Parameters<typeof SettingsPage>[0]> = {},
+) {
   return renderToStaticMarkup(
     <SettingsPage
       onBack={() => {}}
@@ -20,7 +20,6 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
       snapshots={SAMPLE_APP_STATE.providers}
       toast={null}
       onDismissToast={() => {}}
-      onSavePreferences={() => {}}
       onSyncIntervalChange={() => {}}
       onLocalePreferenceChange={() => {}}
       onUserLevelChange={() => {}}
@@ -75,22 +74,23 @@ function renderSettingsPage(overrides: Partial<Parameters<typeof SettingsPage>[0
 }
 
 describe("SettingsPage", () => {
-  it("renders the top-bar navigation, overview controls, and basic-mode quick setup", () => {
+  it("renders five categories, retained settings controls, and compact basic-mode connections", () => {
     const html = renderSettingsPage();
 
-    expect(html).toContain('class="top-app-bar__bottom"');
-    expect(html).toContain(
-      'data-material-action-icon="keyboard-backspace"',
-    );
+    expect(html).not.toContain('class="top-app-bar__bottom"');
+    expect(html).toContain('data-material-action-icon="keyboard-backspace"');
     expect(html).toContain('data-material-action-icon="save"');
-    expect(html).toContain('class="settings-section-nav"');
+    expect(html).toContain('data-settings-category-navigation="rail"');
+    expect(html).toContain('data-settings-category-navigation="select"');
     expect(html.indexOf('id="settings-quick-setup"')).toBeLessThan(
       html.indexOf('id="settings-overview"'),
     );
-    const navMarkup = html.match(/<nav class="settings-section-nav"[\s\S]*?<\/nav>/)?.[0];
+    const navMarkup = html.match(
+      /<nav class="settings-category-rail"[\s\S]*?<\/nav>/,
+    )?.[0];
     expect(navMarkup).toBeDefined();
-    expect(navMarkup?.indexOf('>Quick Setup<')).toBeLessThan(
-      navMarkup?.indexOf('>Overview<') ?? 0,
+    expect(navMarkup?.indexOf(">Accounts &amp; connections<")).toBeLessThan(
+      navMarkup?.indexOf(">General<") ?? 0,
     );
     expect(html).toContain('id="settings-usage-notifications"');
     expect(html).toContain(
@@ -100,9 +100,9 @@ describe("SettingsPage", () => {
     expect(html).toContain('class="settings-overview__level-control"');
     expect(html).not.toContain('class="settings-overview__paired-controls"');
     expect(html).toContain('class="form-field__label-row"');
-    expect(html).toContain('data-settings-material-select="settings-user-level"');
-    expect(html).toContain('data-settings-material-select="locale-preference"');
-    expect(html).toContain('data-settings-material-select="theme-mode"');
+    expect(html).toContain('data-fusion-field="settings-user-level"');
+    expect(html).toContain('data-fusion-field="locale-preference"');
+    expect(html).toContain('data-fusion-field="theme-mode"');
     expect(html).toContain('data-settings-material-select="motion-mode"');
     expect(html.indexOf('id="settings-appearance"')).toBeLessThan(
       html.indexOf('data-settings-material-select="motion-mode"'),
@@ -110,28 +110,30 @@ describe("SettingsPage", () => {
     expect(html.indexOf('id="settings-usage-notifications"')).toBeLessThan(
       html.indexOf('id="settings-appearance"'),
     );
-    expect(html).toContain('data-provider-carousel=""');
-    expect(html).toContain(">Quick Setup<");
-    expect(html).toContain('data-quick-setup-source-modes="cursor-personal-page"');
-    expect(html).toContain('data-quick-setup-source-mode="session_page"');
+    expect(html).not.toContain('data-provider-carousel=""');
+    expect(html).toContain(">Accounts &amp; connections<");
     expect(html).toContain(
-      'class="dashboard-section__header quick-setup-section__header"',
+      'data-quick-setup-source-modes="cursor-personal-page"',
     );
+    expect(html).toContain('data-quick-setup-source-mode="session_page"');
+    expect(html).toContain('class="settings-connection-list"');
     expect(html).toContain('data-quick-setup-provider-groups=""');
     expect(html).toContain('data-quick-setup-provider-group="personal"');
     expect(html).toContain('data-quick-setup-provider-group="api"');
     expect(html).toContain("Personal / Web");
     expect(html).toContain(">API<");
-    expect(html).not.toContain("Cursor Team Admin API");
+    expect(html).toContain(
+      'hidden="" data-quick-setup-provider-id="cursor-team-api"',
+    );
     expect(html).toContain("Cursor personal dashboard usage page");
-    expect(html).not.toContain('data-settings-material-select="popup-circular-row-count"');
+    expect(html).toContain(
+      'data-settings-material-select="popup-circular-row-count"',
+    );
     expect(html).toContain(
       'data-settings-material-select="popup-provider-browsing-mode"',
     );
-    expect(html).not.toContain('data-action-badge-selection-controls=""');
-    expect(html).not.toContain(
-      'data-settings-material-select="toolbar-icon-mode"',
-    );
+    expect(html).toContain('data-action-badge-selection-controls=""');
+    expect(html).toContain('data-settings-material-select="toolbar-icon-mode"');
     expect(html).toContain('data-configuration-backup=""');
     expect(html).toContain('data-settings-provider-display-section=""');
     expect(html).toContain('data-custom-source-settings=""');
@@ -140,9 +142,9 @@ describe("SettingsPage", () => {
     expect(html).toContain('data-provider-order-preferences=""');
     expect(html).toContain('data-provider-progress-preferences=""');
     expect(html).not.toContain('data-provider-order-row="jetbrains-org-page"');
-    expect(html).not.toContain('data-progress-appearance-preferences=""');
-    expect(html).toContain(">More UI settings<");
-    expect(html).toContain(">Provider display settings<");
+    expect(html).toContain('data-progress-appearance-preferences=""');
+    expect(html).toContain(">Global appearance<");
+    expect(html).toContain(">Visible content<");
     expect(html.indexOf('id="settings-appearance"')).toBeLessThan(
       html.indexOf('id="settings-provider-display"'),
     );
@@ -168,9 +170,7 @@ describe("SettingsPage", () => {
 
     expect(html).toContain('data-material-action-icon="devices"');
     expect(html).toContain('data-material-action-icon="tab"');
-    expect(html).toContain(
-      'data-material-action-icon="keyboard-backspace"',
-    );
+    expect(html).toContain('data-material-action-icon="keyboard-backspace"');
     expect(html).toContain('data-material-action-icon="save"');
   });
 
@@ -207,7 +207,9 @@ describe("SettingsPage", () => {
     });
 
     expect(advancedHtml).not.toContain('data-codexbar-bridge-settings=""');
-    expect(advancedHtml).not.toContain('data-local-companion-bridge-settings=""');
+    expect(advancedHtml).not.toContain(
+      'data-local-companion-bridge-settings=""',
+    );
     expect(developerHtml).toContain('data-codexbar-bridge-settings=""');
     expect(developerHtml).toContain('data-local-companion-bridge-settings=""');
   });
@@ -235,7 +237,9 @@ describe("SettingsPage", () => {
     expect(html).toContain('id="settings-advanced"');
     expect(html).toContain('class="source-card');
     expect(html).toContain('data-provider-id="gemini-policy"');
-    expect(html).toContain('data-provider-carousel-active-id="gemini-policy"');
+    expect(html).toContain(
+      'aria-expanded="true" aria-controls="settings-connection-gemini-policy"',
+    );
   });
 
   it("keeps quick-setup focused deep links out of advanced credentials", () => {
@@ -248,7 +252,9 @@ describe("SettingsPage", () => {
 
     expect(html).toContain('data-quick-setup-provider-id="cursor-team-api"');
     expect(html).toContain('data-quick-setup-provider-group="api"');
-    expect(html).toContain('data-quick-setup-credential-link="cursor-team-api"');
+    expect(html).toContain(
+      'data-quick-setup-credential-link="cursor-team-api"',
+    );
     expect(html).not.toContain('id="settings-advanced"');
     expect(html).not.toContain('data-credential-provider-id="cursor-team-api"');
   });
@@ -295,9 +301,7 @@ describe("SettingsPage", () => {
     const providerDisplayDocument = {
       querySelector: () => null,
       getElementById: (sectionId: string) =>
-        sectionId === SETTINGS_SECTION_IDS.providerDisplay
-          ? fallbackSection
-          : null,
+        sectionId === SETTINGS_SECTION_IDS.quickSetup ? fallbackSection : null,
     } as unknown as Document;
     expect(
       getSettingsRouteFocusElement(
@@ -336,10 +340,12 @@ describe("SettingsPage", () => {
   });
 
   it("keeps default personal and policy providers in quick setup when every provider is hidden", () => {
-    const hiddenProviders = SAMPLE_APP_STATE.providerSettings.map((provider) => ({
-      ...provider,
-      displayEnabled: false,
-    }));
+    const hiddenProviders = SAMPLE_APP_STATE.providerSettings.map(
+      (provider) => ({
+        ...provider,
+        displayEnabled: false,
+      }),
+    );
     const defaultQuickSetupProviderIds = [
       "cursor-personal-page",
       "claude-code-team-page",
@@ -351,20 +357,26 @@ describe("SettingsPage", () => {
       providers: hiddenProviders,
     });
 
-    expect(html).toContain(
-      `data-provider-carousel-count="${defaultQuickSetupProviderIds.length}"`,
+    expect(html.match(/data-quick-setup-provider-id=/g)?.length).toBe(
+      hiddenProviders.length,
     );
     for (const providerId of defaultQuickSetupProviderIds) {
       expect(html).toContain(`data-quick-setup-provider-id="${providerId}"`);
-      expect(html).toContain(`data-visibility-toggle="${providerId}"`);
+      expect(html).toContain(`data-visibility-provider-id="${providerId}"`);
       expect(html).toContain(`data-quick-setup-source-modes="${providerId}"`);
     }
-    expect(html).not.toContain('data-quick-setup-provider-id="cursor-team-api"');
+    expect(html).toContain(
+      'hidden="" data-quick-setup-provider-id="cursor-team-api"',
+    );
     expect(html).not.toContain('class="quick-setup-card__more"');
     expect(html).not.toContain("More Provider");
-    expect(html).toContain('data-quick-setup-first-provider-id="codex-personal-page"');
-    expect(html).toContain('data-provider-carousel-active-id="codex-personal-page"');
+    expect(html).toContain(
+      'data-quick-setup-first-provider-id="codex-personal-page"',
+    );
+    expect(html).toContain(
+      'aria-expanded="true" aria-controls="settings-connection-codex-personal-page"',
+    );
     expect(html).toContain(">Start with Codex<");
-    expect(html).toContain(">Enable Codex<");
+    expect(html).toContain('data-quick-setup-primary-action="enable_provider"');
   });
 });

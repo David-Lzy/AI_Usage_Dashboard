@@ -42,7 +42,7 @@ describe("Firefox React DOM warning attribution", () => {
     const violations = [];
     for (const file of files) {
       const source = await readFile(file, "utf8");
-      if (/dangerouslySetInnerHTML|\b(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(/.test(source)) {
+      if (/dangerouslySetInnerHTML|\b(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|unsafeHTML|unsafeSVG|from\s+["']@mdui\/jq/.test(source)) {
         violations.push(file);
       }
     }

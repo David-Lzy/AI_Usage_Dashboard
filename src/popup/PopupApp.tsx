@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useInsertionEffect, useRef, useState } from "react";
+import { useSurfaceMotion } from "../shared/use-motion-effects";
 
 import type {
   AppLocalePreference,
@@ -87,6 +88,7 @@ export function PopupApp() {
   const [loadState, setLoadState] = useState<PopupLoadState>({
     status: "loading",
   });
+  const pageRef = useRef<HTMLElement>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const refreshInFlightRef = useRef(false);
   const [isThemeTogglePending, setIsThemeTogglePending] = useState(false);
@@ -135,7 +137,8 @@ export function PopupApp() {
     [],
   );
 
-  useLayoutEffect(() => {
+  // Root styles do not depend on component refs or schedule React state.
+  useInsertionEffect(() => {
     if (typeof document === "undefined" || typeof window === "undefined") {
       return undefined;
     }
@@ -150,6 +153,8 @@ export function PopupApp() {
       window,
     );
   }, [loadState]);
+
+  useSurfaceMotion(pageRef, loadState.status);
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -563,6 +568,8 @@ export function PopupApp() {
 
   return (
     <main
+      ref={pageRef}
+      data-motion-owned=""
       className={`app-shell popup-shell${
         hasFeaturedProviderCards ? " popup-shell--quota-first" : ""
       }`}

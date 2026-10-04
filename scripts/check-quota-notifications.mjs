@@ -20,12 +20,13 @@ try {
     page.on("pageerror", (error) => errors.push(error.message));
     try {
       await page.goto(`${server.baseUrl}/src/sidepanel/index.html?app-locale=${locale}&app-dir=${locale === "ar" ? "rtl" : "ltr"}#settings`);
-      await page.locator("#settings-appearance").waitFor();
+      await page.locator("#settings-quick-setup").waitFor();
       await page.evaluate(async ({ locale, theme }) => {
         const { default: React } = await import("/__qa/react.js");
         const { default: ReactDOM } = await import("/__qa/react-dom-client.js");
         const { QuotaNotificationSettings } = await import("/src/sidepanel/components/QuotaNotificationSettings.tsx");
         const { createRuntimeI18n } = await import("/src/shared/i18n.ts");
+        const { useFusionTheme } = await import("/src/sidepanel/components/material-ui/fusion-theme.ts");
         const { createDefaultAppState } = await import("/src/shared/production-state.ts");
         const { createQuotaNotificationController } = await import("/src/background/quota-notification-controller.ts");
         const { QUOTA_NOTIFICATION_STORAGE_KEY } = await import("/src/shared/quota-notifications.ts");
@@ -46,7 +47,7 @@ try {
           { kind: "weekly", label: "Weekly limit", normalizedLabel: "weekly", modelLabel: null, quotaUnit: "percent", used: 20, remaining: 80, total: 100, resetAt: null, resetLabel: null },
         ] });
         const dependencies = { readState: async () => state, readStore: async () => stored,
-          writeStore: async (value) => { const previous = stored; stored = structuredClone(value); for (const listener of listeners) listener({ [QUOTA_NOTIFICATION_STORAGE_KEY]: { oldValue: previous, newValue: stored } }, "local"); },
+          writeStore: async (value) => { if (window.__quotaQa?.rejectWrite) throw new Error("QA notification write rejected"); const previous = stored; stored = structuredClone(value); for (const listener of listeners) listener({ [QUOTA_NOTIFICATION_STORAGE_KEY]: { oldValue: previous, newValue: stored } }, "local"); },
           permission: async () => permission, deliver: async (event) => { events.push(event); }, now: () => now };
         let controller = createQuotaNotificationController(dependencies);
         window.__quotaQa = { requests, events, deny: true, getStore: () => stored,
@@ -63,12 +64,25 @@ try {
         holder.id = "quota-qa";
         holder.style.cssText = "margin:12px;min-width:0";
         document.body.append(holder);
-        ReactDOM.createRoot(holder).render(React.createElement(QuotaNotificationSettings, { state, i18n: createRuntimeI18n(locale), warningThresholdPercent: 75 }));
+        function Harness() {
+          const scope = React.useRef(holder);
+          useFusionTheme(scope);
+          return React.createElement(QuotaNotificationSettings, { state, i18n: createRuntimeI18n(locale), warningThresholdPercent: 75 });
+        }
+        ReactDOM.createRoot(holder).render(React.createElement(Harness));
       }, { locale, theme });
       const control = page.locator("#quota-qa [data-quota-notifications]");
-      const mode = control.locator('[data-settings-material-select="quota-notification-mode"] button');
+      const modeField = control.locator('[data-settings-material-select="quota-notification-mode"]');
+      const mode = modeField.locator('input:not(.hidden-input)');
       await mode.waitFor();
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      await modeField.locator('mdui-select').evaluate((element) => {
+        window.__quotaQa.changes = [];
+        for (const type of ['click', 'change']) element.addEventListener(type, () => {
+          window.__quotaQa.changes.push({ type, value: element.value, menu: element.shadowRoot?.querySelector('mdui-menu')?.value, disabled: element.disabled });
+        });
+      });
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__body").getAttribute("inert"), "");
       assert.equal(await mode.getAttribute("aria-expanded"), "false");
       assert.equal(await page.evaluate(() => window.__quotaQa.requests.length), 0);
       assert.equal(await mode.isEnabled(), true, "Missing permission must not disable the explicit enable gesture");
@@ -77,21 +91,80 @@ try {
       }
       await mode.focus();
       await page.keyboard.press("Space");
+      await page.waitForFunction(() => document.activeElement?.tagName === "MDUI-MENU-ITEM" && document.activeElement.getAttribute("value") === "off");
       await page.keyboard.press("ArrowDown");
+      await page.waitForFunction(() => document.activeElement?.tagName === "MDUI-MENU-ITEM" && document.activeElement.getAttribute("value") === "on");
       await page.keyboard.press("Enter");
       await page.waitForFunction(() => window.__quotaQa.requests.length === 1);
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
       assert.equal(await page.evaluate(() => window.__quotaQa.getStore()?.preferences.enabled ?? false), false);
       await page.evaluate(() => { window.__quotaQa.deny = false; });
       async function selectMode(value) {
+        await control.locator(':scope[aria-busy="false"]').waitFor();
+        await page.waitForFunction(
+          () =>
+            !document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
+        await modeField.locator("mdui-select").evaluate(async (element) => {
+          const dropdown = element.shadowRoot.querySelector("mdui-dropdown");
+          await dropdown.updateComplete;
+          await Promise.all(
+            dropdown
+              .getAnimations({ subtree: true })
+              .filter((animation) =>
+                Number.isFinite(
+                  animation.effect?.getComputedTiming().endTime,
+                ),
+              )
+              .map((animation) => animation.finished.catch(() => undefined)),
+          );
+        });
         await mode.click();
-        await page.locator(`.material-select__menu [id$="-option-${value}"]`).click();
+        await page.waitForFunction(
+          () =>
+            document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
+        await modeField.locator(`mdui-menu-item[value="${value}"]`).click();
+        await page.waitForFunction(
+          () =>
+            !document
+              .querySelector(
+                '#quota-qa [data-settings-material-select="quota-notification-mode"] mdui-select',
+              )
+              .shadowRoot.querySelector("mdui-dropdown").open,
+        );
+        await control.locator(':scope[aria-busy="false"]').waitFor();
+        await modeField.locator('mdui-select').evaluate(async (element) => {
+          const dropdown = element.shadowRoot.querySelector('mdui-dropdown');
+          const panel = dropdown.shadowRoot.querySelector('[part="panel"]');
+          if (panel.matches(':popover-open')) await new Promise((resolve) => dropdown.addEventListener('closed', resolve, { once: true }));
+        });
       }
       await selectMode("on");
       await page.waitForFunction(() => window.__quotaQa.getStore()?.preferences.enabled === true);
       assert.equal(await control.locator(".quota-notification-settings__account").count(), 2);
       const threshold = control.locator('[data-notification-action="threshold"]');
       assert.equal(await threshold.inputValue(), "75");
+      await page.evaluate(() => { window.__quotaQa.rejectWrite = true; });
+      await threshold.fill("79");
+      await threshold.press("Enter");
+      const retry = control.locator('.quota-notification-settings__save-feedback button');
+      await retry.waitFor();
+      assert.equal(await threshold.getAttribute("aria-invalid"), "true");
+      assert.equal(await threshold.inputValue(), "79");
+      assert.equal(await page.evaluate(() => window.__quotaQa.getStore().preferences.thresholdPercent), 75);
+      await page.evaluate(() => { window.__quotaQa.rejectWrite = false; });
+      await retry.click();
+      await page.waitForFunction(() => window.__quotaQa.getStore().preferences.thresholdPercent === 79);
+      assert.equal(await threshold.getAttribute("aria-invalid"), null);
       await threshold.fill("80");
       await threshold.press("Enter");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.thresholdPercent === 80);
@@ -118,7 +191,7 @@ try {
       }
       await selectMode("off");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === false);
-      assert.equal(await control.locator(".quota-notification-settings__account").count(), 0);
+      assert.equal(await control.locator(".quota-notification-settings__account:visible").count(), 0);
       await selectMode("on");
       await page.waitForFunction(() => window.__quotaQa.getStore().preferences.enabled === true && window.__quotaQa.getStore().preferences.paused === false);
       assert.equal(await threshold.inputValue(), "80");
@@ -137,7 +210,7 @@ try {
       assert(trace.requests.every((request) => request.active));
       assert(trace.requests.every((request) => JSON.stringify(request.request) === '{"permissions":["notifications"]}'));
       const layout = await control.evaluate((element) => {
-        const modeButton = element.querySelector('[data-settings-material-select="quota-notification-mode"] button').getBoundingClientRect();
+        const modeButton = element.querySelector('[data-settings-material-select="quota-notification-mode"] mdui-select').getBoundingClientRect();
         const body = element.querySelector(".quota-notification-settings__body");
         const accountCheckbox = element.querySelector(".quota-notification-settings__checkbox:checked");
         const checkboxMark = getComputedStyle(accountCheckbox, "::after");
@@ -164,6 +237,12 @@ try {
       results.push({ locale, width, theme, trace, layout });
       console.log(`quota notifications ${locale}/${width}/${theme}: passed`);
     } catch (error) {
+      console.error(JSON.stringify(await page.evaluate(() => {
+        const select = document.querySelector('#quota-qa mdui-select');
+        return { requests: window.__quotaQa?.requests, changes: window.__quotaQa?.changes, store: window.__quotaQa?.getStore(), value: select?.value,
+          disabled: select?.disabled, menuValue: select?.shadowRoot?.querySelector('mdui-menu')?.value,
+          items: [...(select?.querySelectorAll('mdui-menu-item') ?? [])].map((item) => ({ value: item.value, selected: item.selected })) };
+      })));
       await page.screenshot({ path: path.join(output, `${locale}-${width}-failure.png`), fullPage: true });
       throw error;
     } finally { await page.close(); }

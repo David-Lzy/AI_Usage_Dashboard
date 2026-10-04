@@ -8,7 +8,9 @@ import { markSurfaceSwitchIntent } from "../surface-switch-intent";
 
 type TopBarProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
+  compact?: boolean;
+  brandIcon?: boolean;
   themeActionLabel?: string;
   themeActionTitle?: string;
   themeActionIconName?: MaterialActionIconName;
@@ -19,6 +21,7 @@ type TopBarProps = {
   secondaryActionIconName?: MaterialActionIconName;
   primaryActionLabel?: string;
   primaryActionIconName?: MaterialActionIconName;
+  primaryActionContent?: ReactNode;
   bottomContent?: ReactNode;
   sticky?: boolean;
   onThemeAction?: () => void;
@@ -30,6 +33,8 @@ type TopBarProps = {
 export function TopBar({
   title,
   subtitle,
+  compact = false,
+  brandIcon = false,
   themeActionLabel = "Dark",
   themeActionTitle = "Switch to dark mode",
   themeActionIconName,
@@ -40,6 +45,7 @@ export function TopBar({
   secondaryActionIconName,
   primaryActionLabel = "Settings",
   primaryActionIconName,
+  primaryActionContent,
   bottomContent,
   sticky = false,
   onThemeAction,
@@ -49,12 +55,21 @@ export function TopBar({
 }: TopBarProps) {
   return (
     <header
-      className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}`}
+      className={`top-app-bar${sticky ? " top-app-bar--sticky" : ""}${compact ? " top-app-bar--compact" : ""}`}
       data-i18n-layout-contract="top-app-bar"
     >
       <div className="top-app-bar__main">
         <div className="top-app-bar__title">
-          <p className="top-app-bar__eyebrow">{subtitle}</p>
+          {brandIcon ? (
+            <img
+              className="top-app-bar__brand"
+              src="/icons/icon32.png"
+              alt=""
+              width={32}
+              height={32}
+            />
+          ) : null}
+          {subtitle ? <p className="top-app-bar__eyebrow">{subtitle}</p> : null}
           <h1 className="top-app-bar__headline">{title}</h1>
         </div>
 
@@ -101,7 +116,13 @@ export function TopBar({
               </span>
             </button>
           ) : null}
-          <button className="icon-button" type="button" onClick={onSecondaryAction}>
+          <button
+            className="icon-button"
+            type="button"
+            aria-label={secondaryActionLabel}
+            title={secondaryActionLabel}
+            onClick={onSecondaryAction}
+          >
             {secondaryActionIconName ? (
               <MaterialActionIcon
                 className="top-app-bar__action-icon"
@@ -112,21 +133,27 @@ export function TopBar({
               {secondaryActionLabel}
             </span>
           </button>
-          <button
-            className="icon-button icon-button--primary"
-            type="button"
-            onClick={onPrimaryAction}
-          >
-            {primaryActionIconName ? (
-              <MaterialActionIcon
-                className="top-app-bar__action-icon"
-                name={primaryActionIconName}
-              />
-            ) : null}
-            <span className="top-app-bar__action-label">
-              {primaryActionLabel}
-            </span>
-          </button>
+          {primaryActionContent !== undefined ? (
+            primaryActionContent
+          ) : (
+            <button
+              className="icon-button icon-button--primary"
+              type="button"
+              aria-label={primaryActionLabel}
+              title={primaryActionLabel}
+              onClick={onPrimaryAction}
+            >
+              {primaryActionIconName ? (
+                <MaterialActionIcon
+                  className="top-app-bar__action-icon"
+                  name={primaryActionIconName}
+                />
+              ) : null}
+              <span className="top-app-bar__action-label">
+                {primaryActionLabel}
+              </span>
+            </button>
+          )}
         </div>
       </div>
 

@@ -7,6 +7,8 @@ import {
   type SetStateAction,
 } from "react";
 import { createPortal } from "react-dom";
+import { useControlVisibility } from "../../shared/control-visibility";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 
 import type { AppSettings } from "../../providers/types";
 import type { RuntimeI18n } from "../../shared/i18n";
@@ -263,6 +265,10 @@ export function ToolbarPopupPreview({
     () => floatingPosition ?? getInitialFloatingPreviewPosition(),
   );
   const [isDragging, setIsDragging] = useState(false);
+  const panelVisible = useControlVisibility();
+  const inlineRef = useRef<HTMLDivElement | null>(null);
+  useMotionEntrance(floatingPreviewRef, `${placement}:${panelVisible}`);
+  useMotionEntrance(inlineRef, `${placement}:${panelVisible}`);
   const normalizedPreviewRemainingPercent = normalizePreviewRemainingPercent(
     previewRemainingPercent,
   );
@@ -411,6 +417,7 @@ export function ToolbarPopupPreview({
     />
   );
 
+  if (!panelVisible) return null;
   if (placement === "floating") {
     const floatingPreview = (
       <aside
@@ -461,6 +468,7 @@ export function ToolbarPopupPreview({
 
   return (
     <div
+      ref={inlineRef}
       className="toolbar-popup-preview toolbar-popup-preview--inline popup-appearance-preview-card popup-appearance-preview-shell"
       data-toolbar-popup-preview="inline"
       {...buildToolbarPopupPreviewShellAttributes(settings)}

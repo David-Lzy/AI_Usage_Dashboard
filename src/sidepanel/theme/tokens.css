@@ -261,9 +261,9 @@
       color-mix(in srgb, var(--md-sys-color-shadow) 18%, transparent);
 
   /* Motion */
-  --app-motion-duration-fast: 140ms;
-  --app-motion-duration-medium: 220ms;
-  --app-motion-duration-slow: 320ms;
+  --app-motion-duration-fast: 120ms;
+  --app-motion-duration-medium: 200ms;
+  --app-motion-duration-slow: 280ms;
   --app-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --app-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --app-motion-distance-1: 6px;
@@ -722,12 +722,19 @@
 }
 
 :root[data-motion-resolved="full"] {
-  --app-motion-duration-fast: 140ms;
-  --app-motion-duration-medium: 220ms;
-  --app-motion-duration-slow: 320ms;
+  --app-motion-duration-fast: 120ms;
+  --app-motion-duration-medium: 200ms;
+  --app-motion-duration-slow: 280ms;
   --app-motion-distance-1: 6px;
   --app-motion-distance-2: 12px;
   --app-motion-distance-3: 18px;
+}
+
+:root[data-motion-profile="expressive"] {
+  --app-motion-duration-fast: 180ms;
+  --app-motion-duration-medium: 270ms;
+  --app-motion-duration-slow: 360ms;
+  --app-motion-easing-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root[data-motion-resolved="reduced"] {
@@ -748,4 +755,11 @@
   scroll-behavior: auto !important;
   transition-delay: 0ms !important;
   transition-duration: 0.001ms !important;
+}
+
+:root[data-motion-suspended="true"] *,
+:root[data-motion-suspended="true"] *::before,
+:root[data-motion-suspended="true"] *::after {
+  animation-play-state: paused !important;
+  transition: none !important;
 }

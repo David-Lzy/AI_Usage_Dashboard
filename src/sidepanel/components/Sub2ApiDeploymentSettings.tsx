@@ -1,3 +1,4 @@
+import { MotionDetails } from "../../shared/components/MotionDetails";
 import { useEffect, useRef, useState } from "react";
 
 import type {
@@ -25,12 +26,14 @@ import {
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
 import { MaterialSelect } from "./MaterialSelect";
 import { TechnicalText } from "../../shared/components/TechnicalText";
+import { useMotionEntrance } from "../../shared/use-motion-effects";
 
 type Sub2ApiDeploymentSettingsProps = {
   locale: ResolvedAppLocale;
   providerAccounts?: ProviderAccountsByProvider;
   snapshot: ProviderSnapshot | null;
   popupAccountPresentationMode: PopupProviderAccountPresentationMode;
+  onOpenPresentationSettings?: () => void;
   onSelectAccount: (accountId: ProviderAccountId) => void;
   onPopupAccountPresentationModeChange: (
     mode: PopupProviderAccountPresentationMode,
@@ -45,11 +48,7 @@ type Sub2ApiDeploymentSettingsProps = {
 };
 
 type ConnectionTestStatus =
-  | "idle"
-  | "testing"
-  | "success"
-  | "failure"
-  | "timeout";
+  "idle" | "testing" | "success" | "failure" | "timeout";
 
 const CONNECTION_TEST_TIMEOUT_MS = 20_000;
 const CONNECTION_TEST_TICK_MS = 250;
@@ -76,6 +75,7 @@ export function Sub2ApiDeploymentSettings({
   providerAccounts,
   snapshot,
   popupAccountPresentationMode,
+  onOpenPresentationSettings,
   onSelectAccount,
   onPopupAccountPresentationModeChange,
   onSave,
@@ -107,6 +107,8 @@ export function Sub2ApiDeploymentSettings({
   const [retainCachedSummary, setRetainCachedSummary] = useState(true);
   const [connectionTestStatus, setConnectionTestStatus] =
     useState<ConnectionTestStatus>("idle");
+  const feedbackRef = useRef<HTMLDivElement | null>(null);
+  useMotionEntrance(feedbackRef, connectionTestStatus, true);
   const [connectionTestRemainingMs, setConnectionTestRemainingMs] = useState(
     CONNECTION_TEST_TIMEOUT_MS,
   );
@@ -169,8 +171,7 @@ export function Sub2ApiDeploymentSettings({
     isAdding,
   ]);
 
-  const requiresInsecureAcknowledgement =
-    isSub2ApiNonLoopbackHttpUrl(baseUrl);
+  const requiresInsecureAcknowledgement = isSub2ApiNonLoopbackHttpUrl(baseUrl);
   const draft: Sub2ApiDeploymentDraft = {
     accountId: isAdding ? null : activeAccountId,
     displayLabel,
@@ -313,10 +314,9 @@ export function Sub2ApiDeploymentSettings({
         )}
       </div>
 
-      <details className="sub2api-deployment-settings__trust">
-        <summary>{copy.trustTitle}</summary>
+      <MotionDetails className="sub2api-deployment-settings__trust" summary={copy.trustTitle}>
         <p>{copy.trustDetail}</p>
-      </details>
+      </MotionDetails>
 
       <div className="sub2api-deployment-settings__connection-bar">
         {!isAdding && collection?.accounts.length ? (
@@ -336,32 +336,42 @@ export function Sub2ApiDeploymentSettings({
         ) : null}
         {!isAdding && (collection?.accounts.length ?? 0) > 1 ? (
           <div className="sub2api-deployment-settings__presentation">
-            <MaterialSelect
-              fieldIdPrefix="sub2api-popup-account-presentation"
-              label={accountPresentationCopy.label}
-              labelAccessory={
-                <MaterialInfoTooltip>
-                  {accountPresentationCopy.detail}
-                </MaterialInfoTooltip>
-              }
-              value={popupAccountPresentationMode}
-              options={[
-                {
-                  value: "select",
-                  label: accountPresentationCopy.select,
-                },
-                {
-                  value: "cycle",
-                  label: accountPresentationCopy.cycle,
-                },
-                {
-                  value: "cards",
-                  label: accountPresentationCopy.cards,
-                },
-              ]}
-              disabled={connectionTestStatus === "testing"}
-              onChange={onPopupAccountPresentationModeChange}
-            />
+            {onOpenPresentationSettings ? (
+              <button
+                className="text-button"
+                type="button"
+                onClick={onOpenPresentationSettings}
+              >
+                {accountPresentationCopy.label}
+              </button>
+            ) : (
+              <MaterialSelect
+                fieldIdPrefix="sub2api-popup-account-presentation"
+                label={accountPresentationCopy.label}
+                labelAccessory={
+                  <MaterialInfoTooltip>
+                    {accountPresentationCopy.detail}
+                  </MaterialInfoTooltip>
+                }
+                value={popupAccountPresentationMode}
+                options={[
+                  {
+                    value: "select",
+                    label: accountPresentationCopy.select,
+                  },
+                  {
+                    value: "cycle",
+                    label: accountPresentationCopy.cycle,
+                  },
+                  {
+                    value: "cards",
+                    label: accountPresentationCopy.cards,
+                  },
+                ]}
+                disabled={connectionTestStatus === "testing"}
+                onChange={onPopupAccountPresentationModeChange}
+              />
+            )}
           </div>
         ) : null}
         <div
@@ -444,6 +454,7 @@ export function Sub2ApiDeploymentSettings({
           ) : null}
           {connectionTestStatus !== "idle" ? (
             <div
+              ref={feedbackRef}
               className={`sub2api-deployment-settings__test-feedback sub2api-deployment-settings__test-feedback--${connectionTestStatus}`}
               data-sub2api-test-status={connectionTestStatus}
               aria-live="polite"
@@ -549,11 +560,10 @@ export function Sub2ApiDeploymentSettings({
         ) : null}
       </div>
 
-      <details className="sub2api-deployment-settings__protocol">
-        <summary>{copy.protocolTitle}</summary>
+      <MotionDetails className="sub2api-deployment-settings__protocol" summary={copy.protocolTitle}>
         <p>{copy.protocolDetail}</p>
         <p>{copy.protocolExcluded}</p>
-      </details>
+      </MotionDetails>
     </section>
   );
 }

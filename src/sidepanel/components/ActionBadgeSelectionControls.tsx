@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useId,
@@ -180,7 +181,9 @@ export function ActionBadgeSelectionControls({
   const fieldId = `action-badge-selection-${generatedId}`;
   const labelId = `${fieldId}-label`;
   const listboxId = `${fieldId}-listbox`;
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
   const selectedValueSet = new Set(selectedValues);
@@ -417,7 +420,7 @@ export function ActionBadgeSelectionControls({
         maxHeight: `${menuPosition.maxHeight}px`,
       }
     : undefined;
-  const menu = isOpen ? (
+  const menu = isOpen && panelVisible ? (
     <div
       ref={menuRef}
       className="action-badge-selection-controls__menu material-select__menu material-select__menu--floating"

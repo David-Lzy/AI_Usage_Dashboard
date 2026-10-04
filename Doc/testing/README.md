@@ -1,6 +1,6 @@
 # Testing Documentation
 
-Date: 2026-05-18
+Date: 2026-10-03
 
 Document class:
 
@@ -16,6 +16,77 @@ Status note:
 - generated operator evidence, screenshot requests, local browser/RDP notes, and account-specific QA history live in ignored `.local/` history
 
 ## Public Verification
+
+Motion source checks use isolated static-resource-only servers:
+`node scripts/check-motion-foundation.mjs` tests all four modes with OS reduce
+on/off, interrupted disclosure, dynamic content, retained drafts and focus;
+it also checks Default/Follow system choice changes with unchanged intensity,
+using paused synthetic animations so natural completion cannot hide a failure.
+`node scripts/check-cross-surface-motion.mjs` tests continuous fresh quota fills,
+immediate invalid/account/reset transitions, reordering, menus, charts and
+background recovery. The latter also accepts `--browser=firefox` when its
+Playwright runner is installed. Source evidence supplements, not replaces,
+packaged-extension and native-action checks.
+Progress probes assert zero hook style/bounds reads on initial and ordinary
+updates, then check each of the four styles' interrupted capture and exact first
+retarget keyframe. These counters exist only in QA, not the extension package.
+These source QA servers disable file watching/HMR. For a long-lived preview,
+start a fresh isolated server after source changes; reopening an old server can
+reuse transformed modules. Preserve an old tab when it contains unsaved drafts.
+The root theme injector installs dynamic styles before child layout/motion
+effects, using React's [style insertion hook](https://react.dev/reference/react/useInsertionEffect).
+It touches only the stable document root, not component refs or React state.
+`check-fusion-dashboard-browser.mjs --motion-mode=expressive` verifies first-load
+entrances use the saved choice, not a temporary Default profile.
+`--system-motion=no-preference` additionally covers System's normal-motion path;
+the default layout matrix remains Reduced with OS reduction enabled.
+Animated navigation checks retain intermediate frames separately, then wait for
+actual completion and assert final content opacity before end-state screenshots.
+
+`node scripts/check-material-ui-motion.mjs` checks fresh MDUI menu, checkbox
+and button interactions for all eight OS/mode combinations, including Reduced
+while the OS requests normal motion. It accepts `--browser=firefox`. Inherited
+timing tokens and nested Shadow DOM animation durations are checked separately;
+the adapter settles MDUI's fixed-duration feedback through browser animation
+APIs without modifying the library. `check-material-ui-browser.mjs` also accepts
+`--browser=firefox` and `--system-motion=no-preference` for control regressions.
+It selects all four motion choices through the real Settings controls, verifies
+their saved values, checks Space/Enter commits and rejected controlled values,
+and reloads the source preview with More still selected. Check the visible label,
+application mode and persisted mode together: MDUI's internal selection alone
+is not evidence that the application accepted a keyboard activation.
+
+`node scripts/check-settings-motion-browser.mjs --extension=<isolated Chrome build> --record`
+checks Default/More in en/zh-CN/ar, both themes and 390/1440px; `--locales` can
+expand the matrix. It retains intermediate-frame evidence and optional WebM
+recordings. Fixtures and simulated permission/notification results are clearly
+separate from real Provider services and OS delivery. Native toolbar coverage
+uses `check-fusion-native-popup.mjs --extension=<isolated Chrome build>`;
+`--motion-mode=full` or `expressive` checks a selected animated profile instead
+of the default static-layout (`reduced`) regression.
+More additionally probes pointer feedback after asynchronous first mounting,
+checks its <=360ms duration and waits for actual animation completion/paint
+before asserting cleanup, rather than sampling across the remote-debugging
+connection after a fixed sleep.
+The Settings gate also clicks and keyboard-selects motion choices with delayed
+saves, checks that pending or failed saves do not reset the selected draft,
+retries failures, and verifies the persisted choice after reloading the packaged
+extension. Menu probes verify the Motion menu stays anchored in RTL as well as
+remaining within the viewport.
+
+`node scripts/check-fusion-detail-browser.mjs --extension=<isolated Chrome build>`
+checks the migrated detail hierarchy using synthetic Codex history and two
+Sub2API deployments in owned offline extension profiles. The 14-locale matrix
+covers both themes and 390/1440px, keyboard technical disclosure, unchanged
+snapshots/ranges, account selection and visible failed/unknown state. It is
+complemented by the comparison, period/CSV and diagnostics export harnesses.
+
+The migration Dashboard/Sidebar matrix uses
+`node scripts/check-fusion-dashboard-browser.mjs --extension=<isolated Chrome build>`.
+It covers 14 locales, light/dark, 390/900/1440px, keyboard detail/back and Settings
+navigation, empty setup, unchanged snapshots, and an English 200% zoom probe.
+Fixtures are synthetic, in owned offline profiles. It never attaches to RDP or
+grants host permissions. Evidence goes to `tmp/output/playwright/fusion-dashboard/`.
 
 `qa:surface:browser` and `qa:surface:extension` are the maintained surface entrypoints
 (556/565 aliases are retained). Focused commands are `qa:shared-ui:browser`,
@@ -167,6 +238,18 @@ Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
 tests separately cover OS API rejection and Firefox's permission-probe fallback;
 these checks do not claim a visible notification in the user's desktop session.
 
+`node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
+exercises actual extension preference writes and notification persistence while
+holding, rejecting and reordering transport acknowledgements. It verifies that
+storage changes alone do not claim acknowledgement, failed drafts survive
+category changes, retry is explicit, stale results cannot overwrite newer edits,
+unrelated failures remain visible, and the two thresholds persist independently.
+All 14 locales run in light/dark at 390/1440px; `--locales=en,de,ar` and
+`--widths=390,900,1100,1440` select focused runs. Browser notification permission
+is a fixture response only; the script forbids OS notification tests and remote
+requests. Evidence is retained under `tmp/output/playwright/settings-save/`.
+The MDUI source gate also checks a rejected selection can be selected again.
+
 `node scripts/check-settings-split-browser.mjs [screenshot-path]` checks the
 Usage & Notifications / Appearance split in an isolated source browser. It
 edits the in-app and notification thresholds independently, tests Settings
@@ -244,10 +327,124 @@ and verifies each reported warning's exact React DOM context; any different
 reported HTML assignment fails. A source test also forbids raw HTML insertion
 APIs in production application code. Neither check suppresses the warnings or
 skips linting the bundle.
+The settings-only MDUI/Lit chunk adds two reviewed warnings: Lit's static
+template construction and MDUI's DOM factory. The latter is reached by library
+ripple markup and a library-owned form button type, not by labels, values or
+Provider responses. React text children and Lit property bindings remain text;
+application source may not call raw HTML sinks, Lit unsafe HTML directives, or
+the MDUI jQuery factory. The baseline checks the two exact bundle contexts and
+hashes of the reviewed dependency source files; a new location or changed source
+fails. The current baseline is therefore **four visible warnings**, not zero.
+
+The unreleased B fusion adapter has separate source and real-extension gates:
+
+`node scripts/check-fusion-native-popup.mjs --extension=<isolated-chrome>`
+opens the actual Chrome action bubble with `chrome.action.openPopup()` in an
+owned offline profile. CDP attaches to that action target, not a tab with an
+emulated viewport. The default 72 cases cover three locales including RTL,
+both themes, three preferred widths, all progress styles, all browsing modes,
+corner/shadow settings, theme-menu bounds, keyboard dismissal/focus and unchanged
+quota snapshots. Screenshots are captured directly from the action target. This
+uses Chromium's headless action UI, not the user's shared desktop; it does not
+claim an interactive desktop screen-reader review. Pass all 14 supported locale
+codes through `--locales` for the 336-case native matrix. The separate
+automatic/manual scrolling matrix remains `check-popup-modes.mjs`.
+
+`node scripts/check-settings-category-browser.mjs --extension=<isolated-chrome>`
+checks the five-category shell in an actual extension profile across 14 locales,
+light/dark and 390/1440px. It covers old links, back/forward, independent category
+scroll, retained pairing/credential drafts, secret-free navigation storage,
+portal dismissal and visible connection-row geometry. Use `--locales=en,de,ar`
+for focused reruns. It runs offline with the screenshot runtime lock; screenshots
+are synthetic evidence, not user account data. Pairing and bridge failures remain
+covered separately by `check-local-companion-browser.mjs` and controller tests.
+
+`node scripts/check-settings-appearance-browser.mjs --extension=<isolated-chrome>`
+checks all 14 locales, both themes and 390/1440px. It changes three independent
+surface styles/orders, Popup deployment presentation and three preview sizes,
+retains category drafts, checks rich-color layout, and records the four groups
+and backup page. The English desktop case additionally exercises gradient and
+thickness writes, rejected local Cursor preferences and retry, a real JSON
+download/import round trip, malformed import, unavailable Sync, cancelled reset
+and system-theme changes. The profile is offline and seeded with synthetic
+snapshots; no real Provider or permission request is made. The pre-existing
+theme and customization unit suites retain time-boundary, image validation,
+font, color and backup-schema coverage.
+
+`node scripts/check-fusion-upgrade.mjs --baseline=<isolated-0.2.1-build> --extension=<isolated-candidate>`
+creates its own extension copy and browser profile, exports a synthetic baseline
+backup, then replaces only that owned copy with the candidate. It checks all 34
+AppSettings fields, account/usage preservation, unchanged permissions, importing
+the old backup, legacy links, delayed/rejected category restoration and a newer
+deep link winning an in-flight restoration. It also checks time-theme boundaries,
+system-theme changes, custom font/accent, reduced motion, accessible names and
+200% real browser zoom. The clock used for time boundaries is resumed before
+zoom so animation-frame layout observers run normally. The profile is offline;
+neither a user profile nor a loaded `dist/` directory is accepted as an output.
+This is a code-upgrade compatibility test, not a Store upgrade or version bump.
+Evidence lives under `tmp/output/playwright/fusion-upgrade/`.
+
+The i18n source matrix navigates each legacy Settings target before checking
+sticky-header clearance, and opens the real language menu in General. Hidden
+categories are not skipped to make the checks pass. Deep-link navigation owns
+scrolling; the harness waits for stable page/anchor/header geometry instead of
+issuing a competing scroll, and reports an unsettled layout as a failure.
+Notification browser tests
+await both persistence and the visible control's busy state before the next
+action; they still exercise real pointer/keyboard activation and verify the
+optional permission request stays in that user gesture. OS notification delivery
+alone is replaced by the test transport.
+
+Automated keyboard, accessibility-tree and zoom checks do not substitute for
+manual screen-reader testing. That remains a documented release-validation gap
+when an assistive-technology runtime is not available on the QA host.
+
+```sh
+node scripts/check-material-ui-browser.mjs
+export AI_USAGE_BUILD_ROOT="$(mktemp -d /tmp/ai-usage-material-qa-XXXXXX)"
+npm run firefox:build
+node scripts/check-material-ui-extension.mjs \
+  --chrome="$AI_USAGE_BUILD_ROOT/chrome" \
+  --firefox="$AI_USAGE_BUILD_ROOT/firefox"
+```
+
+The source gate covers 14 locales, both resolved themes, narrow/desktop layouts,
+controlled rejection, required values, keyboard menus and production palette
+mapping. The real-extension gate uses fresh profiles, offline Chrome and Firefox,
+and real background-confirmed preference writes. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE`
+and `GECKODRIVER` when the installed binaries differ. Gecko's temporary profile
+is created by the driver; its privileged test context is used only to make that
+owned browser offline and resolve the temporary add-on's UUID. The shared RDP
+browser and user profiles are never attached. Both browsers may hide resource
+timing entries for extension resources. Chrome additionally records actual
+parsed script URLs through CDP, requiring an observed Settings vendor script
+and an observed Popup entry without that vendor. Offline loading and the source
+network gate provide complementary checks, not a claim based on an empty timing
+list. Firefox's owned test window removes the browser chrome minimum width;
+the gate asserts the actual content viewport, not just the requested window size.
+Both browser gates also open the full language menu, including a German 360px
+case. The version-bound adapter places MDUI's fixed-position panel in a manual
+native popover so Settings container queries cannot offset it from the viewport.
+Library keyboard/dismissal behavior is retained; close/unmount cleanup is tested.
+The select trigger uses a native input button with a name containing both the
+field label and its current choice. The popup is a menu of checked radio items;
+it is not mislabeled as a textbox or a combobox with incompatible focus behavior.
+Enter/Space/arrows open it, Home/End move menu focus, Escape restores the trigger,
+and Tab exits to the next field. Controlled rejection and the select's hidden
+required-value control remain intact. The version-bound adapter constrains the
+internal flex wrapper so long button values truncate without pushing the arrow
+outside the field. Chrome's accessibility tree and Firefox's computed roles
+are checked, including the cross-shadow menu relationship where supported.
+This follows the [menu-button pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/),
+not a claim of completed manual screen-reader certification.
+Artifacts are retained under ignored `tmp/output/playwright/material-ui*`.
+
 The runtime message catalog is built as a separate synchronous chunk so the
 shared application chunk stays below Vite's 500 kB warning limit. This changes
 chunk boundaries, not total downloaded code; do not infer a speedup from the
 absence of a size warning.
+MDUI is a separate Settings-only lazy chunk. Confirm that a cold Popup does not
+request `material-controls.js`; compare total bytes as well as chunk sizes.
 
 Extension CPU profiling uses an ignored local artifact directory:
 
@@ -284,6 +481,9 @@ not browser process startup or a flushed OS cache. Idle, glide, hover-paused and
 reduced-motion CPU each get three 30-second windows. The harness verifies actual
 motion/paused states and samples only its own extension renderers. Missing PIDs
 fail measurement rather than becoming zero. CPU excludes browser/GPU processes.
+Fresh-install fixture injection is checked after the queued bootstrap write and
+before navigation; preparation retries are reported separately, never included
+as rendering samples. A failed rendering measurement is not silently retried.
 
 Results, profile ownership, fixture hash, environment, screenshots, median/p95,
 spread, largest chunks and archive bytes go into a unique directory below
@@ -291,11 +491,84 @@ spread, largest chunks and archive bytes go into a unique directory below
 `--smoke` is a harness check, not a valid baseline. Use
 `--startup-only` or `--cpu-only` to repeat one subset without replacing earlier
 evidence. Combine only compatible fixture/build hashes and record both reports.
-`--locale=en`, `--locale=de`, or `--locale=ar` narrows a rerun. The report includes
+`--locale=en`, `--locale=de`, or `--locale=ar` narrows a rerun.
+`--cpu-scenarios=glide` can narrow a same-host CPU comparison without shortening
+its three 30-second samples. The report includes
 host load and the build-content hash. Set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing extension-capable Chromium binary
 when the Playwright-managed browser is unavailable; no browser is installed by
 these commands. A single host run is not a user-facing speed claim or a CI budget.
+
+For the motion follow-up, add `--baseline-extension=<isolated baseline build>`
+to compare against a saved build on the same machine. Baseline/current order
+alternates on each iteration, with one owned browser at a time. Each pair uses
+the same synthetic fixture and Chromium binary. Warm samples in comparison mode
+are one repeat per cold profile, rather than ten opens from the first profile.
+Keep every run, including failed gates; do not run builds, tests or other browser
+matrices concurrently with measured samples. The readiness test opens the Popup
+extension URL; native action-bubble geometry has its separate QA gate.
+
+Comparison mode enforces ten cold/warm samples per startup scenario and three
+30-second renderer samples per CPU scenario. Default startup may increase by at
+most the larger of 10% or 50ms; idle, hover-paused and reduced CPU by 0.5 single-core
+percentage points; continuous glide by 10%. `--smoke` only checks the harness and
+never qualifies these gates. Subset reruns remain explicit, not silent retries.
+`--startup-repeats=40 --cpu-repeats=6` declares a larger complete matrix before
+sampling to reduce shared-host variance. Startup counts must be 10-100 and CPU
+counts 3-12; CPU windows stay 30 seconds. Smoke counts cannot be overridden.
+Keep unfavorable runs and every raw sample. Never combine different build,
+fixture or browser fingerprints or select only favorable cases.
+
+`node scripts/check-motion-bundle-budget.mjs` enforces an 8KiB gzip limit on the
+entire minified shared motion implementation and lazy MDUI theme adapter,
+including pre-existing helpers, with React external. This is a conservative upper bound for added shared motion
+JavaScript, not the total extension ZIP delta. It records exact module inputs.
+
+B fusion's Settings dependency and additional surface styles increase total
+package size even though Popup does not load the Material controls chunk.
+Active-glide renderer CPU also increased in migration comparisons; keep those
+unfavorable samples alongside idle, hover-paused and reduced-motion results.
+Do not describe the redesign as a performance improvement or infer one from
+smaller individual chunks. No fixed latency/CPU budget was agreed for this
+migration; quiet-host, browser/GPU and battery measurements remain separate
+release-performance work, not results established by these renderer samples.
+
+The final migration benchmark used the same Node 25.9.0, Chromium
+153.0.8010.12 and synthetic fixture as its baseline. Twelve scenarios each
+contain ten cold and ten warm navigation samples: median ranges were
+553-898ms cold and 149-300ms warm, versus 469-766ms and 147-225ms before migration.
+Three 30-second renderer samples per mode produced median one-core CPU usage
+of 1.68% idle, 11.55% active glide, 1.45% hover-paused and 1.21% reduced motion
+(baseline 1.45%, 7.74%, 1.71% and 1.35%). Chrome ZIP size increased from
+801,873 to 860,919 bytes (+7.36%). These costs are explicitly accepted for the
+migration, not described as speedups; no numeric release performance SLO was
+defined. Reports retain every sample and variance. Shared-host load limits
+causal interpretation, and this is not a GPU, battery or browser-launch test.
+
+### Motion Acceptance
+
+The 2026-10-03 motion comparison uses the accepted B fusion build as its
+baseline, not the pre-migration interface. All 28 agreed gates pass in one
+immutable, same-host alternating comparison: 40 cold and 40 warm samples per
+build in each of 12 startup scenarios, plus six 30-second windows per build in
+each of four CPU scenarios. Cold median increments range from -148.65 to
+-23.80ms; warm increments range from -19.00 to +11.55ms.
+
+| Renderer CPU Scenario | Baseline | Motion Build | Increment |
+| --- | --- | --- | --- |
+| Idle | 2.166% | 2.043% | -0.123 percentage points |
+| Continuous glide | 10.159% | 8.413% | -1.747 percentage points |
+| Hover-paused | 1.779% | 2.255% | +0.476 percentage points |
+| Reduced | 1.582% | 1.469% | -0.112 percentage points |
+
+Hover-paused passes with only 0.024 percentage points of margin against the
+0.5-point limit. Keep this small margin visible in future regression work.
+The conservative shared-motion-plus-lazy-adapter bound is 6,367 gzip bytes
+(limit 8,192); Chrome ZIP grows from 860,919 to 868,138 bytes. Node 25.9.0 and
+Chromium 153.0.8010.12 are unchanged between builds. Earlier failed reports and
+all raw observations are retained, never pooled across changed build hashes.
+The shared host had substantial background load: these are acceptance results,
+not causal speedup claims or guarantees for GPU, battery or other machines.
 
 The older `perf:extension:profile` remains available for broader surface or explicit
 PID investigations, accepts `--extension`/`--output`, and now uses unique output

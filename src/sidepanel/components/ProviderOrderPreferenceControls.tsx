@@ -1,9 +1,5 @@
-import {
-  useMemo,
-  useState,
-  type DragEvent,
-  type KeyboardEvent,
-} from "react";
+import { useMemo, useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   DisplaySurface,
@@ -18,8 +14,10 @@ import {
 } from "../../shared/display-preferences";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { MaterialIcon } from "./MaterialIcon";
 
 type ProviderOrderPreferenceControlsProps = {
+  surface?: DisplaySurface;
   copy: ReturnType<typeof buildSettingsLocalizedCopy>["providerOrder"];
   providerOrderBySurface: ProviderOrderBySurface;
   providers: Array<{
@@ -37,11 +35,14 @@ function getProviderLabel(
 }
 
 export function ProviderOrderPreferenceControls({
+  surface: selectedSurface,
   copy,
   providerOrderBySurface,
   providers,
   onChange,
 }: ProviderOrderPreferenceControlsProps) {
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, providerOrderBySurface]));
   const [draggedProvider, setDraggedProvider] = useState<{
     surface: DisplaySurface;
     providerId: DashboardSourceId;
@@ -126,6 +127,7 @@ export function ProviderOrderPreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="provider-order-preferences"
       data-provider-order-preferences=""
     >
@@ -142,99 +144,116 @@ export function ProviderOrderPreferenceControls({
       </div>
 
       <div className="provider-order-preferences__surfaces">
-        {DISPLAY_SURFACES.map((surface) => {
-          const orderedProviderIds = resolveProviderOrder(
-            providerOrderBySurface[surface],
-            providerIds,
-          );
-          const surfaceLabel = copy.surfaceLabels[surface];
+        {(selectedSurface ? [selectedSurface] : DISPLAY_SURFACES).map(
+          (surface) => {
+            const orderedProviderIds = resolveProviderOrder(
+              providerOrderBySurface[surface],
+              providerIds,
+            );
+            const surfaceLabel = copy.surfaceLabels[surface];
 
-          return (
-            <section
-              key={surface}
-              className="provider-order-surface"
-              data-provider-order-surface={surface}
-            >
-              <div className="provider-order-surface__header">
-                <p className="provider-order-surface__title">{surfaceLabel}</p>
-                <span className="meta-chip">
-                  {copy.providerCount(orderedProviderIds.length)}
-                </span>
-              </div>
+            return (
+              <section
+                key={surface}
+                className="provider-order-surface"
+                data-provider-order-surface={surface}
+              >
+                <div className="provider-order-surface__header">
+                  <p className="provider-order-surface__title">
+                    {surfaceLabel}
+                  </p>
+                  <span className="meta-chip">
+                    {copy.providerCount(orderedProviderIds.length)}
+                  </span>
+                </div>
 
-              <ol className="provider-order-list">
-                {orderedProviderIds.map((providerId, index) => {
-                  const providerLabel = getProviderLabel(providerLabels, providerId);
-                  const isFirst = index === 0;
-                  const isLast = index === orderedProviderIds.length - 1;
+                <ol className="provider-order-list">
+                  {orderedProviderIds.map((providerId, index) => {
+                    const providerLabel = getProviderLabel(
+                      providerLabels,
+                      providerId,
+                    );
+                    const isFirst = index === 0;
+                    const isLast = index === orderedProviderIds.length - 1;
 
-                  return (
-                    <li
-                      key={providerId}
-                      className="provider-order-list__item"
-                      data-provider-order-row={providerId}
-                      draggable
-                      tabIndex={0}
-                      aria-label={copy.rowAria(
-                        providerLabel,
-                        index + 1,
-                        orderedProviderIds.length,
-                        surfaceLabel,
-                      )}
-                      onDragStart={() =>
-                        setDraggedProvider({ surface, providerId })
-                      }
-                      onDragOver={(event) => event.preventDefault()}
-                      onDragEnd={() => setDraggedProvider(null)}
-                      onDrop={(event) => handleDrop(surface, providerId, event)}
-                      onKeyDown={(event) =>
-                        handleKeyDown(surface, providerId, event)
-                      }
-                    >
-                      <span className="provider-order-list__handle" aria-hidden="true">
-                        ::
-                      </span>
-                      <span className="provider-order-list__name">
-                        {providerLabel}
-                      </span>
-                      <span className="provider-order-list__position">
-                        {index + 1}
-                      </span>
-                      <span className="provider-order-list__actions">
-                        <button
-                          className="text-button provider-order-list__action"
-                          type="button"
-                          disabled={isFirst}
-                          aria-label={copy.moveUpAction(
-                            providerLabel,
-                            surfaceLabel,
-                          )}
-                          onClick={() => moveProvider(surface, providerId, "up")}
+                    return (
+                      <li
+                        key={providerId}
+                        className="provider-order-list__item"
+                        data-provider-order-row={providerId}
+                        data-motion-key={`${surface}:${providerId}`}
+                        draggable
+                        tabIndex={0}
+                        aria-label={copy.rowAria(
+                          providerLabel,
+                          index + 1,
+                          orderedProviderIds.length,
+                          surfaceLabel,
+                        )}
+                        onDragStart={() =>
+                          setDraggedProvider({ surface, providerId })
+                        }
+                        onDragOver={(event) => event.preventDefault()}
+                        onDragEnd={() => setDraggedProvider(null)}
+                        onDrop={(event) =>
+                          handleDrop(surface, providerId, event)
+                        }
+                        onKeyDown={(event) =>
+                          handleKeyDown(surface, providerId, event)
+                        }
+                      >
+                        <span
+                          className="provider-order-list__handle"
+                          aria-hidden="true"
                         >
-                          {copy.up}
-                        </button>
-                        <button
-                          className="text-button provider-order-list__action"
-                          type="button"
-                          disabled={isLast}
-                          aria-label={copy.moveDownAction(
-                            providerLabel,
-                            surfaceLabel,
-                          )}
-                          onClick={() =>
-                            moveProvider(surface, providerId, "down")
-                          }
-                        >
-                          {copy.down}
-                        </button>
-                      </span>
-                    </li>
-                  );
-                })}
-              </ol>
-            </section>
-          );
-        })}
+                          ::
+                        </span>
+                        <span className="provider-order-list__name">
+                          {providerLabel}
+                        </span>
+                        <span className="provider-order-list__position">
+                          {index + 1}
+                        </span>
+                        <span className="provider-order-list__actions">
+                          <button
+                            className="text-button provider-order-list__action"
+                            type="button"
+                            disabled={isFirst}
+                            title={copy.up}
+                            aria-label={copy.moveUpAction(
+                              providerLabel,
+                              surfaceLabel,
+                            )}
+                            onClick={() =>
+                              moveProvider(surface, providerId, "up")
+                            }
+                          >
+                            <MaterialIcon name="keyboard-arrow-up" />
+                          </button>
+                          <button
+                            className="text-button provider-order-list__action"
+                            type="button"
+                            disabled={isLast}
+                            title={copy.down}
+                            aria-label={copy.moveDownAction(
+                              providerLabel,
+                              surfaceLabel,
+                            )}
+                            onClick={() =>
+                              moveProvider(surface, providerId, "down")
+                            }
+                          >
+                            <MaterialIcon name="keyboard-arrow-down" />
+                          </button>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            );
+          },
+        )}
       </div>
     </section>
   );

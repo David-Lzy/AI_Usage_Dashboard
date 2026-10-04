@@ -2,11 +2,7 @@ html.popup-page,
 body.popup-page,
 #root.popup-page-root {
   min-height: 0;
-  background: linear-gradient(
-    180deg,
-    var(--md-sys-color-surface-bright) 0%,
-    var(--md-sys-color-surface-container-low) 100%
-  );
+  background: var(--md-sys-color-surface);
 }
 
 html.popup-page,
@@ -42,6 +38,13 @@ html.popup-page[data-popup-size-preset="wide"] {
   --app-popup-width-min: 420px;
   --app-popup-width-preferred: 520px;
   --app-popup-width-max: 560px;
+}
+
+/* An action bubble sizes its viewport from its content, so 100vw cannot be
+   the source of its preferred width. Tab/source previews remain responsive. */
+html.popup-page[data-popup-host="native"],
+html.popup-page[data-popup-host="native"] body.popup-page {
+  width: var(--app-popup-width-preferred);
 }
 
 html.popup-page[data-popup-corner-style="square"] {
@@ -125,7 +128,7 @@ body.popup-page .status-card {
   --popup-header-refresh-control-min: calc(
     var(--popup-header-control-size) * 1.618
   );
-  --popup-header-control-size: 48px;
+  --popup-header-control-size: 44px;
   position: sticky;
   z-index: 30;
   inset-block-start: var(--app-space-3);
@@ -135,8 +138,9 @@ body.popup-page .status-card {
   gap: var(--app-space-2);
   padding-block: var(--popup-header-action-gap);
   padding-inline: 0;
-  border: 1px solid var(--app-surface-card-border);
-  background: var(--app-surface-card-background);
+  border: 0;
+  border-block-end: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface);
   overflow: visible;
   transition:
     background-color var(--app-motion-duration-fast)
@@ -147,11 +151,8 @@ body.popup-page .status-card {
 }
 
 body.popup-page .popup-header {
-  border-radius: var(
-    --app-popup-provider-card-radius,
-    var(--md-sys-shape-corner-large)
-  );
-  box-shadow: var(--app-popup-card-shadow, var(--app-elevation-1));
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .popup-shell--quota-first .popup-header {
@@ -406,7 +407,7 @@ body.popup-page .popup-header--surface-collapsed {
   transform: translateX(-50%);
 }
 
-.popup-header__theme-mode-menu:not([hidden]) {
+.popup-header__theme-mode-menu:not([hidden]):not([data-motion-owned]) {
   animation: popup-menu-enter var(--app-motion-duration-medium)
     var(--app-motion-easing-standard) both;
 }
@@ -482,11 +483,13 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   min-height: 0;
   color: var(--md-sys-color-on-surface-variant);
   container: popup-footer / inline-size;
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .popup-footer--collapsed {
   height: 0;
   margin-block-start: calc(-1 * var(--app-space-2));
+  border-block-start: 0;
 }
 
 .popup-footer__collapse-toggle {
@@ -556,7 +559,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   margin: 0;
   font-size: 0.6875rem;
   line-height: 0.875rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
 }
 
 .popup-footer__title {
@@ -634,7 +637,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   .popup-footer__heading .section-label {
     font-size: 0.625rem;
     line-height: 0.75rem;
-    letter-spacing: 0.03em;
+    letter-spacing: 0;
   }
 
   .popup-footer__title,
@@ -783,7 +786,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--app-space-2);
-  padding: var(--app-space-4);
+  padding: var(--app-space-3);
   border: 1px solid var(--app-surface-card-border);
   border-radius: var(
     --app-popup-provider-card-radius,
@@ -797,6 +800,18 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   gap: 0;
   padding-block: var(--app-space-2);
 }
+
+.popup-provider-card__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--app-space-2);
+  min-width: 0;
+}
+
+.popup-header__icon-action--refresh[aria-busy="true"] svg {
+  animation: popup-refresh-pending 900ms linear infinite;
+}
+@keyframes popup-refresh-pending { to { transform: rotate(360deg); } }
 
 .popup-provider-card--collapsed .popup-provider-card__identity {
   gap: 0;
@@ -1127,6 +1142,20 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
 .popup-provider-card__history {
   display: grid;
   min-width: 0;
+  border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  padding-block-start: var(--app-space-2);
+}
+
+.popup-provider-card__history .usage-history-compact {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.popup-shell :is(h1, h2, h3, .section-label, button, .chip, .status-chip) {
+  letter-spacing: 0;
 }
 
 .popup-provider-card__progress--circle,
@@ -1299,7 +1328,7 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: var(--md-sys-typescale-title-medium-font);
-  font-size: var(--md-sys-typescale-title-medium-size);
+  font-size: 1rem;
   font-weight: var(--md-sys-typescale-title-medium-weight);
   line-height: var(--md-sys-typescale-title-medium-line-height);
 }
@@ -1401,7 +1430,6 @@ html[data-app-direction="rtl"] .popup-header__theme-mode-menu {
 
   .popup-provider-card__provider {
     min-height: 28px;
-    font-size: 0.8125rem;
     line-height: 1.125rem;
   }
 

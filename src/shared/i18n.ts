@@ -204,6 +204,7 @@ export type RuntimeMessageId =
   | "settings.preferences.theme_mode_helper"
   | "settings.preferences.motion_mode.system"
   | "settings.preferences.motion_mode.full"
+  | "settings.preferences.motion_mode.expressive"
   | "settings.preferences.motion_mode.reduced"
   | "settings.preferences.theme_preset.default"
   | "settings.preferences.theme_preset.meadow"

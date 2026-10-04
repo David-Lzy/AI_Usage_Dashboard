@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { useMotionLayout, useSurfaceMotion } from "../../shared/use-motion-effects";
 import type {
   ProviderAccountsByProvider,
   AppLocalePreference,
@@ -15,10 +17,11 @@ import type {
   UsageHistoryModulesBySurface,
 } from "../../providers/types";
 import { createRuntimeI18n } from "../../shared/i18n";
+import type { MaterialActionIconName } from "../../shared/components/MaterialActionIcon";
 import type {
-  MaterialActionIconName,
-} from "../../shared/components/MaterialActionIcon";
-import type { CustomSourceId, DashboardSourceId } from "../../shared/custom-sources";
+  CustomSourceId,
+  DashboardSourceId,
+} from "../../shared/custom-sources";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { CustomSourceCard } from "../components/CustomSourceCard";
 import { ProviderCard } from "../components/ProviderCard";
@@ -104,6 +107,9 @@ export function DashboardPage({
   onRefreshCustomSource,
   onSelectProviderAccount,
 }: DashboardPageProps) {
+  const pageRef = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  useSurfaceMotion(pageRef, progressSurface);
   const i18n = createRuntimeI18n(
     localePreference,
     typeof window !== "undefined" ? window : undefined,
@@ -141,11 +147,19 @@ export function DashboardPage({
     return 0;
   });
 
+  useMotionLayout(listRef, sourceCards.map((card) => card.sourceId).join(","));
+
   return (
-    <main className="app-shell">
+    <main
+      ref={pageRef}
+      data-motion-owned=""
+      className="app-shell fusion-surface dashboard-fusion"
+      data-dashboard-surface={progressSurface}
+    >
       <TopBar
         title={i18n.t("dashboard.topbar.title")}
-        subtitle={i18n.t("dashboard.topbar.subtitle")}
+        compact
+        brandIcon
         themeActionLabel={themeActionLabel}
         themeActionTitle={themeActionTitle}
         themeActionIconName={themeActionIconName}
@@ -153,47 +167,43 @@ export function DashboardPage({
         expandActionTitle={
           surfaceActionTitle ?? i18n.t("common.actions.open_dashboard_tab")
         }
+        expandActionIconName={
+          progressSurface === "fullPage" ? "dock-left" : "tab"
+        }
         secondaryActionLabel={i18n.t("common.actions.refresh_all")}
+        secondaryActionIconName="refresh"
         primaryActionLabel={i18n.t("common.actions.settings")}
+        primaryActionIconName="settings"
         onThemeAction={onToggleThemeMode}
         onExpandAction={onOpenFullPage}
         onSecondaryAction={onRefreshAll}
         onPrimaryAction={onOpenSettings}
       />
 
-      <section className="hero-card dashboard-hero-card">
-        <div className="dashboard-hero-card__body">
-          <div className="dashboard-hero-card__main">
-            <p className="section-label">{i18n.t("dashboard.hero.eyebrow")}</p>
-            <h2 className="display-headline">{i18n.t("dashboard.hero.title")}</h2>
-          </div>
-
-          {summaryItems.length > 0 ? (
-            <SummaryStrip
-              ariaLabel={i18n.t("dashboard.summary.aria")}
-              className="dashboard-hero-card__summary"
-              items={summaryItems}
-              variant="compact"
-            />
-          ) : null}
-        </div>
-
-        <p className="body-copy dashboard-hero-card__detail">
-          {i18n.t("dashboard.hero.detail")}
-        </p>
-      </section>
+      {summaryItems.length > 0 ? (
+        <SummaryStrip
+          ariaLabel={i18n.t("dashboard.summary.aria")}
+          className="dashboard-summary"
+          items={summaryItems}
+          variant="compact"
+        />
+      ) : null}
 
       <section className="dashboard-section">
         <div className="dashboard-section__header">
           <div>
-            <p className="section-label">{i18n.t("dashboard.providers.eyebrow")}</p>
-            <h2 className="section-title">{i18n.t("dashboard.providers.title")}</h2>
+            <h2 className="section-title">
+              {i18n.t("dashboard.providers.title")}
+            </h2>
           </div>
-          <p className="supporting-copy">{i18n.t("dashboard.providers.detail")}</p>
         </div>
 
         {sourceCards.length > 0 ? (
-          <div className="provider-shell-list" aria-label={i18n.t("dashboard.providers.aria")}>
+          <div
+            ref={listRef}
+            className="provider-shell-list"
+            aria-label={i18n.t("dashboard.providers.aria")}
+          >
             {sourceCards.map((sourceCard) =>
               sourceCard.kind === "provider" ? (
                 <ProviderCard
@@ -236,13 +246,20 @@ export function DashboardPage({
                   progressSurface={progressSurface}
                   source={sourceCard.source}
                   onOpenSettings={onOpenCustomSourcesSettings ?? onOpenSettings}
-                  onRefresh={() => onRefreshCustomSource ? onRefreshCustomSource(sourceCard.source.sourceId) : onRefreshAll()}
+                  onRefresh={() =>
+                    onRefreshCustomSource
+                      ? onRefreshCustomSource(sourceCard.source.sourceId)
+                      : onRefreshAll()
+                  }
                 />
               ),
             )}
           </div>
         ) : (
-          <section className="status-card dashboard-empty-state" aria-live="polite">
+          <section
+            className="status-card dashboard-empty-state"
+            aria-live="polite"
+          >
             <p className="section-label">{i18n.t("dashboard.empty.eyebrow")}</p>
             <p className="body-copy">{i18n.t("dashboard.empty.detail")}</p>
             <div className="credential-actions dashboard-empty-state__actions">

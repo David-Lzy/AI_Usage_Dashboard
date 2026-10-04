@@ -33,7 +33,8 @@ describe("popup startup fast path", () => {
     expect(popupThemeCss).not.toContain("popup-load-state-card__indicator");
   });
 
-  it("waits for cached settings before starting theme synchronization", () => {
+  it("installs cached root styles before child layout and motion reads", () => {
+    const insertionStart = popupAppSource.indexOf("useInsertionEffect(() => {");
     const themeSyncStart = popupAppSource.indexOf("startThemeSettingsSync(");
     const readyGuard = popupAppSource.lastIndexOf(
       'if (loadState.status !== "ready")',
@@ -43,7 +44,14 @@ describe("popup startup fast path", () => {
     expect(themeSyncStart).toBeGreaterThan(-1);
     expect(readyGuard).toBeGreaterThan(-1);
     expect(readyGuard).toBeLessThan(themeSyncStart);
-    expect(popupAppSource).toContain("useLayoutEffect(() => {");
+    expect(insertionStart).toBeGreaterThan(-1);
+    expect(insertionStart).toBeLessThan(readyGuard);
+    expect(popupAppSource.indexOf("useSurfaceMotion(pageRef,")).toBeGreaterThan(
+      themeSyncStart,
+    );
+    expect(popupAppSource.slice(insertionStart, themeSyncStart)).not.toMatch(
+      /setLoadState|pageRef\.current/,
+    );
   });
 
   it("keeps read-state ahead of maintenance work as a one-read fast path", () => {

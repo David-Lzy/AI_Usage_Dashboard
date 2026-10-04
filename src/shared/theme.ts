@@ -9,6 +9,7 @@ import {
   normalizeMotionMode,
   REDUCED_MOTION_QUERY,
   resolveMotionMode,
+  resolveMotionProfile,
 } from "./motion-preferences";
 import {
   DEFAULT_UI_FONT_FAMILY,
@@ -97,6 +98,7 @@ type ThemeStyleRoot = {
 type ThemeRoot = {
   dataset: Record<string, string | undefined>;
   style?: ThemeStyleRoot;
+  ownerDocument?: Document;
 };
 
 type RgbColor = {
@@ -631,6 +633,7 @@ export function applyThemeSettings(
     normalizedSettings.motionMode,
     reader,
   );
+  root.dataset.motionProfile = resolveMotionProfile(normalizedSettings.motionMode, reader);
 
   if (normalizedSettings.themePreset === "custom") {
     if (normalizedSettings.themeCustomSeedHex) {
@@ -707,6 +710,21 @@ export function startThemeSettingsSync(
   };
 
   applyThemeSettings(normalizedSettings, root, reader);
+
+  const doc = root.ownerDocument;
+  if (doc) {
+    const suspend = () => {
+      root.dataset.motionSuspended = doc.visibilityState === "hidden" ? "true" : "false";
+      if (doc.visibilityState !== "hidden") return;
+      for (const animation of doc.getAnimations()) {
+        if (animation.effect?.getTiming().iterations === Infinity) continue;
+        try { animation.finish(); } catch { animation.cancel(); }
+      }
+    };
+    suspend();
+    doc.addEventListener("visibilitychange", suspend);
+    cleanupCallbacks.push(() => doc.removeEventListener("visibilitychange", suspend));
+  }
 
   if (normalizedSettings.themeMode === "time") {
     const scheduleNextBoundary = () => {

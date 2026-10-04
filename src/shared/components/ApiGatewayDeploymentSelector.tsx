@@ -15,6 +15,8 @@ import {
   type FloatingMenuPosition,
 } from "../floating-menu-position";
 import { TechnicalText } from "./TechnicalText";
+import { useControlVisibility } from "../control-visibility";
+import { useMotionMenu } from "../use-motion-effects";
 import "./api-gateway-metering-summary.css";
 
 export function ApiGatewayDeploymentSelector({
@@ -39,6 +41,10 @@ export function ApiGatewayDeploymentSelector({
   );
   const activeLabel = options[selectedIndex]?.label ?? displayLabel;
   const [isOpen, setIsOpen] = useState(false);
+  const visible = useControlVisibility();
+  const menuOpen = visible && isOpen;
+  useMotionMenu(menuRef, menuOpen);
+  useEffect(() => { if (!visible) setIsOpen(false); }, [visible]);
   const [activeIndex, setActiveIndex] = useState(
     selectedIndex >= 0 ? selectedIndex : 0,
   );
@@ -250,7 +256,7 @@ export function ApiGatewayDeploymentSelector({
         maxHeight: `${menuPosition.maxHeight}px`,
       }
     : undefined;
-  const menu = isOpen ? (
+  const menu = menuOpen ? (
     <div
       ref={menuRef}
       id={listboxId}
@@ -300,7 +306,7 @@ export function ApiGatewayDeploymentSelector({
         role="combobox"
         aria-label={`${summaryLabel}: ${activeLabel}`}
         aria-haspopup="listbox"
-        aria-expanded={isOpen}
+        aria-expanded={menuOpen}
         aria-controls={listboxId}
         aria-activedescendant={activeOptionId}
         data-open={isOpen ? "true" : "false"}

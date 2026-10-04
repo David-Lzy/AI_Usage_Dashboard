@@ -23,11 +23,12 @@ the generated `dist/firefox/` package without changing the Chrome build output.
 Use `npm run firefox:lint:baseline` before Firefox-targeted changes are sent so
 the known local beta lint warnings do not drift.
 
-The current Firefox local-beta baseline is zero errors and two generated-bundle
-`UNSAFE_VAR_ASSIGNMENT` warnings for React runtime `innerHTML` handling. These
-are third-party runtime warnings in the built bundle, not extension code that
-injects provider or user content. Treat any additional warning or any error as
-a regression until it is investigated.
+The current Firefox local-beta baseline is zero errors and four reviewed
+generated-bundle warnings: two React DOM `innerHTML` assignments, one Lit
+static-template assignment and one MDUI element-factory construction. These are
+third-party runtime warnings, not application code that injects Provider or user
+content. `firefox:lint:baseline` verifies their exact library contexts; treat
+any additional warning or error as a regression until it is investigated.
 
 ## Before Sending Changes
 
@@ -72,6 +73,18 @@ Do not delete browser-loaded builds, profiles, credentials or release evidence
 as part of command cleanup.
 
 ## UI Control Rhythm
+
+Settings-only MDUI 2.1.5 controls live in
+`src/sidepanel/components/material-ui/`. Keep the dependency lazy with Settings;
+do not import it into quota calculations, background logic or Popup startup.
+The adapter maps the existing theme tokens, not a second palette. Public CSS
+Parts style controls. The small version-bound compatibility module handles
+MDUI's missing input ARIA forwarding and select-menu access; dependency upgrades
+must rerun its browser and extension gates before changing the pin.
+See [testing guidance](Doc/testing/README.md) for the commands and reviewed
+Firefox linter limitations. Do not use raw HTML or jQuery HTML construction in
+application code. Distributed dependency notices are in
+[Third-Party Notices](THIRD_PARTY_NOTICES.md).
 
 Gateway view calculations live in
 [`api-gateway-metering-presentation.ts`](src/shared/api-gateway-metering-presentation.ts),

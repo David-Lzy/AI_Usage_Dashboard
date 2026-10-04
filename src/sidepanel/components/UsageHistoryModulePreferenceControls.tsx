@@ -1,8 +1,5 @@
-import {
-  useState,
-  type DragEvent,
-  type KeyboardEvent,
-} from "react";
+import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   DisplaySurface,
@@ -34,6 +31,7 @@ type DraggedHistoryModule = {
 };
 
 export function UsageHistoryModulePreferenceControls({
+  surface: selectedSurface,
   locale,
   providers,
   snapshots,
@@ -41,6 +39,7 @@ export function UsageHistoryModulePreferenceControls({
   value,
   onChange,
 }: {
+  surface?: DisplaySurface;
   locale: ResolvedAppLocale;
   providers: readonly ProviderSetting[];
   snapshots: readonly ProviderSnapshot[];
@@ -48,6 +47,8 @@ export function UsageHistoryModulePreferenceControls({
   value: UsageHistoryModulesBySurface;
   onChange: (value: UsageHistoryModulesBySurface) => void;
 }) {
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, value]));
   const [draggedModule, setDraggedModule] =
     useState<DraggedHistoryModule | null>(null);
   const copy = buildUsageHistoryLocalizedCopy(locale);
@@ -58,7 +59,8 @@ export function UsageHistoryModulePreferenceControls({
   );
   const configurableProviders = providers.filter(
     (provider) =>
-      provider.id === "codex-personal-page" || historyProviderIds.has(provider.id),
+      provider.id === "codex-personal-page" ||
+      historyProviderIds.has(provider.id),
   );
 
   if (configurableProviders.length === 0) {
@@ -121,7 +123,11 @@ export function UsageHistoryModulePreferenceControls({
   }
 
   return (
-    <section className="usage-history-preferences" data-usage-history-preferences="">
+    <section
+      ref={rootRef}
+      className="usage-history-preferences"
+      data-usage-history-preferences=""
+    >
       <div>
         <p className="section-label">{copy.settingsSectionLabel}</p>
         <div className="section-title-with-info">
@@ -131,9 +137,11 @@ export function UsageHistoryModulePreferenceControls({
       </div>
       {configurableProviders.map((provider) => (
         <div className="usage-history-preferences__provider" key={provider.id}>
-          <h4 className="usage-history-preferences__provider-title">{provider.label}</h4>
+          <h4 className="usage-history-preferences__provider-title">
+            {provider.label}
+          </h4>
           <div className="usage-history-preferences__surface-grid">
-            {SURFACES.map((surface) => {
+            {(selectedSurface ? [selectedSurface] : SURFACES).map((surface) => {
               const preferences = resolveProviderUsageHistoryModules(
                 value,
                 surface,
@@ -173,6 +181,7 @@ export function UsageHistoryModulePreferenceControls({
                           className="provider-progress-list__item usage-history-preferences__item"
                           data-i18n-layout-contract="compact-order-row"
                           data-usage-history-module-row={preference.id}
+                          data-motion-key={`${provider.id}:${surface}:${preference.id}`}
                           draggable
                           tabIndex={0}
                           aria-label={settingsCopy.progressItems.rowAria(

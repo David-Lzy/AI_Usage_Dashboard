@@ -1,8 +1,5 @@
-import {
-  useState,
-  type DragEvent,
-  type KeyboardEvent,
-} from "react";
+import { useRef, useState, type DragEvent, type KeyboardEvent } from "react";
+import { useMotionLayout } from "../../shared/use-motion-effects";
 
 import type {
   ApiGatewayMeteringDisplayPreferences,
@@ -18,6 +15,7 @@ import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { buildSub2ApiSettingsLocalizedCopy } from "../../shared/sub2api-settings-localized-copy";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
+import { MaterialIcon } from "./MaterialIcon";
 
 const SURFACES: readonly DisplaySurface[] = ["popup", "sidebar", "fullPage"];
 
@@ -27,17 +25,23 @@ type DraggedModule = {
 };
 
 export function ApiGatewayMeteringModulePreferenceControls({
+  surface: selectedSurface,
   locale,
   settingsCopy,
   value,
   onChange,
 }: {
+  surface?: DisplaySurface;
   locale: ResolvedAppLocale;
   settingsCopy: ReturnType<typeof buildSettingsLocalizedCopy>;
   value: ApiGatewayMeteringDisplayPreferences;
   onChange: (value: ApiGatewayMeteringDisplayPreferences) => void;
 }) {
-  const [draggedModule, setDraggedModule] = useState<DraggedModule | null>(null);
+  const rootRef = useRef<HTMLElement>(null);
+  useMotionLayout(rootRef, JSON.stringify([selectedSurface, value]));
+  const [draggedModule, setDraggedModule] = useState<DraggedModule | null>(
+    null,
+  );
   const copy = buildSub2ApiSettingsLocalizedCopy(locale);
 
   function handleDrop(
@@ -81,6 +85,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
 
   return (
     <section
+      ref={rootRef}
       className="api-gateway-module-preferences"
       data-api-gateway-module-preferences=""
     >
@@ -93,10 +98,13 @@ export function ApiGatewayMeteringModulePreferenceControls({
       </div>
 
       <div className="provider-order-preferences__surfaces api-gateway-module-preferences__surface-grid">
-        {SURFACES.map((surface) => {
+        {(selectedSurface ? [selectedSurface] : SURFACES).map((surface) => {
           const preferences = value[surface];
-          const surfaceLabel = settingsCopy.progressItems.surfaceLabels[surface];
-          const visibleCount = preferences.filter(({ visible }) => visible).length;
+          const surfaceLabel =
+            settingsCopy.progressItems.surfaceLabels[surface];
+          const visibleCount = preferences.filter(
+            ({ visible }) => visible,
+          ).length;
 
           return (
             <section
@@ -122,6 +130,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                     <li
                       className="provider-order-list__item api-gateway-module-preferences__item"
                       data-api-gateway-module-row={preference.id}
+                      data-motion-key={`${surface}:${preference.id}`}
                       draggable
                       key={preference.id}
                       tabIndex={0}
@@ -169,7 +178,9 @@ export function ApiGatewayMeteringModulePreferenceControls({
                             )
                           }
                         />
-                        <span>{preference.visible ? copy.shown : copy.hidden}</span>
+                        <span>
+                          {preference.visible ? copy.shown : copy.hidden}
+                        </span>
                       </label>
                       <span className="provider-order-list__name">{label}</span>
                       <span className="provider-order-list__actions">
@@ -177,6 +188,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                           className="text-button provider-order-list__action"
                           type="button"
                           disabled={isFirst}
+                          title={settingsCopy.progressItems.up}
                           aria-label={settingsCopy.progressItems.moveUpAction(
                             label,
                             surfaceLabel,
@@ -192,12 +204,13 @@ export function ApiGatewayMeteringModulePreferenceControls({
                             )
                           }
                         >
-                          {settingsCopy.progressItems.up}
+                          <MaterialIcon name="keyboard-arrow-up" />
                         </button>
                         <button
                           className="text-button provider-order-list__action"
                           type="button"
                           disabled={isLast}
+                          title={settingsCopy.progressItems.down}
                           aria-label={settingsCopy.progressItems.moveDownAction(
                             label,
                             surfaceLabel,
@@ -213,7 +226,7 @@ export function ApiGatewayMeteringModulePreferenceControls({
                             )
                           }
                         >
-                          {settingsCopy.progressItems.down}
+                          <MaterialIcon name="keyboard-arrow-down" />
                         </button>
                       </span>
                     </li>

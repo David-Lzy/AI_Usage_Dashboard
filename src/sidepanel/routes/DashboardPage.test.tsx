@@ -8,13 +8,13 @@ import { SAMPLE_APP_STATE } from "../../shared/demo-state";
 import type { CustomSourceViewModel } from "../../shared/custom-source-view-models";
 import { DashboardPage } from "./DashboardPage";
 
-const layoutPrimitivesCss = readFileSync(
-  new URL("../theme/layout-primitives.css", import.meta.url),
+const fusionCss = readFileSync(
+  new URL("../theme/fusion-surfaces.css", import.meta.url),
   "utf8",
 );
 
 describe("DashboardPage", () => {
-  it("renders compact dashboard summary inside the overview hero", () => {
+  it("renders operational summary before providers without an introductory hero", () => {
     const html = renderToStaticMarkup(
       <DashboardPage
         localePreference="en"
@@ -38,33 +38,25 @@ describe("DashboardPage", () => {
       />,
     );
 
-    expect(html).toContain('class="hero-card dashboard-hero-card"');
-    expect(html).toContain('class="body-copy dashboard-hero-card__detail"');
-    expect(html.indexOf("dashboard-hero-card__detail")).toBeGreaterThan(
-      html.indexOf("dashboard-hero-card__body"),
-    );
+    expect(html).toContain('class="app-shell fusion-surface dashboard-fusion"');
+    expect(html).not.toContain("hero-card");
     expect(html).toContain(
-      'class="summary-strip summary-strip--compact dashboard-hero-card__summary"',
+      'class="summary-strip summary-strip--compact dashboard-summary"',
+    );
+    expect(html.indexOf("dashboard-summary")).toBeLessThan(
+      html.indexOf("dashboard-section"),
     );
     expect(html).toContain('data-i18n-layout-contract="compact-summary"');
-    expect(html).toContain("data-i18n-summary-label");
-    expect(html).toContain(">AI coding quota overview<");
     expect(html).toContain(">Visible<");
+    expect(html).toContain('data-material-action-icon="refresh"');
+    expect(html).toContain('data-material-action-icon="settings"');
+    expect(html).toContain('src="/icons/icon32.png"');
     expect(html).not.toContain("Material 3");
-    expect(layoutPrimitivesCss).toContain(".dashboard-hero-card {");
-    expect(layoutPrimitivesCss).toContain(
-      ".dashboard-hero-card__detail {",
+    expect(fusionCss).toContain(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
     );
-    expect(layoutPrimitivesCss).toContain("max-inline-size: none;");
-    expect(layoutPrimitivesCss).toContain(".dashboard-hero-card__body {");
-    expect(layoutPrimitivesCss).toContain(
-      "grid-template-columns: minmax(0, 1fr) minmax(240px, 420px);",
-    );
-    expect(layoutPrimitivesCss).toContain(
-      ".dashboard-hero-card__summary.summary-strip--compact {",
-    );
-    expect(layoutPrimitivesCss).toContain(
-      "grid-template-columns: repeat(auto-fit, minmax(min(100%, 88px), 1fr));",
+    expect(fusionCss).toContain(
+      '.dashboard-fusion[data-dashboard-surface="fullPage"]',
     );
   });
 
@@ -135,13 +127,14 @@ describe("DashboardPage", () => {
     );
 
     expect(html).toContain(">Open Quick Setup<");
-    expect(html).toContain("Start in Quick Setup to enable your first provider");
+    expect(html).toContain(
+      "Start in Quick Setup to enable your first provider",
+    );
     expect(html).toContain('class="status-card dashboard-empty-state"');
     expect(html).toContain(
       'class="credential-actions dashboard-empty-state__actions"',
     );
-    expect(layoutPrimitivesCss).toContain(".dashboard-empty-state {");
-    expect(layoutPrimitivesCss).toContain("max-inline-size: 720px;");
+    expect(fusionCss).toContain(".dashboard-fusion .dashboard-empty-state {");
   });
 
   it("can render the full-page surface switch as a sidebar action", () => {

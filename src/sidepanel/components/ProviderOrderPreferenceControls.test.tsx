@@ -17,7 +17,9 @@ describe("ProviderOrderPreferenceControls", () => {
       <ProviderOrderPreferenceControls
         copy={copy.providerOrder}
         providers={SAMPLE_APP_STATE.providerSettings}
-        providerOrderBySurface={SAMPLE_APP_STATE.settings.providerOrderBySurface}
+        providerOrderBySurface={
+          SAMPLE_APP_STATE.settings.providerOrderBySurface
+        }
         onChange={() => {}}
       />,
     );
@@ -41,14 +43,22 @@ describe("ProviderOrderPreferenceControls", () => {
       <ProviderOrderPreferenceControls
         copy={copy.providerOrder}
         providers={SAMPLE_APP_STATE.providerSettings}
-        providerOrderBySurface={SAMPLE_APP_STATE.settings.providerOrderBySurface}
+        providerOrderBySurface={
+          SAMPLE_APP_STATE.settings.providerOrderBySurface
+        }
         onChange={() => {}}
       />,
     );
 
     expect(html).toContain("Provider-Reihenfolge");
     expect(html).toContain("Vollseiten-Tab");
-    expect(html).toContain("Nach unten");
+    expect(html).toContain('data-material-icon="keyboard-arrow-down"');
+    expect(html).toContain(
+      copy.providerOrder.moveDownAction(
+        "Cursor Personal Usage Page",
+        copy.providerOrder.surfaceLabels.popup,
+      ),
+    );
     expect(html).not.toContain("Choose the order per surface");
   });
 
@@ -57,7 +67,9 @@ describe("ProviderOrderPreferenceControls", () => {
       (provider) => provider.id,
     );
 
-    expect(moveProviderInOrder([], providerIds, "jetbrains-org-page", "up")).toEqual([
+    expect(
+      moveProviderInOrder([], providerIds, "jetbrains-org-page", "up"),
+    ).toEqual([
       "cursor-personal-page",
       "jetbrains-org-page",
       "cursor-team-api",
@@ -68,7 +80,14 @@ describe("ProviderOrderPreferenceControls", () => {
       "codex-enterprise-api",
       "sub2api-api-key",
     ]);
-    expect(reorderProviderBefore([], providerIds, "codex-personal-page", "cursor-personal-page")).toEqual([
+    expect(
+      reorderProviderBefore(
+        [],
+        providerIds,
+        "codex-personal-page",
+        "cursor-personal-page",
+      ),
+    ).toEqual([
       "codex-personal-page",
       "cursor-personal-page",
       "cursor-team-api",

@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useId,
@@ -23,7 +24,9 @@ export function MaterialInfoTooltip({
   const rootRef = useRef<HTMLSpanElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const contentRef = useRef<HTMLSpanElement | null>(null);
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [position, setPosition] = useState<{ left: number; top: number } | null>(
     null,
   );
@@ -41,9 +44,10 @@ export function MaterialInfoTooltip({
       ref={contentRef}
       id={tooltipId}
       className="material-info-tooltip__content"
-      data-open={isOpen ? "true" : "false"}
+      data-open={isOpen && panelVisible ? "true" : "false"}
       data-positioned={position === null ? "false" : "true"}
       role="tooltip"
+      aria-hidden={!isOpen || !panelVisible || undefined}
       style={tooltipStyle}
     >
       {children}

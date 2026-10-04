@@ -1,6 +1,8 @@
 Veja as cotas de IA para programação antes que interrompam seu trabalho. AI Usage Dashboard reúne limites visíveis na fonte, horários de reset, gastos e estado de sincronização em uma extensão do Chrome.
 
-Use o popup da barra para conferir rapidamente e o painel lateral ou dashboard completo para detalhes. O Quick Setup aparece primeiro nas Configurações para conectar apenas as fontes que você usa.
+Use o popup da barra para conferir rapidamente e o painel lateral ou dashboard completo para detalhes. As Configurações começam por Contas e conexões para conectar apenas as fontes que você usa.
+
+A interface compacta em estilo Material organiza as configurações em Contas e conexões, Uso e notificações, Aparência e exibição, Geral e Dados e backup. A navegação se adapta à largura e preserva os rascunhos. O retorno de salvamento reflete o resultado real. Há quatro níveis de animação: Padrão, Seguir o sistema, Mais e Reduzidas. Os limites de aviso na interface e de notificações do sistema continuam independentes.
 
 Ele funciona com fluxos como Codex, Cursor, Claude Personal, análises organizacionais do Claude Code, Gemini Code Assist e gateways compatíveis com Sub2API configurados pelo usuário, mostrando claramente se cada fonte é exata, parcial, por janela de uso, apenas de política ou indisponível.
 

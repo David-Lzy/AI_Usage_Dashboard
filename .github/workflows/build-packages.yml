@@ -185,6 +185,12 @@ jobs:
           - Adds optional quota/reset notifications, sanitized diagnostics export, and aggregate CSV/period summaries.
           - Adds bounded Sub2API deployment comparison and an opt-in, same-machine Codex CLI Companion for local quota reads.
           - Codex API-equivalent estimates appear only after enough complete, priced observations; they are not subscription charges or balances."
+          elif [[ "${package_version}" == "0.2.2" ]]; then
+            release_summary="Stable Chrome package and unsigned Firefox local-beta package."
+            release_highlights="- Unifies Settings, Dashboard, Sidebar, Provider detail and Popup with a compact Material-style interface.
+          - Organizes Settings into five categories with responsive navigation, retained drafts and confirmed save/retry feedback.
+          - Adds Default, Follow system, More and Reduced motion; existing settings and independent quota/notification thresholds are preserved.
+          - Fixes motion-selection round trips, keyboard activation and right-to-left menu placement without changing Provider data or permissions."
           else
             release_summary="Browser-specific packages for this version."
             release_highlights="- Review the repository documentation and changelog for version-specific changes."

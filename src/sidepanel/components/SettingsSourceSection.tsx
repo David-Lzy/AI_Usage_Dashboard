@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type {
   ProviderAccountsByProvider,
   ProviderId,
@@ -18,6 +19,7 @@ import { DiagnosticsExportControl } from "./DiagnosticsExportControl";
 import { SettingsSourceCard } from "./SettingsSourceCard";
 
 type SettingsSourceSectionProps = {
+  embedded?: boolean;
   activeSessionPageAttachAvailable: boolean;
   carouselIndex?: number;
   detail: string;
@@ -47,6 +49,7 @@ type SettingsSourceSectionProps = {
 };
 
 export function SettingsSourceSection({
+  embedded = false,
   activeSessionPageAttachAvailable,
   carouselIndex,
   detail,
@@ -111,30 +114,41 @@ export function SettingsSourceSection({
   );
 
   return (
-    <section className="dashboard-section settings-section-anchor" id={sectionId}>
-      <div className="dashboard-section__header">
-        <div>
-          <p className="section-label">{eyebrow}</p>
-          <div className="section-title-with-info">
-            <h2 className="section-title">{title}</h2>
-            <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
+    <section
+      className="dashboard-section settings-section-anchor"
+      id={sectionId}
+    >
+      {!embedded ? (
+        <div className="dashboard-section__header">
+          <div>
+            <p className="section-label">{eyebrow}</p>
+            <div className="section-title-with-info">
+              <h2 className="section-title">{title}</h2>
+              <MaterialInfoTooltip>{detail}</MaterialInfoTooltip>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
-      <ProviderCarousel
-        ariaLabel={title}
-        initialIndex={
-          focusedSourceIndex > -1 ? focusedSourceIndex : (carouselIndex ?? 0)
-        }
-        items={sourceItems}
-        i18n={i18n}
-        textDirection={i18n.resolvedTextDirection}
-        onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
-      />
+      {embedded ? (
+        sourceItems.map((item) => (
+          <Fragment key={item.id}>{item.content}</Fragment>
+        ))
+      ) : (
+        <ProviderCarousel
+          ariaLabel={title}
+          initialIndex={
+            focusedSourceIndex > -1 ? focusedSourceIndex : (carouselIndex ?? 0)
+          }
+          items={sourceItems}
+          i18n={i18n}
+          textDirection={i18n.resolvedTextDirection}
+          onActiveItemChange={(_item, index) => onCarouselIndexChange?.(index)}
+        />
+      )}
 
       {/* Support export is intentionally available only at the Debug level. */}
-      {userLevelVisibility.showDebugDiagnostics ? (
+      {!embedded && userLevelVisibility.showDebugDiagnostics ? (
         <DiagnosticsExportControl
           state={{
             providers: snapshots,

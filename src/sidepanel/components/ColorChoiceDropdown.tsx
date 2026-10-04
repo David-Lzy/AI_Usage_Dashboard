@@ -1,3 +1,4 @@
+import { useControlVisibility } from "../../shared/control-visibility";
 import {
   useEffect,
   useId,
@@ -134,9 +135,11 @@ export function ColorChoiceDropdown({
       sections,
       copy.customLabel,
     );
+  const panelVisible = useControlVisibility();
   const [isOpen, setIsOpen] = useState(
     () => Boolean(sessionPopoverId) && activePopover?.id === sessionPopoverId,
   );
+  useEffect(() => { if (!panelVisible) setIsOpen(false); }, [panelVisible]);
   const [menuPosition, setMenuPosition] =
     useState<FloatingMenuPosition | null>(null);
   const {
@@ -460,7 +463,7 @@ export function ColorChoiceDropdown({
     </div>
   ) : null;
 
-  const menu = isOpen ? (
+  const menu = isOpen && panelVisible ? (
     <div
       ref={menuRef}
       id={menuId}

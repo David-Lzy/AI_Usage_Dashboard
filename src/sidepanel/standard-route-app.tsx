@@ -137,6 +137,7 @@ export function shouldRestoreSurfaceSessionStateForRoute(
 }
 
 export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
+  const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
   const restoredRouteKeysRef = useRef(new Set<string>());
   const isFullPageSurface =
     typeof window !== "undefined" &&
@@ -147,12 +148,14 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     isLoading,
     loadError,
     applyMessage,
+    settingsSaveFeedback,
+    retrySettingsSave,
     handleRetryInitialization,
     setToast,
   } = useStandardAppRuntime({
     preferCachedBootstrap: true,
+    inlinePreferenceFeedback: route.name === "settings",
   });
-  const route = parseSidePanelHash(locationHash) ?? { name: "dashboard" };
   const routeKey = buildSidePanelHash(route);
 
   function navigateToRoute(nextRoute: SidePanelRouteState) {
@@ -264,7 +267,6 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
     handleSaveCodexWorkspaceConfig,
     handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync,
-    handleSavePreferences,
     handleSaveProviderAdminApiKey,
     handleSaveSub2ApiDeployment,
     handleTestSub2ApiDeployment,
@@ -405,7 +407,7 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
                 ? runtimeI18n.t("common.actions.open_sidebar")
                 : runtimeI18n.t("common.actions.open_settings_tab")
             }
-            settings={appState.settings}
+            settings={{ ...appState.settings, ...settingsSaveFeedback.draft }}
             providers={appState.providerSettings}
             providerAccounts={appState.providerAccounts}
             customSources={appState.customSources}
@@ -413,7 +415,8 @@ export function StandardRouteApp({ locationHash }: StandardRouteAppProps) {
             snapshots={appState.providers}
             toast={toast}
             onDismissToast={() => setToast(null)}
-            onSavePreferences={handleSavePreferences}
+            saveStatus={settingsSaveFeedback.status}
+            onRetrySettingsSave={retrySettingsSave}
             onSyncIntervalChange={(minutes) =>
               handleUpdateSettings({ syncIntervalMinutes: minutes })
             }

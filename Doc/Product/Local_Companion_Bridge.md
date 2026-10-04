@@ -1,6 +1,6 @@
 # Experimental Local Companion Bridge
 
-Date: 2026-09-24
+Date: 2026-10-04
 
 Document class:
 
@@ -12,9 +12,9 @@ Freshness model:
 
 Status note:
 
-- the public Store baseline verified before this source release is
-  `0.2.0-rc.14`; the Codex local quota and equivalent estimate belong to
-  0.2.1 source and require separate Store publication
+- version 0.2.1, which introduced Codex local quota and equivalent estimates,
+  is confirmed public on the Store; this integration remains experimental
+  and opt-in (see the [publication milestone](../Store/Chrome_Web_Store_Publication_Milestone.md))
 - generic local rows remain Custom Sources; the opt-in Codex summary is a
   separate, built-in Codex Personal source
 
@@ -23,7 +23,7 @@ Status note:
 The repository includes an experimental Node reference bridge for development
 and protocol testing. The extension does not install, start, download, or
 update this process, and the generic reference CLI is not presented as a
-built-in Provider connection. Developer/Debug Settings in the 0.2.1 source
+built-in Provider connection. Developer/Debug Settings
 exposes generic pairing and selected-source refresh in addition to the bounded
 CodexBar dashboard adapter described below.
 
@@ -32,7 +32,7 @@ extension to obtain arbitrary machine access.
 
 ## Codex Local Quota (0.2.1 Source)
 
-The preview has no standalone Companion installer. On the **same machine** as
+There is no standalone Companion installer. On the **same machine** as
 the browser, obtain the matching project source, install Node.js `>=22.12.0`
 and Codex CLI, and sign in to Codex CLI. From the project root, manually start
 the Node reference bridge with an explicit, absolute Codex Home path:
@@ -45,7 +45,7 @@ Replace the example path with the Codex Home used by the signed-in CLI. The
 command runs on Windows, macOS and Linux when `node` and `codex` are on `PATH`;
 use `--codex-bin <absolute-executable-path>` if the CLI is elsewhere. Keep the
 terminal open. It prints a loopback URL and one-time pairing code; enter both
-under **Provider display settings → Codex local connection** and allow Chrome's
+under **Accounts & Connections → Codex local connection** and allow Chrome's
 local-address permission request. The disconnected Settings control includes
 these steps. Restarting Companion clears the in-memory token and requires
 pairing again with its new code.
@@ -58,7 +58,7 @@ Only an absolute, explicitly provided Codex Home is accepted. The default
 `codex` executable must be on the operator's PATH; `--codex-bin` allows an
 explicit executable path.
 
-Under Provider display settings, enable Codex Personal, enter the printed
+Under Accounts & Connections, enable Codex Personal, enter the printed
 loopback URL and one-time code, and pair. Basic and Advanced users can use this
 dedicated Codex control; arbitrary Custom Source controls remain
 Developer/Debug-only. Pairing checks that a Codex quota can actually be read,

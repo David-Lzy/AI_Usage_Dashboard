@@ -1,3 +1,4 @@
+import { MotionDetails } from "../../shared/components/MotionDetails";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -592,14 +593,13 @@ export function CustomSourceSettingsSection({
         </div>
       )}
 
-      <details className="custom-source-protocol">
-        <summary>{copy.protocolTitle}</summary>
+      <MotionDetails className="custom-source-protocol" summary={copy.protocolTitle}>
         <p className="body-copy">{copy.protocolHelp}</p>
         <div className="custom-source-protocol__examples">
           <pre>{formatExample(MINIMUM_EXAMPLE)}</pre>
           <pre>{formatExample(FULL_EXAMPLE)}</pre>
         </div>
-      </details>
+      </MotionDetails>
     </section>
   );
 }

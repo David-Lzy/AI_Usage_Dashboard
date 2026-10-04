@@ -430,7 +430,6 @@ export function createStandardAppActions({
       settingsActions.handleSaveCodexSessionToken,
     handleSaveConfigurationToChromeSync:
       settingsActions.handleSaveConfigurationToChromeSync,
-    handleSavePreferences: settingsActions.handleSavePreferences,
     handleSaveProviderAdminApiKey:
       settingsActions.handleSaveProviderAdminApiKey,
     handleSaveSub2ApiDeployment,

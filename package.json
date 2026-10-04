@@ -1,6 +1,6 @@
 {
   "name": "ai-usage-dashboard",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "AGPL-3.0-only",
   "author": "David-Lzy (https://github.com/David-Lzy)",
   "homepage": "https://github.com/David-Lzy/AI_Usage_Dashboard",
@@ -298,6 +298,7 @@
     "qa:production-state:browser": "./scripts/with-preferred-node.sh node ./scripts/check-production-state-browser.mjs"
   },
   "dependencies": {
+    "mdui": "2.1.5",
     "papaparse": "^5.7.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

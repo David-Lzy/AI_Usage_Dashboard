@@ -5,6 +5,7 @@ import { createPageSessionClient } from "./page-session";
 describe("createPageSessionClient", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   it("discovers the highest-priority matching tab in DOM mode", async () => {
@@ -563,6 +564,7 @@ describe("createPageSessionClient", () => {
   });
 
   it("reloads and retries a candidate tab when capture recovery is enabled", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     const query = vi.fn(async () => [
       {
         id: 17,
@@ -648,6 +650,7 @@ describe("createPageSessionClient", () => {
   });
 
   it("reloads a candidate tab before capture when freshness reload is enabled", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
     const calls: string[] = [];
     const query = vi.fn(async () => [
       {
