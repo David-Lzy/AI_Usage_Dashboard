@@ -1,6 +1,6 @@
 # Store Listing Copy Pack
 
-Date: 2026-09-24
+Date: 2026-10-04
 
 Process rule:
 
@@ -16,7 +16,7 @@ Freshness model:
 
 Status note:
 
-- this is the maintained English source copy pack for the 0.2.1 Store update;
+- this is the maintained English source copy pack for the 0.2.2 Store update;
   source text is not proof that the live listing has been changed
 - primary upload locale copy is maintained in the product-description files in this directory
 - keep provider/product names unchanged and do not strengthen partial provider support claims
@@ -39,7 +39,9 @@ Details:
 
 `It supports Codex, Cursor, Claude Personal, Claude Code organization analytics, Gemini Code Assist, configured Sub2API-compatible gateways, and related coding workflows while clearly labeling whether each source is exact, partial, window-scoped, policy-only, or unavailable. It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.`
 
-`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, and sync status. Use the side panel or full-page dashboard for normalized trends, saved Sub2API deployment comparison, selected period summaries, and aggregate CSV export. Settings starts with Quick Setup, then separates Usage & Notifications from Appearance.`
+`Open the toolbar popup to check provider health, setup blockers, usage windows, reset timing, source type, snapshot freshness, and sync status. Use the side panel or full-page dashboard for normalized trends, saved Sub2API deployment comparison, selected period summaries, and aggregate CSV export. Settings starts with Accounts & Connections, followed by Usage & Notifications, Appearance & Display, General, and Data & Backup. Responsive navigation preserves drafts and save feedback reflects the actual result.`
+
+`Choose Default, Follow system, More, or Reduced motion across the interface. In-app warning and system-notification thresholds remain independent. Provider data meanings and permission boundaries are unchanged.`
 
 `AI coding assistants are fast and useful, but quota pages and account states can be easy to lose track of. AI Usage Dashboard makes those states easier to scan while keeping unknown or stale data visibly distinct from fresh source values.`
 
@@ -63,6 +65,7 @@ Feature bullets:
 - `Optional same-machine Codex CLI Companion; conditional API-equivalent estimates are not bills or balances`
 - `Traditional progress bands or editable remaining-color gradients`
 - `Configurable themes, progress styles, provider order, toolbar badge, and toolbar icon`
+- `Five settings categories, responsive navigation, confirmed save feedback, and four motion levels`
 - `Import/export and Chrome Sync support for extension settings`
 - `Open-source code under AGPL-3.0-only`
 

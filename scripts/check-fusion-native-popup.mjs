@@ -175,7 +175,11 @@ try {
           }));
           for (const snapshot of state.providers)
             for (const window of snapshot.usageWindows ?? [])
-              if (window.resetAt) window.resetAt = "2026-10-06T12:00:00.000Z";
+              if (window.resetAt)
+                window.resetAt = new Date(
+                  Date.now() +
+                    (window.kind.includes("weekly") ? 3 * 86400000 : 2 * 3600000),
+                ).toISOString();
           const snapshots = structuredClone(state.providers);
           await worker.evaluate(
             (state) =>

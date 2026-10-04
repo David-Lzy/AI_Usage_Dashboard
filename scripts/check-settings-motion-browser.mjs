@@ -120,8 +120,14 @@ try {
     await configure.click();
     const connection = page.locator("#settings-connection-codex-personal-page");
     await page.waitForTimeout(50);
-    const intermediate = await connection.evaluate((element) => ({ height: element.getBoundingClientRect().height, active: element.getAnimations().length, inert: element.inert }));
-    if (!["reduced", "system"].includes(mode)) assert(intermediate.active > 0, `${name}: no disclosure animation`);
+    const intermediate = await connection.evaluate((element) => ({
+      height: element.getBoundingClientRect().height,
+      active: element.getAnimations().length,
+      inert: element.inert,
+      inPageSample: window.__motionQa.animations.filter((entry) => entry.target === element.className).at(-1)?.intermediate,
+    }));
+    // A delayed host round trip can arrive after the recorded mid-animation frame.
+    if (!["reduced", "system"].includes(mode)) assert(intermediate.active > 0 || intermediate.inPageSample?.state === "running", `${name}: no disclosure animation`);
     await page.waitForTimeout(400);
     const help = connection.locator("[data-codex-local-setup-toggle]");
     await help.click();

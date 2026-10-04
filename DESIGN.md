@@ -1,6 +1,6 @@
 # AI Usage Dashboard Design Contract
 
-Date: 2026-10-02
+Date: 2026-10-04
 
 This document defines the maintained visual and interaction contract for the
 extension. It is intentionally specific to AI Usage Dashboard: a compact,
@@ -110,13 +110,13 @@ control language.
 
 ## Responsive Layout
 
-### B Fusion Migration Target (Unreleased)
+### B Fusion Interface (0.2.2)
 
 The accepted visual direction keeps the existing font, blue accent and semantic
-light/dark roles, while simplifying navigation and grouping. This is the target
-for an incremental production migration, not a claim about the released 0.2.1
-interface. Validate MDUI 2.1.5 in real Chrome and Firefox extensions before using
-its adapters across the application; prototype results are not that validation.
+light/dark roles, while simplifying navigation and grouping. This contract is
+implemented in the 0.2.2 source. Store publication is tracked separately.
+MDUI 2.1.5 has real Chrome and Firefox compatibility gates; prototype results
+are not a substitute for those gates.
 
 The initial production adapter is scoped to Settings under
 `src/sidepanel/components/material-ui/`. It maps the existing resolved theme
@@ -125,7 +125,7 @@ Settings-only chunk. Native field labels and select-menu access require a small,
 version-bound compatibility layer. Keep its controlled-value, keyboard and
 real-extension browser gates when changing the dependency; see the
 [testing guide](Doc/testing/README.md). Settings, Dashboard, Sidebar, Provider
-detail and Popup now follow this contract on the migration branch. MDUI controls
+detail and Popup follow this contract. MDUI controls
 remain Settings-only; sharing the visual language does not require loading that
 library in the compact Popup or replacing existing quota/chart components.
 
@@ -225,7 +225,7 @@ explains state changes; it does not decorate idle surfaces.
 
 - Use short shared durations and easing for menus, collapse, route entry, and
   direct manipulation feedback.
-- The branch motion preference has four choices: `Default` (`full`, 120-280ms),
+- The motion preference has four choices: `Default` (`full`, 120-280ms),
   `Follow system` (`system`), `More` (`expressive`, 180-360ms), and `Reduced`
   (`reduced`). Default and More deliberately override OS reduced motion;
   Follow system respects it. Reduced removes nonessential movement. Existing

@@ -204,7 +204,7 @@ converted or ranked. See the [Sub2API contract](Sub2API_User_Usage_Contract.md).
 
 ### Quota Notifications (0.2.1 Source)
 
-Settings places **Quick Setup** immediately below the top navigation, with its
+The 0.2.1 layout places **Quick Setup** immediately below the top navigation, with its
 navigation chip first. **Overview** follows, then the peer **Usage &
 Notifications** and **Appearance** modules. Usage & Notifications contains the default sync interval,
 the in-app warning threshold, quota notification controls, and configuration
@@ -248,10 +248,10 @@ disable local notification preferences. Delivery is at-most-once: durable event
 state precedes the OS request, so an OS rejection, a superseding capture or a
 crash may suppress an alert instead of replaying it. OS display is not guaranteed.
 
-### Settings Organization (Unreleased Migration)
+### Settings Organization (0.2.2)
 
-The migration branch implements five task-oriented Settings categories. This
-does not describe the released 0.2.1 layout documented above. The category shell
+The 0.2.2 source implements five task-oriented Settings categories, superseding
+the 0.2.1 layout documented above. Store availability is tracked separately. The category shell
 and connection workflows have moved, and ordinary preferences now show actual
 save acknowledgements. All five Settings categories are functional. Dashboard
 and Sidebar use compact headers, operational summaries and responsive Provider
@@ -310,7 +310,7 @@ is explicitly global. Progress bands, gradients, thickness and image-derived
 colors are retained in an expandable editor. The existing synthetic Popup
 preview remains available, with all three widths and its sample-value control.
 Theme mode, accent, font and motion stay global, including system/time resolution.
-The unreleased branch offers Default, Follow system, More and Reduced motion.
+The interface offers Default, Follow system, More and Reduced motion.
 Category selection updates logical visibility immediately, restores its scroll
 position, then introduces incoming content. Mounted connection drafts survive
 category changes. Disclosure closing is inert immediately; visual completion
@@ -320,7 +320,7 @@ decoration. Failed saves and denied notification permission remain real states;
 motion cannot turn them into successful operations.
 
 Dashboard, Sidebar, Provider detail and Popup use the same finite motion profile
-on the unreleased branch. Incoming content, explicit selection, disclosures and
+in 0.2.2. Incoming content, explicit selection, disclosures and
 list reordering retain stable keys and focus. Popup auto-glide speed and its
 hover/manual controls are unchanged. Unknown quota is static, not a perpetual
 decorative loading animation.
@@ -362,7 +362,7 @@ an explicit newer deep link wins over an older pending session read.
 The redesign does not change Provider data meaning, refresh strategy, source
 eligibility, optional permission boundaries or account/credential isolation.
 Prototype mock services, memory saves, static groups and fixed timers are not
-production implementations. See the [design contract](../../DESIGN.md#b-fusion-migration-target-unreleased)
+production implementations. See the [design contract](../../DESIGN.md#b-fusion-interface-022)
 for the shared visual target and real-extension compatibility gate.
 
 ### Setup State
@@ -414,8 +414,8 @@ Display eligibility plus dashboard display visibility determines whether a provi
 ### Quick Setup
 
 - Quick Setup is the source-entry display and setup entry point.
-- Quick Setup is the first Settings section and first top navigation item;
-  its existing section ID remains the deep-link target.
+- The compact Accounts & Connections category is first in 0.2.2; the former
+  Quick Setup section ID remains a compatible deep link to that category.
 - Quick Setup must not be hidden behind Advanced, Developer, or Debug display levels.
 - Quick Setup should show personal/page/policy source entries by default.
 - Team/Enterprise/API source entries should be available through an explicit "show Team/API providers" control so personal users are not overloaded.

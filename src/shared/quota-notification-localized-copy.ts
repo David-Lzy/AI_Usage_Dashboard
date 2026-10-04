@@ -229,7 +229,7 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
     noAccounts: "No hay cuentas disponibles para notificaciones.",
     noSupportedWindows: "No hay periodos de uso compatibles para notificaciones.",
     loading: "Cargando la configuración de notificaciones",
-    permissionNotGranted: "El permiso de notificaciones no esta concedido.",
+    permissionNotGranted: "El permiso de notificaciones no está concedido.",
     permissionUnsupported: "Este navegador no admite notificaciones.",
     pausedStatus: "Las notificaciones están pausadas.",
     readyStatus: "Las notificaciones están listas.",

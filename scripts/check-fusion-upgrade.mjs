@@ -121,13 +121,22 @@ try {
   );
   assert.equal(before.settings.warningThresholdPercent, 73);
   await runtime.page.goto(
-    `${runtime.origin}/src/sidepanel/index.html?surface=full-page#settings/section/settings-data`,
+    `${runtime.origin}/src/sidepanel/index.html?surface=full-page#settings`,
   );
-  const downloadPromise = runtime.page.waitForEvent("download");
-  await runtime.page
-    .getByRole("button", { name: "Export JSON", exact: true })
-    .click();
-  const download = await downloadPromise;
+  await runtime.page.locator(".settings-shell").waitFor();
+  // The published pre-fusion package has no settings-data route.
+  const dataCategory = runtime.page.locator('[data-settings-category-link="data"]');
+  if (await dataCategory.count()) await dataCategory.click();
+  const exportButton = runtime.page.getByRole("button", { name: "Export JSON", exact: true });
+  await exportButton.waitFor();
+  const downloadPromise = runtime.page.waitForEvent("download").then(
+    (download) => ({ download }),
+    (error) => ({ error }),
+  );
+  await exportButton.click();
+  const outcome = await downloadPromise;
+  if (outcome.error) throw outcome.error;
+  const download = outcome.download;
   const backupPath = path.join(output, "synthetic-021-backup.json");
   await download.saveAs(backupPath);
   const backup = JSON.parse(await readFile(backupPath, "utf8"));
