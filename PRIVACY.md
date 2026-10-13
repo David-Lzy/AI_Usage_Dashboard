@@ -99,7 +99,7 @@ system control whether accepted notifications are displayed, retained or silence
 
 ### Optional Community Reset Information
 
-The in-progress provider insights update includes separately opt-in public feeds
+The unreleased provider insights work branch includes separately opt-in public feeds
 from `codex-resets.com` and `codex-reset.com`. They are off by default. Enabling
 them requests only the selected sites' optional host access and uses fixed HTTPS
 GET endpoints about every five minutes, with credentials omitted, no referrer,

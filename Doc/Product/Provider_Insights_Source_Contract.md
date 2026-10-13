@@ -76,6 +76,11 @@ Preserve current provider IDs, stored display choices, credential segregation,
 sync strategy and source fidelity. A generic page title is insufficient to
 classify a signed-in usage screen as logged out.
 
+Optional Codex DOM context uses only the remaining direct-refresh budget, with
+a small completion reserve and its usual bounded cap. A slow tab query or
+renderer is ignored after that budget; it cannot discard an already successful
+quota capture or write late context into the accepted result.
+
 ## Reset And Grant Evidence
 
 An account notification needs fresh same-account source evidence. A percentage

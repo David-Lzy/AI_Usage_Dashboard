@@ -166,7 +166,9 @@ export function buildUsageInsightsFromDom(provider: "codex" | "claude" | "cursor
     provider === "codex" ? "codex-personal-page" : provider === "claude" ? "claude-code-team-page" : "cursor-personal-page");
 }
 
-export async function captureOpenUsageInsights(provider: "codex" | "claude" | "cursor", client: PageSessionClient, binding?: ProviderPageBinding): Promise<ProviderUsageInsights | undefined> {
+export async function captureOpenUsageInsights(provider: "codex" | "claude" | "cursor", client: PageSessionClient, binding?: ProviderPageBinding, timeoutMs = 1500): Promise<ProviderUsageInsights | undefined> {
+  const budget = Number.isFinite(timeoutMs) ? Math.max(0, Math.min(1500, timeoutMs)) : 0;
+  if (budget <= 0) return undefined;
   const tabs = getExtensionTabsApi();
   if (!tabs?.query || !client.executeMainWorld) return undefined;
   const urlPatterns = provider === "codex" ? ["https://chatgpt.com/settings/usage*"]
@@ -183,7 +185,7 @@ export async function captureOpenUsageInsights(provider: "codex" | "claude" | "c
   };
   try {
     return await Promise.race([read().catch(() => undefined), new Promise<undefined>((resolve) => {
-      timeout = setTimeout(() => { cancelled = true; resolve(undefined); }, 1500);
+      timeout = setTimeout(() => { cancelled = true; resolve(undefined); }, budget);
     })]);
   } finally { clearTimeout(timeout); }
 }

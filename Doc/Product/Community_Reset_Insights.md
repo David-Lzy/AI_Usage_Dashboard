@@ -12,7 +12,7 @@ Freshness model:
 
 Status note:
 
-- optional community context in the in-progress provider insights update
+- optional community context in the unreleased provider insights work branch
 - not an official account service or a claim about the currently published Store build
 
 ## Sources And Meaning
@@ -103,6 +103,13 @@ Preference writes show confirmed success or a retryable failure. A revision
 check rejects stale drafts from another window rather than silently restoring
 disabled sources. Manual refresh observes the same cache and backoff boundaries
 as background polling.
+
+Confirmed preference writes and network refresh have separate lifecycles. A slow
+refresh does not lock the Off/source controls; Off cancels pending collection.
+Late refresh feedback cannot restore an older revision or overwrite the current
+scope. Background reads do not dismiss an explicit failed write; its retry is
+still available. A refresh transport failure is source unavailability, not a
+claim that the already acknowledged preference failed to save.
 
 ## Privacy And Delivery Boundary
 

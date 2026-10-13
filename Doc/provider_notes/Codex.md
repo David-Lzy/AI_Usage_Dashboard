@@ -43,13 +43,16 @@ alone no longer means signed out. New-page DOM capture reads a fixed whitelist
 of aggregate labels and literal values, not full HTML, chat rankings or titles.
 Function percentages carry their own displayed date range and successful
 capture time. They are usage composition, never remaining quota. An explicit
-Work/Codex/agent caption marks shared plan scope; unknown scope stays unknown.
+Work/Codex/agent caption marks aggregate usage scope, not evidence of a shared
+physical quota pool; unknown scope stays unknown.
 Graphs without literal aggregate values remain unavailable.
 Browser reset-count payloads remain unverified; a rendered badge or list length
 does not substitute for the official `availableCount` contract.
 
 Optional aggregate capture reads an already-open page without opening or
 refreshing it. Direct session quota remains the primary browser source.
+Optional enrichment is capped to the remaining refresh deadline, so a slow tab
+query or renderer cannot turn an already successful quota response into a timeout.
 The existing local-only path never invokes this browser enrichment. Aggregate
 DOM observations are account-unverified and cannot prove an account grant.
 

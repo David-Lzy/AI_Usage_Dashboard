@@ -56,7 +56,7 @@ try {
         ];
         let resetStore = normalizeResetNotificationStore(undefined), currentFeed = feed, now = Date.now(), permission = "denied";
         const listeners = new Set(), requests = [], delivered = [];
-        const qa = window.__insightsQa = { deny: true, reject: false, conflictSource: false, failRead: false, feedReadFailure: false, requests, delivered, getFeed: () => currentFeed, getReset: () => resetStore,
+        const qa = window.__insightsQa = { deny: true, reject: false, slow: false, slowCount: 0, aborted: 0, conflictSource: false, failRead: false, feedReadFailure: false, requests, delivered, getFeed: () => currentFeed, getReset: () => resetStore,
           renderer: null, change: null, state };
         const broadcast = (key, oldValue, newValue) => { for (const listener of listeners) listener({ [key]: { oldValue, newValue } }, "local"); };
         const reset = createResetNotificationController({ readState: async () => state, readFeed: async () => currentFeed,
@@ -67,7 +67,10 @@ try {
         const community = createCommunityResetController({ readStore: async () => currentFeed,
           writeStore: async (next) => { if (qa.reject) throw new Error("synthetic storage refusal"); const old = currentFeed; currentFeed = next; broadcast(COMMUNITY_RESET_STORAGE_KEY, old, next); },
           hostAccess: async () => !qa.deny, schedule: async () => {}, suppressed: async () => false, now: () => now,
-          fetcher: async () => { throw new Error("Synthetic scenario has no remote transport"); } });
+          fetcher: async (_url, init) => {
+            if (qa.slow) { qa.slowCount++; return new Promise((_resolve, reject) => init.signal.addEventListener("abort", () => { qa.aborted++; reject(new DOMException("Synthetic cancelled request", "AbortError")); }, { once: true })); }
+            throw new Error("Synthetic scenario has no remote transport");
+          } });
         window.chrome = { runtime: { id: "insights-qa", getURL: (value) => `${location.origin}/${value}`, sendMessage: (message) => {
           if (qa.failRead && message.type === "reset-notifications:read" || qa.feedReadFailure && message.type === "community-resets:read") return Promise.reject(new Error("synthetic read failure"));
           if (qa.conflictSource && message.type === "community-resets:update") {
@@ -100,6 +103,8 @@ try {
         qa.renderer = ReactDOM.createRoot(holder); qa.renderer.render(React.createElement(Harness));
         let mount = 0;
         qa.remount = () => { qa.renderer.render(React.createElement(Harness, { key: ++mount })); };
+        qa.stallNextPoll = () => { qa.slow = true; currentFeed = { ...currentFeed, caches: {} }; };
+        qa.recheck = () => { broadcast(COMMUNITY_RESET_STORAGE_KEY, currentFeed, currentFeed); };
       }, { locale, theme, width, overrides: providerInsightsQaOverrides(), feed: communityResetQaStore() });
       const settings = page.locator("#insights-qa [data-reset-insights-settings]");
       const mode = settings.locator('[data-settings-material-select="community-reset-mode"] mdui-select');
@@ -154,6 +159,9 @@ try {
         await select(communityField, "off");
         assert.equal(await page.evaluate(() => window.__insightsQa.getFeed().preferences.mode), "desktop");
         await settings.locator('[data-settings-save-status="error"]').waitFor();
+        await page.evaluate(() => window.__insightsQa.recheck());
+        await page.waitForTimeout(60);
+        assert.equal(await settings.locator('[data-settings-save-status="error"]').count(), 1, "Background reads cannot erase a failed explicit write");
         await page.evaluate(() => { window.__insightsQa.reject = false; });
         await settings.locator('[data-settings-save-status="error"] button').click();
         await page.waitForFunction(() => window.__insightsQa.getFeed().preferences.mode === "off");
@@ -186,6 +194,17 @@ try {
         await page.evaluate(() => { window.__insightsQa.state.providers.find((provider) => provider.providerId === "codex-personal-page").codexLocal.accountVerified = false; window.__insightsQa.remount(); });
         await settings.locator(':scope[aria-busy="false"]').waitFor();
         assert.equal(await settings.locator('[data-settings-material-select="account-reset-card-mode"] mdui-menu-item[value="on"]').count(), 0);
+        await select(communityField, "off");
+        await page.evaluate(() => window.__insightsQa.stallNextPoll());
+        await communityField.locator('input:not(.hidden-input)').click();
+        await communityField.locator('mdui-menu-item[value="in_app"]').click();
+        await page.waitForFunction(() => window.__insightsQa.slowCount > 0);
+        await settings.locator(':scope[aria-busy="false"]').waitFor();
+        assert.equal(await mode.evaluate((element) => element.disabled), false, "Slow polling must not disable the Off command");
+        await select(communityField, "off");
+        await page.waitForFunction(() => window.__insightsQa.aborted > 0 && window.__insightsQa.getFeed().preferences.mode === "off");
+        await page.waitForTimeout(60);
+        assert.equal(await mode.evaluate((element) => element.value), "off", "The cancelled refresh cannot restore On");
       }
       if (["en", "zh-CN", "ar"].includes(locale) && [1440, 390].includes(width)) {
         await settings.screenshot({ path: path.join(output, `${locale}-${theme}-${width}-settings.png`) });

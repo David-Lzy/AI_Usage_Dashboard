@@ -301,13 +301,18 @@ export function createCodexPersonalPageClient(
       }
 
       const trigger = options.trigger ?? "manual";
+      const deadlineMs = Math.max(1, options.deadlineMs ?? (trigger === "manual"
+        ? CODEX_MANUAL_REFRESH_DEADLINE_MS : CODEX_AUTOMATIC_REFRESH_DEADLINE_MS));
+      const deadlineAt = Date.now() + deadlineMs;
       const refreshPromise = (async (): Promise<CodexPersonalPageUsageResult> => {
         const directResult = await (
           options.sessionApiClient ?? codexSessionApiClient
         ).getUsageSnapshot(trigger);
 
         if (directResult.ok) {
-          const usageInsights = await captureOpenUsageInsights("codex", options.pageSessionClient ?? createPageSessionClient(), normalizedBinding);
+          // Optional context cannot displace an already successful quota result.
+          const usageInsights = await captureOpenUsageInsights("codex", options.pageSessionClient ?? createPageSessionClient(), normalizedBinding,
+            Math.max(0, deadlineAt - Date.now() - 50));
           return {
             captureSource: "session_api",
             replacePreviousSnapshot: directResult.replacePreviousSnapshot,
@@ -384,14 +389,6 @@ export function createCodexPersonalPageClient(
             : normalizedBinding,
         };
       })();
-      const deadlineMs = Math.max(
-        1,
-        options.deadlineMs ??
-          (trigger === "manual"
-            ? CODEX_MANUAL_REFRESH_DEADLINE_MS
-            : CODEX_AUTOMATIC_REFRESH_DEADLINE_MS),
-      );
-
       return settleWithinDeadline(refreshPromise, deadlineMs, () => ({
         captureSource: "page_parse",
         directApiFailure: {

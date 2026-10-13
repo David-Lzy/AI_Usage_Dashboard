@@ -114,7 +114,7 @@ describe("sidepanel view models", () => {
     expect(codex?.currentSourceContractLabel).toBe("Shipped personal partial");
     expect(codex?.sessionPageContractLabel).toBe("Shipped personal partial");
     expect(codex?.openableSessionPageUrl).toBe(
-      "https://chatgpt.com/codex/cloud/settings/analytics",
+      "https://chatgpt.com/settings/usage",
     );
     expect(codex?.currentSourceGraduationGateLabel).toBeNull();
     expect(codex?.currentSourceFidelityLabel).toBe("Window-only vendor value");

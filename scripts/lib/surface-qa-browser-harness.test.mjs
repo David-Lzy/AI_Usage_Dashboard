@@ -14,6 +14,7 @@ describe("surface QA browser harness", () => {
         {
           viewportHeight: 900,
           colorDropdownTop: 320,
+          colorDropdownBottom: 376,
         },
         "colorDropdownTop",
         "color dropdown",
@@ -37,6 +38,7 @@ describe("surface QA browser harness", () => {
         {
           viewportHeight: 900,
           colorDropdownTop: 850,
+          colorDropdownBottom: 906,
         },
         "colorDropdownTop",
         "color dropdown",

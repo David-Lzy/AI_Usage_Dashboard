@@ -322,7 +322,7 @@ describe("settings view models", () => {
     expect(sourceCardModel.sessionTrack?.fields).toEqual([
       {
         label: "Route",
-        value: "https://chatgpt.com/codex/cloud/settings/analytics",
+        value: "https://chatgpt.com/settings/usage",
       },
       {
         label: "Availability",

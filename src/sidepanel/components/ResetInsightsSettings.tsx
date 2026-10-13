@@ -21,7 +21,14 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
   const [feed, setFeed] = useState<CommunityResetView | null>(null), [notifications, setNotifications] = useState<ResetNotificationView | null>(null);
   const [busy, setBusy] = useState(false), [error, setError] = useState(false), [notice, setNotice] = useState<string | null>(null);
   const [loading, setLoading] = useState(true), [saved, setSaved] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const pending = useRef(false), retry = useRef<(() => Promise<void>) | null>(null);
+  const refreshGeneration = useRef(0);
+  function acceptFeed(next: CommunityResetView) {
+    setFeed((current) => current && current.store.revision > next.store.revision ? current : next);
+  }
+  function cancelRefreshFeedback() { refreshGeneration.current += 1; setRefreshing(false); }
+  useEffect(() => () => { refreshGeneration.current += 1; }, []);
   const copy = getCommunityResetCopy(i18n.resolvedLocale), ui = getProviderInsightsUiCopy(i18n.resolvedLocale), fixed = getResetNotificationCopy(i18n.resolvedLocale), quota = buildQuotaNotificationLocalizedCopy(i18n.resolvedLocale);
   const accountKey = JSON.stringify(["codex-personal-page", getActiveProviderAccountId(state, "codex-personal-page")]);
   const snapshot = state.providers.find((provider) => provider.providerId === "codex-personal-page");
@@ -31,10 +38,10 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
       const token = ++generation;
       try {
         const next = await sendCommunityResetMessage({ type: "community-resets:read" });
-        if (active && token === generation) setFeed(next);
+        if (active && token === generation) acceptFeed(next);
         const reset = await sendResetNotificationMessage({ type: "reset-notifications:read" });
         if (!reset.ok) throw new Error("read");
-        if (active && token === generation) { setNotifications(reset.view); if (!pending.current) setError(false); }
+        if (active && token === generation) { setNotifications(reset.view); if (!pending.current && !retry.current) setError(false); }
         return true;
       } catch {
         if (active && token === generation) {
@@ -59,21 +66,31 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
     setBusy(true); setError(false); setSaved(false); setNotice(null);
     try { await work(); retry.current = null; } catch { setError(true); } finally { pending.current = false; setBusy(false); }
   }
+  async function refreshFeed() {
+    const token = ++refreshGeneration.current;
+    setRefreshing(true);
+    try {
+      const next = await sendCommunityResetMessage({ type: "community-resets:refresh" });
+      if (token === refreshGeneration.current) acceptFeed(next);
+    } catch {
+      if (token === refreshGeneration.current) setNotice(copy.unavailable);
+    } finally { if (token === refreshGeneration.current) setRefreshing(false); }
+  }
   async function savePreferences(patch: Partial<CommunityResetPreferences> | ((current: CommunityResetPreferences) => Partial<CommunityResetPreferences>)) {
     if (!feed) return;
-    const refresh = async () => { setFeed(await sendCommunityResetMessage({ type: "community-resets:refresh" })); };
     const write = async (base: CommunityResetView) => {
       const changes = typeof patch === "function" ? patch(base.store.preferences) : patch;
       const next = await sendCommunityResetMessage({ type: "community-resets:update", expectedRevision: base.store.revision, preferences: { ...base.store.preferences, ...changes } });
-      setFeed(next); setSaved(true);
-      if (next.store.preferences.mode !== "off") { retry.current = refresh; await refresh(); }
+      acceptFeed(next); setSaved(true);
+      if (next.store.preferences.mode !== "off") void refreshFeed();
     };
     // Only an explicit retry rebases the intended field onto another window's revision.
-    retry.current = async () => { const latest = await sendCommunityResetMessage({ type: "community-resets:read" }); setFeed(latest); await write(latest); };
+    retry.current = async () => { const latest = await sendCommunityResetMessage({ type: "community-resets:read" }); acceptFeed(latest); await write(latest); };
     await write(feed);
   }
   function changeMode(mode: CommunityResetMode) {
     if (!preferences || pending.current) return;
+    cancelRefreshFeedback();
     // Keep optional permissions in the originating select gesture, before any await.
     const permission = mode === "off" ? Promise.resolve(true) : requestCommunityResetAccess(preferences.sources, mode === "desktop");
     void operation(async () => {
@@ -89,6 +106,7 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
   }
   function changeSource(source: CommunityResetSource, enabled: boolean) {
     if (!preferences || pending.current) return;
+    cancelRefreshFeedback();
     const permission = enabled && preferences.mode !== "off" ? requestCommunityResetAccess([source]) : Promise.resolve(true);
     void operation(async () => {
       if (!await permission) setNotice(copy.denied);
@@ -144,8 +162,8 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
     </ControlVisibilityBoundary>
     <div className="reset-insights-settings__actions">
       <a className="text-button text-button--outlined" href="#provider-detail/codex-personal-page">{copy.openDetails}</a>
-      <FusionButton compact icon={<MaterialActionIcon name="refresh" width="18" height="18" fill="currentColor" />} disabled={busy || !runtime || !preferences || preferences.mode === "off"}
-        onClick={() => { void operation(async () => { setFeed(await sendCommunityResetMessage({ type: "community-resets:refresh" })); }); }}>{i18n.t("common.actions.refresh")}</FusionButton>
+      <FusionButton compact icon={<MaterialActionIcon name="refresh" width="18" height="18" fill="currentColor" />} disabled={busy || refreshing || !runtime || !preferences || preferences.mode === "off"}
+        onClick={() => { setNotice(null); void refreshFeed(); }}>{refreshing ? quota.loading : i18n.t("common.actions.refresh")}</FusionButton>
       {grantEnabled ? <FusionButton compact disabled={busy || notifications?.permission !== "granted" || notifications.preferences.accountPaused} onClick={() => { void test("account"); }}>{quota.test}</FusionButton> : null}
     </div>
     {notice ? <p className="supporting-copy" role="status">{notice}</p> : null}

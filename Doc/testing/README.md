@@ -251,6 +251,28 @@ Current early-reset evidence and unverified CLI identity remain unsupported,
 not inferred. The cross-surface insights browser gate extends this evidence;
 no synthetic transport test proves an OS banner appeared.
 
+`node scripts/check-firefox-provider-insights.mjs --extension=<isolated-firefox>
+--geckodriver=<executable>` checks the actual temporary Firefox addon, not a web
+preview. It launches an owned headless profile, forces that browser offline,
+installs a disposable copy and verifies native runtime/CSP/MDUI, locale/theme
+and desktop/intermediate/RTL narrow layouts. Only the disposable manifest grants
+notifications for an API-acceptance test; production optional permissions stay
+unchanged. The result distinguishes accepted API calls from unobserved OS
+banners. Driver commands follow [Mozilla's standalone WebDriver interface](https://firefox-source-docs.mozilla.org/testing/geckodriver/Usage.html).
+
+`node scripts/check-chrome-notification-api.mjs --extension=<isolated-chrome>`
+performs the corresponding native Chrome API acceptance check with an owned
+offline profile and disposable manifest. Both helpers create/clear only a fixed
+synthetic message and do not attach to the owner's desktop. API success must not
+be reported as observed desktop delivery.
+
+`node scripts/profile-community-reset-poll.mjs` runs the production controller
+with bounded synthetic public responses, not live HTTP. Fifty concurrent poll
+calls coalesce per sample; the check records default-off zero requests, selected
+origins, five-minute caching, conditional requests and Retry-After. Reported
+wall/process CPU timings are a Node microprofile, not browser-worker CPU or real
+service latency. Paired packaged startup/renderer profiling remains separate.
+
 `node scripts/check-provider-insights-ui.mjs` renders the actual insight cards,
 detail/community panel and Settings controls with synthetic snapshots. Its
 default matrix covers 14 locales, light/dark and 1440/900/390/320px (112 groups).
@@ -262,6 +284,8 @@ retry and identity loss while subscribed. Only
 permission/OS transport and public payloads are synthetic; the real controllers
 handle preferences. Non-local requests are blocked and asserted absent. Reports
 and synthetic screenshots remain under `.local/qa/provider-insights/823/`.
+It also verifies that Off cancels a slow refresh without locking preference
+controls, and that background reads preserve explicit failed-write feedback.
 
 `node scripts/check-fusion-native-popup.mjs --extension=<isolated-build>
 --insights` exercises the new summaries in the real Chrome action target. It

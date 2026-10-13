@@ -130,7 +130,7 @@ describe("provider source helpers", () => {
     expect(sessionPagePlan).not.toBeNull();
     expect(sessionPagePlan?.rolloutStage).toBe("shipped");
     expect(getOpenableRouteHint(sessionPagePlan?.routeHints ?? [])).toBe(
-      "https://chatgpt.com/codex/cloud/settings/analytics",
+      "https://chatgpt.com/settings/usage",
     );
   });
 
