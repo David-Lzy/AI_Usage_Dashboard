@@ -139,7 +139,8 @@ export function parseCommunityResetPayload(endpoint: CommunityResetEndpoint, pay
       if (!communityRecord(row) || row.reset_type !== "regular" && row.reset_type !== "banked") continue;
       const source = communityRecord(row.source) ? row.source : {};
       if (source.type !== "x_post" && source.type !== "observed") continue;
-      const state = row.status === "scheduled" ? "scheduled" : row.status === undefined ? "reported" : "unknown";
+      // Only status.latest_reset promises execution; the historical list promises announcements.
+      const state = endpoint === "resets" ? "announced" : row.status === "scheduled" ? "scheduled" : row.status === undefined ? "reported" : "unknown";
       const item = event("codex-resets", row, row.reset_type === "banked" ? "grant" : "reset", state,
         source.type === "observed" || source.author !== "thsottiaux");
       if (item) events.push(item);
@@ -220,10 +221,12 @@ export function isCommunityResetCacheFresh(cache: CommunityResetCache, now: numb
 export function mergeCommunityResetEvents(store: CommunityResetStore): CommunityResetMergedEvent[] {
   if (store.preferences.mode === "off") return [];
   const grouped = new Map<string, CommunityResetEvent[]>();
-  for (const [endpoint, cache] of Object.entries(store.caches)) {
-    if (!store.preferences.sources.includes(COMMUNITY_RESET_ENDPOINTS[endpoint as CommunityResetEndpoint].source)) continue;
+  for (const endpoint of Object.keys(COMMUNITY_RESET_ENDPOINTS) as CommunityResetEndpoint[]) {
+    const cache = store.caches[endpoint];
+    if (!store.preferences.sources.includes(COMMUNITY_RESET_ENDPOINTS[endpoint].source)) continue;
     for (const event of cache?.fragment?.events ?? []) {
       const key = communityEventKey(event), entries = grouped.get(key) ?? [];
+      if (endpoint === "resets" && entries.some((entry) => entry.source === event.source && entry.kind === event.kind)) continue;
       if (!entries.some((entry) => JSON.stringify(entry) === JSON.stringify(event))) entries.push(event);
       grouped.set(key, entries);
     }

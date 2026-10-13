@@ -11,11 +11,12 @@ async function hostAccess(source: CommunityResetSource): Promise<boolean> {
   catch { return false; }
 }
 export const communityResetController = createCommunityResetController({
-  readStore: async () => (await chrome.storage.local.get(COMMUNITY_RESET_STORAGE_KEY))[COMMUNITY_RESET_STORAGE_KEY],
-  writeStore: async (store) => { await chrome.storage.local.set({ [COMMUNITY_RESET_STORAGE_KEY]: store }); },
+  readStore: async () => typeof chrome !== "undefined" && chrome.storage?.local ? (await chrome.storage.local.get(COMMUNITY_RESET_STORAGE_KEY))[COMMUNITY_RESET_STORAGE_KEY] : undefined,
+  writeStore: async (store) => { if (typeof chrome !== "undefined" && chrome.storage?.local) await chrome.storage.local.set({ [COMMUNITY_RESET_STORAGE_KEY]: store }); },
   hostAccess,
   suppressed: readStoreScreenshotRuntimeLock,
   schedule: async (enabled) => {
+    if (typeof chrome === "undefined" || !chrome.alarms?.create) return;
     if (!enabled) { await chrome.alarms.clear(COMMUNITY_RESET_ALARM); return; }
     if ((await chrome.alarms.get(COMMUNITY_RESET_ALARM))?.periodInMinutes !== 5) {
       await chrome.alarms.create(COMMUNITY_RESET_ALARM, { delayInMinutes: 1, periodInMinutes: 5 });

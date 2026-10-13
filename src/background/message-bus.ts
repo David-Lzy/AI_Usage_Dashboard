@@ -746,6 +746,7 @@ export async function handleAppMessage(
       }
 
       await quotaNotificationController.reset();
+      await (await import("./reset-notification-runtime")).resetNotificationController.reset();
 
       const importedState = await updateAppState((currentState) => {
         invalidateAllProviderSyncIdentities();
@@ -821,6 +822,7 @@ export async function handleAppMessage(
       }
 
       await quotaNotificationController.reset();
+      await (await import("./reset-notification-runtime")).resetNotificationController.reset();
 
       const restoredState = await updateAppState((currentState) => {
         invalidateAllProviderSyncIdentities();

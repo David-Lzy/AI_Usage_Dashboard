@@ -30,6 +30,12 @@ domain's documented timeline classification uses `group` and
 not inferred to be reset cards from their text. Only documented rounded forecast
 probabilities are retained, never the site's undocumented signal score.
 
+Only plural `status.latest_reset` explicitly promises execution; the historical
+`resets` list promises announcements, not an execution flag. History alone is
+never eligible for a desktop alert. When the status identifies the same post,
+that source's authoritative lifecycle refines its history context. A different
+source's contradictory classification still remains a conflict.
+
 These are **community reports**, not proof that the current account reset or
 received anything. Predictions and announced schedules never change personal
 quota, deadline, money, reset-card count or notification eligibility. Passing a
@@ -65,6 +71,9 @@ Cache-Control/Age and published expiry headers, and apply exponential backoff an
 Retry-After. They keep at most 100 normalized events per endpoint and read only
 the first bounded page, not an unbounded historical crawl. Failed/stale data keeps
 its last successful capture time; HTTP success or 304 is not a new reset.
+An explicit foreground check respects at least one minute between endpoint
+requests and does not override server backoff; normal alarm polling stays at
+approximately five minutes.
 
 Disabling a source aborts pending work and invalidates its generation. Late
 responses cannot restore disabled preferences or data. Worker restart reconstructs
@@ -79,10 +88,36 @@ public summaries, attribution, timestamps and cache metadata are stored; raw
 response bodies and arbitrary payload fields are discarded. Site operators still
 receive ordinary network metadata such as IP address.
 
-The feed layer does not itself deliver desktop notifications. Notification
-eligibility and durable deduplication are evaluated separately, with first-enable,
-pause, account identity, conflict and freshness safeguards. Browser exit, sleep or
-OS notification suppression can delay or prevent delivery; no new daemon is added.
+The feed layer does not itself deliver desktop notifications. The separate
+notification evaluator is opt-in, with independent community/account pause
+controls, a local durable ledger and first-enable baselines. Every event endpoint
+establishes its own silent first-read baseline; a failed endpoint's first recovery
+is not a backlog of notifications. Subsequent pending-to-reported transitions
+can qualify, but forecasts, schedules, stale data, conflicts and untraceable
+observations cannot. Multiple recent new reports form one summary per check;
+reports older than 24 hours are not caught up.
+
+Community messages explicitly say the account is unconfirmed and name/link the
+source; clicking opens only that source's fixed homepage. They never include raw
+announcement text. Confirmed account grant messages require a fresh increase from
+a known authoritative count, the same verified paired identity and the same
+accepted capture. Unknown-to-known, re-pairing, account switching, permission
+loss and pause/resume establish silent baselines. Capped detail rows are never
+counted. Account clicks open the matching extension detail, or Accounts &
+Connections if the active local account has changed.
+
+Current reviewed sources do not expose a trustworthy explicit early-reset event
+or stable identity in the modern CLI account contract. Those cases remain
+unsupported: no email, percent drop or community report is substituted. Existing
+scheduled-reset and low-quota notifications retain their prior conservative
+rules. New available-card subscriptions are separately default-off.
+
+Ledgers and validated click targets are persisted before best-effort OS delivery.
+A crash or rejected OS request can miss an alert; it cannot cause a restart storm.
+Configuration import/Sync restore resets new notification subscriptions and
+downgrades community desktop mode to in-app, without deleting permitted in-app
+collection or changing thresholds. Browser exit, sleep or OS suppression can
+delay or prevent delivery; no new daemon is added.
 
 ## Verification
 

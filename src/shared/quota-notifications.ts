@@ -22,7 +22,7 @@ export type QuotaNotificationAccount = {
   accountId: string;
   label: string;
   active: boolean;
-  windows: { key: string; label: string; kind: ProviderUsageWindow["kind"]; modelLabel: string | null }[];
+  windows: { key: string; label: string; kind: ProviderUsageWindow["kind"] | "monthly"; modelLabel: string | null }[];
 };
 export type QuotaNotificationEvent = {
   kind: "low" | "reset";
@@ -112,14 +112,24 @@ function accountEntries(state: QuotaNotificationSourceState) {
     });
   });
 }
+type NotificationWindow = Omit<ProviderUsageWindow, "kind"> & { kind: ProviderUsageWindow["kind"] | "monthly"; capturedAt?: string };
 function supportedWindows(accountKey: string, snapshot: ProviderSnapshot | undefined) {
   const seen = new Set<string>();
   const entries = (snapshot?.usageWindows ?? []).slice(0, 64).flatMap((window) => {
     if (window.quotaUnit !== "percent" || !["rolling_5h", "weekly", "model_rolling_5h", "model_weekly"].includes(window.kind)) return [];
     const model = typeof window.modelLabel === "string" ? window.modelLabel.slice(0, 128) : "";
-    const key = JSON.stringify([accountKey, window.kind, model]);
+    // Keep legacy opt-outs stable. Explicit supplemental IDs disambiguate independent pools.
+    const supplementalId = window.id && window.id !== "codex:primary" && window.id !== "codex:secondary" ? window.id : null;
+    const key = JSON.stringify(supplementalId ? [accountKey, window.kind, model, supplementalId] : [accountKey, window.kind, model]);
     return [{ key, window }];
-  });
+  }) as { key: string; window: NotificationWindow }[];
+  if (snapshot?.providerId === "cursor-personal-page") for (const pool of snapshot.usageInsights?.quotaPools ?? []) {
+    entries.push({ key: JSON.stringify([accountKey, "pool", pool.id]), window: {
+      id: pool.id, kind: pool.kind, label: pool.id, normalizedLabel: pool.id, modelLabel: pool.id,
+      quotaUnit: "percent", used: pool.usedPercent, remaining: pool.remainingPercent, total: 100,
+      resetAt: pool.resetAt, resetLabel: null, capturedAt: pool.capturedAt,
+    } });
+  }
   const duplicates = new Set<string>();
   for (const { key } of entries) {
     if (seen.has(key)) duplicates.add(key);
@@ -133,12 +143,12 @@ export function listQuotaNotificationAccounts(state: QuotaNotificationSourceStat
     windows: supportedWindows(account.key, account.snapshot).map(({ key, window }) => ({ key, label: window.label, kind: window.kind, modelLabel: window.modelLabel })) }));
 }
 
-function readObservation(snapshot: ProviderSnapshot, window: ProviderUsageWindow, now: number): Observation | null {
-  const capturedAt = normalizeSnapshotTimestamp(snapshot.lastSuccessAt);
+function readObservation(snapshot: ProviderSnapshot, window: NotificationWindow, now: number): Observation | null {
+  const capturedAt = normalizeSnapshotTimestamp(window.capturedAt ?? snapshot.lastSuccessAt);
   const attemptedAt = normalizeSnapshotTimestamp(snapshot.lastAttemptAt);
   if (!capturedAt || snapshot.syncStatus === "error") return null;
   const time = Date.parse(capturedAt);
-  if (time > now || now - time > MAX_NOTIFICATION_CAPTURE_AGE_MS || (attemptedAt && Date.parse(attemptedAt) > time)) return null;
+  if (time > now || now - time > MAX_NOTIFICATION_CAPTURE_AGE_MS || (!window.capturedAt && attemptedAt && Date.parse(attemptedAt) > time)) return null;
   const used = window.used ?? (window.remaining === null ? null : 100 - window.remaining);
   if (typeof used !== "number" || !Number.isFinite(used) || used < 0 || used > 100 || (window.total !== null && window.total !== 100)) return null;
   if (window.remaining !== null && (!Number.isFinite(window.remaining) || Math.abs(100 - used - window.remaining) > 0.5)) return null;

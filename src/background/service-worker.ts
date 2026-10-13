@@ -32,12 +32,25 @@ import { quotaNotificationController } from "./quota-notification-runtime";
 import { communityResetController } from "./community-reset-runtime";
 import { COMMUNITY_RESET_ALARM, COMMUNITY_RESET_STORAGE_KEY, normalizeCommunityResetStore } from "../shared/community-reset-feeds";
 import type { CommunityResetMessage } from "../shared/community-reset-client";
+import { resetNotificationController } from "./reset-notification-runtime";
+import type { ResetNotificationMessage } from "../shared/reset-notification-client";
+import { CODEX_RESET_CAPTURE_KEY } from "../shared/codex-reset-capture";
+import { LOCAL_COMPANION_PAIRING_KEY } from "../shared/local-companion-pairing";
+
+let resetClickListenerAttached = false;
+function attachResetClickListener() {
+  if (resetClickListenerAttached || typeof chrome.notifications?.onClicked?.addListener !== "function") return;
+  chrome.notifications.onClicked.addListener((id) => { void resetNotificationController.click(id).catch(() => undefined); });
+  resetClickListenerAttached = true;
+}
+attachResetClickListener();
 
 // MV3 workers can restart without onStartup; reconstruct the optional alarm each time.
 void communityResetController.reconcile().catch(() => undefined);
 
 subscribeToAppStateStorageChanges(() => {
   void quotaNotificationController.evaluate().catch(() => undefined);
+  void resetNotificationController.evaluate().catch(() => undefined);
 });
 chrome.storage.onChanged.addListener((changes, area) => {
   const feedChange = changes[COMMUNITY_RESET_STORAGE_KEY];
@@ -46,8 +59,13 @@ chrome.storage.onChanged.addListener((changes, area) => {
     communityResetController.invalidate();
     void communityResetController.reconcile().catch(() => undefined);
   }
+  if (area === "local" && (feedChange || changes[CODEX_RESET_CAPTURE_KEY] || changes[LOCAL_COMPANION_PAIRING_KEY])) {
+    if (changes[LOCAL_COMPANION_PAIRING_KEY]) resetNotificationController.invalidate();
+    void resetNotificationController.evaluate().catch(() => undefined);
+  }
   if (area === "local" && changes[APP_STATE_STORAGE_KEY] && !changes[APP_STATE_STORAGE_KEY].newValue) {
     void quotaNotificationController.reset().catch(() => undefined);
+    void resetNotificationController.reset().catch(() => undefined);
   }
 });
 
@@ -104,11 +122,15 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 chrome.permissions.onAdded.addListener(() => {
+  attachResetClickListener();
+  void resetNotificationController.evaluate().catch(() => undefined);
   void syncProviderPermissionState().catch(() => undefined);
   void communityResetController.reconcile().catch(() => undefined);
 });
 
 chrome.permissions.onRemoved.addListener(() => {
+  resetNotificationController.invalidate();
+  void resetNotificationController.evaluate().catch(() => undefined);
   communityResetController.invalidate();
   void communityResetController.reconcile().catch(() => undefined);
   void syncProviderPermissionState().catch(() => undefined);
@@ -206,6 +228,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (typeof message?.type === "string" && message.type.startsWith("reset-notifications:")) {
+    if (_sender.id !== chrome.runtime.id) { sendResponse({ ok: false }); return false; }
+    void resetNotificationController.handle(message as ResetNotificationMessage)
+      .then(sendResponse, () => sendResponse({ ok: false }));
+    return true;
+  }
   if (typeof message?.type === "string" && message.type.startsWith("community-resets:")) {
     if (_sender.id !== chrome.runtime.id) { sendResponse({ ok: false }); return false; }
     void communityResetController.handle(message as CommunityResetMessage)

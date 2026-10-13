@@ -38,6 +38,7 @@ import { computeCodexAccountDigest } from "../shared/codex-local-bridge";
 import { codexCredentialBroker } from "../providers/codex/session-credential-broker";
 import { syncCodexLocalProvider } from "../providers/codex/local-companion-adapter";
 import { DEFAULT_APP_STATE } from "../shared/constants";
+import { codexResetPairingTag, writeCodexResetCapture } from "../shared/codex-reset-capture";
 
 const STALE_MULTIPLIER = 2;
 const MIN_STALE_MINUTES = 60;
@@ -56,6 +57,8 @@ type SyncEngineOutcome = {
 type ProviderAdapterSyncResult = {
   setting?: ProviderSetting;
   snapshot: ProviderSnapshot;
+  codexAccountDigest?: string | null;
+  codexPairingTag?: string | null;
 };
 
 export async function syncCodexBySelectedSource(
@@ -76,8 +79,9 @@ export async function syncCodexBySelectedSource(
     });
   }
   const local = await syncCodexLocalProvider(provider, pairing, now);
+  const codexPairingTag = pairing.token ? await codexResetPairingTag(pairing.baseUrl, pairing.token) : null;
   if (pairing.codexMode !== "hybrid" || !local.accountDigest || local.snapshot.syncStatus !== "ok") {
-    return { snapshot: local.snapshot, setting };
+    return { snapshot: local.snapshot, setting, codexAccountDigest: local.accountDigest, codexPairingTag };
   }
   const beforeCredential = await codexCredentialBroker.peekCredential?.();
   const browserBaseline = DEFAULT_APP_STATE.providers.find((item) => item.providerId === provider.providerId)!;
@@ -96,6 +100,8 @@ export async function syncCodexBySelectedSource(
   const browserHistoryIsNew = browserCapture !== null && Date.parse(browserCapture) >= now.getTime() - 1000;
   return {
     setting,
+    codexAccountDigest: local.accountDigest,
+    codexPairingTag,
     snapshot: {
       ...local.snapshot,
       usageHistory: sameAccount && browserHistoryIsNew && browser.snapshot.syncStatus === "ok"
@@ -458,7 +464,16 @@ async function runSyncEngineOnce(
         identity,
       };
       // Commit each provider promptly; a slow sibling must not replay an older result.
-      await updateAppState((latest) => mergeProviderSyncOutcome(latest, completed, now));
+      const accepted = await updateAppState((latest) => mergeProviderSyncOutcome(latest, completed, now));
+      const acceptedSnapshot = accepted.providers.find((entry) => entry.providerId === provider.providerId);
+      if (provider.providerId === "codex-personal-page" && acceptedSnapshot && isProviderSyncIdentityCurrent(accepted, provider.providerId, identity)
+        && acceptedSnapshot.lastSuccessAt === outcome.snapshot.lastSuccessAt) {
+        const digest = outcome.codexAccountDigest;
+        await writeCodexResetCapture(acceptedSnapshot.syncSource === "local_companion" && acceptedSnapshot.syncStatus === "ok"
+          && acceptedSnapshot.codexLocal?.accountVerified && typeof digest === "string" && /^[a-f0-9]{64}$/.test(digest)
+          && outcome.codexPairingTag && acceptedSnapshot.lastSuccessAt ? { accountKey: JSON.stringify([provider.providerId, accountId]), identity: digest, pairingTag: outcome.codexPairingTag,
+            capturedAt: acceptedSnapshot.lastSuccessAt } : null).catch(() => undefined);
+      }
       return completed;
     },
   );

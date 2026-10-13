@@ -238,6 +238,19 @@ Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
 tests separately cover OS API rejection and Firefox's permission-probe fallback;
 these checks do not claim a visible notification in the user's desktop session.
 
+The new reset/community evaluator uses synthetic unit evidence in
+`src/shared/reset-notifications.test.ts` and
+`src/background/reset-notification-controller.test.ts`; runtime tests verify
+fixed localized messages and allowlisted click routes. Coverage separates
+scheduled/forecast/history context from reported execution, first-endpoint
+baselines, duplicate/conflicting sources, known versus unknown reset-card count,
+opaque accepted identity, permission loss, pause, restart and at-most-once OS
+failure. `quota-notification-pools.test.ts` checks independent monthly pool
+identity without changing legacy opt-out keys or treating product shares as quota.
+Current early-reset evidence and unverified CLI identity remain unsupported,
+not inferred. The cross-surface insights browser gate extends this evidence;
+no synthetic transport test proves an OS banner appeared.
+
 `node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
 exercises actual extension preference writes and notification persistence while
 holding, rejecting and reordering transport acknowledgements. It verifies that

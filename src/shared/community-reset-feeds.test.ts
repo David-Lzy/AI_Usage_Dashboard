@@ -33,7 +33,7 @@ describe("community reset contracts", () => {
     expect(JSON.stringify(parsed)).not.toContain("secret");
   });
   it("merges the same original post without counting sources as independent confirmation", () => {
-    const a = parseCommunityResetPayload("resets", { data: [row], meta })!;
+    const a = parseCommunityResetPayload("status", { data: { latest_reset: row, scheduled_reset: null, active_watch: null }, meta })!;
     const b = parseCommunityResetPayload("timeline", { events: [{ id: row.id, announced_at: at, group: "reset", type: "reset", announcement_state: "announced", summary: "Reset", url: `${post}?tracking=yes` }] })!;
     expect(mergeCommunityResetEvents(combined(a, b))).toMatchObject([{ conflict: false, entries: [{ source: "codex-resets" }, { source: "codex-reset" }] }]);
     b.events[0].state = "unknown";

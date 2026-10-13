@@ -116,6 +116,22 @@ data; no remote website code or push service is loaded. See the
 [community contract](Doc/Product/Community_Reset_Insights.md) for source,
 freshness and delivery boundaries.
 
+Community desktop messages are separately opt-in, distinguish source reports from
+account confirmation, and contain fixed localized copy plus the credited source
+URL. They do not copy public post text, reveal account identifiers, balances or
+credentials, or send personal observations to the sites. Local-only duplicate
+and validated click ledgers are persisted before best-effort delivery and are
+excluded from backup/Sync/diagnostics. Pausing/resuming or first enabling a source
+establishes a silent baseline; old reports are not sent as a burst.
+
+For opt-in available-reset-card alerts, only an accepted fresh Codex Companion
+capture may retain an opaque keyed identity digest and an opaque pairing tag in
+a separate machine-local key. Neither is a raw provider ID, email, credential,
+prompt or log path; neither enters AppState, exports, Chrome Sync or public feed
+requests. Re-pairing, an unverified identity, revoked loopback permission or
+unknown count suppresses account confirmation. Details arrays do not supply a
+count. No early reset is inferred from a percentage decrease.
+
 Users can pause delivery, set the used-quota threshold, disable accounts/windows,
 send a test, or turn the feature off. Events are persisted before attempted OS
 delivery to prevent repeated alerts after a service-worker restart. An OS failure

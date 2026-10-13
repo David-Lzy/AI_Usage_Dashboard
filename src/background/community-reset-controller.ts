@@ -37,7 +37,7 @@ export function createCommunityResetController(deps: Dependencies) {
     alarmTail = alarmTail.then(schedule, schedule);
     await alarmTail;
   }
-  function poll(): Promise<void> {
+  function poll(foreground = false): Promise<void> {
     if (active) return active.promise;
     const token = generation, abort = new AbortController();
     const promise = (async () => {
@@ -54,7 +54,7 @@ export function createCommunityResetController(deps: Dependencies) {
           continue;
         }
         if (previous.retryAt && Date.parse(previous.retryAt) > now
-          || previous.failure !== "permission" && previous.checkedAt && now - Date.parse(previous.checkedAt) < COMMUNITY_RESET_INTERVAL_MS) continue;
+          || previous.failure !== "permission" && previous.checkedAt && now - Date.parse(previous.checkedAt) < (foreground ? 60_000 : COMMUNITY_RESET_INTERVAL_MS)) continue;
         updates[endpoint] = await fetchCommunityResetEndpoint(endpoint, previous, now, abort.signal, deps.fetcher);
       }
       await serial(async () => {
@@ -77,7 +77,7 @@ export function createCommunityResetController(deps: Dependencies) {
   }
   function handle(message: CommunityResetMessage): Promise<CommunityResetResponse> {
     if (message.type === "community-resets:update") invalidate();
-    if (message.type === "community-resets:refresh") return poll().then(() => handle({ type: "community-resets:read" }));
+    if (message.type === "community-resets:refresh") return poll(true).then(() => handle({ type: "community-resets:read" }));
     return serial(async () => {
       if (message.type !== "community-resets:read" && message.type !== "community-resets:update") return { ok: false };
       let store = normalizeCommunityResetStore(await deps.readStore());

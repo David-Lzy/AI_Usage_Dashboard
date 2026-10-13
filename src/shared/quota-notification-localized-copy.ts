@@ -1,4 +1,5 @@
 import type { ResolvedAppLocale } from "./i18n";
+import { getResetNotificationCopy } from "./reset-notification-localized-copy";
 
 export type QuotaNotificationLocalizedCopy = {
   eyebrow: string;
@@ -11,7 +12,7 @@ export type QuotaNotificationLocalizedCopy = {
   accounts: string;
   windows: string;
   windowKindLabels: Record<
-    "rolling_5h" | "weekly" | "model_rolling_5h" | "model_weekly",
+    "rolling_5h" | "weekly" | "model_rolling_5h" | "model_weekly" | "monthly",
     string
   >;
   noAccounts: string;
@@ -34,7 +35,8 @@ export type QuotaNotificationLocalizedCopy = {
   notifyTestBody: string;
 };
 
-const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
+type LegacyCopy = Omit<QuotaNotificationLocalizedCopy, "windowKindLabels"> & { windowKindLabels: Omit<QuotaNotificationLocalizedCopy["windowKindLabels"], "monthly"> };
+const COPY: Record<ResolvedAppLocale, LegacyCopy> = {
   en: {
     eyebrow: "Notifications",
     title: "Quota notifications",
@@ -530,5 +532,5 @@ const COPY: Record<ResolvedAppLocale, QuotaNotificationLocalizedCopy> = {
 export function buildQuotaNotificationLocalizedCopy(
   locale: ResolvedAppLocale,
 ): QuotaNotificationLocalizedCopy {
-  return COPY[locale];
+  return { ...COPY[locale], windowKindLabels: { ...COPY[locale].windowKindLabels, monthly: getResetNotificationCopy(locale).monthlyUsage } };
 }
