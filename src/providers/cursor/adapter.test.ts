@@ -5,6 +5,8 @@ import type { ProviderSecrets, ProviderSetting, ProviderSnapshot } from "../type
 import { createEmptyPageBinding } from "../../shared/page-bindings";
 import type { CursorPersonalParseResult } from "./personal-page-parser";
 import type { CursorUsageBillingContractFixture } from "./usage-billing-contract";
+import poolFixture from "../../../fixtures/cursor/quota-pools-dom.fixture.json";
+import { buildUsageInsightsFromDom, type UsageInsightsDomCapture } from "../usage-insights-dom";
 
 const {
   createCursorOfficialClientMock,
@@ -104,6 +106,17 @@ const emptySecrets: ProviderSecrets = {
 };
 
 describe("syncCursorProvider", () => {
+  it("retains pool provenance independently of a failed legacy summary without changing badge data", async () => {
+    const usageInsights = buildUsageInsightsFromDom("cursor", poolFixture as UsageInsightsDomCapture, "2026-10-13T10:00:00.000Z")!;
+    createCursorPersonalPageClientMock.mockReturnValue({ getUsageSnapshot: async () => ({
+      ...buildCursorPersonalPageResponse({ status: "route_drift", reason: "No legacy quota", chosenRoute: "https://cursor.com/dashboard/spending", routeStatuses: [] }), usageInsights,
+    }) });
+    const { snapshot } = await syncCursorProvider({ provider: baseProvider, secrets: emptySecrets, setting: { ...grantedSetting, sourcePreference: "session_page" }, warningThresholdPercent: 80, now: new Date("2026-10-13T10:00:01.000Z") });
+    expect(snapshot.usageInsights).toEqual(usageInsights);
+    expect(snapshot.remaining).toBeNull();
+    expect(snapshot.usageWindows).toBeUndefined();
+    expect(snapshot.syncStatus).not.toBe("ok");
+  });
   beforeEach(() => {
     createCursorOfficialClientMock.mockReset();
     createCursorPersonalPageClientMock.mockReset();

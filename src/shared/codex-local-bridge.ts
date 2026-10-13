@@ -76,7 +76,7 @@ export function normalizeCodexLocalSummary(value: unknown): CodexLocalSummary | 
     if (!item || typeof item !== "object" || Array.isArray(item)) return [];
     const window = item as Record<string, unknown>;
     if (typeof window.id !== "string" || !/^[a-z][a-z0-9_.-]{0,47}:(primary|secondary)$/.test(window.id)
-      || window.id.startsWith("codex:") || seen.has(window.id) || !["rolling_5h", "weekly", "unknown"].includes(String(window.kind))
+      || window.id.startsWith("codex:") || seen.has(window.id) || typeof window.kind !== "string" || !["rolling_5h", "weekly", "unknown"].includes(window.kind)
       || !Number.isSafeInteger(window.durationMinutes) || Number(window.durationMinutes) < 1 || Number(window.durationMinutes) > 44_640
       || !Number.isInteger(window.usedPercent) || Number(window.usedPercent) < 0 || Number(window.usedPercent) > 100
       || window.resetAt !== null && !normalizeSnapshotTimestamp(window.resetAt)) return [];

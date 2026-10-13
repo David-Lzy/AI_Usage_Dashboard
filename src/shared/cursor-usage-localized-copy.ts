@@ -6,6 +6,7 @@ export type CursorUsageLocalizedCopy = {
   billingCycle: string;
   planUsage: string;
   firstPartyPool: string;
+  used: string;
   apiPool: string;
   onDemand: string;
   includedValue: string;
@@ -30,14 +31,14 @@ export type CursorUsageLocalizedCopy = {
   csvAvailable: string;
 };
 
-const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
+const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, Omit<CursorUsageLocalizedCopy, "used">> = {
   en: {
     billingSummary: "Usage & billing",
     recentUsage: "Recent usage",
     billingCycle: "Billing cycle",
     planUsage: "Plan usage value",
-    firstPartyPool: "Included model pool",
-    apiPool: "Third-party API pool",
+    firstPartyPool: "Auto · legacy API",
+    apiPool: "API · legacy API",
     onDemand: "On-Demand",
     includedValue: "Included",
     bonusValue: "Free / bonus",
@@ -66,8 +67,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "近期用量",
     billingCycle: "计费周期",
     planUsage: "套餐内用量价值",
-    firstPartyPool: "第一方模型池",
-    apiPool: "第三方 API 池",
+    firstPartyPool: "Auto · 旧接口",
+    apiPool: "API · 旧接口",
     onDemand: "按量付费",
     includedValue: "套餐内",
     bonusValue: "免费 / 赠送",
@@ -95,8 +96,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "近期用量",
     billingCycle: "計費週期",
     planUsage: "方案內用量價值",
-    firstPartyPool: "第一方模型集區",
-    apiPool: "第三方 API 集區",
+    firstPartyPool: "Auto · 舊介面",
+    apiPool: "API · 舊介面",
     onDemand: "隨用隨付",
     includedValue: "方案內",
     bonusValue: "免費 / 贈送",
@@ -124,8 +125,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "最近の使用量",
     billingCycle: "請求期間",
     planUsage: "プラン内使用価値",
-    firstPartyPool: "対象モデル枠",
-    apiPool: "外部 API 枠",
+    firstPartyPool: "Auto · 旧API",
+    apiPool: "API · 旧API",
     onDemand: "従量課金",
     includedValue: "プラン内",
     bonusValue: "無料 / ボーナス",
@@ -153,8 +154,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "최근 사용량",
     billingCycle: "결제 주기",
     planUsage: "플랜 내 사용 가치",
-    firstPartyPool: "포함 모델 풀",
-    apiPool: "타사 API 풀",
+    firstPartyPool: "Auto · 기존 API",
+    apiPool: "API · 기존 API",
     onDemand: "종량제",
     includedValue: "플랜 포함",
     bonusValue: "무료 / 보너스",
@@ -182,8 +183,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Uso reciente",
     billingCycle: "Ciclo de facturación",
     planUsage: "Valor de uso del plan",
-    firstPartyPool: "Grupo de modelos incluidos",
-    apiPool: "Grupo de API de terceros",
+    firstPartyPool: "Auto · API anterior",
+    apiPool: "API · API anterior",
     onDemand: "Bajo demanda",
     includedValue: "Incluido",
     bonusValue: "Gratis / bonificación",
@@ -211,8 +212,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Uso recente",
     billingCycle: "Ciclo de faturamento",
     planUsage: "Valor de uso do plano",
-    firstPartyPool: "Grupo de modelos incluídos",
-    apiPool: "Grupo de APIs de terceiros",
+    firstPartyPool: "Auto · API antiga",
+    apiPool: "API · API antiga",
     onDemand: "Sob demanda",
     includedValue: "Incluído",
     bonusValue: "Grátis / bônus",
@@ -240,8 +241,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Utilisation récente",
     billingCycle: "Période de facturation",
     planUsage: "Valeur d’utilisation du forfait",
-    firstPartyPool: "Réserve de modèles incluse",
-    apiPool: "Réserve d’API tierces",
+    firstPartyPool: "Auto · ancienne API",
+    apiPool: "API · ancienne API",
     onDemand: "À la demande",
     includedValue: "Inclus",
     bonusValue: "Gratuit / bonus",
@@ -269,8 +270,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Letzte Nutzung",
     billingCycle: "Abrechnungszeitraum",
     planUsage: "Nutzungswert im Tarif",
-    firstPartyPool: "Enthaltener Modellpool",
-    apiPool: "Drittanbieter-API-Pool",
+    firstPartyPool: "Auto · ältere API",
+    apiPool: "API · ältere API",
     onDemand: "Bedarfsabhängig",
     includedValue: "Enthalten",
     bonusValue: "Kostenlos / Bonus",
@@ -298,8 +299,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Utilizzo recente",
     billingCycle: "Periodo di fatturazione",
     planUsage: "Valore di utilizzo del piano",
-    firstPartyPool: "Pool di modelli incluso",
-    apiPool: "Pool API di terze parti",
+    firstPartyPool: "Auto · API precedente",
+    apiPool: "API · API precedente",
     onDemand: "A consumo",
     includedValue: "Incluso",
     bonusValue: "Gratis / bonus",
@@ -327,8 +328,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Недавнее использование",
     billingCycle: "Расчётный период",
     planUsage: "Стоимость использования в тарифе",
-    firstPartyPool: "Пул включённых моделей",
-    apiPool: "Пул сторонних API",
+    firstPartyPool: "Auto · прежний API",
+    apiPool: "API · прежний API",
     onDemand: "По потреблению",
     includedValue: "Включено",
     bonusValue: "Бесплатно / бонус",
@@ -356,8 +357,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "الاستخدام الأخير",
     billingCycle: "دورة الفوترة",
     planUsage: "قيمة الاستخدام ضمن الخطة",
-    firstPartyPool: "مجموعة النماذج المشمولة",
-    apiPool: "مجموعة واجهات الطرف الثالث",
+    firstPartyPool: "Auto · الواجهة السابقة",
+    apiPool: "API · الواجهة السابقة",
     onDemand: "حسب الاستخدام",
     includedValue: "مشمول",
     bonusValue: "مجاني / مكافأة",
@@ -385,8 +386,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "हाल का उपयोग",
     billingCycle: "बिलिंग अवधि",
     planUsage: "प्लान में उपयोग का मूल्य",
-    firstPartyPool: "शामिल मॉडल पूल",
-    apiPool: "तृतीय-पक्ष API पूल",
+    firstPartyPool: "Auto · पुराना API",
+    apiPool: "API · पुराना API",
     onDemand: "मांग पर",
     includedValue: "शामिल",
     bonusValue: "मुफ़्त / बोनस",
@@ -414,8 +415,8 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
     recentUsage: "Penggunaan terbaru",
     billingCycle: "Siklus penagihan",
     planUsage: "Nilai penggunaan paket",
-    firstPartyPool: "Kumpulan model tercakup",
-    apiPool: "Kumpulan API pihak ketiga",
+    firstPartyPool: "Auto · API lama",
+    apiPool: "API · API lama",
     onDemand: "Sesuai pemakaian",
     includedValue: "Tercakup",
     bonusValue: "Gratis / bonus",
@@ -440,8 +441,14 @@ const CURSOR_USAGE_COPY: Record<ResolvedAppLocale, CursorUsageLocalizedCopy> = {
   },
 };
 
+const USED: Record<ResolvedAppLocale, string> = {
+  en: "used", "zh-CN": "已用", "zh-TW": "已用", ja: "使用済み", ko: "사용됨",
+  "es-419": "usado", "pt-BR": "usado", fr: "utilisé", de: "genutzt", it: "utilizzato",
+  ru: "использовано", ar: "مستخدم", hi: "प्रयुक्त", id: "terpakai",
+};
+
 export function buildCursorUsageLocalizedCopy(
   locale: string,
 ): CursorUsageLocalizedCopy {
-  return CURSOR_USAGE_COPY[locale as ResolvedAppLocale] ?? CURSOR_USAGE_COPY.en;
+  return { ...(CURSOR_USAGE_COPY[locale as ResolvedAppLocale] ?? CURSOR_USAGE_COPY.en), used: USED[locale as ResolvedAppLocale] ?? USED.en };
 }

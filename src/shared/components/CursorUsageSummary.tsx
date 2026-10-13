@@ -8,6 +8,7 @@ import type {
   CursorUsageMetric,
   DisplaySurface,
   ProviderId,
+  ProviderQuotaPool,
 } from "../../providers/types";
 import {
   readCursorUsageCollapsePreference,
@@ -16,6 +17,9 @@ import {
   type CursorUsageUiModuleId,
 } from "../cursor-usage-ui-preferences";
 import type { CursorUsageLocalizedCopy } from "../cursor-usage-localized-copy";
+import { getProviderInsightsCopy } from "../provider-insights-copy";
+import { isResolvedAppLocale } from "../i18n";
+import { isLocalCompanionCaptureStale } from "../local-companion-settings";
 import "./cursor-usage-summary.css";
 
 type CursorUsageRangeDays = 7 | 30;
@@ -27,6 +31,7 @@ type CursorUsageSummaryProps = {
   surface: DisplaySurface;
   usage: CursorUsageBilling;
   density?: "compact" | "detail";
+  quotaPools?: ProviderQuotaPool[];
 };
 
 type AggregateBreakdown = {
@@ -248,7 +253,10 @@ export function CursorUsageSummary({
   surface,
   usage,
   density = "compact",
+  quotaPools,
 }: CursorUsageSummaryProps) {
+  const resolvedLocale = isResolvedAppLocale(locale) ? locale : "en";
+  const insightCopy = getProviderInsightsCopy(resolvedLocale);
   const [billingExpanded, setBillingExpanded] = usePersistedExpandedState(
     providerId,
     surface,
@@ -340,6 +348,18 @@ export function CursorUsageSummary({
       </header>
       {billingExpanded ? (
         <div className="cursor-usage-module__content">
+          {quotaPools?.length ? <div data-cursor-quota-pools="">
+            <p className="cursor-usage-module__empty">{copy.spendingPage}</p>
+            {quotaPools.map((pool) => {
+              const stale = isLocalCompanionCaptureStale(pool.capturedAt);
+              const label = pool.id === "cursor_models" ? "Cursor Models" : pool.id === "other_models" ? "Other Models" : "Grok Bot";
+              return <div key={pool.id}>
+                <CursorProgressRow label={label} percent={stale ? null : pool.usedPercent}
+                  valueLabel={stale ? copy.stale : pool.usedPercent === null ? copy.unavailable : `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(pool.usedPercent)}% ${copy.used}`} />
+                {density === "detail" ? <p className="cursor-usage-module__empty">{insightCopy.page} · {insightCopy.captured}: {formatDate(pool.capturedAt, locale)}{pool.resetText ? ` · ${pool.resetText}` : ""}</p> : null}
+              </div>;
+            })}
+          </div> : null}
           {usage.plan ? (
             <>
               <CursorProgressRow

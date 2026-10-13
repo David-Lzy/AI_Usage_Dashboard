@@ -1,6 +1,7 @@
 import type {
   ProviderId, ProviderInsightCapture, ProviderResetCredits, ProviderResetOffer,
   ProviderScopedBalance, ProviderUsageDistribution, ProviderUsageInsights,
+  ProviderQuotaPool,
 } from "../providers/types";
 import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
 
@@ -14,8 +15,12 @@ const text = (value: unknown, max = 80): string | null => {
   return clean && clean.length <= max && !/[<>\u0000-\u001f\u007f@]/.test(clean) ? clean : null;
 };
 
+function insightTimestamp(value: unknown): string | null {
+  return typeof value === "string" && day(value.slice(0, 10)) ? normalizeSnapshotTimestamp(value) : null;
+}
+
 function capture(raw: Record<string, unknown>): ProviderInsightCapture | null {
-  const capturedAt = normalizeSnapshotTimestamp(raw.capturedAt);
+  const capturedAt = insightTimestamp(raw.capturedAt);
   return capturedAt && (raw.source === "page" || raw.source === "local_companion")
     && typeof raw.accountVerified === "boolean"
     ? { source: raw.source, capturedAt, accountVerified: raw.source === "local_companion" && raw.accountVerified } : null;
@@ -29,9 +34,9 @@ export function normalizeProviderResetCredits(value: unknown): ProviderResetCred
   if (value.offers !== null && !Array.isArray(value.offers)) return null;
   const offers: ProviderResetOffer[] | null = value.offers === null ? null : [];
   if (Array.isArray(value.offers)) for (const item of value.offers.slice(0, 32)) {
-    if (!isRecord(item) || !["codex", "full", "rolling_5h", "unknown"].includes(String(item.kind))
+    if (!isRecord(item) || typeof item.kind !== "string" || !["codex", "full", "rolling_5h", "unknown"].includes(item.kind)
       || item.available !== null && typeof item.available !== "boolean") continue;
-    const expiresAt = normalizeSnapshotTimestamp(item.expiresAt);
+    const expiresAt = insightTimestamp(item.expiresAt);
     if (item.expiresAt !== null && !expiresAt) continue;
     const expiryText = text(item.expiryText);
     offers!.push({ kind: item.kind as ProviderResetOffer["kind"], available: item.available as boolean | null,
@@ -48,7 +53,7 @@ function normalizeBalance(value: unknown): ProviderScopedBalance | null {
   const meta = capture(value);
   const unit = value.unit === "credits" || typeof value.unit === "string" && /^[A-Z]{3}$/.test(value.unit)
     ? value.unit as string : null;
-  const expiresAt = normalizeSnapshotTimestamp(value.expiresAt);
+  const expiresAt = insightTimestamp(value.expiresAt);
   if (!meta || !unit || value.id !== "cloud_session" && value.id !== "usage_credit"
     || value.remaining !== null && !nonnegative(value.remaining)
     || value.total !== null && !nonnegative(value.total)
@@ -86,6 +91,24 @@ function normalizeDistribution(value: unknown): ProviderUsageDistribution | null
   return { ...meta, kind: value.kind, unit: "percent", rangeStart, rangeEnd, values };
 }
 
+function normalizeQuotaPool(value: unknown): ProviderQuotaPool | null {
+  if (!isRecord(value)) return null;
+  const meta = capture(value);
+  const resetAt = insightTimestamp(value.resetAt);
+  if (!meta || meta.source !== "page" || typeof value.id !== "string" || !["cursor_models", "other_models", "grok_bot"].includes(value.id)
+    || value.kind !== "monthly" && value.kind !== "weekly"
+    || value.kind !== (value.id === "grok_bot" ? "weekly" : "monthly")
+    || value.usedPercent !== null && (!nonnegative(value.usedPercent) || value.usedPercent > 100)
+    || value.remainingPercent !== null && (!nonnegative(value.remainingPercent) || value.remainingPercent > 100)
+    || value.resetAt !== null && !resetAt) return null;
+  if (nonnegative(value.usedPercent) && nonnegative(value.remainingPercent)
+    && Math.abs(value.usedPercent + value.remainingPercent - 100) > 0.01) return null;
+  const resetText = text(value.resetText);
+  return { ...meta, id: value.id as ProviderQuotaPool["id"], kind: value.kind,
+    usedPercent: value.usedPercent as number | null, remainingPercent: value.remainingPercent as number | null,
+    resetAt, ...(resetText ? { resetText } : {}) };
+}
+
 export function normalizeProviderUsageInsights(value: unknown, providerId?: ProviderId): ProviderUsageInsights | null {
   if (!isRecord(value) || providerId && !["codex-personal-page", "claude-code-team-page", "cursor-personal-page"].includes(providerId)) return null;
   const result: ProviderUsageInsights = {};
@@ -108,6 +131,16 @@ export function normalizeProviderUsageInsights(value: unknown, providerId?: Prov
   }
   const distribution = normalizeDistribution(value.distribution);
   if (distribution) result.distribution = distribution;
+  if ((!providerId || providerId === "cursor-personal-page") && Array.isArray(value.quotaPools)) {
+    const seen = new Set<string>();
+    const pools = value.quotaPools.slice(0, 8).flatMap((item) => {
+      const pool = normalizeQuotaPool(item);
+      if (!pool || seen.has(pool.id)) return [];
+      seen.add(pool.id);
+      return [pool];
+    });
+    if (pools.length) result.quotaPools = pools;
+  }
   if (providerId !== undefined && providerId !== "codex-personal-page") {
     if (result.quotaScope?.source === "local_companion") delete result.quotaScope;
     if (result.resetCredits?.source === "local_companion") delete result.resetCredits;
@@ -127,6 +160,9 @@ export function mergeProviderUsageInsights(current?: ProviderUsageInsights, prev
   const quotaScope = latest(current?.quotaScope, previous?.quotaScope);
   const resetCredits = latest(current?.resetCredits, previous?.resetCredits);
   const distribution = latest(current?.distribution, previous?.distribution);
+  const pools = new Map(previous?.quotaPools?.map((pool) => [pool.id, pool]));
+  for (const pool of current?.quotaPools ?? []) pools.set(pool.id, latest(pool, pools.get(pool.id))!);
   return { ...(quotaScope ? { quotaScope } : {}), ...(resetCredits ? { resetCredits } : {}),
-    ...(distribution ? { distribution } : {}), ...(balances.size ? { balances: [...balances.values()] } : {}) };
+    ...(distribution ? { distribution } : {}), ...(balances.size ? { balances: [...balances.values()] } : {}),
+    ...(pools.size ? { quotaPools: [...pools.values()] } : {}) };
 }

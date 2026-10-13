@@ -1,11 +1,23 @@
 import { describe, expect, it } from "vitest";
 import { buildUsageInsightsFromDom, type UsageInsightsDomCapture } from "./usage-insights-dom";
 import claudeFixture from "../../fixtures/claude/usage-insights-dom.fixture.json";
+import cursorFixture from "../../fixtures/cursor/quota-pools-dom.fixture.json";
 
 const row = (key: string, value: number | null, unit: "percent" | "count" | "USD" | null): UsageInsightsDomCapture["rows"][number] =>
   ({ key, label: key === "function.tasks" ? "Tasks" : "Reset credits", value, total: null, unit, direction: null, available: null, expiresAt: null, expiryText: null });
 
 describe("bounded page aggregate capture", () => {
+  it("keeps two monthly Cursor pools and the weekly allowance independently identified", () => {
+    const captured = buildUsageInsightsFromDom("cursor", cursorFixture as UsageInsightsDomCapture, "2026-10-13T10:00:00.000Z");
+    expect(captured?.quotaPools).toMatchObject([
+      { id: "cursor_models", kind: "monthly", usedPercent: 32, remainingPercent: 68, resetAt: null, resetText: cursorFixture.monthlyResetText },
+      { id: "other_models", kind: "monthly", usedPercent: 68, remainingPercent: 32, resetAt: null },
+      { id: "grok_bot", kind: "weekly", usedPercent: 0, remainingPercent: 100, resetAt: null, resetText: "Resets weekly" },
+    ]);
+    expect(captured).not.toHaveProperty("remaining");
+    const single = buildUsageInsightsFromDom("cursor", { ...cursorFixture, rows: cursorFixture.rows.slice(0, 1) } as UsageInsightsDomCapture, "2026-10-13T10:00:00.000Z");
+    expect(single?.quotaPools).toHaveLength(1);
+  });
   it("separates Claude reset presence and credits without inventing counts or composition", () => {
     const captured = buildUsageInsightsFromDom("claude", claudeFixture as UsageInsightsDomCapture, "2026-10-13T10:00:00.000Z");
     expect(captured?.resetCredits).toMatchObject({ availableCount: null, offers: [

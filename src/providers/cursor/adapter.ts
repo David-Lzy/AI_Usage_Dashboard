@@ -43,6 +43,7 @@ import {
   mergeCursorUsageBilling,
 } from "../../shared/cursor-usage-billing";
 import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
+import { mergeProviderUsageInsights } from "../../shared/provider-usage-insights";
 
 type CursorAdapterContext = {
   provider: ProviderSnapshot;
@@ -486,7 +487,7 @@ async function tryCursorPersonalSource({
         trigger,
       }),
     });
-    const { result, pageBinding, captureSource } = await client.getUsageSnapshot(
+    const { result, pageBinding, captureSource, usageInsights } = await client.getUsageSnapshot(
       setting.pageBinding,
     );
     const nextSetting: ProviderSetting = {
@@ -533,6 +534,7 @@ async function tryCursorPersonalSource({
           syncStatus: isRecoverable ? "warning" : "error",
           tone: isRecoverable ? "warning" : "error",
           warningReason: result.reason,
+          usageInsights: mergeProviderUsageInsights(usageInsights, provider.usageInsights),
           warningDiagnostic:
             result.status === "route_drift"
               ? createAdapterErrorDiagnostic({
@@ -605,6 +607,7 @@ async function tryCursorPersonalSource({
         usageFacts,
         usageSummary,
         ...(cursorUsage ? { cursorUsage } : {}),
+        usageInsights: mergeProviderUsageInsights(usageInsights, provider.usageInsights),
         lastSuccessAt: snapshot.capturedAt ?? null,
         lastSyncLabel: buildCursorPersonalRefreshLabel(captureSource),
       },

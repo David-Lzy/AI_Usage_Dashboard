@@ -5,6 +5,19 @@ const meta = { source: "local_companion", capturedAt: "2026-10-13T10:00:00.000Z"
 const reset = { ...meta, availableCount: 4, offers: [{ kind: "codex", available: true, expiresAt: "2026-10-20T00:00:00.000Z" }] };
 
 describe("usage insight persistence boundary", () => {
+  it("whitelists Cursor pool identities and rejects malformed IDs without coercion", () => {
+    const pool = { ...meta, source: "page", id: "cursor_models", kind: "monthly", usedPercent: 32, remainingPercent: 68, resetAt: null };
+    const parsed = normalizeProviderUsageInsights({ quotaPools: [pool, pool, { ...pool, id: "unknown" }, { ...pool, id: { toString: "not-callable" } }] }, "cursor-personal-page");
+    expect(parsed?.quotaPools).toHaveLength(1);
+    expect(normalizeProviderUsageInsights({ quotaPools: [pool] }, "codex-personal-page")).toBeNull();
+    expect(normalizeProviderUsageInsights({ quotaPools: [{ ...pool, remainingPercent: 90 }] })).toBeNull();
+    expect(normalizeProviderUsageInsights({ quotaPools: [{ ...pool, resetAt: "Nov 30" }] })).toBeNull();
+    expect(normalizeProviderUsageInsights({ quotaPools: [{ ...pool, resetAt: "2026-11-30" }] })).toBeNull();
+    expect(normalizeProviderUsageInsights({ quotaPools: [{ ...pool, resetAt: "2026-02-30T12:00:00Z" }] })).toBeNull();
+    expect(normalizeProviderResetCredits({ ...reset, offers: [{ kind: { toString: "not-callable" } }] })?.offers).toEqual([]);
+    const old = { ...pool, capturedAt: "2026-10-12T10:00:00.000Z", usedPercent: 80, remainingPercent: 20 };
+    expect(mergeProviderUsageInsights(normalizeProviderUsageInsights({ quotaPools: [old] })!, parsed!)?.quotaPools?.[0]?.usedPercent).toBe(32);
+  });
   it("keeps count authoritative and distinguishes unknown, empty and capped details", () => {
     expect(normalizeProviderResetCredits(reset)).toMatchObject({ availableCount: 4, detailsComplete: false });
     expect(normalizeProviderResetCredits({ ...reset, offers: null })?.offers).toBeNull();

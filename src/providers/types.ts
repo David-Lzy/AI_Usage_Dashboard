@@ -406,11 +406,21 @@ export type ProviderUsageDistribution = ProviderInsightCapture & {
   values: { id: string; label: string; value: number }[];
 };
 
+export type ProviderQuotaPool = ProviderInsightCapture & {
+  id: "cursor_models" | "other_models" | "grok_bot";
+  kind: "monthly" | "weekly";
+  usedPercent: number | null;
+  remainingPercent: number | null;
+  resetAt: string | null;
+  resetText?: string;
+};
+
 export type ProviderUsageInsights = {
   quotaScope?: ProviderInsightCapture & { scope: "shared_plan" | "provider" };
   resetCredits?: ProviderResetCredits;
   balances?: ProviderScopedBalance[];
   distribution?: ProviderUsageDistribution;
+  quotaPools?: ProviderQuotaPool[];
 };
 
 export type CodexObservedEstimate = {

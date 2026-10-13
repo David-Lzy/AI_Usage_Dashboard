@@ -656,6 +656,7 @@ export function PopupFeaturedProviderList({
                         providerId={provider.providerId}
                         surface="popup"
                         usage={provider.cursorUsage}
+                        quotaPools={provider.usageInsights?.quotaPools}
                       />
                     ) : null}
                     {provider.apiGatewayMetering ? (

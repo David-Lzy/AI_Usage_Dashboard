@@ -328,6 +328,7 @@ export function ProviderCard({
             providerId={provider.providerId}
             surface={progressSurface}
             usage={provider.cursorUsage}
+            quotaPools={provider.usageInsights?.quotaPools}
           />
         ) : null}
 

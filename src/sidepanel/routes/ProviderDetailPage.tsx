@@ -608,6 +608,7 @@ export function ProviderDetailPage({
                 providerId={provider.providerId}
                 surface="fullPage"
                 usage={provider.cursorUsage}
+                quotaPools={provider.usageInsights?.quotaPools}
               />
               <nav
                 aria-label={cursorUsageCopy.sourceLinksLabel}

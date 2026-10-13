@@ -59,7 +59,25 @@ try {
   assert.equal(claude.rows.find((row) => row.key === "quota.routine_runs")?.total, 10);
   assert.ok(claude.rows.every((row) => !row.key.startsWith("product.")));
   assert.ok(!JSON.stringify(claude).includes("private-"));
-  console.log(JSON.stringify({ status: "passed", providers: ["codex", "claude"], checks: ["literal-aggregates", "scoped-period", "scope", "chat-exclusion", "sign-out", "hydration", "reset-presence", "scoped-credits", "unsupported-composition-excluded"], syntheticData: true }));
+  body = `<main><h1>Spending</h1><section><p>Usage limits reset on Nov 30</p></section>
+    <div><div><div><span>Cursor Models</span><span>Includes Grok and Composer</span></div><span>32% used</span></div><div></div></div>
+    <div><div><div><span>Other Models</span></div><span>68% used</span></div><div></div></div>
+    <div><h2>Grok Bot</h2><div><div><span>Weekly usage</span><span>0% used</span></div><p>Resets weekly</p><p>Grok Bot pauses at the limit.</p></div></div>
+    <table><tr><td>private-request-row</td><td>100%</td></tr></table></main>`;
+  await page.goto("https://cursor.com/dashboard/spending");
+  const cursor = await page.evaluate(`${compiled}\nreadUsageInsightsDom("cursor")`);
+  assert.equal(cursor.rows.find((row) => row.key === "pool.cursor_models")?.value, 32);
+  assert.equal(cursor.rows.find((row) => row.key === "pool.other_models")?.value, 68);
+  assert.equal(cursor.rows.find((row) => row.key === "pool.grok_bot")?.value, 0);
+  assert.equal(cursor.rows.find((row) => row.key === "pool.grok_bot")?.resetText, "Resets weekly");
+  assert.equal(cursor.monthlyResetText, "Usage limits reset on Nov 30");
+  assert.ok(!JSON.stringify(cursor).includes("private-"));
+  body = `<main><p>Promo 99% used</p><div><div><div><span>Cursor Models</span></div><span>32,5% used</span></div><div></div></div></main>`;
+  await page.reload();
+  const single = await page.evaluate(`${compiled}\nreadUsageInsightsDom("cursor")`);
+  assert.equal(single.rows.find((row) => row.key === "pool.cursor_models")?.value, 32.5);
+  assert.equal(single.rows.length, 1);
+  console.log(JSON.stringify({ status: "passed", providers: ["codex", "claude", "cursor"], checks: ["literal-aggregates", "scoped-period", "scope", "chat-exclusion", "sign-out", "hydration", "reset-presence", "scoped-credits", "unsupported-composition-excluded", "independent-pools", "date-only-reset"], syntheticData: true }));
 } finally {
   await browser.close();
 }

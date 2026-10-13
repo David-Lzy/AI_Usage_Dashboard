@@ -8,6 +8,7 @@ export type UsageInsightsDomCapture = {
   sourceUrl?: string;
   blocked?: boolean;
   planLabel?: string | null;
+  monthlyResetText?: string | null;
   rows: { key: string; label: string; value: number | null; total: number | null;
     unit: "percent" | "USD" | "count" | null; direction: "used" | "remaining" | null;
     available: boolean | null; expiresAt: string | null; expiryText: string | null;
@@ -70,13 +71,13 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
     if (key === "balance.cloud" && !/cloud.session|云会话/i.test(clean(element.closest("section")?.textContent ?? null))) continue;
     let parent = element.parentElement;
     let row: UsageInsightsDomCapture["rows"][number] | undefined;
-    for (let depth = 0; parent && depth < 6; depth++, parent = parent.parentElement) {
+    for (let depth = 0; parent && depth < (key.startsWith("pool.") ? 3 : 6); depth++, parent = parent.parentElement) {
       const context = clean(parent.textContent);
       if (context.length > 480 || /chat usage ranking|聊天用量排行/i.test(context)
         || known.some((other) => other.element !== element && other.key !== key && parent!.contains(other.element))) break;
       if (key === "pool.grok_bot" && !/grok bot/i.test(clean(parent.parentElement?.textContent ?? null))) continue;
-      const percent = context.match(/(\d{1,3}(?:\.\d+)?)\s*[%％]/);
-      const money = [...context.matchAll(/(?:US\$|USD)\s*([\d,]+(?:\.\d{1,2})?)/g)];
+      const percent = context.match(/(?<![\d.,])(\d{1,3}(?:[.,]\d{1,2})?)\s*[%％]/);
+      const money = [...context.matchAll(/(?:US\$|USD)\s*((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d{1,2})?)(?![\d.,])/g)];
       const quotaCount = key === "quota.routine_runs" ? context.match(/(\d{1,5})\s*(?:\/|of)\s*(\d{1,5})/i) : null;
       const count = key === "balance.flex" ? [...parent.children].map((child) => clean(child.textContent))
         .find((text) => /^\d{1,5}(?:\.\d+)?$/.test(text)) : undefined;
@@ -84,16 +85,22 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
         : [...parent.querySelectorAll("button")].some((button) => /^(?:reset for free|免费重置)$/i.test(clean(button.textContent)) && !button.disabled) ? true : null;
       const expiryText = context.match(/expires?(?: on| at)?\s+[^.;。]{1,72}|于[^。]{1,64}(?:到期|过期)|\d+月\d+日[^。]{0,32}(?:到期|过期)/i)?.[0] ?? null;
       const rawTime = parent.querySelector("time[datetime]")?.getAttribute("datetime");
-      const expiresAt = rawTime && /^\d{4}-\d{2}-\d{2}T/.test(rawTime) && Number.isFinite(Date.parse(rawTime))
+      const dayPart = rawTime?.slice(0, 10);
+      const dayTime = dayPart ? Date.parse(`${dayPart}T00:00:00Z`) : NaN;
+      const expiresAt = rawTime && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(rawTime)
+        && Number.isFinite(dayTime) && new Date(dayTime).toISOString().startsWith(dayPart!) && Number.isFinite(Date.parse(rawTime))
         ? new Date(rawTime).toISOString() : null;
       if (percent || money.length || quotaCount || count !== undefined || key.startsWith("reset.") && (available !== null || expiryText)) {
-        const value = percent ? Number(percent[1]) : money[0] ? Number(money[0][1]!.replace(/,/g, ""))
+        const value = percent ? Number(percent[1]!.replace(",", ".")) : money[0] ? Number(money[0][1]!.replace(/,/g, ""))
           : quotaCount ? Number(quotaCount[1]) : count !== undefined ? Number(count) : null;
-        const resetText = context.match(/(?:resets?(?: in| at| on)?\s+[^.;%]{1,64}|(?:星期|周)[一二三四五六日天][^。%]{0,32}重置)/i)?.[0] ?? null;
-        row = { key, label, value, total: money[1] ? Number(money[1][1]!.replace(/,/g, "")) : quotaCount ? Number(quotaCount[2]) : null,
+        const resetText = [...parent.querySelectorAll("span,div,p,time")].filter((node) => node.childElementCount === 0)
+          .map((node) => clean(node.textContent)).find((text) => text.length <= 80 && /^(?:resets?(?: in| at| on| weekly)?\b|(?:星期|周)[一二三四五六日天].{0,32}重置)/i.test(text)) ?? null;
+        const candidate = { key, label, value, total: money[1] ? Number(money[1][1]!.replace(/,/g, "")) : quotaCount ? Number(quotaCount[2]) : null,
           unit: percent ? "percent" : money.length ? "USD" : quotaCount || count !== undefined ? "count" : null,
           direction: /remaining|left|剩余|可用/i.test(context) ? "remaining" : /used|consumed|已用|已使用/i.test(context) ? "used" : null,
-          available, expiresAt, expiryText, resetText };
+          available, expiresAt, expiryText, resetText } as UsageInsightsDomCapture["rows"][number];
+        row = row && key.startsWith("pool.") ? { ...row, resetText: row.resetText ?? candidate.resetText } : candidate;
+        if (key.startsWith("pool.") && !resetText) continue;
         if (!key.startsWith("reset.") || available !== null) break;
       }
     }
@@ -117,6 +124,7 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
     /^(?:log in|sign in|登录|登入)$/i.test(clean(element.textContent)));
   return { ...empty, rows, rangeStart: dates?.[0] ?? null, rangeEnd: dates?.[1] ?? null, sharedPlan, loggedOut,
     planLabel: provider === "claude" ? leaves.map((element) => clean(element.textContent)).find((label) => /^(?:Claude )?(?:Pro|Max(?: (?:5x|20x))?)$/i.test(label)) ?? null : null,
+    monthlyResetText: provider === "cursor" ? leaves.map((element) => clean(element.textContent)).find((text) => text.length <= 80 && /^usage limits reset on /i.test(text)) ?? null : null,
     blocked: Boolean(document.querySelector("[id*='cf-turnstile'],iframe[src*='challenges.cloudflare.com']")) };
 }
 
@@ -138,6 +146,16 @@ export function buildUsageInsightsFromDom(provider: "codex" | "claude" | "cursor
       remaining: row.value, total: row.total, unit: "USD", expiresAt: row.expiresAt,
       ...(row.expiryText ? { expiryText: row.expiryText } : {}) }));
   if (balances.length) result.balances = balances;
+  if (provider === "cursor") {
+    const pools = data.rows.filter((row) => ["pool.cursor_models", "pool.other_models", "pool.grok_bot"].includes(row.key)
+      && row.unit === "percent" && row.value !== null && row.direction !== null).map((row) => ({ ...meta,
+      id: row.key.slice(5) as "cursor_models" | "other_models" | "grok_bot",
+      kind: row.key === "pool.grok_bot" ? "weekly" as const : "monthly" as const,
+      usedPercent: row.direction === "used" ? row.value : 100 - row.value!,
+      remainingPercent: row.direction === "remaining" ? row.value : 100 - row.value!,
+      resetAt: row.expiresAt, resetText: row.resetText ?? (row.key !== "pool.grok_bot" ? data.monthlyResetText : undefined) ?? undefined }));
+    if (pools.length) result.quotaPools = pools;
+  }
   const kind = provider === "codex" ? "function" as const : "product" as const;
   const categories = provider === "codex" ? ["tasks", "subagents", "agent_tasks", "composer", "memory", "unknown"] : ["claude_code", "chats", "cowork", "other"];
   const values = data.rows.filter((row) => provider === "codex" && categories.includes(row.key.slice(kind.length + 1)) && row.key.startsWith(`${kind}.`) && row.unit === "percent" && row.value !== null)
