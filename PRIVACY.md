@@ -97,6 +97,25 @@ built-in provider name and a percentage or reset message, not account labels,
 credentials, URLs, model identities or raw errors. The browser and operating
 system control whether accepted notifications are displayed, retained or silenced.
 
+### Optional Community Reset Information
+
+The in-progress provider insights update includes separately opt-in public feeds
+from `codex-resets.com` and `codex-reset.com`. They are off by default. Enabling
+them requests only the selected sites' optional host access and uses fixed HTTPS
+GET endpoints about every five minutes, with credentials omitted, no referrer,
+bounded responses and conditional caching/backoff. Requests contain no provider
+credentials, account identifiers or personal quota values. Operators receive
+ordinary network metadata, including the network IP address.
+
+Only bounded public event summaries, source links, forecasts and cache timestamps
+are retained in a separate local key. This key is excluded from AppState,
+configuration backups, Chrome Sync and diagnostic exports. Turning feeds off
+stops polling and cancels pending requests. Reports and predictions cannot change
+personal quota or reset-credit counts. Source credit remains beside displayed
+data; no remote website code or push service is loaded. See the
+[community contract](Doc/Product/Community_Reset_Insights.md) for source,
+freshness and delivery boundaries.
+
 Users can pause delivery, set the used-quota threshold, disable accounts/windows,
 send a test, or turn the feature off. Events are persisted before attempted OS
 delivery to prevent repeated alerts after a service-worker restart. An OS failure

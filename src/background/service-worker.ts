@@ -29,11 +29,23 @@ import { subscribeToAppStateStorageChanges } from "../shared/app-state-storage-e
 import { APP_STATE_STORAGE_KEY } from "../shared/constants";
 import type { QuotaNotificationMessage } from "../shared/quota-notification-client";
 import { quotaNotificationController } from "./quota-notification-runtime";
+import { communityResetController } from "./community-reset-runtime";
+import { COMMUNITY_RESET_ALARM, COMMUNITY_RESET_STORAGE_KEY, normalizeCommunityResetStore } from "../shared/community-reset-feeds";
+import type { CommunityResetMessage } from "../shared/community-reset-client";
+
+// MV3 workers can restart without onStartup; reconstruct the optional alarm each time.
+void communityResetController.reconcile().catch(() => undefined);
 
 subscribeToAppStateStorageChanges(() => {
   void quotaNotificationController.evaluate().catch(() => undefined);
 });
 chrome.storage.onChanged.addListener((changes, area) => {
+  const feedChange = changes[COMMUNITY_RESET_STORAGE_KEY];
+  if (area === "local" && feedChange
+    && JSON.stringify(normalizeCommunityResetStore(feedChange.oldValue).preferences) !== JSON.stringify(normalizeCommunityResetStore(feedChange.newValue).preferences)) {
+    communityResetController.invalidate();
+    void communityResetController.reconcile().catch(() => undefined);
+  }
   if (area === "local" && changes[APP_STATE_STORAGE_KEY] && !changes[APP_STATE_STORAGE_KEY].newValue) {
     void quotaNotificationController.reset().catch(() => undefined);
   }
@@ -93,14 +105,20 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.permissions.onAdded.addListener(() => {
   void syncProviderPermissionState().catch(() => undefined);
+  void communityResetController.reconcile().catch(() => undefined);
 });
 
 chrome.permissions.onRemoved.addListener(() => {
+  communityResetController.invalidate();
+  void communityResetController.reconcile().catch(() => undefined);
   void syncProviderPermissionState().catch(() => undefined);
   void quotaNotificationController.evaluate().catch(() => undefined);
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === COMMUNITY_RESET_ALARM) {
+    void communityResetController.poll().catch(() => undefined);
+  }
   if (isPeriodicSyncAlarm(alarm)) {
     void (async () => {
       if (await readStoreScreenshotRuntimeLock()) {
@@ -188,6 +206,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (typeof message?.type === "string" && message.type.startsWith("community-resets:")) {
+    if (_sender.id !== chrome.runtime.id) { sendResponse({ ok: false }); return false; }
+    void communityResetController.handle(message as CommunityResetMessage)
+      .then(sendResponse, () => sendResponse({ ok: false }));
+    return true;
+  }
   if (typeof message?.type === "string" && message.type.startsWith("quota-notifications:")) {
     if (_sender.id !== chrome.runtime.id) { sendResponse({ ok: false }); return false; }
     void quotaNotificationController.handle(message as QuotaNotificationMessage)

@@ -93,6 +93,10 @@ change personal allowance, reset time, available reset-credit count or balance.
 Community operators reporting the same announcement are not independent account
 confirmation. Unverified payload schemas remain unsupported until reviewed.
 
+The optional [community reset contract](Community_Reset_Insights.md) specifies
+the separately cached, default-off readers, attribution, lifecycle/conflict
+classification and network limits for both public sites.
+
 ## Verification
 
 Use minimized fixtures following the [Provider Authoring Guide](Provider_Authoring_Guide.md).
