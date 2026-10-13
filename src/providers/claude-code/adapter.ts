@@ -38,6 +38,7 @@ import {
   type ProviderSourceAttempt,
 } from "../provider-source-strategy";
 import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
+import { mergeProviderUsageInsights } from "../../shared/provider-usage-insights";
 import type {
   ClaudePersonalUsageFact,
   ClaudePersonalUsageWindow,
@@ -584,7 +585,7 @@ async function tryClaudePersonalSource({
         trigger,
       }),
     });
-    const { result, pageBinding, capturedAt } = await client.getUsageSnapshot(
+    const { result, pageBinding, capturedAt, usageInsights } = await client.getUsageSnapshot(
       setting.pageBinding,
     );
     const nextSetting: ProviderSetting = {
@@ -593,6 +594,7 @@ async function tryClaudePersonalSource({
     };
 
     if (result.status !== "ok") {
+      const retainQuota = provider.syncSource === "page_parse" && provider.quotaUnit === "percent";
       const isRecoverable =
         result.status === "open_page_required" || result.status === "logged_out";
 
@@ -614,10 +616,10 @@ async function tryClaudePersonalSource({
           planName: "Claude personal usage page",
           quotaUnit: "percent",
           quotaWindow: "rolling",
-          used: null,
-          remaining: null,
-          total: 100,
-          resetAt: "Visible Claude usage page",
+          used: retainQuota ? provider.used : null,
+          remaining: retainQuota ? provider.remaining : null,
+          total: retainQuota ? provider.total : 100,
+          resetAt: retainQuota ? provider.resetAt : "Visible Claude usage page",
           resetLabel:
             result.status === "logged_out"
               ? "Log back into Claude and reopen the personal usage page"
@@ -661,6 +663,7 @@ async function tryClaudePersonalSource({
               ? provider.usageFacts
               : undefined,
           usageSummary: provider.usageSummary ?? null,
+          usageInsights: mergeProviderUsageInsights(usageInsights, provider.usageInsights),
           lastSyncLabel:
             result.status === "logged_out"
               ? "Claude usage page session missing"
@@ -724,6 +727,7 @@ async function tryClaudePersonalSource({
         warningDiagnostic: usageThresholdDiagnostic,
         usageWindows: buildClaudeUsageWindows(result.snapshot.windows),
         usageFacts: result.snapshot.facts.map(toProviderUsageFact),
+        usageInsights: mergeProviderUsageInsights(usageInsights, provider.usageInsights),
         usageSummary: buildClaudeUsageSummary(
           result.snapshot.windows,
           result.snapshot.facts,

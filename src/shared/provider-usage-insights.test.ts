@@ -35,6 +35,17 @@ describe("usage insight persistence boundary", () => {
     expect(normalizeProviderUsageInsights({ distribution: { ...distribution, values: [{ id: "tasks", label: "Tasks", value: 100 }, { id: "other", label: "Other", value: 40 }] } })).toBeNull();
   });
 
+  it("preserves balance purpose, currency, zero and unknown without minor-unit conversion", () => {
+    const credit = { ...meta, source: "page", id: "usage_credit", remaining: 0, total: null, unit: "USD", expiresAt: null };
+    const cloud = { ...credit, id: "cloud_session", remaining: 80.25, total: 100, expiresAt: "2026-03-08T07:00:00.000Z" };
+    expect(normalizeProviderUsageInsights({ balances: [cloud, credit] }, "claude-code-team-page")?.balances).toMatchObject([
+      { id: "cloud_session", remaining: 80.25, total: 100, unit: "USD", expiresAt: cloud.expiresAt },
+      { id: "usage_credit", remaining: 0, total: null, unit: "USD", expiresAt: null },
+    ]);
+    expect(normalizeProviderUsageInsights({ balances: [{ ...credit, remaining: null }] })?.balances?.[0]?.remaining).toBeNull();
+    expect(normalizeProviderUsageInsights({ balances: [{ ...cloud, remaining: 101 }] })).toBeNull();
+  });
+
   it("merges independent capture times without replacing newer data with an old result", () => {
     const previous = normalizeProviderUsageInsights({ resetCredits: reset })!;
     const older = normalizeProviderUsageInsights({ resetCredits: { ...reset, capturedAt: "2026-10-12T10:00:00.000Z", availableCount: 2 },

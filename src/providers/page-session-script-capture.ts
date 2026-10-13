@@ -75,11 +75,15 @@ export async function readIsolatedPageSnapshot(
     if (usageProvider !== "codex" || /^https:\/\/chatgpt\.com\/settings\/usage\/?$/.test(data.sourceUrl ?? "")) {
       const escape = (value: string) => value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
       const quota = (data.rows ?? []).filter((row) => row.key.startsWith("quota.") && row.unit === "percent" && row.direction !== null && row.value !== null)
-        .map((row) => `<p>${escape(row.label)}</p><p>${row.direction === "remaining" ? row.value : 100 - row.value!}% remaining</p>`).join("");
+        .map((row) => {
+          const quotaLabel = usageProvider === "claude" ? ({ "quota.five_hour": "5-hour usage limit", "quota.weekly": "Weekly limit", "quota.sonnet_weekly": "Sonnet weekly limit" } as Record<string, string>)[row.key] ?? row.label : row.label;
+          return `<p>${escape(quotaLabel)}</p><p>${row.direction === "remaining" ? row.value : 100 - row.value!}% remaining</p>${row.resetText ? `<p>${escape(row.resetText)}</p>` : ""}`;
+        }).join("");
       const flex = (data.rows ?? []).find((row) => row.key === "balance.flex" && row.unit === "count");
+      const routine = (data.rows ?? []).find((row) => row.key === "quota.routine_runs" && row.unit === "count" && row.value !== null && row.total !== null && row.total > 0 && row.value <= row.total);
       const label = usageProvider === "codex" ? "Codex usage" : `${usageProvider} usage`;
       return { url: data.sourceUrl ?? "", title: label, heading: label, scripts: {},
-        html: `<h1>${label}</h1>${quota}${flex ? `<p>Credit balance</p><p>${flex.value}</p>` : ""}${data.loggedOut ? "<button>Log in</button>" : ""}${data.blocked ? "cf-turnstile" : ""}`,
+        html: `<h1>${label}</h1>${data.planLabel ? `<p>${escape(data.planLabel)}</p>` : ""}${quota}${routine ? `<p>Daily included routine runs</p><p>${routine.value} of ${routine.total}</p>` : ""}${flex ? `<p>Credit balance</p><p>${flex.value}</p>` : ""}${data.loggedOut ? "<button>Log in</button>" : ""}${data.blocked ? "cf-turnstile" : ""}`,
         usageInsights: buildUsageInsightsFromDom(usageProvider, data, new Date().toISOString()) ?? undefined };
     }
   }

@@ -39,7 +39,27 @@ try {
   await page.reload();
   assert.deepEqual((await capture()).rows, []);
   assert.equal((await capture()).loggedOut, false);
-  console.log(JSON.stringify({ status: "passed", provider: "codex", checks: ["literal-aggregates", "period", "scope", "chat-exclusion", "sign-out", "hydration"], syntheticData: true }));
+  body = `<nav>Claude Code 99%</nav><div role="dialog"><h1>Usage</h1><span>Pro</span>
+    <section><div><span>Current session</span><span>25% used</span></div><div><span>All models</span><span>40% used</span></div><div><span>Daily included routine runs</span><span>1 of 10</span></div></section>
+    <section><div><div><span><div><span>Full reset</span></div><span>?</span></span><div>Expires October 31</div></div><div><button>Reset for free</button></div></div>
+      <div><span>5-hour reset</span><p>None available yet</p></div></section>
+    <section><h3>Cloud-session credits</h3><div><div><span>Included credits</span><span>Expires November 15</span></div><div>US$80 remaining (US$100 total)</div></div></section>
+    <section><div><h3>Usage credits</h3><div>US$0</div></div><div>80% used</div></section>
+    <section><h3>Products</h3><div><span>Claude Code</span><span>85%</span></div></section>
+    <table><tr><td>private-conversation-title</td></tr></table></div>`;
+  await page.goto("https://claude.ai/new#settings/usage");
+  const claude = await page.evaluate(`${compiled}\nreadUsageInsightsDom("claude")`);
+  assert.equal(claude.sourceUrl, "https://claude.ai/new#settings/usage");
+  assert.equal(claude.rows.find((row) => row.key === "reset.full")?.available, true);
+  assert.equal(claude.rows.find((row) => row.key === "reset.five_hour")?.available, false);
+  assert.equal(claude.rows.find((row) => row.key === "balance.cloud")?.value, 80);
+  assert.equal(claude.rows.find((row) => row.key === "balance.cloud")?.total, 100);
+  assert.equal(claude.rows.find((row) => row.key === "balance.usage")?.value, 0);
+  assert.equal(claude.rows.filter((row) => row.key.startsWith("quota.")).length, 3);
+  assert.equal(claude.rows.find((row) => row.key === "quota.routine_runs")?.total, 10);
+  assert.ok(claude.rows.every((row) => !row.key.startsWith("product.")));
+  assert.ok(!JSON.stringify(claude).includes("private-"));
+  console.log(JSON.stringify({ status: "passed", providers: ["codex", "claude"], checks: ["literal-aggregates", "scoped-period", "scope", "chat-exclusion", "sign-out", "hydration", "reset-presence", "scoped-credits", "unsupported-composition-excluded"], syntheticData: true }));
 } finally {
   await browser.close();
 }

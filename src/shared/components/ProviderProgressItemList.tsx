@@ -27,6 +27,7 @@ import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-cop
 import { UsageProgress } from "./UsageProgress";
 import { CodexEstimateStrip } from "./CodexEstimateStrip";
 import { CodexUsageInsightsSummary } from "./CodexUsageInsightsSummary";
+import { ClaudeUsageInsightsSummary } from "./ClaudeUsageInsightsSummary";
 import { buildProgressMotionSample } from "../progress-motion";
 import { useProgressMotion } from "../use-progress-motion";
 
@@ -249,7 +250,7 @@ export function ProviderProgressItemList({
       })}
     </div>
   );
-  const insights = <CodexUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} />;
+  const insights = <><CodexUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /><ClaudeUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /></>;
   if (provider.providerId !== "codex-personal-page" || provider.syncSource !== "local_companion" || !provider.codexLocal) return <>{list}{insights}</>;
   return (
     <div className={`codex-progress-group${hasSingleCircularProgressItem ? " codex-progress-group--single-ring" : ""}`}>

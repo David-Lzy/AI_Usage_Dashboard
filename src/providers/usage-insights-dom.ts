@@ -7,9 +7,11 @@ import { normalizeProviderUsageInsights } from "../shared/provider-usage-insight
 export type UsageInsightsDomCapture = {
   sourceUrl?: string;
   blocked?: boolean;
+  planLabel?: string | null;
   rows: { key: string; label: string; value: number | null; total: number | null;
     unit: "percent" | "USD" | "count" | null; direction: "used" | "remaining" | null;
-    available: boolean | null; expiresAt: string | null; expiryText: string | null }[];
+    available: boolean | null; expiresAt: string | null; expiryText: string | null;
+    resetText?: string | null }[];
   rangeStart: string | null;
   rangeEnd: string | null;
   sharedPlan: boolean;
@@ -19,7 +21,8 @@ export type UsageInsightsDomCapture = {
 // This function is serialized into the source page. Keep its dependencies local.
 export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCapture {
   const provider = args[0];
-  const empty: UsageInsightsDomCapture = { sourceUrl: location.origin + location.pathname,
+  const empty: UsageInsightsDomCapture = { sourceUrl: location.origin + location.pathname
+    + (provider === "claude" && location.hash === "#settings/usage" ? "#settings/usage" : ""),
     rows: [], rangeStart: null, rangeEnd: null, sharedPlan: false, loggedOut: false };
   const host = provider === "codex" ? "chatgpt.com" : provider === "claude" ? "claude.ai" : provider === "cursor" ? "cursor.com" : null;
   if (!host || location.hostname !== host) return empty;
@@ -36,17 +39,24 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
     ["function.unknown", /^(?:unknown|未知)$/i],
     ["balance.flex", /^(?:credit balance|credits balance|flex credits|余额额度)$/i],
   ] : provider === "claude" ? [
+    ["quota.five_hour", /^(?:current session|5[- ]hour limit|当前会话|5\s*小时限额)$/i],
+    ["quota.weekly", /^(?:all models|weekly limit|weekly usage|所有模型|本周|每周限额)$/i],
+    ["quota.sonnet_weekly", /^(?:sonnet only|仅 sonnet)$/i],
+    ["quota.design", /^claude design$/i],
+    ["quota.routine_runs", /^(?:daily included routine runs|daily routine runs|每日(?:包含的)?例程运行)$/i],
     ["reset.full", /^(?:full reset|完全重置)$/i], ["reset.five_hour", /^(?:5[- ]hour reset|5\s*小时重置)$/i],
     ["balance.cloud", /^(?:included credits|included allowance|包含的额度)$/i],
     ["balance.usage", /^(?:usage credits|用量额度)$/i],
-    ["product.claude_code", /^claude code$/i], ["product.chats", /^(?:chats|聊天)$/i],
-    ["product.cowork", /^cowork$/i], ["product.other", /^(?:other|其他)$/i],
+    // Product composition has no reviewed current payload or scoped DOM group.
   ] : [
     ["pool.cursor_models", /^cursor models(?:\s*[·-].*)?$/i],
     ["pool.other_models", /^other models$/i], ["pool.grok_bot", /^weekly usage$/i],
   ];
   const clean = (value: string | null) => (value ?? "").replace(/\s+/g, " ").trim();
-  const leaves = [...document.querySelectorAll("h1,h2,h3,h4,p,span,div,label")].filter((element) =>
+  const root = provider === "claude" && location.pathname === "/new"
+    ? document.querySelector("[role=dialog]") : document.querySelector("main") ?? document;
+  if (!root) return empty;
+  const leaves = [...root.querySelectorAll("h1,h2,h3,h4,p,span,div,label")].filter((element) =>
     element.childElementCount === 0 && element.getClientRects().length > 0
     && !element.closest("table,[role=table],[role=row],nav,aside,a[href*='/c/'],a[href*='conversation']")
     && clean(element.textContent).length <= 160).slice(0, 10000);
@@ -57,32 +67,37 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
   });
   const rows: UsageInsightsDomCapture["rows"] = [];
   for (const { element, label, key } of known.slice(0, 32)) {
+    if (key === "balance.cloud" && !/cloud.session|云会话/i.test(clean(element.closest("section")?.textContent ?? null))) continue;
     let parent = element.parentElement;
-    for (let depth = 0; parent && depth < 4; depth++, parent = parent.parentElement) {
+    let row: UsageInsightsDomCapture["rows"][number] | undefined;
+    for (let depth = 0; parent && depth < 6; depth++, parent = parent.parentElement) {
       const context = clean(parent.textContent);
       if (context.length > 480 || /chat usage ranking|聊天用量排行/i.test(context)
         || known.some((other) => other.element !== element && other.key !== key && parent!.contains(other.element))) break;
       if (key === "pool.grok_bot" && !/grok bot/i.test(clean(parent.parentElement?.textContent ?? null))) continue;
       const percent = context.match(/(\d{1,3}(?:\.\d+)?)\s*[%％]/);
       const money = [...context.matchAll(/(?:US\$|USD)\s*([\d,]+(?:\.\d{1,2})?)/g)];
+      const quotaCount = key === "quota.routine_runs" ? context.match(/(\d{1,5})\s*(?:\/|of)\s*(\d{1,5})/i) : null;
       const count = key === "balance.flex" ? [...parent.children].map((child) => clean(child.textContent))
         .find((text) => /^\d{1,5}(?:\.\d+)?$/.test(text)) : undefined;
-      const available = /no (?:resets|credits)|none (?:available|yet)|目前还没有|当前没有|暂无/i.test(context) ? false
-        : /reset for free|免费重置/i.test(context) ? true : null;
+      const available = /no (?:resets|credits)|none (?:available|yet)|expired|目前还没有|当前没有|暂无|已过期/i.test(context) ? false
+        : [...parent.querySelectorAll("button")].some((button) => /^(?:reset for free|免费重置)$/i.test(clean(button.textContent)) && !button.disabled) ? true : null;
       const expiryText = context.match(/expires?(?: on| at)?\s+[^.;。]{1,72}|于[^。]{1,64}(?:到期|过期)|\d+月\d+日[^。]{0,32}(?:到期|过期)/i)?.[0] ?? null;
       const rawTime = parent.querySelector("time[datetime]")?.getAttribute("datetime");
       const expiresAt = rawTime && /^\d{4}-\d{2}-\d{2}T/.test(rawTime) && Number.isFinite(Date.parse(rawTime))
         ? new Date(rawTime).toISOString() : null;
-      if (percent || money.length || count !== undefined || key.startsWith("reset.") && (available !== null || expiryText)) {
+      if (percent || money.length || quotaCount || count !== undefined || key.startsWith("reset.") && (available !== null || expiryText)) {
         const value = percent ? Number(percent[1]) : money[0] ? Number(money[0][1]!.replace(/,/g, ""))
-          : count !== undefined ? Number(count) : null;
-        rows.push({ key, label, value, total: money[1] ? Number(money[1][1]!.replace(/,/g, "")) : null,
-          unit: percent ? "percent" : money.length ? "USD" : count !== undefined ? "count" : null,
+          : quotaCount ? Number(quotaCount[1]) : count !== undefined ? Number(count) : null;
+        const resetText = context.match(/(?:resets?(?: in| at| on)?\s+[^.;%]{1,64}|(?:星期|周)[一二三四五六日天][^。%]{0,32}重置)/i)?.[0] ?? null;
+        row = { key, label, value, total: money[1] ? Number(money[1][1]!.replace(/,/g, "")) : quotaCount ? Number(quotaCount[2]) : null,
+          unit: percent ? "percent" : money.length ? "USD" : quotaCount || count !== undefined ? "count" : null,
           direction: /remaining|left|剩余|可用/i.test(context) ? "remaining" : /used|consumed|已用|已使用/i.test(context) ? "used" : null,
-          available, expiresAt, expiryText });
-        break;
+          available, expiresAt, expiryText, resetText };
+        if (!key.startsWith("reset.") || available !== null) break;
       }
     }
+    if (row) rows.push(row);
   }
   const dateElements = leaves.filter((element) => /^\d{4}[/-]\d{1,2}[/-]\d{1,2}\s*[-–]\s*\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(clean(element.textContent)));
   let distributionContainer = known.find((item) => /^(function|product)\./.test(item.key))?.element.parentElement;
@@ -101,6 +116,7 @@ export function readUsageInsightsDom(...args: unknown[]): UsageInsightsDomCaptur
   const loggedOut = rows.length === 0 && [...document.querySelectorAll("a,button")].some((element) =>
     /^(?:log in|sign in|登录|登入)$/i.test(clean(element.textContent)));
   return { ...empty, rows, rangeStart: dates?.[0] ?? null, rangeEnd: dates?.[1] ?? null, sharedPlan, loggedOut,
+    planLabel: provider === "claude" ? leaves.map((element) => clean(element.textContent)).find((label) => /^(?:Claude )?(?:Pro|Max(?: (?:5x|20x))?)$/i.test(label)) ?? null : null,
     blocked: Boolean(document.querySelector("[id*='cf-turnstile'],iframe[src*='challenges.cloudflare.com']")) };
 }
 
@@ -117,14 +133,14 @@ export function buildUsageInsightsFromDom(provider: "codex" | "claude" | "cursor
   if (count !== null || offers.length) result.resetCredits = { ...meta, availableCount: count,
     offers: offers.length ? offers : null, detailsComplete: null };
   const balances = data.rows.filter((row) => row.key === "balance.cloud" || row.key === "balance.usage")
-    .filter((row) => row.unit === "USD").map((row) => ({ ...meta,
+    .filter((row) => row.unit === "USD" && (row.key === "balance.usage" || row.direction === "remaining")).map((row) => ({ ...meta,
       id: row.key === "balance.cloud" ? "cloud_session" as const : "usage_credit" as const,
       remaining: row.value, total: row.total, unit: "USD", expiresAt: row.expiresAt,
       ...(row.expiryText ? { expiryText: row.expiryText } : {}) }));
   if (balances.length) result.balances = balances;
   const kind = provider === "codex" ? "function" as const : "product" as const;
   const categories = provider === "codex" ? ["tasks", "subagents", "agent_tasks", "composer", "memory", "unknown"] : ["claude_code", "chats", "cowork", "other"];
-  const values = data.rows.filter((row) => categories.includes(row.key.slice(kind.length + 1)) && row.key.startsWith(`${kind}.`) && row.unit === "percent" && row.value !== null)
+  const values = data.rows.filter((row) => provider === "codex" && categories.includes(row.key.slice(kind.length + 1)) && row.key.startsWith(`${kind}.`) && row.unit === "percent" && row.value !== null)
     .map((row) => ({ id: row.key.slice(kind.length + 1), label: row.label, value: row.value! }));
   if (values.length) result.distribution = { ...meta, kind, unit: "percent",
     rangeStart: data.rangeStart, rangeEnd: data.rangeEnd, values };

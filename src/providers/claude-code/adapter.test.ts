@@ -96,6 +96,16 @@ describe("syncClaudeCodeProvider", () => {
     createClaudePersonalPageClientMock.mockReset();
   });
 
+  it("retains a confirmed percent quota while independently updating a failed-page insight", async () => {
+    const previous = { ...baseProvider, syncSource: "page_parse" as const, quotaUnit: "percent" as const, used: 40, remaining: 60, total: 100,
+      usageInsights: { resetCredits: { source: "page" as const, capturedAt: "2026-10-12T10:00:00.000Z", accountVerified: false, availableCount: null, offers: [], detailsComplete: null } } };
+    createClaudePersonalPageClientMock.mockReturnValue({ getUsageSnapshot: async () => ({ result: { status: "route_drift", reason: "No working quota", chosenRoute: "https://claude.ai/new#settings/usage", routeStatuses: [] },
+      pageBinding: createEmptyPageBinding(), usageInsights: { resetCredits: { ...previous.usageInsights.resetCredits, capturedAt: "2026-10-13T10:00:00.000Z", offers: [{ kind: "full", available: true, expiresAt: null }] } } }) });
+    const { snapshot } = await syncClaudeCodeProvider({ provider: previous, secrets: emptySecrets, setting: grantedSetting, warningThresholdPercent: 80, now: new Date("2026-10-13T10:00:01.000Z") });
+    expect(snapshot).toMatchObject({ used: 40, remaining: 60, total: 100, usageInsights: { resetCredits: { capturedAt: "2026-10-13T10:00:00.000Z" } } });
+    expect(snapshot.syncStatus).not.toBe("ok");
+  });
+
   it("falls back to the Claude usage page when the Admin API key is absent", async () => {
     const attemptedAt = new Date(2026, 3, 20, 12, 34);
     createClaudePersonalPageClientMock.mockReturnValue({
