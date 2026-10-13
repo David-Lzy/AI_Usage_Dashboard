@@ -13,6 +13,7 @@ import {
   extractCodexObservedUsageHistoryContract,
   type CodexObservedUsageHistoryContract,
 } from "./usage-history-contract";
+import type { ProviderUsageInsights } from "../types";
 
 export type CodexPersonalRouteKey =
   | "personal_usage"
@@ -60,6 +61,7 @@ export type CodexPersonalRouteCapture = {
   summary: CodexPersonalPageSummary | null;
   usageHistoryContract?: CodexObservedUsageHistoryContract | null;
   usageHistoryCaptureTimes?: CodexUsageHistoryCaptureTimes;
+  usageInsights?: ProviderUsageInsights;
 };
 
 export type CodexPersonalLiveFixture = {
@@ -94,7 +96,7 @@ const CODEX_PERSONAL_ROUTE_DEFINITIONS: CodexRouteDefinition[] = [
   {
     routeKey: "personal_usage",
     pageLabel: "Codex personal usage page",
-    urlPatterns: ["https://chatgpt.com/codex/settings/usage*"],
+    urlPatterns: ["https://chatgpt.com/settings/usage*", "https://chatgpt.com/codex/settings/usage*"],
   },
   {
     routeKey: "cloud_usage",
@@ -148,12 +150,11 @@ function pickInterestingTextSnippets(lines: string[]): string[] {
 function isLoggedOutChatGptPage(page: PageSessionCapturedPage): boolean {
   const url = page.url.toLowerCase();
   const html = page.html.toLowerCase();
-  const title = page.title.toLowerCase();
-
-  return (
+  const usable = /\d{1,3}\s*[%％]|credit balance|shared_plan/i.test(html) || Boolean(page.usageInsights);
+  return !usable && (
     url === "https://chatgpt.com/" ||
     url === "https://chatgpt.com" ||
-    title === "chatgpt" ||
+    /<(?:button|a)[^>]*>\s*(?:log in|sign in|登录|登入)\s*<\//i.test(html) ||
     html.includes("登录以获取基于已保存聊天的回答") ||
     html.includes("login to get answers based on saved chats") ||
     html.includes("免费注册")
@@ -164,12 +165,7 @@ function matchesCodexRoute(
   route: CodexRouteDefinition,
   page: PageSessionCapturedPage,
 ): boolean {
-  const expectedPath = route.urlPatterns[0]
-    .replace("https://chatgpt.com", "")
-    .replace("*", "");
-  const url = page.url.toLowerCase();
-
-  if (!url.includes(expectedPath.toLowerCase())) {
+  if (!route.urlPatterns.some((pattern) => page.url.toLowerCase().startsWith(pattern.replace("*", "").toLowerCase()))) {
     return false;
   }
 
@@ -187,12 +183,7 @@ function bindingMatchesRoute(
     return true;
   }
 
-  const expectedPath = route.urlPatterns[0]
-    .replace("https://chatgpt.com", "")
-    .replace("*", "")
-    .toLowerCase();
-
-  return binding.matchedUrl.toLowerCase().includes(expectedPath);
+  return route.urlPatterns.some((pattern) => binding.matchedUrl!.toLowerCase().startsWith(pattern.replace("*", "").toLowerCase()));
 }
 
 function chooseRecommendedSurface(
@@ -312,10 +303,10 @@ async function captureRoute(
           reloadBeforeCapture: reloadOptions,
         }
       : {}),
-    ...(options.openPageWhenMissing && route.routeKey === "cloud_analytics"
+    ...(options.openPageWhenMissing && route.routeKey === "personal_usage"
       ? {
           openWhenMissing: {
-            url: "https://chatgpt.com/codex/cloud/settings/analytics",
+            url: "https://chatgpt.com/settings/usage",
             active: false,
             closeOnUnmatched: true,
           },
@@ -339,6 +330,7 @@ async function captureRoute(
               : {}),
           }
         : { mode: "dom" as const }),
+      ...(route.routeKey === "personal_usage" ? { usageProvider: "codex" as const } : {}),
     },
     match(page) {
       if (isLoggedOutChatGptPage(page)) {
@@ -376,6 +368,7 @@ async function captureRoute(
     matchedUrl: result.page.url,
     matchedTitle: result.page.title,
     summary: summarizeCodexPersonalPage(result.page),
+    usageInsights: result.page.usageInsights,
     usageHistoryContract,
     usageHistoryCaptureTimes: extractUsageHistoryCaptureTimes(
       result.page.observedNetwork?.entries,
@@ -430,7 +423,7 @@ export async function captureCodexPersonalLiveFixture(
     capturedAt: new Date().toISOString(),
     extractionMode: "network_observer",
     primaryCandidateRoute:
-      "https://chatgpt.com/codex/cloud/settings/analytics#usage",
+      "https://chatgpt.com/settings/usage",
     routes,
     decision: buildDecision(routes),
   };

@@ -1,3 +1,6 @@
+import type { ProviderUsageInsights } from "./types";
+import { buildUsageInsightsFromDom, readUsageInsightsDom, type UsageInsightsDomCapture } from "./usage-insights-dom";
+
 export type PageSessionCapturedScriptMap = Record<string, string | null>;
 
 export type PageSessionCapturedWindowMap = Record<string, string | null>;
@@ -29,6 +32,7 @@ export type PageSessionIsolatedPageSnapshot = {
   heading: string | null;
   html: string;
   scripts: PageSessionCapturedScriptMap;
+  usageInsights?: ProviderUsageInsights;
 };
 
 export async function executeScriptResult<T>(
@@ -62,7 +66,23 @@ export async function readIsolatedPageSnapshot(
   tabId: number,
   scriptingApi: PageSessionScriptingApi,
   scriptSelectors: string[],
+  usageProvider?: "codex" | "claude" | "cursor",
 ): Promise<PageSessionIsolatedPageSnapshot> {
+  if (usageProvider) {
+    const data = await executeScriptResult<UsageInsightsDomCapture>(scriptingApi, {
+      tabId, func: readUsageInsightsDom, args: [usageProvider, "new_codex_only"],
+    });
+    if (usageProvider !== "codex" || /^https:\/\/chatgpt\.com\/settings\/usage\/?$/.test(data.sourceUrl ?? "")) {
+      const escape = (value: string) => value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
+      const quota = (data.rows ?? []).filter((row) => row.key.startsWith("quota.") && row.unit === "percent" && row.direction !== null && row.value !== null)
+        .map((row) => `<p>${escape(row.label)}</p><p>${row.direction === "remaining" ? row.value : 100 - row.value!}% remaining</p>`).join("");
+      const flex = (data.rows ?? []).find((row) => row.key === "balance.flex" && row.unit === "count");
+      const label = usageProvider === "codex" ? "Codex usage" : `${usageProvider} usage`;
+      return { url: data.sourceUrl ?? "", title: label, heading: label, scripts: {},
+        html: `<h1>${label}</h1>${quota}${flex ? `<p>Credit balance</p><p>${flex.value}</p>` : ""}${data.loggedOut ? "<button>Log in</button>" : ""}${data.blocked ? "cf-turnstile" : ""}`,
+        usageInsights: buildUsageInsightsFromDom(usageProvider, data, new Date().toISOString()) ?? undefined };
+    }
+  }
   const snapshot = await executeScriptResult<PageSessionIsolatedPageSnapshot>(
     scriptingApi,
     {

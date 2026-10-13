@@ -7,18 +7,21 @@ import { withSnapshotFreshness } from "../../shared/snapshot-freshness";
 
 const baseline = DEFAULT_APP_STATE.providers.find((provider) => provider.providerId === "codex-personal-page")!;
 
-function usageWindow(window: CodexLocalWindow): ProviderUsageWindow {
+function usageWindow(window: Omit<CodexLocalWindow, "id"> & { id: string }): ProviderUsageWindow {
   const label = window.kind === "weekly" ? "Weekly limit" : window.kind === "rolling_5h" ? "5-hour limit" : "Usage limit";
   return {
-    label, normalizedLabel: label, kind: window.kind, modelLabel: null,
+    id: window.id === "primary" || window.id === "secondary" ? `codex:${window.id}` : window.id,
+    label, normalizedLabel: label, kind: window.kind,
+    modelLabel: window.id.includes(":") ? window.id.split(":")[0]! : null,
     quotaUnit: "percent", used: window.usedPercent, remaining: 100 - window.usedPercent,
     total: 100, resetAt: window.resetAt, resetLabel: null,
   };
 }
 
 export function buildCodexLocalSnapshot(previous: ProviderSnapshot, summary: CodexLocalSummary, now: Date): ProviderSnapshot {
-  const windows = summary.windows.map(usageWindow);
-  const primary = windows.find((window) => window.kind === "weekly") ?? windows[0]!;
+  const baseWindows = summary.windows.map(usageWindow);
+  const windows = [...baseWindows, ...(summary.additionalWindows ?? []).map(usageWindow)];
+  const primary = baseWindows.find((window) => window.kind === "weekly") ?? baseWindows[0]!;
   const remaining = primary.remaining;
   const safePrevious = previous.syncSource === "local_companion" ? previous : baseline;
   return withSnapshotFreshness(safePrevious, {
@@ -49,6 +52,7 @@ export function buildCodexLocalSnapshot(previous: ProviderSnapshot, summary: Cod
       accountVerified: summary.accountDigest !== null,
       estimates: summary.estimates,
     },
+    usageInsights: summary.resetCredits ? { resetCredits: summary.resetCredits } : undefined,
     tone: remaining !== null && remaining <= 20 ? "warning" : "neutral",
   }, now, summary.observedAt);
 }

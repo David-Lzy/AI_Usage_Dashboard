@@ -104,6 +104,19 @@ describe("syncCodexProvider", () => {
     createCodexPersonalPageClientMock.mockReset();
   });
 
+  it("can update aggregate context without manufacturing a working quota", async () => {
+    const usageInsights = { quotaScope: { source: "page", capturedAt: "2026-10-13T10:00:00.000Z", accountVerified: false, scope: "shared_plan" } };
+    createCodexPersonalPageClientMock.mockReturnValue({ getUsageSnapshot: async () => ({
+      ...buildCodexPersonalPageResponse({ status: "route_drift", reason: "No quota percentages", chosenRoute: "https://chatgpt.com/settings/usage", routeStatuses: [] }),
+      usageInsights,
+    }) });
+    const { snapshot } = await syncCodexProvider({ provider: { ...baseProvider, remaining: 40, used: 60, total: 100 },
+      setting: grantedSetting, secrets: emptySecrets, warningThresholdPercent: 80, now: new Date("2026-10-13T10:00:01.000Z") });
+    expect(snapshot.usageInsights).toEqual(usageInsights);
+    expect(snapshot.remaining).toBe(40);
+    expect(snapshot.syncStatus).not.toBe("ok");
+  });
+
   it("keeps failed refreshes of old quotas unavailable to pace predictions", async () => {
     const now = new Date("2026-09-22T12:00:00Z");
     const previous: ProviderSnapshot = {

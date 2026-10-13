@@ -215,6 +215,7 @@ export const PROVIDER_SOURCE_BLUEPRINTS: Record<ProviderId, ProviderSourceBluepr
         priority: 2,
         label: "Codex personal usage pages",
         routeHints: [
+          "https://chatgpt.com/settings/usage*",
           "https://chatgpt.com/codex/cloud/settings/analytics*",
           "https://chatgpt.com/codex/settings/usage*",
           "https://chatgpt.com/codex/cloud/settings/usage*",

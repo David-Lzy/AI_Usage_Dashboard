@@ -26,6 +26,7 @@ import {
 import { buildUsageProgressLocalizedCopy } from "../usage-progress-localized-copy";
 import { UsageProgress } from "./UsageProgress";
 import { CodexEstimateStrip } from "./CodexEstimateStrip";
+import { CodexUsageInsightsSummary } from "./CodexUsageInsightsSummary";
 import { buildProgressMotionSample } from "../progress-motion";
 import { useProgressMotion } from "../use-progress-motion";
 
@@ -248,13 +249,15 @@ export function ProviderProgressItemList({
       })}
     </div>
   );
-  if (provider.providerId !== "codex-personal-page" || provider.syncSource !== "local_companion" || !provider.codexLocal) return list;
+  const insights = <CodexUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} />;
+  if (provider.providerId !== "codex-personal-page" || provider.syncSource !== "local_companion" || !provider.codexLocal) return <>{list}{insights}</>;
   return (
     <div className={`codex-progress-group${hasSingleCircularProgressItem ? " codex-progress-group--single-ring" : ""}`}>
       <div className="codex-progress-group__inner">
         {list}
         <CodexEstimateStrip provider={provider} i18n={i18n} detail={surface === "fullPage"} />
       </div>
+      {surface === "fullPage" ? insights : null}
     </div>
   );
 }

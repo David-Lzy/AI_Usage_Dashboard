@@ -1,4 +1,4 @@
-import type { ProviderId } from "./types";
+import type { ProviderId, ProviderUsageInsights } from "./types";
 import { getCandidateTabs } from "./page-session-candidate-tabs";
 import {
   closeOpenedPageSessionTab,
@@ -59,6 +59,7 @@ export type PageSessionCapturedPage = {
   title: string;
   heading: string | null;
   html: string;
+  usageInsights?: ProviderUsageInsights;
   bootData?: {
     scripts: PageSessionCapturedScriptMap;
     windowValues: PageSessionCapturedWindowMap;
@@ -138,10 +139,11 @@ export type PageSessionBootDataExtraction = {
   maxSerializedLength?: number;
 };
 
-export type PageSessionExtraction =
+export type PageSessionExtraction = (
   | PageSessionDomExtraction
   | PageSessionBootDataExtraction
-  | PageSessionNetworkObserverExtraction;
+  | PageSessionNetworkObserverExtraction
+) & { usageProvider?: "codex" | "claude" | "cursor" };
 
 export type PageSessionDefinition = {
   providerId: ProviderId;
@@ -265,6 +267,7 @@ async function capturePageSessionPage(
     tabId,
     scriptingApi,
     scriptSelectors,
+    extraction.usageProvider,
   );
 
   if (extraction.mode === "boot_data") {
@@ -290,6 +293,7 @@ async function capturePageSessionPage(
     title: baseSnapshot.title,
     heading: baseSnapshot.heading,
     html: baseSnapshot.html,
+    ...(baseSnapshot.usageInsights ? { usageInsights: baseSnapshot.usageInsights } : {}),
     ...(bootData ? { bootData } : {}),
     ...(observedNetwork ? { observedNetwork } : {}),
   };

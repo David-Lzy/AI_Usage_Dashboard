@@ -95,7 +95,7 @@ describe("summarizeCodexPersonalPage", () => {
     ]);
   });
 
-  it("only auto-opens the preferred cloud analytics route when enabled", async () => {
+  it("only auto-opens the new shared usage route when enabled", async () => {
     const capturedDefinitions: Parameters<PageSessionClient["capture"]>[0][] = [];
     const client: PageSessionClient = {
       async capture(definition) {
@@ -137,13 +137,30 @@ describe("summarizeCodexPersonalPage", () => {
       ]),
       waitForRequiredEntriesTimeoutMs: 5_000,
     });
-    expect(capturedDefinitions[0].openWhenMissing).toEqual({
-      url: "https://chatgpt.com/codex/cloud/settings/analytics",
+    expect(capturedDefinitions[0].openWhenMissing).toBeUndefined();
+    expect(capturedDefinitions[1].openWhenMissing).toEqual({
+      url: "https://chatgpt.com/settings/usage",
       active: false,
       closeOnUnmatched: true,
     });
-    expect(capturedDefinitions[1].openWhenMissing).toBeUndefined();
+    expect(capturedDefinitions[1].urlPatterns).toContain("https://chatgpt.com/codex/settings/usage*");
+    expect(capturedDefinitions[1].extraction).toMatchObject({ usageProvider: "codex" });
     expect(capturedDefinitions[2].openWhenMissing).toBeUndefined();
+  });
+
+  it("does not classify a signed-in ChatGPT shell by title alone", async () => {
+    const classifications: string[] = [];
+    const client: PageSessionClient = { async capture(definition) {
+      if (definition.urlPatterns.includes("https://chatgpt.com/settings/usage*")) {
+        const page = { url: "https://chatgpt.com/settings/usage?tab=analytics", title: "ChatGPT", heading: "Usage", html: "<p>Codex Weekly limit</p><p>70% remaining</p>" };
+        classifications.push(definition.match(page));
+        classifications.push(definition.match({ ...page, html: "<button>Log in</button>" }));
+        classifications.push(definition.match({ ...page, html: "<h1>Codex usage</h1>Loading" }));
+      }
+      return { status: "not_found", attempts: [] };
+    } };
+    await captureCodexPersonalLiveFixture(client, undefined, { reloadPageBeforeCapture: false });
+    expect(classifications).toEqual(["matched", "logged_out", "matched"]);
   });
 
   it("can inspect a hydrating page again without triggering another reload", async () => {

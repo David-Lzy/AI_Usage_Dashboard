@@ -10,11 +10,12 @@ type Props = { provider: ProviderViewModel; i18n: RuntimeI18n; detail: boolean }
 export function CodexEstimateStrip({ provider, i18n, detail }: Props) {
   const copy = getCodexLocalEstimateCopy(i18n.resolvedLocale);
   const windows = provider.usageWindows ?? [];
-  const weekly = windows.find((window) => window.kind === "weekly");
+  const weekly = windows.find((window) => window.kind === "weekly" && (!window.id || window.id.startsWith("codex:")));
   const defaultIndex = weekly ? windows.indexOf(weekly) : 0;
   const [chosenIndex, setChosenIndex] = useState<number | null>(null);
   const selectedIndex = detail && chosenIndex !== null && windows[chosenIndex] ? chosenIndex : defaultIndex;
-  const estimate = provider.codexLocal?.estimates[selectedIndex];
+  const windowId = windows[selectedIndex]?.id?.replace(/^codex:/, "");
+  const estimate = windowId ? provider.codexLocal?.estimates.find((item) => item.windowId === windowId) : provider.codexLocal?.estimates[selectedIndex];
   const disconnected = provider.syncStatus !== "ok";
   const stale = !disconnected && isLocalCompanionCaptureStale(provider.lastSuccessAt);
   const unavailable = disconnected || stale;

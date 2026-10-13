@@ -4,7 +4,7 @@ import type {
   CodexPersonalRouteCapture,
   CodexPersonalRouteKey,
 } from "./personal-page-capture";
-import type { ProviderUsageHistory } from "../types";
+import type { ProviderUsageHistory, ProviderUsageInsights } from "../types";
 import { parseCodexUsageHistory } from "./usage-history-parser";
 
 export type CodexPersonalWindowKind =
@@ -47,6 +47,7 @@ export type CodexPersonalUsageSnapshot = {
   windows: CodexPersonalUsageWindow[];
   balances: CodexPersonalUsageBalance[];
   usageHistory?: ProviderUsageHistory;
+  usageInsights?: ProviderUsageInsights;
   note: string;
 };
 
@@ -593,6 +594,7 @@ export function parseCodexPersonalLiveFixture(
         primaryWindow,
         windows,
         balances: buildBalances(matchedRoute.summary),
+        usageInsights: matchedRoute.usageInsights,
         usageHistory: parseCodexUsageHistory(
           matchedRoute.usageHistoryContract,
           fixture.capturedAt,
