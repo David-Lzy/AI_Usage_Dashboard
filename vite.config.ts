@@ -176,6 +176,9 @@ export default defineConfig({
         chunkFileNames: "assets/[name].js",
         manualChunks(id) {
           const moduleId = normalizeRollupId(id);
+          if (/\/src\/shared\/(?:community-reset-feeds|provider-usage-insights|provider-insights(?:-ui)?-copy)\.ts$/.test(moduleId)) {
+            return "provider-insights-contract";
+          }
           // Settings loads this component runtime lazily; Popup never imports it.
           if (/\/node_modules\/(?:mdui|@mdui\/[^/]+|lit|lit-html|lit-element|@lit\/[^/]+|@lit-labs\/[^/]+)\//.test(moduleId)) {
             return "material-controls";

@@ -36,6 +36,8 @@ import { buildUsageHistoryLocalizedCopy } from "../shared/usage-history-localize
 import {
   createDefaultUsageHistoryModulesBySurface,
   resolveProviderUsageHistoryModules,
+  isUsageHistorySeriesModule,
+  isProviderUsageHistoryModuleVisible,
 } from "../shared/usage-history-visibility";
 import {
   readPopupUsageHistoryCollapsePreference,
@@ -44,6 +46,7 @@ import {
   writePopupUsageHistoryCollapsePreference,
 } from "./popup-collapse-preferences";
 import { CursorUsageSummary } from "../shared/components/CursorUsageSummary";
+import { ProviderSupplementalModules } from "../shared/components/ProviderSupplementalModules";
 import { buildCursorUsageLocalizedCopy } from "../shared/cursor-usage-localized-copy";
 import {
   ApiGatewayDeploymentSelector,
@@ -387,6 +390,7 @@ export function PopupFeaturedProviderList({
                 progressThicknessPx={progressThicknessPx}
                 resetTimeDisplayMode={resetTimeDisplayMode}
                 i18n={i18n}
+                showUsageInsights={isProviderUsageHistoryModuleVisible(usageHistoryModulesBySurface, "popup", provider.providerId, "quota_insights")}
               />
             );
             const hasProviderProgress = hasVisibleProviderProgressItems(
@@ -400,7 +404,7 @@ export function PopupFeaturedProviderList({
                   usageHistoryModulesBySurface,
                   "popup",
                   provider.providerId,
-                ).filter((preference) => preference.visible)
+                ).filter((preference) => preference.visible && isUsageHistorySeriesModule(preference.id))
               : [];
             const showProviderServiceStatus = isProviderServiceStatusVisible(
               providerServiceStatusVisibilityBySurface,
@@ -649,6 +653,7 @@ export function PopupFeaturedProviderList({
                         ))}
                       </div>
                     ) : null}
+                    <ProviderSupplementalModules provider={provider} i18n={i18n} surface="popup" preferences={usageHistoryModulesBySurface} compact includeAccountSummary={!hasProviderProgress} />
                     {provider.cursorUsage ? (
                       <CursorUsageSummary
                         copy={cursorUsageCopy}
@@ -656,7 +661,6 @@ export function PopupFeaturedProviderList({
                         providerId={provider.providerId}
                         surface="popup"
                         usage={provider.cursorUsage}
-                        quotaPools={provider.usageInsights?.quotaPools}
                       />
                     ) : null}
                     {provider.apiGatewayMetering ? (

@@ -1,0 +1,20 @@
+.provider-insights { min-inline-size: 0; padding-block: 14px; border-block-start: 1px solid var(--app-supporting-surface-border); }
+.provider-insights__title { margin: 0 0 8px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+.provider-insights > .supporting-copy { margin-block: 8px; }
+.provider-insights__metadata { margin: 6px 0; font-size: 12px; color: var(--md-sys-color-on-surface-variant); overflow-wrap: anywhere; }
+.provider-insights__rows { display: grid; gap: 12px; padding: 0; margin: 12px 0 0; list-style: none; }
+.provider-insights__rows > li { min-inline-size: 0; }
+.provider-insights__rows > li + li { border-block-start: 1px solid var(--app-supporting-surface-border); padding-block-start: 12px; }
+.provider-insights__rows .supporting-copy { margin-block: 8px; line-height: 1.5; }
+.provider-insights__metadata > span { display: inline-block; margin-inline-end: 12px; }
+.provider-insights__forecast { padding-block-start: 16px; margin-block-start: 16px; border-block-start: 1px solid var(--app-supporting-surface-border); max-inline-size: 640px; }
+.provider-insights__forecast .provider-insights__row { margin-block: 8px; }
+.provider-insights__row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; font-size: 14px; overflow-wrap: anywhere; }
+.provider-insights__row > span { flex: 1 1 150px; min-inline-size: 0; }
+.provider-insights__row strong { max-inline-size: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+.provider-insights__composition-bar { height: 5px; background: var(--md-sys-color-surface-container-high); overflow: hidden; margin-block-start: 6px; }
+.provider-insights__composition-bar > span { display: block; height: 100%; }
+.provider-insights a { overflow-wrap: anywhere; }
+.provider-insights[data-community-resets] .provider-insights__rows { max-inline-size: 640px; }
+.provider-insights__conflict { padding-inline-start: 18px; margin-block: 12px; }
+.provider-insights__conflict > li + li { margin-block-start: 12px; }

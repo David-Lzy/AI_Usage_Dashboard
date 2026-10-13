@@ -204,7 +204,10 @@ export type ProgressItemsBySurface = Record<
 >;
 export type ProviderUsageHistoryModuleId =
   | "personal_usage_by_surface"
-  | "turns_history";
+  | "turns_history"
+  | "quota_insights"
+  | "usage_composition"
+  | "community_resets";
 export type ProviderUsageHistoryModulePreference = {
   id: ProviderUsageHistoryModuleId;
   visible: boolean;

@@ -25,7 +25,7 @@ Dates, identifiers and amounts in test fixtures are synthetic.
 
 | Source | Verified entry | Data and units | Evidence and boundary |
 | --- | --- | --- | --- |
-| Codex browser | New `/settings/usage` overview/analytics; retained `/codex/settings/usage` and `/codex/cloud/settings/usage` | Source-visible quota percentages; aggregate function composition for the selected period | New rendered layout and aggregate label/value pairing reviewed October 13. Conversation rankings are excluded. Shared allowance is not Codex-only unless the source says so. |
+| Codex browser | New `/settings/usage` overview/analytics; retained `/codex/settings/usage` and `/codex/cloud/settings/usage` | Source-visible quota percentages; aggregate function composition for the selected period | New rendered layout and aggregate label/value pairing reviewed October 13. Conversation rankings are excluded. Work/Codex/agents identifies the analytics usage scope, not proof of a shared quota pool. |
 | Codex session API | Existing `GET /backend-api/wham/usage` | Window percent, reset epoch seconds, separate flexible credits | Existing reviewed contract retained; newly observed endpoint names are candidates until their payload is independently verified. |
 | Codex CLI Companion | Read-only `account/rateLimits/read` | `usedPercent`, minutes per window, reset epoch seconds, available reset count and optional detail expiry | Official app-server contract. `availableCount` is authoritative even with absent or capped detail rows. |
 | Claude Personal | `/new#settings/usage`, retained legacy entry | Subscription window percent; reset-offer presence/expiry; separately scoped cloud-session and usage credits | New reset/credit sections reviewed October 13. Numeric count and exact expiry must remain unknown when only presence or a calendar date is rendered. New JSON shapes were not verified in that review. |
@@ -96,6 +96,27 @@ confirmation. Unverified payload schemas remain unsupported until reviewed.
 The optional [community reset contract](Community_Reset_Insights.md) specifies
 the separately cached, default-off readers, attribution, lifecycle/conflict
 classification and network limits for both public sites.
+
+## Presentation And Saved Display Choices
+
+Reset counts/known expiry and purpose-scoped Claude balances use the existing
+quota area. With one visible Codex circle and enough container width, the local
+estimate/reset summary sits alongside it; multiple circles or bars keep a
+wrapping summary below. Layout depends on visible windows, not a plan name.
+When no quota item is visible, an independently enabled reset/credit summary
+still works. Unknown expiry is explicit and capped offers never establish count.
+
+Settings extends existing per-surface module preferences with quota insights,
+usage composition and a Codex community summary. Existing chart order and
+visibility survive. Composition/community default off. Cursor's new pool block
+also defaults off so it cannot undo a user's hidden billing summary. New pool
+rows use their own successful capture time and monthly/weekly identity; legacy
+Auto/API billing amounts retain their original meaning. Fixed-position insight
+blocks are visibility controls, not misleading draggable chart series.
+
+Full details retain source/capture/account-verification context and scoped
+composition periods. Composition is labeled as share of usage, not remaining
+quota. No conversation title or request content is displayed or stored.
 
 ## Verification
 

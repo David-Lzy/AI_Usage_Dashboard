@@ -3,6 +3,7 @@ import type { ProviderViewModel } from "../provider-view-models";
 import { getProviderInsightsCopy } from "../provider-insights-copy";
 import { getCodexLocalEstimateCopy } from "../codex-local-estimate-copy";
 import { isLocalCompanionCaptureStale } from "../local-companion-settings";
+import { getProviderInsightsUiCopy } from "../provider-insights-ui-copy";
 
 export function ClaudeUsageInsightsSummary({ provider, i18n, detail }: { provider: ProviderViewModel; i18n: RuntimeI18n; detail: boolean }) {
   if (provider.providerId !== "claude-code-team-page" || !provider.usageInsights) return null;
@@ -10,15 +11,16 @@ export function ClaudeUsageInsightsSummary({ provider, i18n, detail }: { provide
   if (!resetCredits && !balances?.length) return null;
   const copy = getProviderInsightsCopy(i18n.resolvedLocale);
   const state = getCodexLocalEstimateCopy(i18n.resolvedLocale);
-  const date = (value: string) => new Intl.DateTimeFormat(i18n.resolvedLocale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+  const ui = getProviderInsightsUiCopy(i18n.resolvedLocale);
+  const date = (value: string) => i18n.formatTemporalValue(value);
   const metric = (label: string, value: string, key: string) => <div className="codex-estimate-strip__metric" key={key}><span>{label}</span><strong>{value}</strong></div>;
   return <div className="codex-estimate-strip" data-usage-insights="claude">
     <div className="codex-estimate-strip__metrics">
-      {resetCredits?.offers?.filter((offer) => offer.kind === "full" || offer.kind === "rolling_5h").map((offer) => metric(
+      {resetCredits?.offers?.filter((offer) => offer.kind === "full" || offer.kind === "rolling_5h").map((offer, index) => metric(
         offer.kind === "full" ? copy.fullReset : copy.fiveHourReset,
-        isLocalCompanionCaptureStale(resetCredits.capturedAt) ? state.stale : offer.available === null ? state.unknown : offer.available ? copy.available : copy.unavailable, offer.kind))}
+        offer.expiresAt && Date.parse(offer.expiresAt) <= Date.now() ? ui.expired : isLocalCompanionCaptureStale(resetCredits.capturedAt) ? state.stale : offer.available === null ? state.unknown : offer.available ? copy.available : copy.unavailable, `${offer.kind}:${index}`))}
       {balances?.map((balance) => metric(balance.id === "cloud_session" ? copy.cloudCredits : copy.usageCredits,
-        isLocalCompanionCaptureStale(balance.capturedAt) ? state.stale : balance.remaining === null ? state.unknown
+        balance.expiresAt && Date.parse(balance.expiresAt) <= Date.now() ? ui.expired : isLocalCompanionCaptureStale(balance.capturedAt) ? state.stale : balance.remaining === null ? state.unknown
           : balance.unit === "credits" ? i18n.formatNumber(balance.remaining)
             : new Intl.NumberFormat(i18n.resolvedLocale, { style: "currency", currency: balance.unit }).format(balance.remaining), balance.id))}
     </div>

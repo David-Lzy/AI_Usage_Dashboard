@@ -18,6 +18,7 @@ import { useSettingsCredentialDrafts } from "./use-settings-credential-drafts";
 import { useSettingsCategoryNavigation } from "./use-settings-category-navigation";
 import { getSettingsUserLevelVisibility } from "./settings-user-level-visibility";
 import { useSettingsSurfaceSessionState } from "./use-settings-surface-session-state";
+import { useState } from "react";
 
 type UseSettingsPageInput = {
   settings: AppSettings;
@@ -44,6 +45,7 @@ export function useSettingsPage({
   onSaveCodexSessionToken,
   onClearCodexSessionToken,
 }: UseSettingsPageInput) {
+  const [surfaceSessionEntry] = useState(() => typeof document !== "undefined" && document.documentElement.dataset.settingsSurfaceSessionRestore === "true");
   const credentialDrafts = useSettingsCredentialDrafts({
     onSaveProviderAdminApiKey,
     onClearProviderAdminApiKey,
@@ -97,7 +99,7 @@ export function useSettingsPage({
     defaultAdvancedOpen,
     defaultUiMoreOpen: settings.themePreset === "custom",
     forceAdvancedOpen: routeFocusRequiresAdvanced,
-    restoreScroll: !routeFocus,
+    restoreScroll: !routeFocus || surfaceSessionEntry,
   });
 
   return {

@@ -15,6 +15,28 @@ type PendingFullPageEntry = {
 const PENDING_FULL_PAGE_ENTRY_KEY =
   "ai-usage-dashboard:pending-full-page-entry";
 const PENDING_FULL_PAGE_ENTRY_TTL_MS = 15_000;
+const PENDING_SETTINGS_SURFACE_SESSION_KEY = "ai-usage-dashboard:pending-settings-surface-session";
+
+export function storePendingSettingsSurfaceSession(targetHash: string, storage?: StorageLike | null, now = Date.now()) {
+  const hash = normalizeHash(targetHash);
+  if (!storage || !hash.startsWith("#settings/section/")) return;
+  try { storage.setItem(PENDING_SETTINGS_SURFACE_SESSION_KEY, JSON.stringify({ targetHash: hash, createdAt: now })); } catch { /* Optional handoff hint. */ }
+}
+
+export function consumePendingSettingsSurfaceSession(currentHash: string, storage?: StorageLike | null, now = Date.now()): boolean {
+  if (!storage) return false;
+  try {
+    const raw = storage.getItem(PENDING_SETTINGS_SURFACE_SESSION_KEY);
+    if (!raw) return false;
+    const hint: unknown = JSON.parse(raw);
+    storage.removeItem(PENDING_SETTINGS_SURFACE_SESSION_KEY);
+    if (!hint || typeof hint !== "object") return false;
+    const value = hint as { targetHash?: unknown; createdAt?: unknown };
+    return typeof value.createdAt === "number" && Number.isFinite(value.createdAt) && now >= value.createdAt
+      && now - value.createdAt < PENDING_FULL_PAGE_ENTRY_TTL_MS && typeof value.targetHash === "string"
+      && value.targetHash.startsWith("#settings/section/") && value.targetHash === normalizeHash(currentHash);
+  } catch { return false; }
+}
 
 function normalizeHash(hash: string): string {
   if (!hash) {

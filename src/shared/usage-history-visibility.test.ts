@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { ProviderUsageHistoryModulePreference } from "../providers/types";
 import {
   createDefaultUsageHistoryModulesBySurface,
   isProviderUsageHistoryModuleVisible,
@@ -8,6 +9,12 @@ import {
   resolveProviderUsageHistoryModules,
   setProviderUsageHistoryModuleVisibility,
 } from "./usage-history-visibility";
+
+const EXTRA: ProviderUsageHistoryModulePreference[] = [
+  { id: "quota_insights", visible: true },
+  { id: "usage_composition", visible: false },
+  { id: "community_resets", visible: false },
+];
 
 describe("usage history visibility", () => {
   it("defaults both modules to visible on every surface", () => {
@@ -22,6 +29,7 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "personal_usage_by_surface", visible: true },
       { id: "turns_history", visible: true },
+      ...EXTRA,
     ]);
   });
 
@@ -65,6 +73,7 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "turns_history", visible: false },
       { id: "personal_usage_by_surface", visible: true },
+      ...EXTRA,
     ]);
   });
 
@@ -108,6 +117,7 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "turns_history", visible: false },
       { id: "personal_usage_by_surface", visible: true },
+      ...EXTRA,
     ]);
     expect(
       resolveProviderUsageHistoryModules(
@@ -118,6 +128,7 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "personal_usage_by_surface", visible: true },
       { id: "turns_history", visible: true },
+      ...EXTRA,
     ]);
   });
 
@@ -146,6 +157,7 @@ describe("usage history visibility", () => {
     ).toEqual([
       { id: "turns_history", visible: false },
       { id: "personal_usage_by_surface", visible: true },
+      ...EXTRA,
     ]);
   });
 });

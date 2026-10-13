@@ -44,6 +44,7 @@ type ProviderProgressItemListProps = {
   accountId?: string | null;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
   surface: DisplaySurface;
+  showUsageInsights?: boolean;
 };
 
 function formatQuotaValue(
@@ -135,6 +136,7 @@ export function ProviderProgressItemList({
   accountId,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
   surface,
+  showUsageInsights = true,
 }: ProviderProgressItemListProps) {
   const visibleProgressItems = selectVisibleProviderProgressItems(
     provider,
@@ -250,15 +252,18 @@ export function ProviderProgressItemList({
       })}
     </div>
   );
-  const insights = <><CodexUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /><ClaudeUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /></>;
+  const insights = showUsageInsights ? <><CodexUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /><ClaudeUsageInsightsSummary provider={provider} i18n={i18n} detail={surface === "fullPage"} /></> : null;
   if (provider.providerId !== "codex-personal-page" || provider.syncSource !== "local_companion" || !provider.codexLocal) return <>{list}{insights}</>;
+  if (!showUsageInsights) return list;
   return (
     <div className={`codex-progress-group${hasSingleCircularProgressItem ? " codex-progress-group--single-ring" : ""}`}>
       <div className="codex-progress-group__inner">
         {list}
-        <CodexEstimateStrip provider={provider} i18n={i18n} detail={surface === "fullPage"} />
+        <div className="codex-progress-group__supplement">
+          <CodexEstimateStrip provider={provider} i18n={i18n} detail={surface === "fullPage"} />
+          {insights}
+        </div>
       </div>
-      {surface === "fullPage" ? insights : null}
     </div>
   );
 }

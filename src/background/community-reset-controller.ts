@@ -82,6 +82,7 @@ export function createCommunityResetController(deps: Dependencies) {
       if (message.type !== "community-resets:read" && message.type !== "community-resets:update") return { ok: false };
       let store = normalizeCommunityResetStore(await deps.readStore());
       if (message.type === "community-resets:update") {
+        if (message.expectedRevision !== undefined && message.expectedRevision !== store.revision) return { ok: false };
         const preferences = normalizeCommunityResetPreferences(message.preferences);
         if (JSON.stringify(store.preferences) !== JSON.stringify(preferences)) {
           store = { ...store, preferences, revision: store.revision + 1 };

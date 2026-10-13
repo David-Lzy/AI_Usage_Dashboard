@@ -7,7 +7,7 @@ import {
 export type CommunityResetView = { store: CommunityResetStore; access: Partial<Record<CommunityResetSource, boolean>> };
 export type CommunityResetMessage =
   | { type: "community-resets:read" | "community-resets:refresh" }
-  | { type: "community-resets:update"; preferences: CommunityResetPreferences };
+  | { type: "community-resets:update"; preferences: CommunityResetPreferences; expectedRevision?: number };
 export type CommunityResetResponse = { ok: true; view: CommunityResetView } | { ok: false };
 export async function sendCommunityResetMessage(message: CommunityResetMessage): Promise<CommunityResetView> {
   const api = getExtensionApiNamespace();

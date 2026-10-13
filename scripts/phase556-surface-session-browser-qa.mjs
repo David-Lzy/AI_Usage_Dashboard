@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
 import {
   assert,
   assertVisibleTop,
@@ -13,7 +14,7 @@ import {
 } from "./lib/surface-qa-browser-harness.mjs";
 
 const projectRoot = process.cwd();
-const distRoot = path.join(projectRoot, "dist", "chrome");
+const distRoot = resolveBuildPaths({ projectRoot }).chromeDir;
 const artifactDir = path.join(
   projectRoot,
   "tmp",
@@ -167,6 +168,8 @@ async function installExtensionSessionStorageShim(context) {
 }
 
 async function scrollTo(page, selector) {
+  await page.evaluate((id) => { location.hash = `settings/section/${id}`; }, selector.slice(1));
+  await page.locator(selector).first().waitFor({ state: "visible" });
   await page.locator(selector).first().scrollIntoViewIfNeeded();
   await page.evaluate(() => window.scrollBy(0, -96));
   await page.waitForTimeout(150);
@@ -218,7 +221,8 @@ async function prepareSettingsSession(page) {
   }
 
   await scrollTo(page, "#settings-appearance");
-  await page.locator(".settings-preferences__more-toggle").click();
+  const editor = page.locator(".settings-progress-editor > summary");
+  if (await editor.getAttribute("aria-expanded") !== "true") await editor.click();
   await page.waitForTimeout(150);
   await page.locator(".settings-preferences__test-popup-button").click();
   await page.waitForTimeout(150);
@@ -250,7 +254,7 @@ function assertSettingsSessionRestored(
   openedProviderProgressDetailsId,
   label,
 ) {
-  assert(snapshot.hash === "#settings", `${label}: hash was ${snapshot.hash}.`);
+  assert(snapshot.hash === sourceSnapshot.hash, `${label}: hash was ${snapshot.hash}.`);
   assert(
     snapshot.colorDropdownOpen === "true",
     `${label}: active color dropdown was not restored; source=${sourceSnapshot.colorDropdownOpen}, destination=${snapshot.colorDropdownOpen}, snapshot=${JSON.stringify(snapshot)}.`,
@@ -274,7 +278,7 @@ function assertSettingsSessionRestored(
   }
 
   assert(
-    findMovedCarousel(sourceSnapshot, snapshot),
+    !sourceSnapshot.carousels.some((carousel) => carousel.count > 1) || findMovedCarousel(sourceSnapshot, snapshot),
     `${label}: provider carousel active item was not restored; source=${JSON.stringify(sourceSnapshot.carousels)}, destination=${JSON.stringify(snapshot.carousels)}.`,
   );
 }

@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+import { providerInsightsQaOverrides } from "./lib/provider-insights-qa-fixtures.mjs";
 
 const arg = (name) =>
   process.argv
@@ -142,6 +143,10 @@ try {
       ])
         for (const [index, style] of styles.entries()) {
           const state = structuredClone(fixture);
+          if (process.argv.includes("--insights")) {
+            const overrides = providerInsightsQaOverrides(Date.now(), size === "wide" ? 1 : 2);
+            state.providers = state.providers.map((snapshot) => ({ ...snapshot, ...overrides[snapshot.providerId] }));
+          }
           const id = `${locale}-${theme}-${size}-${style}`;
           state.settings = {
             ...state.settings,
@@ -251,6 +256,7 @@ try {
               progress: [
                 ...document.querySelectorAll('[role="progressbar"]'),
               ].map((element) => element.getAttribute("aria-valuenow")),
+              accountInsights: document.querySelector('[data-usage-insights="codex"]') !== null,
               headerClipped: [
                 ...document.querySelectorAll(".popup-provider-card__header"),
               ].some(
@@ -280,6 +286,7 @@ try {
               "Popup background token is unresolved",
             );
             assert(layout.style.includes(`--${style}`));
+            if (process.argv.includes("--insights")) assert(layout.accountInsights, "The new account summary must render in the native action popup");
             assert(
               !layout.materialLibrary &&
                 !layout.resources.some((url) =>
@@ -363,6 +370,55 @@ try {
                   document.querySelector(".popup-header__theme-menu > button"),
               ),
             );
+            let browsingInteraction = false;
+            if (locale === "en" && theme === "light" && size === "balanced") {
+              if (modes[index] === "collapsible") {
+                const toggled = await evaluate(async () => {
+                  const button = document.querySelector('[data-popup-provider-card-toggle]');
+                  const initial = button.getAttribute('aria-expanded'); button.click();
+                  await new Promise((resolve) => setTimeout(resolve, 380));
+                  const collapsed = button.getAttribute('aria-expanded'); button.click();
+                  await new Promise((resolve) => setTimeout(resolve, 380));
+                  return { initial, collapsed, restored: button.getAttribute('aria-expanded') };
+                });
+                assert.notEqual(toggled.initial, toggled.collapsed); assert.equal(toggled.initial, toggled.restored);
+              } else if (["single", "switch"].includes(modes[index])) {
+                const switched = await evaluate(async () => {
+                  const current = () => document.querySelector('[data-popup-provider-source-link]')?.getAttribute('data-popup-provider-source-link');
+                  const button = document.querySelector('.popup-provider-switcher__button--next, [data-popup-provider-center-switch]');
+                  const initial = current(); button.click(); await new Promise((resolve) => setTimeout(resolve, 380));
+                  const next = current(); button.click(); await new Promise((resolve) => setTimeout(resolve, 380));
+                  return { initial, next, restored: current() };
+                });
+                assert.notEqual(switched.initial, switched.next); assert.equal(switched.initial, switched.restored);
+              } else {
+                const motion = await evaluate(async () => {
+                  const stage = document.querySelector('.popup-provider-stage');
+                  const track = document.querySelector('.popup-provider-list');
+                  const reduced = document.documentElement.dataset.motionResolved === 'reduced';
+                  const read = () => ({ transform: getComputedStyle(track).transform, states: track.getAnimations().map((animation) => animation.playState) });
+                  const before = read(); await new Promise((resolve) => setTimeout(resolve, 200));
+                  if (reduced) return { reduced, before, after: read() };
+                  const moving = read(); stage.dispatchEvent(new PointerEvent('pointerenter'));
+                  await new Promise((resolve) => setTimeout(resolve, 60)); const paused = read();
+                  await new Promise((resolve) => setTimeout(resolve, 200)); const settled = read();
+                  stage.dispatchEvent(new WheelEvent('wheel', { deltaY: 24, bubbles: true, cancelable: true }));
+                  await new Promise((resolve) => requestAnimationFrame(resolve)); const manual = read();
+                  stage.dispatchEvent(new PointerEvent('pointerleave'));
+                  await new Promise((resolve) => setTimeout(resolve, 200));
+                  return { reduced, before, moving, paused, settled, manual, after: read() };
+                });
+                if (motion.reduced) { assert.equal(motion.before.transform, motion.after.transform); assert(!motion.after.states.includes('running')); }
+                else {
+                  assert.notEqual(motion.before.transform, motion.moving.transform);
+                  assert(motion.paused.states.length && motion.paused.states.every((state) => state === 'paused'));
+                  assert.equal(motion.paused.transform, motion.settled.transform);
+                  assert.notEqual(motion.settled.transform, motion.manual.transform);
+                  assert(motion.after.states.includes('running'));
+                }
+              }
+              browsingInteraction = true;
+            }
             assert.deepEqual(
               await worker.evaluate(
                 async () =>
@@ -380,6 +436,7 @@ try {
               layout,
               menu,
               keyboard: true,
+              browsingInteraction,
             });
             console.log(`Native action ${id}: passed`);
           } finally {

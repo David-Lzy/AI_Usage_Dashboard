@@ -5,7 +5,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { consumePendingFullPageEntry } from "../shared/extension-surface-entry";
+import { consumePendingFullPageEntry, consumePendingSettingsSurfaceSession } from "../shared/extension-surface-entry";
 import { isFullPageSurfaceSearch } from "../shared/extension-surface-paths";
 import { getSafeLocalStorage } from "../shared/local-storage";
 import { installPerformanceDebugCounters } from "../shared/perf-debug";
@@ -36,6 +36,9 @@ import "./theme/fusion-surfaces.css";
 const rootElement = document.getElementById("root")!;
 
 installPerformanceDebugCounters();
+if (consumePendingSettingsSurfaceSession(window.location.hash, getSafeLocalStorage())) {
+  document.documentElement.dataset.settingsSurfaceSessionRestore = "true";
+}
 
 if (isFullPageSurfaceSearch(window.location.search)) {
   document.documentElement.classList.add("full-page-shell");

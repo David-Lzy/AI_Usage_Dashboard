@@ -170,6 +170,20 @@ _The 0.2.2 interface shown with synthetic QA data, not live account usage.
 The [0.2.1 Settings image](./Doc/Assets/ai-usage-dashboard-settings-quick-setup.png)
 is retained as historical material. Store review and rollout are tracked separately._
 
+### Provider Insights In The Work Branch
+
+The unreleased provider-insights branch adds source-scoped reset credits and
+balances, separate Cursor model pools, optional usage composition and default-off
+[community reset context](./Doc/Product/Community_Reset_Insights.md). Usage &
+Notifications keeps community reports and verified account-card alerts separate;
+predictions are detail-only, never personal quota or an alert. The public feed
+does not require an account connection. These changes are not a statement that
+the published 0.2.2 Store package already contains them.
+
+![Work-branch notification settings with synthetic data](./Doc/Assets/provider-insights-settings-preview.png)
+
+![Separate community conflict and forecast detail with synthetic data](./Doc/Assets/provider-insights-community-preview.png)
+
 ## Extend It
 
 ### Custom JSON Sources

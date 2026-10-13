@@ -80,6 +80,30 @@ responses cannot restore disabled preferences or data. Worker restart reconstruc
 the optional alarm. Screenshot QA locks suppress requests. No provider tab is
 opened, refreshed or focused by this polling.
 
+## Controls And Presentation
+
+Usage & Notifications contains separate community and account-event controls.
+The community selector is Off / In-app / In-app and desktop; selected source
+checkboxes remain visible while Off and do not themselves start requests.
+Desktop access is requested only from the enabling gesture. Denial keeps in-app
+content available. Pause and test apply to the new desktop scope, not to the
+existing quota threshold. Available-card alerts have their own Off / On / Paused
+selector and remain unavailable when the current local account is unverified.
+An already granted notifications permission is reused, not treated as denial.
+
+The Settings detail link works without a connected Codex account. Codex detail
+contains the attributed timeline, classification/conflicts, source capture times
+and separate forecast horizons/confidence. Popup, Dashboard and Sidebar show
+only a compact summary and detail entry when their saved community display
+module is enabled; those modules start off. The feed panel is loaded on demand,
+not with the default Popup. Account quota and the toolbar percentage are never
+replaced by community percentages.
+
+Preference writes show confirmed success or a retryable failure. A revision
+check rejects stale drafts from another window rather than silently restoring
+disabled sources. Manual refresh observes the same cache and backoff boundaries
+as background polling.
+
 ## Privacy And Delivery Boundary
 
 The community cache/preferences are a distinct machine-local key, not AppState,

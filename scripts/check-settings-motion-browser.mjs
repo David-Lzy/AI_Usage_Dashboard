@@ -227,6 +227,10 @@ try {
     await choose("motion-mode", mode);
     await page.waitForFunction(() => document.querySelector('[data-settings-save-status]')?.dataset.settingsSaveStatus === "saved");
     const details = page.locator(".settings-progress-editor");
+    if (await details.locator(":scope > summary").getAttribute("aria-expanded") === "true") {
+      await details.locator(":scope > summary").click();
+      await details.locator(":scope > div").waitFor({ state: "hidden" });
+    }
     await details.locator(":scope > summary").click();
     await page.waitForTimeout(45);
     await details.locator(":scope > summary").click();

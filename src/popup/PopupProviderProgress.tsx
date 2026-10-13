@@ -22,6 +22,7 @@ type PopupProviderProgressProps = {
   provider: ProviderViewModel;
   accountId?: string | null;
   resetTimeDisplayMode?: ResetTimeDisplayMode;
+  showUsageInsights?: boolean;
 };
 
 export function PopupProviderProgress({
@@ -35,6 +36,7 @@ export function PopupProviderProgress({
   provider,
   accountId,
   resetTimeDisplayMode = DEFAULT_RESET_TIME_DISPLAY_MODE,
+  showUsageInsights = true,
 }: PopupProviderProgressProps) {
   return (
     <ProviderProgressItemList
@@ -50,6 +52,7 @@ export function PopupProviderProgress({
       accountId={accountId}
       resetTimeDisplayMode={resetTimeDisplayMode}
       surface="popup"
+      showUsageInsights={showUsageInsights}
     />
   );
 }

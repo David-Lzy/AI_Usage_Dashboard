@@ -251,6 +251,25 @@ Current early-reset evidence and unverified CLI identity remain unsupported,
 not inferred. The cross-surface insights browser gate extends this evidence;
 no synthetic transport test proves an OS banner appeared.
 
+`node scripts/check-provider-insights-ui.mjs` renders the actual insight cards,
+detail/community panel and Settings controls with synthetic snapshots. Its
+default matrix covers 14 locales, light/dark and 1440/900/390/320px (112 groups).
+`--locales=en,zh-CN,ar --quick` limits the layout smoke run; `--browser=firefox`
+uses the installed Playwright Firefox engine for source rendering. The interaction gate
+covers source and desktop permission denial, permission reuse, independent
+community/account pause, test delivery, failed initial reads/writes, explicit
+retry and identity loss while subscribed. Only
+permission/OS transport and public payloads are synthetic; the real controllers
+handle preferences. Non-local requests are blocked and asserted absent. Reports
+and synthetic screenshots remain under `.local/qa/provider-insights/823/`.
+
+`node scripts/check-fusion-native-popup.mjs --extension=<isolated-build>
+--insights` exercises the new summaries in the real Chrome action target. It
+uses a fresh profile, offline screenshot lock and single/multiple-window fixture
+variants across the existing sizes/styles/browsing modes. Source tabs, account
+state and the user's loaded extension are not used. The surface-extension gate
+also honors `AI_USAGE_BUILD_ROOT`; use an isolated build for it.
+
 `node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
 exercises actual extension preference writes and notification persistence while
 holding, rejecting and reordering transport acknowledgements. It verifies that

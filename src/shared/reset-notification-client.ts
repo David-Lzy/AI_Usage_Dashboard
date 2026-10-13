@@ -1,7 +1,9 @@
 import { getExtensionApiNamespace, getExtensionPermissionsApi, hasExtensionRuntime } from "./extension-api";
 import { RESET_NOTIFICATION_STORAGE_KEY, normalizeResetNotificationStore, type ResetNotificationChange, type ResetNotificationPreferences } from "./reset-notifications";
+import { CODEX_RESET_CAPTURE_KEY } from "./codex-reset-capture";
+import { LOCAL_COMPANION_PAIRING_KEY } from "./local-companion-pairing";
 
-export type ResetNotificationView = { preferences: ResetNotificationPreferences; permission: "granted" | "denied" | "unsupported"; accountEligible: boolean };
+export type ResetNotificationView = { preferences: ResetNotificationPreferences; permission: "granted" | "denied" | "unsupported"; accountEligible: boolean; accountKey?: string | null };
 export type ResetNotificationMessage =
   | { type: "reset-notifications:read" }
   | { type: "reset-notifications:update"; change: ResetNotificationChange }
@@ -21,7 +23,9 @@ export async function requestResetNotificationPermission(): Promise<boolean> {
 }
 export function subscribeToResetNotificationChanges(listener: () => void): () => void {
   const changes = typeof chrome !== "undefined" ? chrome.storage?.onChanged : undefined;
-  const callback = (values: Record<string, chrome.storage.StorageChange>, area: string) => { if (area === "local" && values[RESET_NOTIFICATION_STORAGE_KEY]) listener(); };
+  const callback = (values: Record<string, chrome.storage.StorageChange>, area: string) => {
+    if (area === "local" && (values[RESET_NOTIFICATION_STORAGE_KEY] || values[CODEX_RESET_CAPTURE_KEY] || values[LOCAL_COMPANION_PAIRING_KEY])) listener();
+  };
   changes?.addListener(callback);
   const permissions = getExtensionPermissionsApi();
   permissions?.onAdded?.addListener(listener); permissions?.onRemoved?.addListener(listener);

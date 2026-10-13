@@ -46,6 +46,7 @@ import { ProgressAppearancePreferenceControls } from "./ProgressAppearancePrefer
 import { getSettingsAppearanceCopy } from "../../shared/settings-appearance-localized-copy";
 import { buildQuotaPaceLocalizedCopy } from "../../shared/quota-pace-localized-copy";
 import { QuotaNotificationSettings } from "./QuotaNotificationSettings";
+import { ResetInsightsSettings } from "./ResetInsightsSettings";
 import { SettingsUiMoreSection } from "./SettingsUiMoreSection";
 import type { SettingsCategory } from "../settings-categories";
 import { SETTINGS_SECTION_IDS } from "../settings-section-ids";
@@ -168,7 +169,8 @@ export function SettingsPreferencesSection({
   onWarningThresholdChange,
 }: SettingsPreferencesSectionProps) {
   const [editingSurface, setEditingSurface] = useState<DisplaySurface>("popup");
-  const [progressEditorOpen, setProgressEditorOpen] = useState(false);
+  const progressEditorOpen = surfaceSessionState.uiMoreOpen;
+  const setProgressEditorOpen = surfaceSessionState.setUiMoreOpen;
   const appearanceCopy = getSettingsAppearanceCopy(i18n.resolvedLocale);
   const quotaPaceCopy = buildQuotaPaceLocalizedCopy(i18n.resolvedLocale);
   const {
@@ -424,6 +426,7 @@ export function SettingsPreferencesSection({
           i18n={i18n}
           warningThresholdPercent={settings.warningThresholdPercent}
         />
+        <ResetInsightsSettings state={{ providers: snapshots, providerSettings: providers, providerAccounts }} i18n={i18n} />
         <label
           className="settings-preferences__binary-setting settings-quota-estimate"
           data-quota-pace-forecast-setting=""

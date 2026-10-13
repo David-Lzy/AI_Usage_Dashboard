@@ -4,6 +4,7 @@ import path from "node:path";
 import process from "node:process";
 
 import { chromium } from "playwright";
+import { resolveBuildPaths } from "./lib/build-paths.mjs";
 import {
   assert,
   assertVisibleTop,
@@ -14,7 +15,7 @@ import {
 } from "./lib/surface-qa-browser-harness.mjs";
 
 const projectRoot = process.cwd();
-const extensionPath = path.join(projectRoot, "dist", "chrome");
+const extensionPath = resolveBuildPaths({ projectRoot }).chromeDir;
 const artifactDir = path.join(
   projectRoot,
   "tmp",

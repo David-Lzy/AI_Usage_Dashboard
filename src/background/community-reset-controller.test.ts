@@ -78,4 +78,12 @@ describe("optional community background controller", () => {
     await controller.poll();
     expect(read().caches.status).toMatchObject({ fragment: null, failure: "permission" });
   });
+  it("rejects an outdated preference draft rather than re-enabling another window's source", async () => {
+    const { controller, read, fetcher } = setup(true);
+    expect((await controller.handle({ type: "community-resets:update", expectedRevision: 0, preferences: { mode: "off", sources: ["codex-reset"] } })).ok).toBe(true);
+    expect((await controller.handle({ type: "community-resets:update", expectedRevision: 0, preferences: { mode: "desktop", sources: ["codex-resets"] } })).ok).toBe(false);
+    expect(read().revision).toBe(1);
+    expect(read().preferences).toEqual({ mode: "off", sources: ["codex-reset"] });
+    expect(fetcher).not.toHaveBeenCalled();
+  });
 });

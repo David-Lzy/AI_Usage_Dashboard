@@ -33,7 +33,7 @@ export function createResetNotificationController(deps: Dependencies) {
     const permission = await deps.suppressed() ? "denied" : await deps.permission();
     const observation = state ? readCurrentCreditObservation(state, capture, now()) : null;
     return { state, feed, store, capture, permission, view: { preferences: store.preferences, permission,
-      accountEligible: observation !== null && observation.availableCount !== null } satisfies ResetNotificationView };
+      accountEligible: observation !== null && observation.availableCount !== null, accountKey: observation?.accountKey ?? null } satisfies ResetNotificationView };
   }
   function invalidate() { generation += 1; }
   function evaluate() {

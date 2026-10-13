@@ -17,9 +17,8 @@ import {
   type CursorUsageUiModuleId,
 } from "../cursor-usage-ui-preferences";
 import type { CursorUsageLocalizedCopy } from "../cursor-usage-localized-copy";
-import { getProviderInsightsCopy } from "../provider-insights-copy";
-import { isResolvedAppLocale } from "../i18n";
-import { isLocalCompanionCaptureStale } from "../local-companion-settings";
+import { createRuntimeI18n, isResolvedAppLocale } from "../i18n";
+import { CursorQuotaPoolInsights } from "./CursorQuotaPoolInsights";
 import "./cursor-usage-summary.css";
 
 type CursorUsageRangeDays = 7 | 30;
@@ -256,7 +255,6 @@ export function CursorUsageSummary({
   quotaPools,
 }: CursorUsageSummaryProps) {
   const resolvedLocale = isResolvedAppLocale(locale) ? locale : "en";
-  const insightCopy = getProviderInsightsCopy(resolvedLocale);
   const [billingExpanded, setBillingExpanded] = usePersistedExpandedState(
     providerId,
     surface,
@@ -348,18 +346,6 @@ export function CursorUsageSummary({
       </header>
       {billingExpanded ? (
         <div className="cursor-usage-module__content">
-          {quotaPools?.length ? <div data-cursor-quota-pools="">
-            <p className="cursor-usage-module__empty">{copy.spendingPage}</p>
-            {quotaPools.map((pool) => {
-              const stale = isLocalCompanionCaptureStale(pool.capturedAt);
-              const label = pool.id === "cursor_models" ? "Cursor Models" : pool.id === "other_models" ? "Other Models" : "Grok Bot";
-              return <div key={pool.id}>
-                <CursorProgressRow label={label} percent={stale ? null : pool.usedPercent}
-                  valueLabel={stale ? copy.stale : pool.usedPercent === null ? copy.unavailable : `${new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(pool.usedPercent)}% ${copy.used}`} />
-                {density === "detail" ? <p className="cursor-usage-module__empty">{insightCopy.page} · {insightCopy.captured}: {formatDate(pool.capturedAt, locale)}{pool.resetText ? ` · ${pool.resetText}` : ""}</p> : null}
-              </div>;
-            })}
-          </div> : null}
           {usage.plan ? (
             <>
               <CursorProgressRow
@@ -489,6 +475,8 @@ export function CursorUsageSummary({
     <div
       className={`cursor-usage-summary cursor-usage-summary--${surface} cursor-usage-summary--${density}`}
     >
+      {quotaPools?.length && modulePreferences.some((item) => item.id === "billing_summary" && item.visible)
+        ? <CursorQuotaPoolInsights pools={quotaPools} i18n={createRuntimeI18n(resolvedLocale)} compact={density === "compact"} /> : null}
       {modulePreferences.map((preference) =>
         preference.visible ? modules[preference.id] : null,
       )}

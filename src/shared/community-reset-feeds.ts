@@ -38,6 +38,7 @@ export type CommunityResetForecast = {
   watchPercent: number | null;
   confidence: "low" | "medium" | "high" | "unknown";
   lastResetAt: string | null;
+  windowLabel?: string | null;
 };
 export type CommunityResetFragment = {
   events: CommunityResetEvent[];
@@ -150,6 +151,7 @@ export function parseCommunityResetPayload(endpoint: CommunityResetEndpoint, pay
       source: "codex-resets", capturedAt: communityTimestamp(watch.observed_at)!, expiresAt: communityTimestamp(watch.expires_at),
       watchPercent: percent(watch.reset_chance_percent), percent24h: null, percent48h: null,
       confidence: "unknown", lastResetAt: null,
+      windowLabel: summary(watch.forecast_window).slice(0, 80) || null,
     });
   } else if (endpoint === "timeline") {
     if (!Array.isArray(payload.events)) return null;
@@ -191,7 +193,7 @@ function normalizeFragment(value: unknown, source: CommunityResetSource): Commun
     return [{ source, capturedAt: communityTimestamp(raw.capturedAt)!, expiresAt: communityTimestamp(raw.expiresAt),
       percent24h: percent(raw.percent24h), percent48h: percent(raw.percent48h), watchPercent: percent(raw.watchPercent),
       confidence: raw.confidence === "low" || raw.confidence === "medium" || raw.confidence === "high" ? raw.confidence : "unknown",
-      lastResetAt: communityTimestamp(raw.lastResetAt) }];
+      lastResetAt: communityTimestamp(raw.lastResetAt), windowLabel: summary(raw.windowLabel).slice(0, 80) || null }];
   });
   return { events, forecasts, generatedAt: communityTimestamp(value.generatedAt) };
 }

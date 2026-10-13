@@ -10,7 +10,7 @@ export async function waitForDashboard(page) {
 }
 
 export async function waitForSettings(page) {
-  await page.waitForSelector("#settings-appearance");
+  await page.waitForSelector(".settings-fusion");
   await page.waitForSelector("[data-topbar-open-full-page='true']");
   await page.waitForTimeout(250);
 }
@@ -46,7 +46,8 @@ export async function collectSettingsSnapshot(page) {
       activeId: element.getAttribute("data-provider-carousel-active-id"),
       count: Number(element.getAttribute("data-provider-carousel-count") ?? "0"),
     }));
-    const uiMore = document.querySelector(".settings-preferences__more");
+    const uiMore = document.querySelector(".settings-appearance-editor");
+    const progressEditor = document.querySelector(".settings-progress-editor > summary");
     const toolbarPreviewButton = document.querySelector(
       ".settings-preferences__test-popup-button",
     );
@@ -63,12 +64,13 @@ export async function collectSettingsSnapshot(page) {
       colorDropdownTop: rectTop(
         "[data-session-popover-id='progress-color-band:high:color']",
       ),
+      colorDropdownBottom: document.querySelector("[data-session-popover-id='progress-color-band:high:color']")?.getBoundingClientRect().bottom ?? null,
       providerDisplayTop: rectTop("#settings-provider-display"),
       quickSetupTop: rectTop("#settings-quick-setup"),
       advancedTop: rectTop("#settings-advanced"),
       providerProgressDetails,
       carousels,
-      uiMoreOpen: uiMore?.getAttribute("data-open") ?? null,
+      uiMoreOpen: progressEditor?.getAttribute("aria-expanded") ?? null,
       toolbarPreviewOpen:
         toolbarPreviewButton?.getAttribute("aria-pressed") ?? null,
       toolbarPreviewMode:
@@ -82,7 +84,7 @@ export function assertVisibleTop(snapshot, key, label) {
 
   assert(typeof top === "number", `${label} top was not available.`);
   assert(
-    top >= -120 && top <= snapshot.viewportHeight * 0.8,
+    key === "colorDropdownTop" ? top >= 0 && snapshot.colorDropdownBottom <= snapshot.viewportHeight + 1 : top >= -120 && top <= snapshot.viewportHeight * 0.8,
     `${label} was not restored into view; top=${top}, viewport=${snapshot.viewportHeight}.`,
   );
 }
