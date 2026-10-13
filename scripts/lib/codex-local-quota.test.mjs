@@ -2,6 +2,23 @@ import { EventEmitter } from "node:events";
 import { PassThrough } from "node:stream";
 import { describe, expect, it } from "vitest";
 import { accountBindingDigest, normalizeCodexRateLimits, readCodexRateLimits } from "./codex-local-quota.mjs";
+import auditFixture from "../../fixtures/provider-insights/source-audit.fixture.json";
+
+describe("reviewed reset-count fixture", () => {
+  it("uses the authoritative count even when detail rows are capped", () => {
+    const parsed = normalizeCodexRateLimits(auditFixture.codex.localQuota);
+    expect(parsed.availableResetCount).toBe(4);
+    expect(auditFixture.codex.localQuota.rateLimitResetCredits.credits).toHaveLength(2);
+    expect(parsed.windows[0].durationMinutes).toBe(10080);
+    expect(parsed.accountId).toBeNull();
+  });
+
+  it("distinguishes unknown count from zero", () => {
+    const base = auditFixture.codex.localQuota;
+    expect(normalizeCodexRateLimits({ ...base, rateLimitResetCredits: auditFixture.boundaryCases.unknownResetCount }).availableResetCount).toBeNull();
+    expect(normalizeCodexRateLimits({ ...base, rateLimitResetCredits: auditFixture.boundaryCases.zeroResetCount }).availableResetCount).toBe(0);
+  });
+});
 
 const RESPONSE = {
   accountId: "private-account-id",

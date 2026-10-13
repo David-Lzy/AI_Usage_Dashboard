@@ -19,6 +19,7 @@ Status note:
 
 - [Provider Authoring Guide](./Provider_Authoring_Guide.md)
 - [Provider Setup And Display Product Contract](./Provider_Setup_Display_Product_Contract.md)
+- [Provider Insights Source Contract](./Provider_Insights_Source_Contract.md)
 - [Custom JSON Sources](./Custom_JSON_Sources.md)
 - [Experimental Local Companion Bridge](./Local_Companion_Bridge.md)
 - [Official Provider Service Status Feeds](./Official_Provider_Service_Status_Feeds.md)
