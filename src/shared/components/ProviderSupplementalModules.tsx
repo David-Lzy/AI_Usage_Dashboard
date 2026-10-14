@@ -19,8 +19,9 @@ export function ProviderSupplementalModules({ provider, i18n, surface, preferenc
     </> : null}
     {provider.providerId === "cursor-personal-page" && visible("quota_insights") && provider.usageInsights?.quotaPools?.length
       ? <CursorQuotaPoolInsights pools={provider.usageInsights.quotaPools} i18n={i18n} compact={compact} /> : null}
-    {visible("usage_composition") ? <ProviderUsageComposition provider={provider} i18n={i18n} compact={compact} /> : null}
+    {visible("usage_composition") && (surface !== "popup" || !compact || provider.usageInsights?.distribution?.values.length)
+      ? <ProviderUsageComposition provider={provider} i18n={i18n} compact={compact} /> : null}
     {compact && provider.providerId === "codex-personal-page" && isProviderUsageHistoryModuleVisible(preferences, surface, provider.providerId, "community_resets")
-      ? <CommunityResetPanelSlot i18n={i18n} compact /> : null}
+      ? <CommunityResetPanelSlot i18n={i18n} compact presentation={surface === "popup" ? "popup" : undefined} /> : null}
   </>;
 }

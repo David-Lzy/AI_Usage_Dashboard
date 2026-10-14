@@ -104,6 +104,17 @@ module is enabled; those modules start off. The feed panel is loaded on demand,
 not with the default Popup. Account quota and the toolbar percentage are never
 replaced by community percentages.
 
+Popup uses a dedicated compact presentation: event kind and reported state,
+a short UTC announcement date, one set of linked source names and an explicit
+community-not-account boundary. A keyboard/hover tooltip preserves exact
+announcement/capture times and per-source status. Source conflict remains
+visible; execution reports are never presented as personal confirmation.
+Freshness uses the event endpoints, not a newer forecast. Missing access,
+partial sources, stale data and healthy empty results remain distinct.
+An empty usage-composition module is omitted only in Popup without changing
+saved display preferences; real retained stale composition still carries its
+status. Sidebar, Dashboard and detail retain their existing presentation.
+
 Preference writes show confirmed success or a retryable failure. A revision
 check rejects stale drafts from another window rather than silently restoring
 disabled sources. Manual refresh observes the same cache and backoff boundaries

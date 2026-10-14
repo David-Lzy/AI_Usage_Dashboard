@@ -302,6 +302,19 @@ variants across the existing sizes/styles/browsing modes. Source tabs, account
 state and the user's loaded extension are not used. The surface-extension gate
 also honors `AI_USAGE_BUILD_ROOT`; use an isolated build for it.
 
+`node scripts/check-popup-community-summary.mjs` compares the unchanged compact
+baseline with the Popup-only summary at 344/392/520px in en/zh-CN/ar and both
+themes. It checks twelve synthetic event/failure scenarios, exact-time tooltip
+visibility and keyboard/hover access, source attribution, RTL and overflow.
+The Chinese stale fixture must use at most 70% of the baseline content height.
+`--browser=firefox` selects source rendering in Firefox; `--quick` is one Chinese
+layout smoke. Evidence is kept under ignored `.local/qa/provider-insights/826/`.
+For the real Chrome action target, `check-fusion-native-popup.mjs --community`
+enables the new panel and absent-composition regression across all size/mode
+combinations; `--locales=<comma-separated-locales>` expands language coverage.
+It retains the existing menu, focus, automatic-scroll and snapshot checks.
+Use an isolated build and profile, never the owner's loaded package/state.
+
 `node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
 exercises actual extension preference writes and notification persistence while
 holding, rejecting and reordering transport acknowledgements. It verifies that

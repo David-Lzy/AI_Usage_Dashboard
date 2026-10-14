@@ -10,8 +10,9 @@ import { MotionDetails } from "./MotionDetails";
 import "./provider-insights.css";
 import { useEffect, useState } from "react";
 import { getExtensionApiNamespace, hasExtensionRuntime } from "../extension-api";
+import { CommunityResetPopupSummary } from "./CommunityResetPopupSummary";
 
-export function CommunityResetPanel({ i18n, compact = false, store: supplied }: { i18n: RuntimeI18n; compact?: boolean; store?: CommunityResetStore }) {
+export function CommunityResetPanel({ i18n, compact = false, presentation, store: supplied }: { i18n: RuntimeI18n; compact?: boolean; presentation?: "popup"; store?: CommunityResetStore }) {
   const { view, loading, failed } = useCommunityResetView();
   const store = supplied ?? view.store;
   const copy = getCommunityResetCopy(i18n.resolvedLocale), ui = getProviderInsightsUiCopy(i18n.resolvedLocale), meta = getProviderInsightsCopy(i18n.resolvedLocale);
@@ -24,12 +25,12 @@ export function CommunityResetPanel({ i18n, compact = false, store: supplied }: 
     document.addEventListener("visibilitychange", update);
     return () => { clearInterval(timer); document.removeEventListener("visibilitychange", update); };
   }, [store.preferences.mode]);
-  if (!supplied && failed) return <section className="provider-insights" data-community-resets="unavailable">
+  if (!supplied && failed) return presentation === "popup" ? <CommunityResetPopupSummary i18n={i18n} store={store} now={now} failed detailUrl="#settings/section/settings-usage-notifications" external={false} /> : <section className="provider-insights" data-community-resets="unavailable">
     <h3 className="provider-insights__title">{ui.communityTitle}</h3>
     <p className="supporting-copy" role="status">{copy.unavailable}</p>
     <a className="text-button text-button--inline" href="#settings/section/settings-usage-notifications">{i18n.t("common.actions.settings")}</a>
   </section>;
-  if (!supplied && loading || store.preferences.mode === "off") return compact ? null : <section className="provider-insights" data-community-resets="off">
+  if (!supplied && loading || store.preferences.mode === "off") return compact || presentation === "popup" ? null : <section className="provider-insights" data-community-resets="off">
     <h3 className="provider-insights__title">{ui.communityTitle}</h3>
     <p className="supporting-copy">{loading ? quota.loading : quota.modeOff}</p>
     <a className="text-button text-button--inline" href="#settings/section/settings-usage-notifications">{i18n.t("common.actions.settings")}</a>
@@ -38,6 +39,7 @@ export function CommunityResetPanel({ i18n, compact = false, store: supplied }: 
   const api = getExtensionApiNamespace();
   const detailUrl = hasExtensionRuntime(api) && api?.runtime?.getURL
     ? `${api.runtime.getURL("src/sidepanel/index.html")}?surface=full-page#provider-detail/codex-personal-page` : "#provider-detail/codex-personal-page";
+  if (presentation === "popup") return <CommunityResetPopupSummary i18n={i18n} store={store} now={now} detailUrl={detailUrl} external={hasExtensionRuntime(api)} />;
   const sources = store.preferences.sources;
   const sourceMetadata = (source: CommunityResetSource) => {
     const caches = Object.entries(store.caches).filter(([endpoint]) => COMMUNITY_RESET_ENDPOINTS[endpoint as keyof typeof COMMUNITY_RESET_ENDPOINTS].source === source).map(([, cache]) => cache!);
