@@ -194,6 +194,7 @@ try {
         await page.evaluate(() => { window.__insightsQa.state.providers.find((provider) => provider.providerId === "codex-personal-page").codexLocal.accountVerified = false; window.__insightsQa.remount(); });
         await settings.locator(':scope[aria-busy="false"]').waitFor();
         assert.equal(await settings.locator('[data-settings-material-select="account-reset-card-mode"] mdui-menu-item[value="on"]').count(), 0);
+        await settings.locator('[data-account-reset-unavailable]').waitFor({ state: "visible" });
         await select(communityField, "off");
         await page.evaluate(() => window.__insightsQa.stallNextPoll());
         await communityField.locator('input:not(.hidden-input)').click();

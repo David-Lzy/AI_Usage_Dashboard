@@ -60,6 +60,7 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
   const grantEnabled = notifications?.preferences.grantAccountKeys.includes(accountKey) === true;
   const accountEligible = notifications?.accountEligible === true && notifications.accountKey === accountKey;
   const grantMode = !grantEnabled ? "off" : notifications?.preferences.accountPaused ? "paused" : "on";
+  const accountNotice = !runtime ? copy.previewUnavailable : notifications && !accountEligible ? ui.accountGrantUnavailable : null;
   async function operation(work: () => Promise<void>) {
     if (pending.current) return;
     pending.current = true; retry.current = work;
@@ -140,9 +141,12 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
       <FusionSelect<CommunityResetMode> label={ui.communityTitle} value={preferences?.mode ?? "off"} fieldIdPrefix="community-reset-mode"
         disabled={!runtime || busy || !preferences} options={[{ value: "off", label: quota.modeOff }, { value: "in_app", label: copy.inApp }, { value: "desktop", label: copy.desktop }]}
         onChange={changeMode} />
-      <FusionSelect<"off" | "on" | "paused"> label={copy.grantSubscription} value={grantMode} fieldIdPrefix="account-reset-card-mode"
-        disabled={!runtime || busy || !notifications || !accountEligible && !grantEnabled}
-        options={grantOptions} onChange={changeGrant} />
+      <div className="reset-insights-settings__account">
+        <FusionSelect<"off" | "on" | "paused"> label={copy.grantSubscription} value={grantMode} fieldIdPrefix="account-reset-card-mode"
+          disabled={!runtime || busy || !notifications || !accountEligible && !grantEnabled}
+          options={grantOptions} onChange={changeGrant} />
+        {accountNotice ? <p className="supporting-copy" data-account-reset-unavailable="">{accountNotice}</p> : null}
+      </div>
     </div>
     <div className="reset-insights-settings__sources">
       {COMMUNITY_RESET_SOURCES.map((source) => <div className="reset-insights-settings__source" key={source}>
@@ -153,7 +157,7 @@ export function ResetInsightsSettings({ state, i18n }: { state: State; i18n: Run
       </div>)}
     </div>
     <p className="supporting-copy">{copy.warning}</p>
-    <p className="supporting-copy">{!runtime ? copy.previewUnavailable : notifications && !accountEligible ? fixed.unverified : fixed.earlyUnavailable}</p>
+    {!accountNotice ? <p className="supporting-copy">{fixed.earlyUnavailable}</p> : null}
     <ControlVisibilityBoundary animate hidden={preferences?.mode !== "desktop"} className="reset-insights-settings__desktop"
       data-motion-focus-target={'[data-fusion-field="community-reset-mode"] mdui-select'}>
       <FusionCheckbox checked={notifications?.preferences.communityPaused === true} disabled={busy || !notifications}

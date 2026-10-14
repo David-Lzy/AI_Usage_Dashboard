@@ -1,5 +1,7 @@
-.reset-insights-settings { padding-block: 20px; margin-block-start: 16px; border-block-start: 1px solid var(--app-supporting-surface-border); min-inline-size: 0; }
-.reset-insights-settings__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; max-inline-size: 900px; }
+.reset-insights-settings { grid-column: 1 / -1; padding-block: 20px; margin-block-start: 16px; border-block-start: 1px solid var(--app-supporting-surface-border); min-inline-size: 0; }
+.reset-insights-settings__fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; align-items: start; }
+.reset-insights-settings__account { min-inline-size: 0; }
+.reset-insights-settings__account > .supporting-copy { margin-block: 8px 0; }
 .reset-insights-settings__sources { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-block: 12px; }
 .reset-insights-settings__source { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-inline-size: 0; }
 .reset-insights-settings__source > mdui-checkbox { max-inline-size: 100%; }

@@ -2,7 +2,23 @@ import type { ResolvedAppLocale } from "./i18n";
 
 type Copy = { quotaTitle: string; compositionTitle: string; communityTitle: string; modulesTitle: string; modulesDetail: string;
   usageScope: string; compositionNote: string; noComposition: string; period: string; knownExpiry: string; expiryUnknown: string;
-  monthly: string; weekly: string; used: string; sourcePeriod: string; expired: string };
+  monthly: string; weekly: string; used: string; sourcePeriod: string; expired: string; accountGrantUnavailable: string };
+const ACCOUNT_GRANT_UNAVAILABLE: Record<ResolvedAppLocale, string> = {
+  en: "Requires a fresh local Codex snapshot with verified identity and a known available reset-card count.",
+  "zh-CN": "需要可核对身份的有效 Codex 本地快照，且可用重置卡数量已知。",
+  "zh-TW": "需要可核對身分的有效 Codex 本機快照，且可用重置卡數量已知。",
+  ja: "本人確認済みの最新のローカル Codex データと、利用可能なリセットカード数が必要です。",
+  ko: "계정이 확인된 최신 로컬 Codex 스냅샷과 확인된 사용 가능한 리셋 카드 수가 필요합니다.",
+  "es-419": "Requiere datos locales recientes de Codex con identidad verificada y un número conocido de tarjetas de reinicio disponibles.",
+  "pt-BR": "Requer dados locais recentes do Codex com identidade verificada e quantidade conhecida de cartões de redefinição disponíveis.",
+  fr: "Nécessite des données locales récentes de Codex avec une identité vérifiée et un nombre connu de cartes de réinitialisation disponibles.",
+  de: "Erfordert aktuelle lokale Codex-Daten mit bestätigter Identität und bekannter Anzahl verfügbarer Reset-Karten.",
+  it: "Richiede dati locali recenti di Codex con identità verificata e un numero noto di carte di ripristino disponibili.",
+  ru: "Нужны актуальные локальные данные Codex с подтверждённой учётной записью и известным числом доступных карт сброса.",
+  ar: "يتطلب بيانات Codex محلية حديثة بهوية مؤكدة وعدد معروف من بطاقات إعادة الضبط المتاحة.",
+  hi: "सत्यापित पहचान वाला ताज़ा स्थानीय Codex डेटा और उपलब्ध रीसेट कार्डों की ज्ञात संख्या आवश्यक है।",
+  id: "Memerlukan data Codex lokal terbaru dengan identitas terverifikasi dan jumlah kartu reset tersedia yang diketahui.",
+};
 const EXPIRED: Record<ResolvedAppLocale, string> = { en: "Expired", "zh-CN": "已到期", "zh-TW": "已到期", ja: "期限切れ", ko: "만료됨", "es-419": "Vencido", "pt-BR": "Expirado", fr: "Expiré", de: "Abgelaufen", it: "Scaduto", ru: "Истекло", ar: "منتهي الصلاحية", hi: "समाप्त", id: "Kedaluwarsa" };
 const VALUES: Record<ResolvedAppLocale, [string, string, string, string, string, string, string, string, string, string, string, string, string, string, string]> = {
   en: ["Quota and reset insights", "Usage composition", "Community summary", "History and supplemental modules", "Popup / sidebar / full page", "Usage scope: Work / Codex / agents", "Share of usage, not remaining quota", "Composition is not exposed by this source", "Period", "Nearest known expiry", "Exact expiry unknown", "Monthly", "Weekly", "used", "Reset timing shown by the source"],
@@ -22,5 +38,5 @@ const VALUES: Record<ResolvedAppLocale, [string, string, string, string, string,
 };
 export function getProviderInsightsUiCopy(locale: ResolvedAppLocale): Copy {
   const [quotaTitle, compositionTitle, communityTitle, modulesTitle, modulesDetail, usageScope, compositionNote, noComposition, period, knownExpiry, expiryUnknown, monthly, weekly, used, sourcePeriod] = VALUES[locale];
-  return { quotaTitle, compositionTitle, communityTitle, modulesTitle, modulesDetail, usageScope, compositionNote, noComposition, period, knownExpiry, expiryUnknown, monthly, weekly, used, sourcePeriod, expired: EXPIRED[locale] };
+  return { quotaTitle, compositionTitle, communityTitle, modulesTitle, modulesDetail, usageScope, compositionNote, noComposition, period, knownExpiry, expiryUnknown, monthly, weekly, used, sourcePeriod, expired: EXPIRED[locale], accountGrantUnavailable: ACCOUNT_GRANT_UNAVAILABLE[locale] };
 }

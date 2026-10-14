@@ -287,6 +287,14 @@ and synthetic screenshots remain under `.local/qa/provider-insights/823/`.
 It also verifies that Off cancels a slow refresh without locking preference
 controls, and that background reads preserve explicit failed-write feedback.
 
+`node scripts/check-reset-settings-layout.mjs --extension=<isolated-chrome>`
+checks the actual packaged Settings embedding, not only a standalone control.
+It covers 14 locales, light/dark and 1440/1100/900/390/320px, asserting full-width
+placement in the outer grid, wide two-column/narrow stacking, RTL, overflow,
+unverified-account feedback and unchanged Off after opening/closing a menu.
+Profiles/data are owned and synthetic, remote requests are forbidden and no
+permissions or desktop notifications are exercised.
+
 `node scripts/check-fusion-native-popup.mjs --extension=<isolated-build>
 --insights` exercises the new summaries in the real Chrome action target. It
 uses a fresh profile, offline screenshot lock and single/multiple-window fixture

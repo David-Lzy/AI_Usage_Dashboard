@@ -1,6 +1,6 @@
 # Community Reset Insights
 
-Date: 2026-10-13
+Date: 2026-10-14
 
 Document class:
 
@@ -90,6 +90,11 @@ content available. Pause and test apply to the new desktop scope, not to the
 existing quota threshold. Available-card alerts have their own Off / On / Paused
 selector and remain unavailable when the current local account is unverified.
 An already granted notifications permission is reused, not treated as denial.
+The two selectors share a full-width row when space permits and stack on narrow
+surfaces. The account selector's nearby unavailable message requires a fresh
+verified local snapshot and a known authoritative available-card count. Browser
+quota access or pairing alone does not establish those conditions; an unknown
+count is not a real zero. The existing eligibility and permission rules remain.
 
 The Settings detail link works without a connected Codex account. Codex detail
 contains the attributed timeline, classification/conflicts, source capture times
