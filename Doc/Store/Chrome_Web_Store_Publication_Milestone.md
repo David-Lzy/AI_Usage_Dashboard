@@ -16,9 +16,10 @@ Status note:
 - AI Usage Dashboard has a live Chrome Web Store listing
 - a direct public-page fetch displayed `0.2.2`, updated October 5, 2026,
   on 2026-10-16; authenticated Store API status confirms manifest `0.2.2.0`
-  as `PUBLISHED` at 100%, with no submitted revision
-- GitHub Release `v0.2.2` is stable and provides verified browser-specific
-  packages and checksums; its Chrome manifest is `0.2.2.0`
+  as `PUBLISHED` at 100%, with `0.2.3.0` subsequently submitted as
+  `PENDING_REVIEW` at 100%
+- GitHub Release `v0.2.3` is stable and provides verified browser-specific
+  packages and checksums; its Chrome manifest is `0.2.3.0`
 - the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
   updated listing and images were saved in the Developer Dashboard and the
   revision was submitted for review once with automatic publication after
@@ -31,8 +32,14 @@ Status note:
   and the same package was resubmitted without another upload. Automatic
   publication after approval remained selected. The subsequent publication is
   independently confirmed above; no exact approval time is inferred.
-- source version `0.2.3` is being prepared for release; its GitHub tag, Store
-  upload and review submission are not yet confirmed
+- GitHub `v0.2.3` was published on 2026-10-16 UTC after successful PR, main
+  and tag workflows. Downloaded tag packages passed checksum, ZIP integrity
+  and manifest/browser-transform checks. The tag workflow skipped Store upload
+  because repository credentials are not configured; the authenticated local
+  API accepted the exact Chrome tag ZIP once as a draft. After all 14 description
+  fields passed saved readback and permission explanations were updated, the
+  Dashboard accepted one review submission. The authenticated API confirms
+  `0.2.3.0` as `PENDING_REVIEW` at 100%; public availability is not yet confirmed
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -47,6 +54,19 @@ Status note:
   2026. The authenticated API confirmed `0.2.2.0` as `PUBLISHED` at 100%
   with no submitted revision. This supersedes the historical pending/rejected
   checkpoints below without inventing an approval timestamp.
+- [GitHub Release v0.2.3](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.3)
+  was published on 2026-10-16 UTC with Chrome, unsigned Firefox local-beta and
+  checksum assets. An authenticated Store upload accepted manifest `0.2.3.0`.
+  The post-upload status still reports `0.2.2.0` as `PUBLISHED` at 100% and no
+  submitted revision. This is an uploaded-draft checkpoint, not review or rollout.
+  Later on the same day, the Dashboard accepted its combined package/metadata
+  submission with automatic publication after approval selected. The API then
+  reported `0.2.3.0` as `PENDING_REVIEW` at 100%, while `0.2.2.0` remained
+  `PUBLISHED` at 100%. Six maintained descriptions and eight English fallbacks
+  were verified after reload; optional notification, alarm and single-purpose
+  explanations now include the opt-in community behavior. The icon and existing
+  B fusion galleries were retained, not claimed as newly uploaded 0.2.3 images.
+  No second ZIP upload or review request occurred.
 - On 2026-10-04 UTC, the public listing displayed `0.2.1` and an update date
   of September 25, 2026. The authenticated API confirmed manifest `0.2.1.0`
   as `PUBLISHED` at 100%. The later post-submission query confirmed manifest
@@ -203,8 +223,7 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Prepare the 0.2.3 tag-scoped package and current listing metadata. Do not
-  repeat the completed 0.2.2 upload or review request.
+- Await 0.2.3 review without repeating the accepted ZIP upload or review request.
 - Verify both authenticated API publication state and public-page rollout
   before calling 0.2.3 available on the Store. Keep uploaded, submitted,
   and published states distinct. If rejected, inspect the specific reason

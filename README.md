@@ -15,10 +15,10 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
-Version 0.2.2 is available from the Chrome Web Store and GitHub. Source version
-0.2.3 adds the provider insights and optional community notifications described
-below; its release is being prepared. Upload, review and public rollout are
-tracked separately.
+Version 0.2.3 is available on GitHub with the provider insights and optional
+community notifications described below. The Chrome Web Store still serves
+0.2.2; the exact 0.2.3 tag package and updated listing copy were submitted for
+review on October 16, 2026. Submission is not public availability.
 
 ![AI Usage Dashboard 0.2.2](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
 
@@ -270,14 +270,15 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 
 - The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
   displays `0.2.2`, verified on 2026-10-16. The authenticated Store API
-  reports manifest `0.2.2.0` as `PUBLISHED` at 100%, with no pending submission.
+  reports manifest `0.2.2.0` as `PUBLISHED` at 100%, with `0.2.3.0` pending review.
 - Source package version: `0.2.3`; Chrome manifest version: `0.2.3.0`.
-- GitHub Release [`v0.2.2`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.2)
+- GitHub Release [`v0.2.3`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.3)
   is stable and provides verified Chrome and unsigned Firefox local-beta
   packages plus `SHA256SUMS.txt`. Its tag workflow and downloaded hashes passed
-  on 2026-10-04 UTC.
-- The 0.2.3 release is being prepared; its tag, packages and Store submission
-  are not yet confirmed. The published 0.2.2 package remains the Store baseline.
+  on 2026-10-16 UTC.
+- On 2026-10-16 UTC, the authenticated Store API confirmed `0.2.3.0` as
+  `PENDING_REVIEW` at 100%, with automatic publication after approval selected.
+  The published 0.2.2 package remains the Store baseline until approval and rollout.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 
