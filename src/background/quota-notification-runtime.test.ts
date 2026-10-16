@@ -60,7 +60,7 @@ describe("notification runtime permissions and local storage", () => {
     const create = vi.fn(async () => "id");
     vi.stubGlobal("chrome", { runtime: { id: "qa", getURL: (path: string) => `chrome-extension://qa/${path}` }, permissions: { contains: async () => true }, notifications: { create }, storage: { local: {
       get: async (key: string) => key === APP_STATE_STORAGE_KEY ? { [key]: state } : key === QUOTA_NOTIFICATION_STORAGE_KEY ? { [key]: store } : {},
-      set: async (value: Record<string, typeof store>) => { store = value[QUOTA_NOTIFICATION_STORAGE_KEY]; },
+      set: async (value: Record<string, typeof store>) => { if (Object.hasOwn(value, QUOTA_NOTIFICATION_STORAGE_KEY)) store = value[QUOTA_NOTIFICATION_STORAGE_KEY]; },
     } } });
     await quotaNotificationController.evaluate();
     snapshot.lastAttemptAt = snapshot.lastSuccessAt = new Date(now - 1000).toISOString();

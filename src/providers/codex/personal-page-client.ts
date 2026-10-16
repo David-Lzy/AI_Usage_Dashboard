@@ -1,5 +1,5 @@
 import personalPageLiveFixture from "../../../fixtures/codex/personal-page-live.fixture.json";
-import type { ProviderPageBinding, SyncTrigger } from "../types";
+import type { ProviderPageBinding, ProviderUsageInsights, SyncTrigger } from "../types";
 import {
   createPageSessionClient,
   hasLivePageSessionApis,
@@ -25,6 +25,8 @@ import {
   type CodexSessionApiClient,
   type CodexSessionApiFailureCode,
 } from "./session-api-client";
+import { captureOpenUsageInsights } from "../usage-insights-dom";
+import { mergeProviderUsageInsights } from "../../shared/provider-usage-insights";
 
 export type CodexPersonalPageClientOptions = {
   source?: "fixture" | "live";
@@ -45,6 +47,7 @@ export type CodexPersonalPageUsageResult = {
     retryAt: number | null;
   };
   replacePreviousSnapshot?: boolean;
+  usageInsights?: ProviderUsageInsights;
   result: CodexPersonalParseResult;
   pageBinding: ProviderPageBinding;
 };
@@ -298,16 +301,23 @@ export function createCodexPersonalPageClient(
       }
 
       const trigger = options.trigger ?? "manual";
+      const deadlineMs = Math.max(1, options.deadlineMs ?? (trigger === "manual"
+        ? CODEX_MANUAL_REFRESH_DEADLINE_MS : CODEX_AUTOMATIC_REFRESH_DEADLINE_MS));
+      const deadlineAt = Date.now() + deadlineMs;
       const refreshPromise = (async (): Promise<CodexPersonalPageUsageResult> => {
         const directResult = await (
           options.sessionApiClient ?? codexSessionApiClient
         ).getUsageSnapshot(trigger);
 
         if (directResult.ok) {
+          // Optional context cannot displace an already successful quota result.
+          const usageInsights = await captureOpenUsageInsights("codex", options.pageSessionClient ?? createPageSessionClient(), normalizedBinding,
+            Math.max(0, deadlineAt - Date.now() - 50));
           return {
             captureSource: "session_api",
             replacePreviousSnapshot: directResult.replacePreviousSnapshot,
-            result: directResult.result,
+            result: directResult.result.status === "ok" ? { ...directResult.result,
+              snapshot: { ...directResult.result.snapshot, usageInsights } } : directResult.result,
             pageBinding: normalizedBinding,
           };
         }
@@ -361,10 +371,14 @@ export function createCodexPersonalPageClient(
         }
 
         const routeForBinding = chooseBindingRoute(fixture);
+        const usageInsights = fixture.routes.reduce<ProviderUsageInsights | undefined>((merged, route) => mergeProviderUsageInsights(route.usageInsights, merged), undefined);
+        if (result.status === "ok") result = { ...result, snapshot: { ...result.snapshot,
+          usageInsights: mergeProviderUsageInsights(usageInsights, result.snapshot.usageInsights) } };
 
         return {
           captureSource: "page_parse",
           directApiFailure: directResult,
+          ...(usageInsights ? { usageInsights } : {}),
           result,
           pageBinding: routeForBinding
             ? buildBindingFromRouteCapture(
@@ -375,14 +389,6 @@ export function createCodexPersonalPageClient(
             : normalizedBinding,
         };
       })();
-      const deadlineMs = Math.max(
-        1,
-        options.deadlineMs ??
-          (trigger === "manual"
-            ? CODEX_MANUAL_REFRESH_DEADLINE_MS
-            : CODEX_AUTOMATIC_REFRESH_DEADLINE_MS),
-      );
-
       return settleWithinDeadline(refreshPromise, deadlineMs, () => ({
         captureSource: "page_parse",
         directApiFailure: {

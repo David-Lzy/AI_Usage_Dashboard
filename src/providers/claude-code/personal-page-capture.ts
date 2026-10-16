@@ -12,6 +12,7 @@ import {
   MAX_CLAUDE_PERSONAL_RESPONSE_LENGTH,
   type ClaudePersonalUsageContract,
 } from "./personal-usage-contract";
+import type { ProviderUsageInsights } from "../types";
 
 export type ClaudePersonalRouteKey = "settings_usage";
 
@@ -52,6 +53,7 @@ export type ClaudePersonalRouteCapture = {
   matchedTitle: string | null;
   summary: ClaudePersonalPageSummary | null;
   usageContract: ClaudePersonalUsageContract | null;
+  usageInsights?: ProviderUsageInsights;
 };
 
 export type ClaudePersonalLiveFixture = {
@@ -179,6 +181,8 @@ function isLoggedOutOrUpgradeClaudePage(page: PageSessionCapturedPage): boolean 
   const url = page.url.toLowerCase();
   const title = page.title.toLowerCase();
   const visibleText = toTextLines(page.html).join("\n").toLowerCase();
+  if (!page.usageInsights && !/\d{1,3}\s*[%％]/.test(visibleText)
+    && /<(?:button|a)[^>]*>\s*(?:log in|sign in|登录|登入)\s*<\//i.test(page.html)) return true;
 
   if (parsedUrl?.hostname !== "claude.ai") {
     return true;
@@ -345,6 +349,7 @@ async function captureRoute(
       : {}),
     extraction: {
       mode: "network_observer",
+      usageProvider: "claude",
       matchUrlSubstrings: [...CLAUDE_PERSONAL_USAGE_MATCH_SUBSTRINGS],
       requiredMatchUrlSubstrings: [CLAUDE_USAGE_ENDPOINT_SUFFIX],
       maxEntries: 8,
@@ -393,6 +398,7 @@ async function captureRoute(
       ? { ...summary, recommendedSurface: "network_observer" }
       : summary,
     usageContract,
+    usageInsights: result.page.usageInsights,
   };
 }
 

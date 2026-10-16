@@ -29,6 +29,23 @@ function normalizedWindow(raw, key) {
   };
 }
 
+function epochTime(value) {
+  return Number.isSafeInteger(value) && value > 0 && value * 1000 <= 8.64e15
+    ? new Date(value * 1000).toISOString() : null;
+}
+
+function resetCreditSummary(raw, count, observedAt, accountId) {
+  const offers = Array.isArray(raw?.credits) ? raw.credits.slice(0, 32).flatMap((credit) => {
+    if (!record(credit) || typeof credit.status !== "string") return [];
+    return [{ kind: credit.resetType === "codexRateLimits" ? "codex" : "unknown",
+      available: credit.status === "available" ? true : credit.status === "expired" ? false : null,
+      expiresAt: epochTime(credit.expiresAt) }];
+  }) : null;
+  return { source: "local_companion", capturedAt: observedAt, accountVerified: accountId !== null,
+    availableCount: count, offers, detailsComplete: offers === null || count === null ? null
+      : offers.filter((offer) => offer.available).length >= count };
+}
+
 export function normalizeCodexRateLimits(raw, observedAt = new Date().toISOString()) {
   if (!record(raw)) throw new Error("codex_invalid_response");
   const primary = record(raw.rateLimitsByLimitId) && record(raw.rateLimitsByLimitId.codex)
@@ -43,12 +60,20 @@ export function normalizeCodexRateLimits(raw, observedAt = new Date().toISOStrin
   if (resetCount !== undefined && resetCount !== null && (!Number.isSafeInteger(resetCount) || resetCount < 0)) {
     throw new Error("codex_invalid_response");
   }
+  const accountId = typeof raw.accountId === "string" && raw.accountId.length > 0 && raw.accountId.length <= 256
+    ? raw.accountId : null;
+  const additionalWindows = record(raw.rateLimitsByLimitId) ? Object.entries(raw.rateLimitsByLimitId)
+    .filter(([id]) => id !== "codex" && /^[a-z][a-z0-9_.-]{0,47}$/.test(id))
+    .slice(0, 8).flatMap(([id, limits]) => record(limits) ? [
+      normalizedWindow(limits.primary, `${id}:primary`), normalizedWindow(limits.secondary, `${id}:secondary`),
+    ].filter(Boolean) : []) : [];
   return {
     observedAt,
-    accountId: typeof raw.accountId === "string" && raw.accountId.length > 0 && raw.accountId.length <= 256
-      ? raw.accountId : null,
+    accountId,
     windows,
     availableResetCount: resetCount ?? null,
+    resetCredits: resetCreditSummary(raw.rateLimitResetCredits, resetCount ?? null, observedAt, accountId),
+    additionalWindows,
   };
 }
 
@@ -76,6 +101,7 @@ export function readCodexRateLimits({ codexHome, codexBin = "codex", timeoutMs =
     const decoder = new StringDecoder("utf8");
     let bytes = 0;
     let initialized = false;
+    let detailFallback = false;
     const finish = (error, value) => {
       if (finished) return;
       finished = true;
@@ -106,8 +132,13 @@ export function readCodexRateLimits({ codexHome, codexBin = "codex", timeoutMs =
           if (message.error) { finish("codex_unsupported"); return; }
           initialized = true;
           child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", method: "initialized", params: {} })}\n`);
-          child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id: 2, method: "account/rateLimits/read", params: { excludeResetCreditDetails: true } })}\n`);
-        } else if (message.id === 2) {
+          child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id: 2, method: "account/rateLimits/read", params: { excludeResetCreditDetails: false } })}\n`);
+        } else if (message.id === 2 || detailFallback && message.id === 3) {
+          if (message.error?.code === -32602 && !detailFallback) {
+            detailFallback = true;
+            child.stdin.write(`${JSON.stringify({ jsonrpc: "2.0", id: 3, method: "account/rateLimits/read", params: { excludeResetCreditDetails: true } })}\n`);
+            continue;
+          }
           if (message.error) { finish("codex_quota_unavailable"); return; }
           try { finish(null, normalizeCodexRateLimits(message.result)); }
           catch { finish("codex_invalid_response"); }

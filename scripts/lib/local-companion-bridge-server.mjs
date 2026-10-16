@@ -556,7 +556,9 @@ export function createLocalCompanionBridge(options) {
             observedAt: quota.observedAt,
             accountDigest: accountBindingDigest(requestToken, quota.accountId),
             windows: quota.windows,
-            availableResetCount: quota.availableResetCount,
+            availableResetCount: confirmed.availableResetCount,
+            ...(confirmed.resetCredits ? { resetCredits: confirmed.resetCredits } : {}),
+            ...(quota.additionalWindows?.length ? { additionalWindows: quota.additionalWindows } : {}),
             estimates,
           };
         });

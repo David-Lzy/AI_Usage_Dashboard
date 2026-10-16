@@ -5,6 +5,8 @@ import type { CursorUsageBilling } from "../../providers/types";
 import { buildCursorUsageLocalizedCopy } from "../cursor-usage-localized-copy";
 import type { WebStorageLike } from "../local-storage";
 import { CursorUsageSummary } from "./CursorUsageSummary";
+import poolFixture from "../../../fixtures/cursor/quota-pools-dom.fixture.json";
+import { buildUsageInsightsFromDom, type UsageInsightsDomCapture } from "../../providers/usage-insights-dom";
 
 function useModulePreferences(
   preferences: unknown,
@@ -105,6 +107,20 @@ describe("CursorUsageSummary", () => {
     vi.unstubAllGlobals();
   });
 
+  it("renders named used quotas separately from legacy API value and paid charges", () => {
+    const pools = buildUsageInsightsFromDom("cursor", poolFixture as UsageInsightsDomCapture, new Date().toISOString())!.quotaPools;
+    const html = renderToStaticMarkup(<CursorUsageSummary copy={buildCursorUsageLocalizedCopy("en")} locale="en" providerId="cursor-personal-page"
+      surface="fullPage" density="detail" usage={USAGE} quotaPools={pools} />);
+    expect(html).toContain("Cursor Models");
+    expect(html).toContain("32% used");
+    expect(html).toContain("68% used");
+    expect(html).toContain("0% used");
+    expect(html).toContain("Usage limits reset on Nov 30");
+    expect(html).toContain("Actual charge: $3.50");
+    expect(html).toContain("Auto · legacy API");
+    expect(html).not.toContain("32% remaining");
+  });
+
   it("distinguishes plan value from actual On-Demand charges", () => {
     const html = renderToStaticMarkup(
       <CursorUsageSummary
@@ -118,8 +134,8 @@ describe("CursorUsageSummary", () => {
 
     expect(html).toContain("Plan usage value");
     expect(html).toContain("Actual charge: $3.50");
-    expect(html).toContain("Included model pool");
-    expect(html).toContain("Third-party API pool");
+    expect(html).toContain("Auto · legacy API");
+    expect(html).toContain("API · legacy API");
     expect(html).toContain("Cursor model A");
     expect(html).toContain('role="progressbar"');
   });

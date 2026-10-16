@@ -1,6 +1,6 @@
 # Cursor Provider Note
 
-Date: 2026-07-17
+Date: 2026-10-13
 
 Process rule:
 
@@ -18,6 +18,32 @@ Status note:
 
 - this provider note should track the current selected source path, support boundary, and official-source basis for Cursor
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
+
+## October 13 Independent Pools (Work Branch)
+
+Cursor Spending was read-only reviewed on October 13: Cursor Models and Other
+Models have distinct literal used percentages; Grok Bot has a separate weekly
+allowance. This update adds bounded optional `usageInsights.quotaPools`, with
+stable IDs, source, successful capture time and reset precision per pool.
+The two model pools follow the documented monthly billing cycle; a missing
+pool is not inferred from Pro/Start/Ultra plan names. Missing percentages stay
+unknown. A date-only monthly reset hint or "Resets weekly" is not an exact
+timestamp and cannot provide confirmed notification reset evidence.
+
+The known background summary, plan/hard-limit and aggregate token-history
+contracts remain unchanged. Their legacy Auto/API percentages are displayed
+as legacy API statistics, not relabeled as Cursor Models/Other Models. Router
+and Auto can draw from both pools, so those identities are not interchangeable.
+The added percentages are independent usage measures, not money; they do not
+replace toolbar percentage semantics or alter paid/included history/export.
+
+Optional pool capture reads an already-open Spending tab without focusing or
+reloading it, within a bounded deadline. Billing summary still works without a
+dashboard renderer; frozen/missing Spending data does not fail valid billing.
+Unknown new dashboard endpoint names remain unsupported until their response
+schemas are independently reviewed. No purchase, plan-change or On-Demand
+enablement controls are added. See [Cursor usage and limits](https://prod.cursor.com/help/models-and-usage/usage-limits)
+and the [source contract](../Product/Provider_Insights_Source_Contract.md).
 
 Post-0.2.0-rc.1 background session update:
 

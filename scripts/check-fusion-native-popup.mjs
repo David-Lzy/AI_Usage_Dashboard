@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+import { providerInsightsQaOverrides, communityResetQaStore } from "./lib/provider-insights-qa-fixtures.mjs";
 
 const arg = (name) =>
   process.argv
@@ -17,7 +18,7 @@ assert(
 const manifest = JSON.parse(
   await readFile(path.join(extensionPath, "manifest.json"), "utf8"),
 );
-const root = path.resolve("tmp/output/playwright/fusion-native-popup");
+const root = path.resolve(arg("--output-root") ?? "tmp/output/playwright/fusion-native-popup");
 await mkdir(root, { recursive: true });
 const output = await mkdtemp(path.join(root, "run-"));
 const loader = await createServer({
@@ -104,7 +105,7 @@ try {
   context = await chromium.launchPersistentContext(
     path.join(output, "profile"),
     {
-      executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE,
+      ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : { channel: "chromium" }),
       headless: true,
       offline: true,
       viewport: { width: 1440, height: 900 },
@@ -142,6 +143,19 @@ try {
       ])
         for (const [index, style] of styles.entries()) {
           const state = structuredClone(fixture);
+          if (process.argv.includes("--insights")) {
+            const overrides = providerInsightsQaOverrides(Date.now(), size === "wide" ? 1 : 2);
+            state.providers = state.providers.map((snapshot) => ({ ...snapshot, ...overrides[snapshot.providerId] }));
+          }
+          const communityEnabled = process.argv.includes("--community");
+          if (communityEnabled) {
+            const overrides = providerInsightsQaOverrides();
+            delete overrides["codex-personal-page"].usageInsights.distribution;
+            state.providers = state.providers.map((snapshot) => ({ ...snapshot, ...overrides[snapshot.providerId] }));
+            state.settings.usageHistoryModulesBySurface.popup["codex-personal-page"] = [
+              { id: "quota_insights", visible: true }, { id: "usage_composition", visible: true }, { id: "community_resets", visible: true },
+            ];
+          }
           const id = `${locale}-${theme}-${size}-${style}`;
           state.settings = {
             ...state.settings,
@@ -181,6 +195,14 @@ try {
                     (window.kind.includes("weekly") ? 3 * 86400000 : 2 * 3600000),
                 ).toISOString();
           const snapshots = structuredClone(state.providers);
+          if (communityEnabled) {
+            const feed = communityResetQaStore(); feed.preferences.mode = "in_app";
+            feed.caches.resets = structuredClone(feed.caches.status);
+            if (index !== 3) feed.caches.timeline.fragment.events[0].state = "reported";
+            if (index === 0) for (const cache of Object.values(feed.caches)) cache.expiresAt = new Date(Date.now() - 1).toISOString();
+            if (index === 2) for (const cache of Object.values(feed.caches)) cache.failure = "permission";
+            await worker.evaluate((feed) => chrome.storage.local.set({ "ai-usage-dashboard.community-reset-feeds.v1": feed }), feed);
+          }
           await worker.evaluate(
             (state) =>
               chrome.storage.local.set({
@@ -251,6 +273,14 @@ try {
               progress: [
                 ...document.querySelectorAll('[role="progressbar"]'),
               ].map((element) => element.getAttribute("aria-valuenow")),
+              accountInsights: document.querySelector('[data-usage-insights="codex"]') !== null,
+              community: document.querySelector('[data-community-resets="popup"]') ? {
+                health: document.querySelector('[data-community-resets="popup"]').dataset.communityHealth,
+                sources: [...document.querySelectorAll('.community-popup__sources a')].map((link) => link.href),
+                tooltip: document.querySelector('.community-popup__info button')?.getAttribute('aria-label'),
+                hasComposition: document.querySelector('[data-provider-composition]') !== null,
+                clipped: [...document.querySelectorAll('.community-popup')].some((node) => node.scrollWidth > node.clientWidth + 1),
+              } : null,
               headerClipped: [
                 ...document.querySelectorAll(".popup-provider-card__header"),
               ].some(
@@ -280,6 +310,27 @@ try {
               "Popup background token is unresolved",
             );
             assert(layout.style.includes(`--${style}`));
+            if (process.argv.includes("--insights")) assert(layout.accountInsights, "The new account summary must render in the native action popup");
+            if (communityEnabled) {
+              assert(layout.community && !layout.community.hasComposition && !layout.community.clipped, JSON.stringify(layout.community));
+              assert.equal(layout.community.health, ["stale", "fresh", "permission", "fresh"][index]);
+              assert.equal(new Set(layout.community.sources).size, layout.community.sources.length);
+              assert.equal(layout.community.sources.length, 2);
+              assert(layout.community.tooltip.includes('UTC'));
+              if (locale === "en" && theme === "light" && size === "compact") {
+                const tooltip = await evaluate(async () => {
+                  const button = document.querySelector('.community-popup__info button');
+                  button.scrollIntoView({ block: 'center' }); button.focus();
+                  await new Promise((resolve) => setTimeout(resolve, 80));
+                  const tip = document.getElementById(button.getAttribute('aria-describedby'));
+                  const box = tip.getBoundingClientRect();
+                  const result = { focused: document.activeElement === button, visible: tip.dataset.open === 'true' && tip.dataset.positioned === 'true',
+                    left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: innerWidth, height: innerHeight };
+                  button.blur(); return result;
+                });
+                assert(tooltip.focused && tooltip.visible && tooltip.left >= 0 && tooltip.right <= tooltip.width + 1 && tooltip.top >= 0 && tooltip.bottom <= tooltip.height + 1, JSON.stringify(tooltip));
+              }
+            }
             assert(
               !layout.materialLibrary &&
                 !layout.resources.some((url) =>
@@ -363,6 +414,55 @@ try {
                   document.querySelector(".popup-header__theme-menu > button"),
               ),
             );
+            let browsingInteraction = false;
+            if (locale === "en" && theme === "light" && size === "balanced") {
+              if (modes[index] === "collapsible") {
+                const toggled = await evaluate(async () => {
+                  const button = document.querySelector('[data-popup-provider-card-toggle]');
+                  const initial = button.getAttribute('aria-expanded'); button.click();
+                  await new Promise((resolve) => setTimeout(resolve, 380));
+                  const collapsed = button.getAttribute('aria-expanded'); button.click();
+                  await new Promise((resolve) => setTimeout(resolve, 380));
+                  return { initial, collapsed, restored: button.getAttribute('aria-expanded') };
+                });
+                assert.notEqual(toggled.initial, toggled.collapsed); assert.equal(toggled.initial, toggled.restored);
+              } else if (["single", "switch"].includes(modes[index])) {
+                const switched = await evaluate(async () => {
+                  const current = () => document.querySelector('[data-popup-provider-source-link]')?.getAttribute('data-popup-provider-source-link');
+                  const button = document.querySelector('.popup-provider-switcher__button--next, [data-popup-provider-center-switch]');
+                  const initial = current(); button.click(); await new Promise((resolve) => setTimeout(resolve, 380));
+                  const next = current(); button.click(); await new Promise((resolve) => setTimeout(resolve, 380));
+                  return { initial, next, restored: current() };
+                });
+                assert.notEqual(switched.initial, switched.next); assert.equal(switched.initial, switched.restored);
+              } else {
+                const motion = await evaluate(async () => {
+                  const stage = document.querySelector('.popup-provider-stage');
+                  const track = document.querySelector('.popup-provider-list');
+                  const reduced = document.documentElement.dataset.motionResolved === 'reduced';
+                  const read = () => ({ transform: getComputedStyle(track).transform, states: track.getAnimations().map((animation) => animation.playState) });
+                  const before = read(); await new Promise((resolve) => setTimeout(resolve, 200));
+                  if (reduced) return { reduced, before, after: read() };
+                  const moving = read(); stage.dispatchEvent(new PointerEvent('pointerenter'));
+                  await new Promise((resolve) => setTimeout(resolve, 60)); const paused = read();
+                  await new Promise((resolve) => setTimeout(resolve, 200)); const settled = read();
+                  stage.dispatchEvent(new WheelEvent('wheel', { deltaY: 24, bubbles: true, cancelable: true }));
+                  await new Promise((resolve) => requestAnimationFrame(resolve)); const manual = read();
+                  stage.dispatchEvent(new PointerEvent('pointerleave'));
+                  await new Promise((resolve) => setTimeout(resolve, 200));
+                  return { reduced, before, moving, paused, settled, manual, after: read() };
+                });
+                if (motion.reduced) { assert.equal(motion.before.transform, motion.after.transform); assert(!motion.after.states.includes('running')); }
+                else {
+                  assert.notEqual(motion.before.transform, motion.moving.transform);
+                  assert(motion.paused.states.length && motion.paused.states.every((state) => state === 'paused'));
+                  assert.equal(motion.paused.transform, motion.settled.transform);
+                  assert.notEqual(motion.settled.transform, motion.manual.transform);
+                  assert(motion.after.states.includes('running'));
+                }
+              }
+              browsingInteraction = true;
+            }
             assert.deepEqual(
               await worker.evaluate(
                 async () =>
@@ -380,6 +480,7 @@ try {
               layout,
               menu,
               keyboard: true,
+              browsingInteraction,
             });
             console.log(`Native action ${id}: passed`);
           } finally {

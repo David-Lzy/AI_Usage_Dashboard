@@ -446,6 +446,8 @@
 
 .codex-progress-group { container-type: inline-size; min-width: 0; }
 .codex-progress-group__inner { display: grid; gap: var(--app-space-3); min-width: 0; }
+.codex-progress-group__supplement { min-inline-size: 0; }
+.codex-progress-group__supplement > .codex-estimate-strip + .codex-estimate-strip { border-block-start: 0; margin-block-start: 8px; padding-block-start: 0; }
 .codex-estimate-strip { min-width: 0; border-top: 1px solid var(--app-supporting-surface-border); padding-top: var(--app-space-3); }
 .codex-estimate-strip__metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--app-space-2); }
 .codex-estimate-strip__metric { display: grid; align-content: start; gap: var(--app-space-1); min-width: 0; }

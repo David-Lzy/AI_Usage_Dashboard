@@ -8,6 +8,7 @@ import type {
   CursorUsageMetric,
   DisplaySurface,
   ProviderId,
+  ProviderQuotaPool,
 } from "../../providers/types";
 import {
   readCursorUsageCollapsePreference,
@@ -16,6 +17,8 @@ import {
   type CursorUsageUiModuleId,
 } from "../cursor-usage-ui-preferences";
 import type { CursorUsageLocalizedCopy } from "../cursor-usage-localized-copy";
+import { createRuntimeI18n, isResolvedAppLocale } from "../i18n";
+import { CursorQuotaPoolInsights } from "./CursorQuotaPoolInsights";
 import "./cursor-usage-summary.css";
 
 type CursorUsageRangeDays = 7 | 30;
@@ -27,6 +30,7 @@ type CursorUsageSummaryProps = {
   surface: DisplaySurface;
   usage: CursorUsageBilling;
   density?: "compact" | "detail";
+  quotaPools?: ProviderQuotaPool[];
 };
 
 type AggregateBreakdown = {
@@ -248,7 +252,9 @@ export function CursorUsageSummary({
   surface,
   usage,
   density = "compact",
+  quotaPools,
 }: CursorUsageSummaryProps) {
+  const resolvedLocale = isResolvedAppLocale(locale) ? locale : "en";
   const [billingExpanded, setBillingExpanded] = usePersistedExpandedState(
     providerId,
     surface,
@@ -469,6 +475,8 @@ export function CursorUsageSummary({
     <div
       className={`cursor-usage-summary cursor-usage-summary--${surface} cursor-usage-summary--${density}`}
     >
+      {quotaPools?.length && modulePreferences.some((item) => item.id === "billing_summary" && item.visible)
+        ? <CursorQuotaPoolInsights pools={quotaPools} i18n={createRuntimeI18n(resolvedLocale)} compact={density === "compact"} /> : null}
       {modulePreferences.map((preference) =>
         preference.visible ? modules[preference.id] : null,
       )}

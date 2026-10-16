@@ -1,0 +1,14 @@
+{
+  "provenance": "Synthetic percentages and dates; nested label/percentage structure reviewed from Cursor Spending on 2026-10-13. New API payloads remain unverified. Legacy Auto/API percentages are not aliases for these pools.",
+  "sourceUrl": "https://cursor.com/dashboard/spending",
+  "monthlyResetText": "Usage limits reset on Nov 30",
+  "rows": [
+    { "key": "pool.cursor_models", "label": "Cursor Models", "value": 32, "total": null, "unit": "percent", "direction": "used", "available": null, "expiresAt": null, "expiryText": null },
+    { "key": "pool.other_models", "label": "Other Models", "value": 68, "total": null, "unit": "percent", "direction": "used", "available": null, "expiresAt": null, "expiryText": null },
+    { "key": "pool.grok_bot", "label": "Weekly usage", "value": 0, "total": null, "unit": "percent", "direction": "used", "available": null, "expiresAt": null, "expiryText": null, "resetText": "Resets weekly" }
+  ],
+  "rangeStart": null,
+  "rangeEnd": null,
+  "sharedPlan": false,
+  "loggedOut": false
+}

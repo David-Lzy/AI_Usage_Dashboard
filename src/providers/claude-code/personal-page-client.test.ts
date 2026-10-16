@@ -35,6 +35,34 @@ function buildMatchedClaudeResult(html: string): PageSessionResult {
 }
 
 describe("createClaudePersonalPageClient", () => {
+  it("retains independently captured insights through hydration on the same tab", async () => {
+    const insight = { resetCredits: { source: "page" as const, capturedAt: "2026-10-13T10:00:00.000Z", accountVerified: false,
+      availableCount: null, offers: [{ kind: "full" as const, available: true, expiresAt: null }], detailsComplete: null } };
+    let reads = 0;
+    const client = createClaudePersonalPageClient({ source: "live", hydrationRetryAttempts: 1, hydrationRetryDelayMs: 0,
+      pageSessionClient: { capture: async () => {
+        reads++;
+        const page = buildMatchedClaudeResult(reads === 1 ? "<h1>Usage</h1>Loading" : "<h1>Usage</h1><p>Weekly limit</p><p>60% remaining</p>");
+        if (reads === 1 && page.status === "matched") page.page.usageInsights = insight;
+        return page;
+      } } });
+    const result = await client.getUsageSnapshot();
+    expect(result.result.status).toBe("ok");
+    expect(result.usageInsights).toEqual(insight);
+  });
+
+  it("does not retain earlier aggregate data after the source tab changes", async () => {
+    let reads = 0;
+    const client = createClaudePersonalPageClient({ source: "live", hydrationRetryAttempts: 1, hydrationRetryDelayMs: 0,
+      pageSessionClient: { capture: async () => {
+        reads++;
+        const result = buildMatchedClaudeResult(reads === 1 ? "<h1>Usage</h1>Loading" : "<h1>Usage</h1><p>Weekly limit</p><p>60% remaining</p>");
+        if (result.status === "matched" && reads === 1) result.page.usageInsights = { resetCredits: { source: "page", capturedAt: "2026-10-13T10:00:00.000Z", accountVerified: false, availableCount: null, offers: [], detailsComplete: null } };
+        if (reads === 2) result.attempts[0]!.tabId = 208;
+        return result;
+      } } });
+    expect((await client.getUsageSnapshot()).usageInsights).toBeUndefined();
+  });
   it("opens and retries the Claude usage route while the page hydrates", async () => {
     let usageCaptureCount = 0;
     const capture = vi.fn<PageSessionClient["capture"]>(async (definition) => {

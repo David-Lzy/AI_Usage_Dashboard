@@ -151,9 +151,12 @@ listing internal phase numbers, private TODO names, local machine paths,
 operator notes, screenshot evidence, upload receipts, or personal review
 history.
 
-The 0.2.1 and 0.2.2 tags use version-specific stable summaries and highlights.
+The 0.2.1, 0.2.2 and 0.2.3 tags use version-specific stable summaries and highlights.
 The 0.2.2 notes cover the unified interface, five Settings categories, four motion
 choices and selection/RTL fixes, not a change to Provider data or permissions.
+The 0.2.3 notes cover source-scoped provider insights, default-off community
+reports and notifications, verified account-card eligibility, and Popup/settings
+polish. Community reports and forecasts are never personal quota confirmation.
 Other versions fall back to generic package notes until their own copy is reviewed.
 
 ## Claim Boundaries

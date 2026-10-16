@@ -1,6 +1,6 @@
 # Claude Provider Note
 
-Date: 2026-07-21
+Date: 2026-10-13
 
 Process rule:
 
@@ -43,6 +43,35 @@ The two source entries must not be merged:
   unless the source explicitly exposes that personal value.
 
 ## Claude Personal Contract
+
+### October 13 Insights (Work Branch)
+
+The current modal was read-only reviewed again on October 13. The extension
+adds separately timestamped full-reset and five-hour-reset presence, plus
+cloud-session allowance and general usage-credit balances. Literal USD values
+remain dollar amounts, not the minor-unit values in older structured credit
+responses; the two sources and purposes are not summed. Date-only offer expiry
+stays source text without an invented year, timezone or exact deadline.
+An available action establishes presence, not a numerical reset-card count.
+The extension contains no redemption, purchase or automatic-payment controls.
+
+New DOM fallback uses a fixed aggregate whitelist within the Usage dialog
+(or the legacy usage main area), excluding conversation navigation and product
+percentages. The existing same-origin usage/prepaid/spend-limit response
+allowlist is unchanged: newly rendered sections do not establish new JSON APIs.
+Quota failure retains previously confirmed quota and optional section capture
+times rather than making a successful credit read mean successful quota.
+
+No current, scoped product-composition contract was verified in this review.
+Product composition remains unsupported; missing shares are not filled with
+zero or read from a graph. The optional snapshot type can represent a reviewed
+distribution in the future, but this is not a claim of a live Claude reader.
+
+As documented in [Claude limit resets](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset),
+a reset can leave the usual weekly deadline unchanged and does not change
+usage-credit balance. Neither a lower usage percentage nor a disappearing
+offer proves a redeemed reset. Aggregate page observations are account-unverified
+and are not evidence for an account-arrival desktop notification.
 
 Current routes:
 

@@ -35,7 +35,13 @@ export const quotaNotificationController = createQuotaNotificationController({
       .replaceAll("{remaining}", new Intl.NumberFormat(i18n.resolvedLocale, { maximumFractionDigits: 1 }).format(event.remainingPercent));
     const title = format(event.kind === "test" ? copy.notifyTestTitle : event.kind === "low" ? copy.notifyLowTitle : copy.notifyResetTitle);
     const message = format(event.kind === "test" ? copy.notifyTestBody : event.kind === "low" ? copy.notifyLowBody : copy.notifyResetBody);
-    await api.notifications.create(`ai-usage-dashboard-quota-${crypto.randomUUID()}`, {
+    const id = `ai-usage-dashboard-quota-${crypto.randomUUID()}`;
+    if (event.kind !== "test") {
+      await (await import("./reset-notification-runtime")).resetNotificationController.registerClick(id, {
+        kind: "account", providerId: event.providerId, accountKey: event.accountKey,
+      });
+    }
+    await api.notifications.create(id, {
       type: "basic", iconUrl: api.runtime.getURL("icons/icon128.png"), title, message,
     });
   },

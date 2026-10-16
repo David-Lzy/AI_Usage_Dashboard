@@ -78,7 +78,10 @@ describe("SettingsProviderDisplaySection", () => {
     expect(html).toContain('data-api-gateway-module-preferences=""');
     expect(html.match(/data-api-gateway-module-row=/g)).toHaveLength(12);
     expect(html).not.toContain("Sub2API connections");
-    expect(html).toContain("Show history modules by surface");
+    expect(html).toContain("History and supplemental modules");
+    expect(html).toContain("Popup / sidebar / full page");
+    expect(html).toContain('data-insight-module="quota_insights"');
+    expect(html).toContain('data-insight-module="community_resets"');
     expect(html).toContain(
       "Choose and order personal usage and turns independently",
     );

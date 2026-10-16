@@ -59,7 +59,7 @@ describe("openProviderSourcePage", () => {
     await openProviderSourcePage("codex-personal-page");
 
     expect(popupWindow.open).toHaveBeenCalledWith(
-      "https://chatgpt.com/codex/cloud/settings/analytics",
+      "https://chatgpt.com/settings/usage",
       "_blank",
       "noopener,noreferrer",
     );

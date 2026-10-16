@@ -22,6 +22,12 @@ const summary: CodexLocalSummary = {
 };
 
 describe("Codex local snapshot", () => {
+  it("does not choose an unrelated additional weekly pool for the toolbar", () => {
+    const captured = buildCodexLocalSnapshot(baseline, { ...summary, windows: [summary.windows[0]!],
+      additionalWindows: [{ ...summary.windows[1]!, id: "agent:secondary", usedPercent: 99 }] }, new Date(capturedAt));
+    expect(captured.remaining).toBe(80);
+    expect(captured.usageWindows?.map((window) => window.id)).toEqual(["codex:primary", "agent:secondary"]);
+  });
   it("uses actual returned windows and keeps their successful capture time on failure", () => {
     const captured = buildCodexLocalSnapshot(baseline, summary, new Date("2026-09-24T10:00:02.000Z"));
     expect(captured).toMatchObject({ syncSource: "local_companion", syncStatus: "ok", remaining: 35, lastSuccessAt: capturedAt, codexLocal: { availableResetCount: 0, accountVerified: true } });

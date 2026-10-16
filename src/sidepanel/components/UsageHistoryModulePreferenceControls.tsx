@@ -12,11 +12,13 @@ import type {
 import type { ResolvedAppLocale } from "../../shared/i18n";
 import type { buildSettingsLocalizedCopy } from "../../shared/settings-localized-copy";
 import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-localized-copy";
+import { getProviderInsightsUiCopy } from "../../shared/provider-insights-ui-copy";
 import {
   moveProviderUsageHistoryModulePreference,
   reorderProviderUsageHistoryModulePreference,
   resolveProviderUsageHistoryModules,
   setProviderUsageHistoryModuleVisibility,
+  isUsageHistorySeriesModule,
 } from "../../shared/usage-history-visibility";
 import "../../shared/components/usage-history-charts.css";
 import { MaterialInfoTooltip } from "./MaterialInfoTooltip";
@@ -52,6 +54,7 @@ export function UsageHistoryModulePreferenceControls({
   const [draggedModule, setDraggedModule] =
     useState<DraggedHistoryModule | null>(null);
   const copy = buildUsageHistoryLocalizedCopy(locale);
+  const insightCopy = getProviderInsightsUiCopy(locale);
   const historyProviderIds = new Set(
     snapshots
       .filter((snapshot) => snapshot.usageHistory)
@@ -60,6 +63,7 @@ export function UsageHistoryModulePreferenceControls({
   const configurableProviders = providers.filter(
     (provider) =>
       provider.id === "codex-personal-page" ||
+      provider.id === "claude-code-team-page" || provider.id === "cursor-personal-page" ||
       historyProviderIds.has(provider.id),
   );
 
@@ -70,6 +74,9 @@ export function UsageHistoryModulePreferenceControls({
   const moduleLabels: Record<ProviderUsageHistoryModuleId, string> = {
     personal_usage_by_surface: copy.personalUsage,
     turns_history: copy.turns,
+    quota_insights: insightCopy.quotaTitle,
+    usage_composition: insightCopy.compositionTitle,
+    community_resets: insightCopy.communityTitle,
   };
 
   function handleDrop(
@@ -129,9 +136,9 @@ export function UsageHistoryModulePreferenceControls({
       data-usage-history-preferences=""
     >
       <div>
-        <p className="section-label">{copy.settingsSectionLabel}</p>
+        <p className="section-label">{insightCopy.modulesTitle}</p>
         <div className="section-title-with-info">
-          <h3 className="section-title">{copy.settingsTitle}</h3>
+          <h3 className="section-title">{insightCopy.modulesDetail}</h3>
           <MaterialInfoTooltip>{copy.settingsDetail}</MaterialInfoTooltip>
         </div>
       </div>
@@ -170,10 +177,10 @@ export function UsageHistoryModulePreferenceControls({
                     </span>
                   </div>
                   <ol className="provider-progress-list">
-                    {preferences.map((preference, index) => {
+                    {preferences.filter((preference) => isUsageHistorySeriesModule(preference.id)).map((preference, index, ordered) => {
                       const moduleLabel = moduleLabels[preference.id];
                       const isFirst = index === 0;
-                      const isLast = index === preferences.length - 1;
+                      const isLast = index === ordered.length - 1;
 
                       return (
                         <li
@@ -312,6 +319,14 @@ export function UsageHistoryModulePreferenceControls({
                       );
                     })}
                   </ol>
+                  <div className="provider-insights-preferences">
+                    {preferences.filter((preference) => !isUsageHistorySeriesModule(preference.id)).map((preference) => <label
+                      key={preference.id} className="settings-preferences__binary-setting" data-insight-module={preference.id}>
+                      <input type="checkbox" checked={preference.visible} onChange={(event) => onChange(setProviderUsageHistoryModuleVisibility(
+                        value, surface, provider.id, preference.id, event.currentTarget.checked))} />
+                      <span>{moduleLabels[preference.id]}</span>
+                    </label>)}
+                  </div>
                 </section>
               );
             })}

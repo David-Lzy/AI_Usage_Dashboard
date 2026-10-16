@@ -3,7 +3,7 @@ import {
   normalizePageBinding,
   reconcilePageBindingFromSessionResult,
 } from "../../shared/page-bindings";
-import type { ProviderPageBinding } from "../types";
+import type { ProviderPageBinding, ProviderUsageInsights } from "../types";
 import {
   createPageSessionClient,
   hasLivePageSessionApis,
@@ -18,6 +18,7 @@ import {
   parseClaudePersonalLiveFixture,
   type ClaudePersonalParseResult,
 } from "./personal-page-parser";
+import { mergeProviderUsageInsights } from "../../shared/provider-usage-insights";
 
 export type ClaudePersonalPageClientOptions = {
   source?: "fixture" | "live";
@@ -31,6 +32,7 @@ export type ClaudePersonalPageUsageResult = {
   result: ClaudePersonalParseResult;
   pageBinding: ProviderPageBinding;
   capturedAt?: string | null;
+  usageInsights?: ProviderUsageInsights;
 };
 
 export type ClaudePersonalPageClient = {
@@ -193,11 +195,19 @@ export function createClaudePersonalPageClient(
         attempt += 1
       ) {
         await delay(retryDelayMs);
+        const previous = fixture.routes.find((route) => route.status === "matched");
         fixture = await captureClaudePersonalLiveFixture(
           pageSessionClient,
           pageSessionBinding,
           captureOptions,
         );
+        const next = fixture.routes.find((route) => route.status === "matched");
+        const previousTab = previous?.attempts.find((attempt) => attempt.status === "matched")?.tabId;
+        const nextTab = next?.attempts.find((attempt) => attempt.status === "matched")?.tabId;
+        if (next && previous && next.matchedUrl === previous.matchedUrl
+          && typeof nextTab === "number" && nextTab === previousTab) {
+          next.usageInsights = mergeProviderUsageInsights(next.usageInsights, previous.usageInsights);
+        }
         result = parseClaudePersonalLiveFixture(
           fixture as ClaudePersonalLiveFixture,
         );
@@ -207,6 +217,7 @@ export function createClaudePersonalPageClient(
       return {
         result,
         capturedAt: fixture.capturedAt,
+        ...(routeForBinding?.usageInsights ? { usageInsights: routeForBinding.usageInsights } : {}),
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(
               routeForBinding,

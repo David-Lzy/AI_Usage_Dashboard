@@ -60,6 +60,14 @@ AI Usage Dashboard is designed to avoid persistent collection of raw browser aut
 - It uses optional host permissions for supported provider origins and
   user-approved custom source HTTP/HTTPS endpoint origins.
 - It uses packaged extension scripts and does not load remote executable code.
+- Optional community reset feeds are default-off, credential-free reads of fixed
+  HTTPS JSON endpoints. Selected origins are explicitly granted; redirects,
+  oversized bodies, unbounded history and remote executable content are rejected.
+  Public reports/forecasts cannot mutate account quotas or confirm account events.
+  Their cache and notification/click ledgers remain machine-local, outside backups,
+  Chrome Sync and diagnostics. Notification targets and text are allowlisted;
+  personal confirmations require a fresh accepted identity/capture, not an email
+  or a percentage decrease.
 - User-configured custom JSON sources are fetched as JSON with browser
   credentials omitted. The response is validated and normalized; raw response
   bodies are not stored, HTML is not rendered, and scripts are not executed.

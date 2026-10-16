@@ -14,11 +14,13 @@ import { MaterialIcon } from "./MaterialIcon";
 type MaterialInfoTooltipProps = {
   children: ReactNode;
   className?: string;
+  tooltipClassName?: string;
 };
 
 export function MaterialInfoTooltip({
   children,
   className = "",
+  tooltipClassName = "",
 }: MaterialInfoTooltipProps) {
   const tooltipId = useId();
   const rootRef = useRef<HTMLSpanElement | null>(null);
@@ -43,7 +45,7 @@ export function MaterialInfoTooltip({
     <span
       ref={contentRef}
       id={tooltipId}
-      className="material-info-tooltip__content"
+      className={`material-info-tooltip__content${tooltipClassName ? ` ${tooltipClassName}` : ""}`}
       data-open={isOpen && panelVisible ? "true" : "false"}
       data-positioned={position === null ? "false" : "true"}
       role="tooltip"

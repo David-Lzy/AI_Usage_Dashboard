@@ -38,6 +38,7 @@ import {
   mergeProviderUsageHistoryModules,
 } from "../../shared/provider-usage-history";
 import { hasLivePageSessionApis } from "../page-session";
+import { mergeProviderUsageInsights } from "../../shared/provider-usage-insights";
 import {
   providerSourceStrategyRunner,
   type ProviderSourceAttempt,
@@ -717,6 +718,7 @@ async function tryCodexPersonalSource({
       captureSource,
       directApiFailure,
       replacePreviousSnapshot,
+      usageInsights,
       result,
       pageBinding,
     } = await client.getUsageSnapshot(setting.pageBinding);
@@ -806,6 +808,7 @@ async function tryCodexPersonalSource({
           usageBalances: hasPreviousData ? provider.usageBalances : undefined,
           usageSummary: hasPreviousData ? provider.usageSummary : null,
           usageHistory: hasPreviousData ? provider.usageHistory : undefined,
+          usageInsights: mergeProviderUsageInsights(usageInsights, replacePreviousSnapshot ? undefined : provider.usageInsights),
           lastSyncLabel: directFailureLabel
             ? hasPreviousData
               ? `${directFailureLabel}; showing last successful data`
@@ -876,6 +879,7 @@ async function tryCodexPersonalSource({
           result.snapshot.usageHistory,
           replacePreviousSnapshot ? undefined : provider.usageHistory,
         ),
+        usageInsights: mergeProviderUsageInsights(result.snapshot.usageInsights, replacePreviousSnapshot ? undefined : provider.usageInsights),
         usageSummary: buildPersonalUsageSummary(
           result.snapshot.windows,
           result.snapshot.balances,

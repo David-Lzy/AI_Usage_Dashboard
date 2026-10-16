@@ -11,6 +11,9 @@ import { DISPLAY_SURFACES } from "./display-preferences";
 export const PROVIDER_USAGE_HISTORY_MODULE_IDS = [
   "personal_usage_by_surface",
   "turns_history",
+  "quota_insights",
+  "usage_composition",
+  "community_resets",
 ] as const satisfies readonly ProviderUsageHistoryModuleId[];
 
 type UnknownRecord = Record<string, unknown>;
@@ -27,8 +30,15 @@ export function createDefaultUsageHistoryModulesBySurface(): UsageHistoryModules
   };
 }
 
-export function createDefaultProviderUsageHistoryModules(): ProviderUsageHistoryModulePreference[] {
-  return PROVIDER_USAGE_HISTORY_MODULE_IDS.map((id) => ({ id, visible: true }));
+export function isUsageHistorySeriesModule(id: ProviderUsageHistoryModuleId): boolean {
+  return id === "personal_usage_by_surface" || id === "turns_history";
+}
+export function createDefaultProviderUsageHistoryModules(providerId?: ProviderId): ProviderUsageHistoryModulePreference[] {
+  const ids: ProviderUsageHistoryModuleId[] = providerId === "claude-code-team-page" || providerId === "cursor-personal-page"
+    ? [] : ["personal_usage_by_surface", "turns_history"];
+  if (providerId === "codex-personal-page" || providerId === "claude-code-team-page" || providerId === "cursor-personal-page") ids.push("quota_insights", "usage_composition");
+  if (providerId === "codex-personal-page") ids.push("community_resets");
+  return ids.map((id) => ({ id, visible: id === "quota_insights" && providerId !== "cursor-personal-page" || isUsageHistorySeriesModule(id) }));
 }
 
 function normalizeProviderModulePreferences(
@@ -110,7 +120,7 @@ export function resolveProviderUsageHistoryModules(
     return [{ ...preference }];
   });
 
-  for (const preference of createDefaultProviderUsageHistoryModules()) {
+  for (const preference of createDefaultProviderUsageHistoryModules(providerId)) {
     if (!seen.has(preference.id)) {
       resolved.push(preference);
     }
@@ -128,7 +138,7 @@ export function isProviderUsageHistoryModuleVisible(
   return (
     resolveProviderUsageHistoryModules(value, surface, providerId).find(
       (preference) => preference.id === moduleId,
-    )?.visible ?? true
+    )?.visible ?? false
   );
 }
 
@@ -171,7 +181,9 @@ export function moveProviderUsageHistoryModulePreference(
   const currentIndex = preferences.findIndex(
     (preference) => preference.id === moduleId,
   );
-  const nextIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+  let nextIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+  if (isUsageHistorySeriesModule(moduleId)) while (nextIndex >= 0 && nextIndex < preferences.length
+    && !isUsageHistorySeriesModule(preferences[nextIndex].id)) nextIndex += direction === "up" ? -1 : 1;
 
   if (
     currentIndex === -1 ||

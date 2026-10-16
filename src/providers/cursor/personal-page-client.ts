@@ -1,6 +1,6 @@
 import personalPageLiveEvidenceFixture from "../../../fixtures/cursor/personal-page-live-evidence.fixture.json";
 import { normalizePageBinding, reconcilePageBindingFromSessionResult } from "../../shared/page-bindings";
-import type { ProviderPageBinding, SyncTrigger } from "../types";
+import type { ProviderPageBinding, ProviderUsageInsights, SyncTrigger } from "../types";
 import {
   createPageSessionClient,
   hasLivePageSessionApis,
@@ -23,6 +23,7 @@ import {
   type CursorSessionApiFailureCode,
 } from "./session-api-client";
 import { mergeCursorObservedUsageBillingContracts } from "./usage-billing-contract";
+import { captureOpenUsageInsights } from "../usage-insights-dom";
 
 export type CursorPersonalPageClientOptions = {
   source?: "fixture" | "live";
@@ -32,12 +33,14 @@ export type CursorPersonalPageClientOptions = {
   openPageWhenMissing?: boolean;
   hydrationRetryAttempts?: number;
   hydrationRetryDelayMs?: number;
+  usageInsightsReader?: typeof captureOpenUsageInsights;
 };
 
 export type CursorPersonalPageUsageResult = {
   result: CursorPersonalParseResult;
   pageBinding: ProviderPageBinding;
   captureSource: "fixture" | "page_parse" | "session_api";
+  usageInsights?: ProviderUsageInsights;
   directApiFailure?: {
     code: CursorSessionApiFailureCode;
     reason: string;
@@ -214,10 +217,12 @@ export function createCursorPersonalPageClient(
         options.sessionApiClient ?? cursorSessionApiClient
       ).getUsageSnapshot(options.trigger ?? "manual");
       if (directResult.ok) {
+        const usageInsights = await (options.usageInsightsReader ?? captureOpenUsageInsights)("cursor", options.pageSessionClient ?? createPageSessionClient(), normalizedBinding).catch(() => undefined);
         return {
           result: directResult.result,
           pageBinding: normalizedBinding,
           captureSource: "session_api",
+          ...(usageInsights ? { usageInsights } : {}),
         };
       }
 
@@ -267,11 +272,13 @@ export function createCursorPersonalPageClient(
         );
       }
       const routeForBinding = chooseBindingRoute(fixture);
+      const usageInsights = await (options.usageInsightsReader ?? captureOpenUsageInsights)("cursor", pageSessionClient, normalizedBinding).catch(() => undefined);
 
       return {
         result,
         captureSource: "page_parse",
         directApiFailure: directResult,
+        ...(usageInsights ? { usageInsights } : {}),
         pageBinding: routeForBinding
           ? buildBindingFromRouteCapture(
               routeForBinding,

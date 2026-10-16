@@ -1,6 +1,6 @@
 # Codex Provider Note
 
-Date: 2026-09-24
+Date: 2026-10-13
 
 Process rule:
 
@@ -19,11 +19,11 @@ Status note:
 - this provider note should track the current selected source path, support boundary, and official-source basis for Codex
 - refresh it whenever the chosen source path, active release promise, or relevant official docs change
 
-## Current Personal Source Extension (Unreleased)
+## Current Personal Sources
 
 The original Enterprise Analytics MVP decision below is historical context,
 not the current complete product scope. Codex Personal already supports the
-signed-in browser usage-page path. The 2026-09-24 work branch adds an opt-in
+signed-in browser usage-page path. Version 0.2.1 introduced an opt-in
 same-machine Companion path using Codex CLI `account/rateLimits/read` for
 quota windows, reset times, and official available banked reset cards. Without
 pairing, browser behavior is unchanged. Local-only never refreshes the browser
@@ -33,8 +33,41 @@ The local bridge does not treat API-equivalent estimates as paid balance.
 Only new, completely priced session-log token deltas and at least five points
 of observed quota movement can produce an estimate. Unknown prices, changed
 accounts, resets, and read gaps restart learning. See the [Local Companion
-Bridge](../Product/Local_Companion_Bridge.md) for the full contract. This
-feature is **not** in the current Chrome Web Store package.
+Bridge](../Product/Local_Companion_Bridge.md) for the full contract.
+
+### October 13 Source Adaptation (Work Branch)
+
+The new `https://chatgpt.com/settings/usage` overview and analytics routes are
+accepted alongside the three legacy Codex routes. A generic `ChatGPT` title
+alone no longer means signed out. New-page DOM capture reads a fixed whitelist
+of aggregate labels and literal values, not full HTML, chat rankings or titles.
+Function percentages carry their own displayed date range and successful
+capture time. They are usage composition, never remaining quota. An explicit
+Work/Codex/agent caption marks aggregate usage scope, not evidence of a shared
+physical quota pool; unknown scope stays unknown.
+Graphs without literal aggregate values remain unavailable.
+Browser reset-count payloads remain unverified; a rendered badge or list length
+does not substitute for the official `availableCount` contract.
+
+Optional aggregate capture reads an already-open page without opening or
+refreshing it. Direct session quota remains the primary browser source.
+Optional enrichment is capped to the remaining refresh deadline, so a slow tab
+query or renderer cannot turn an already successful quota response into a timeout.
+The existing local-only path never invokes this browser enrichment. Aggregate
+DOM observations are account-unverified and cannot prove an account grant.
+
+The Companion can additionally return bounded reset offer expiry summaries
+and separately identified rate-limit buckets. The official `availableCount`
+is authoritative even if detail rows are missing, empty or capped. Raw offer
+IDs and descriptions are discarded. Extra buckets do not alter the original
+Codex window used for the toolbar or equivalent estimates. A detail-capability
+rejection is retried once with the same read-only request excluding details.
+Old CLIs can continue providing quota while new fields stay unknown.
+
+The documented `account/read` response does not expose a stable account ID.
+Without one from the quota contract, the bridge reports account-unverified;
+it does not substitute an email or read auth files. See the [source audit](../Product/Provider_Insights_Source_Contract.md)
+and [official app-server reference](https://learn.chatgpt.com/docs/app-server).
 
 ## 1. Decision
 

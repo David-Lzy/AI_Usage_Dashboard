@@ -1,4 +1,4 @@
-import { storePendingFullPageEntry } from "../shared/extension-surface-entry";
+import { storePendingFullPageEntry, storePendingSettingsSurfaceSession } from "../shared/extension-surface-entry";
 import {
   buildSurfaceSessionKey,
   captureSurfaceSessionState,
@@ -216,6 +216,7 @@ export async function openFullPageRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
   await captureRouteSurfaceSessionState(route);
+  storePendingSettingsSurfaceSession(buildSidePanelHash(route), getSafeLocalStorage());
 
   const path = buildFullPageExtensionPath(route);
 
@@ -251,6 +252,7 @@ export async function openSidePanelRoute(
   route: SidePanelRouteState,
 ): Promise<void> {
   await captureRouteSurfaceSessionState(route);
+  storePendingSettingsSurfaceSession(buildSidePanelHash(route), getSafeLocalStorage());
 
   const path = buildSidePanelExtensionPath(route);
   const capabilities = getBrowserCapabilities();

@@ -238,6 +238,83 @@ Evidence is retained under `tmp/output/playwright/quota-notifications/`. Unit
 tests separately cover OS API rejection and Firefox's permission-probe fallback;
 these checks do not claim a visible notification in the user's desktop session.
 
+The new reset/community evaluator uses synthetic unit evidence in
+`src/shared/reset-notifications.test.ts` and
+`src/background/reset-notification-controller.test.ts`; runtime tests verify
+fixed localized messages and allowlisted click routes. Coverage separates
+scheduled/forecast/history context from reported execution, first-endpoint
+baselines, duplicate/conflicting sources, known versus unknown reset-card count,
+opaque accepted identity, permission loss, pause, restart and at-most-once OS
+failure. `quota-notification-pools.test.ts` checks independent monthly pool
+identity without changing legacy opt-out keys or treating product shares as quota.
+Current early-reset evidence and unverified CLI identity remain unsupported,
+not inferred. The cross-surface insights browser gate extends this evidence;
+no synthetic transport test proves an OS banner appeared.
+
+`node scripts/check-firefox-provider-insights.mjs --extension=<isolated-firefox>
+--geckodriver=<executable>` checks the actual temporary Firefox addon, not a web
+preview. It launches an owned headless profile, forces that browser offline,
+installs a disposable copy and verifies native runtime/CSP/MDUI, locale/theme
+and desktop/intermediate/RTL narrow layouts. Only the disposable manifest grants
+notifications for an API-acceptance test; production optional permissions stay
+unchanged. The result distinguishes accepted API calls from unobserved OS
+banners. Driver commands follow [Mozilla's standalone WebDriver interface](https://firefox-source-docs.mozilla.org/testing/geckodriver/Usage.html).
+
+`node scripts/check-chrome-notification-api.mjs --extension=<isolated-chrome>`
+performs the corresponding native Chrome API acceptance check with an owned
+offline profile and disposable manifest. Both helpers create/clear only a fixed
+synthetic message and do not attach to the owner's desktop. API success must not
+be reported as observed desktop delivery.
+
+`node scripts/profile-community-reset-poll.mjs` runs the production controller
+with bounded synthetic public responses, not live HTTP. Fifty concurrent poll
+calls coalesce per sample; the check records default-off zero requests, selected
+origins, five-minute caching, conditional requests and Retry-After. Reported
+wall/process CPU timings are a Node microprofile, not browser-worker CPU or real
+service latency. Paired packaged startup/renderer profiling remains separate.
+
+`node scripts/check-provider-insights-ui.mjs` renders the actual insight cards,
+detail/community panel and Settings controls with synthetic snapshots. Its
+default matrix covers 14 locales, light/dark and 1440/900/390/320px (112 groups).
+`--locales=en,zh-CN,ar --quick` limits the layout smoke run; `--browser=firefox`
+uses the installed Playwright Firefox engine for source rendering. The interaction gate
+covers source and desktop permission denial, permission reuse, independent
+community/account pause, test delivery, failed initial reads/writes, explicit
+retry and identity loss while subscribed. Only
+permission/OS transport and public payloads are synthetic; the real controllers
+handle preferences. Non-local requests are blocked and asserted absent. Reports
+and synthetic screenshots remain under `.local/qa/provider-insights/823/`.
+It also verifies that Off cancels a slow refresh without locking preference
+controls, and that background reads preserve explicit failed-write feedback.
+
+`node scripts/check-reset-settings-layout.mjs --extension=<isolated-chrome>`
+checks the actual packaged Settings embedding, not only a standalone control.
+It covers 14 locales, light/dark and 1440/1100/900/390/320px, asserting full-width
+placement in the outer grid, wide two-column/narrow stacking, RTL, overflow,
+unverified-account feedback and unchanged Off after opening/closing a menu.
+Profiles/data are owned and synthetic, remote requests are forbidden and no
+permissions or desktop notifications are exercised.
+
+`node scripts/check-fusion-native-popup.mjs --extension=<isolated-build>
+--insights` exercises the new summaries in the real Chrome action target. It
+uses a fresh profile, offline screenshot lock and single/multiple-window fixture
+variants across the existing sizes/styles/browsing modes. Source tabs, account
+state and the user's loaded extension are not used. The surface-extension gate
+also honors `AI_USAGE_BUILD_ROOT`; use an isolated build for it.
+
+`node scripts/check-popup-community-summary.mjs` compares the unchanged compact
+baseline with the Popup-only summary at 344/392/520px in en/zh-CN/ar and both
+themes. It checks twelve synthetic event/failure scenarios, exact-time tooltip
+visibility and keyboard/hover access, source attribution, RTL and overflow.
+The Chinese stale fixture must use at most 70% of the baseline content height.
+`--browser=firefox` selects source rendering in Firefox; `--quick` is one Chinese
+layout smoke. Evidence is kept under ignored `.local/qa/provider-insights/826/`.
+For the real Chrome action target, `check-fusion-native-popup.mjs --community`
+enables the new panel and absent-composition regression across all size/mode
+combinations; `--locales=<comma-separated-locales>` expands language coverage.
+It retains the existing menu, focus, automatic-scroll and snapshot checks.
+Use an isolated build and profile, never the owner's loaded package/state.
+
 `node scripts/check-settings-save-browser.mjs --extension=<isolated-build>`
 exercises actual extension preference writes and notification persistence while
 holding, rejecting and reordering transport acknowledgements. It verifies that

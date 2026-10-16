@@ -68,6 +68,7 @@ import { SettingsCategoryNavigation } from "../components/SettingsCategoryNaviga
 import { SettingsProviderConnectionControls } from "../components/SettingsProviderConnectionControls";
 import { DiagnosticsExportControl } from "../components/DiagnosticsExportControl";
 import { getSettingsCategoryCopy } from "../../shared/settings-category-localized-copy";
+import type { SettingsCategory } from "../settings-categories";
 import "./settings-fusion.css";
 import { useSurfaceMotion } from "../../shared/use-motion-effects";
 
@@ -339,13 +340,15 @@ export function SettingsPage({
     onClearCodexSessionToken,
   });
 
-  const previousCategory = useRef(activeCategory);
+  const previousCategory = useRef<SettingsCategory | null>(isCategoryRestoring ? null : activeCategory);
   useEffect(() => {
+    if (isCategoryRestoring) return;
+    if (previousCategory.current === null) { previousCategory.current = activeCategory; return; }
     if (previousCategory.current === activeCategory) return;
     previousCategory.current = activeCategory;
     settingsSurfaceSession.preferences.setActivePopover(null);
     settingsSurfaceSession.preferences.setToolbarPopupPreviewOpen(false);
-  }, [activeCategory]);
+  }, [activeCategory, isCategoryRestoring]);
 
   useEffect(() => {
     const shell = settingsShellRef.current;

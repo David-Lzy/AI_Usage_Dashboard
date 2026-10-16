@@ -1,6 +1,6 @@
 # Experimental Local Companion Bridge
 
-Date: 2026-10-04
+Date: 2026-10-13
 
 Document class:
 
@@ -77,6 +77,24 @@ and bounded estimate summaries. It never returns the raw account id, token,
 prompt, session text, model log, or file path. A missing reset count stays
 **unknown**, distinct from a real zero. The raw Codex Home and pairing secret
 remain local and outside Chrome Sync and configuration backups.
+
+Work-branch source adaptation adds optional `resetCredits` and
+`additionalWindows` without changing the v1 schema or required fields.
+`resetCredits` retains the official available count, bounded offer type,
+availability and known expiry, with its own capture time. `offers: null`
+means details unavailable; `offers: []` means a known empty returned list.
+The list may be capped and never determines the authoritative count.
+Opaque offer IDs, titles and descriptions do not leave the Companion.
+Additional official rate-limit buckets have separate stable pool IDs and
+do not become samples for the existing primary/secondary estimates.
+Older clients may omit both optional sections; failed optional validation
+does not invalidate otherwise usable quota.
+
+The current documented account interface has no stable account ID. If the
+quota response lacks a verifiable ID, the digest is null, the UI states
+account-unverified, and account-bound estimation remains unavailable.
+Neither email nor private auth-file contents are used as a substitute.
+Local-only continues to make zero browser capture requests.
 
 ### Observed API Equivalent
 

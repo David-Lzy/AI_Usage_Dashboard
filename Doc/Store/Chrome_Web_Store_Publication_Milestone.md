@@ -1,6 +1,6 @@
 # Chrome Web Store Publication Milestone
 
-Date: 2026-10-04
+Date: 2026-10-16
 
 Document class:
 
@@ -14,9 +14,9 @@ Freshness model:
 Status note:
 
 - AI Usage Dashboard has a live Chrome Web Store listing
-- a direct public-page fetch displayed `0.2.1` on 2026-10-04 UTC;
-  authenticated Store API status reports manifest `0.2.1.0` as `PUBLISHED`
-  at 100%, and submitted manifest `0.2.2.0` as `PENDING_REVIEW` at 100%
+- a direct public-page fetch displayed `0.2.2`, updated October 5, 2026,
+  on 2026-10-16; authenticated Store API status confirms manifest `0.2.2.0`
+  as `PUBLISHED` at 100%, with no submitted revision
 - GitHub Release `v0.2.2` is stable and provides verified browser-specific
   packages and checksums; its Chrome manifest is `0.2.2.0`
 - the Store API accepted the 0.2.1 package upload on 2026-09-24 UTC; the
@@ -29,7 +29,10 @@ Status note:
   tag-scoped package once. The initial review rejected a long brand list as
   keyword stuffing. Corrected descriptions were verified in all 14 fields,
   and the same package was resubmitted without another upload. Automatic
-  publication after approval remains selected. It is not yet a public Store release.
+  publication after approval remained selected. The subsequent publication is
+  independently confirmed above; no exact approval time is inferred.
+- source version `0.2.3` is being prepared for release; its GitHub tag, Store
+  upload and review submission are not yet confirmed
 - the RC14 tag workflow skipped Store handoff because repository credentials
   are not configured; a later authenticated local upload and Dashboard review
   submission succeeded, and RC14 has since been published
@@ -40,6 +43,10 @@ Status note:
 
 - Chrome Web Store:
   https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea
+- On 2026-10-16, the public listing displayed `0.2.2`, updated October 5,
+  2026. The authenticated API confirmed `0.2.2.0` as `PUBLISHED` at 100%
+  with no submitted revision. This supersedes the historical pending/rejected
+  checkpoints below without inventing an approval timestamp.
 - On 2026-10-04 UTC, the public listing displayed `0.2.1` and an update date
   of September 25, 2026. The authenticated API confirmed manifest `0.2.1.0`
   as `PUBLISHED` at 100%. The later post-submission query confirmed manifest
@@ -175,7 +182,7 @@ At this milestone, the project has the following public-facing baseline:
 ## Quality Gate State
 
 Store availability is not a guarantee that every provider or environment is
-working. The published 0.2.1 build includes account-isolated sync, concurrent
+working. The published 0.2.2 build includes account-isolated sync, concurrent
 state writes, capture freshness, shared controls and production initialization.
 Ongoing risks include:
 
@@ -196,13 +203,12 @@ Ongoing risks include:
 
 ## Next Store Work
 
-- Await the corrected submission's review result without repeating the accepted
-  upload or review request. The updated 0.2.2 copy and images are part of the
-  submitted revision. If rejected, inspect the specific reason before choosing
-  a further recovery action; do not blindly upload or resubmit.
+- Prepare the 0.2.3 tag-scoped package and current listing metadata. Do not
+  repeat the completed 0.2.2 upload or review request.
 - Verify both authenticated API publication state and public-page rollout
-  before calling 0.2.2 available on the Store. Keep
-  uploaded, submitted, and published states distinct.
+  before calling 0.2.3 available on the Store. Keep uploaded, submitted,
+  and published states distinct. If rejected, inspect the specific reason
+  before choosing a recovery action; do not blindly upload or resubmit.
 - Keep the current public copy in `Doc/Store/` as the maintained text source.
 - Keep personal upload operations and generated screenshot working files under
   `.local/`.

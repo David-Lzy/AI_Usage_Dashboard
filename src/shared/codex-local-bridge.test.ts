@@ -15,6 +15,17 @@ const base = {
 };
 
 describe("Codex local summary boundary", () => {
+  it("validates optional reset details and keeps additional pools out of estimate identities", () => {
+    const resetCredits = { source: "local_companion", capturedAt: base.observedAt, accountVerified: true, availableCount: 4,
+      offers: [{ kind: "codex", available: true, expiresAt: null, id: "private-id" }] };
+    const additional = { ...base.windows[0], id: "agent:primary" };
+    const parsed = normalizeCodexLocalSummary({ ...base, availableResetCount: 4, accountDigest: null, resetCredits,
+      additionalWindows: [additional, additional, { ...additional, id: "codex:primary" }, { ...additional, id: "private/id" }] });
+    expect(parsed?.resetCredits).toMatchObject({ accountVerified: false, availableCount: 4, detailsComplete: false });
+    expect(parsed?.additionalWindows).toHaveLength(1);
+    expect(parsed?.estimates).toHaveLength(1);
+    expect(JSON.stringify(parsed)).not.toContain("private-");
+  });
   it("whitelists bounded equivalent values without accepting raw identity or account URLs", () => {
     const parsed = normalizeCodexLocalSummary({ ...base, accountId: "secret-account", rawLog: "secret-prompt", path: "/secret/path" });
     expect(parsed).toMatchObject({ availableResetCount: 0, estimates: [{ status: "ready", currentUsd: 12.5, fullUsd: 25 }] });

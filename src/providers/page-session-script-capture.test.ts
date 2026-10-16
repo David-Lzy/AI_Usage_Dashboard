@@ -71,6 +71,19 @@ describe("page-session script capture helpers", () => {
     ).rejects.toThrow("Page-session isolated capture returned an invalid page snapshot.");
   });
 
+  it("serializes only whitelisted new Codex aggregates and never asks for the full HTML", async () => {
+    const api = createResultApi({ sourceUrl: "https://chatgpt.com/settings/usage", rows: [
+      { key: "quota.weekly", label: "Weekly limit", value: 70, unit: "percent", direction: "remaining" },
+      { key: "function.tasks", label: "Tasks", value: 74.7, unit: "percent" },
+    ], rangeStart: "2026-10-07", rangeEnd: "2026-10-13", sharedPlan: true, loggedOut: false,
+      html: "private-conversation-title", title: "private-conversation-title" });
+    const result = await readIsolatedPageSnapshot(7, api, [], "codex");
+    expect(result.html).toContain("70% remaining");
+    expect(result.usageInsights?.distribution?.values).toEqual([{ id: "tasks", label: "Tasks", value: 74.7 }]);
+    expect(JSON.stringify(result)).not.toContain("private-");
+    expect(api.executeScript).toHaveBeenCalledTimes(1);
+  });
+
   it("skips main-world execution when no window keys are requested", async () => {
     const scriptingApi = createExecutingApi();
 

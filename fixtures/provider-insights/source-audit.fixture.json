@@ -1,0 +1,89 @@
+{
+  "fixtureVersion": 1,
+  "synthetic": true,
+  "reviewedAt": "2026-10-13",
+  "provenance": "Independently authored values. Official CLI fields, retained browser contracts, and rendered aggregates are separate; DOM proposals are not provider JSON contracts.",
+  "boundaryCases": {
+    "missingCodexUsage": { "rate_limit": { "primary_window": null, "secondary_window": null } },
+    "invalidCodexPercent": { "rate_limit": { "primary_window": { "used_percent": 101, "limit_window_seconds": 300, "reset_at": 947289600 } } },
+    "staleCapture": { "capturedAt": "2000-01-01T00:00:00Z", "checkedAt": "2000-01-02T00:00:00Z", "eligibleForNotification": false },
+    "changedSource": { "previousSource": "browser", "currentSource": "local_companion", "identityMatch": false, "mergeHistory": false },
+    "unknownResetCount": { "availableCount": null, "credits": null },
+    "zeroResetCount": { "availableCount": 0, "credits": [] }
+  },
+  "codex": {
+    "browserUsage": {
+      "plan_type": "pro",
+      "rate_limit": {
+        "primary_window": null,
+        "secondary_window": { "used_percent": 25, "limit_window_seconds": 604800, "reset_at": 947289600 }
+      },
+      "credits": { "has_credits": true, "unlimited": false, "balance": 120 }
+    },
+    "localQuota": {
+      "rateLimits": {
+        "limitId": "codex",
+        "primary": null,
+        "secondary": { "usedPercent": 25, "windowDurationMins": 10080, "resetsAt": 947289600 }
+      },
+      "rateLimitResetCredits": {
+        "availableCount": 4,
+        "credits": [
+          { "id": "synthetic-reset-one", "resetType": "codexRateLimits", "status": "available", "grantedAt": 946684800, "expiresAt": 949363200 },
+          { "id": "synthetic-reset-two", "resetType": "codexRateLimits", "status": "available", "grantedAt": 946684800, "expiresAt": null }
+        ]
+      }
+    },
+    "renderedComposition": {
+      "rangeStart": "2000-01-01",
+      "rangeEnd": "2000-01-07",
+      "unit": "percent",
+      "values": [
+        { "label": "Tasks", "value": 60 },
+        { "label": "Subagents", "value": 25 },
+        { "label": "Agent-created tasks", "value": 10 },
+        { "label": "Memory updates", "value": 5 }
+      ]
+    }
+  },
+  "claude": {
+    "legacyUsage": {
+      "five_hour": { "utilization": 30, "resets_at": "2000-01-01T05:00:00Z" },
+      "seven_day": { "utilization": 40, "resets_at": "2000-01-08T00:00:00Z" }
+    },
+    "renderedSections": {
+      "fullReset": { "available": true, "count": null, "expiryText": "Expires October 23", "expiresAt": null },
+      "fiveHourReset": { "available": false, "count": null, "expiresAt": null },
+      "cloudSessionCredit": { "remaining": 100, "total": 100, "unit": "USD", "scope": "cloud_session", "expiresAt": "2000-02-01T00:00:00Z" },
+      "usageCredit": { "remaining": 0, "unit": "USD", "scope": "usage_credit" }
+    },
+    "productCompositionCandidate": null
+  },
+  "cursor": {
+    "legacySummary": {
+      "billingCycleStart": "2000-01-01T00:00:00Z",
+      "billingCycleEnd": "2000-02-01T00:00:00Z",
+      "membershipType": "pro",
+      "limitType": "usage",
+      "isUnlimited": false,
+      "individualUsage": {
+        "plan": {
+          "enabled": true,
+          "used": 1500,
+          "limit": 4000,
+          "remaining": 2500,
+          "breakdown": { "included": 1200, "bonus": 300, "total": 1500 },
+          "autoPercentUsed": 20,
+          "apiPercentUsed": 35,
+          "totalPercentUsed": 60
+        },
+        "onDemand": { "enabled": true, "used": 500, "limit": null, "remaining": null }
+      }
+    },
+    "renderedPools": [
+      { "id": "cursor_models", "label": "Cursor Models", "usedPercent": 20, "kind": "monthly", "resetAt": null },
+      { "id": "other_models", "label": "Other Models", "usedPercent": 35, "kind": "monthly", "resetAt": null },
+      { "id": "grok_bot", "label": "Grok Bot", "usedPercent": 10, "kind": "weekly", "resetAt": null }
+    ]
+  }
+}

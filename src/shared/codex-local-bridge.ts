@@ -5,7 +5,8 @@ import {
   type LocalCompanionBridgeResult,
 } from "./local-companion-bridge";
 import { normalizeSnapshotTimestamp } from "./snapshot-freshness";
-import type { CodexObservedEstimate } from "../providers/types";
+import type { CodexObservedEstimate, ProviderResetCredits } from "../providers/types";
+import { normalizeProviderResetCredits } from "./provider-usage-insights";
 
 export const CODEX_LOCAL_SUMMARY_SCHEMA = "ai-usage-dashboard.codex-local.v1";
 export type CodexLocalSourceMode = "browser" | "local" | "hybrid";
@@ -23,6 +24,8 @@ export type CodexLocalSummary = {
   windows: CodexLocalWindow[];
   availableResetCount: number | null;
   estimates: CodexObservedEstimate[];
+  resetCredits?: ProviderResetCredits;
+  additionalWindows?: (Omit<CodexLocalWindow, "id"> & { id: string })[];
 };
 
 export function normalizeCodexLocalSourceMode(value: unknown): CodexLocalSourceMode {
@@ -68,7 +71,23 @@ export function normalizeCodexLocalSummary(value: unknown): CodexLocalSummary | 
       priceDate: ready ? "2026-09-24" : null,
     });
   }
-  return { schema: CODEX_LOCAL_SUMMARY_SCHEMA, observedAt, accountDigest: raw.accountDigest, windows, availableResetCount: raw.availableResetCount as number | null, estimates };
+  const resetCredits = normalizeProviderResetCredits(raw.resetCredits);
+  const additionalWindows = Array.isArray(raw.additionalWindows) ? raw.additionalWindows.slice(0, 16).flatMap((item) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) return [];
+    const window = item as Record<string, unknown>;
+    if (typeof window.id !== "string" || !/^[a-z][a-z0-9_.-]{0,47}:(primary|secondary)$/.test(window.id)
+      || window.id.startsWith("codex:") || seen.has(window.id) || typeof window.kind !== "string" || !["rolling_5h", "weekly", "unknown"].includes(window.kind)
+      || !Number.isSafeInteger(window.durationMinutes) || Number(window.durationMinutes) < 1 || Number(window.durationMinutes) > 44_640
+      || !Number.isInteger(window.usedPercent) || Number(window.usedPercent) < 0 || Number(window.usedPercent) > 100
+      || window.resetAt !== null && !normalizeSnapshotTimestamp(window.resetAt)) return [];
+    seen.add(window.id);
+    return [{ id: window.id, kind: window.kind as CodexLocalWindow["kind"], durationMinutes: Number(window.durationMinutes),
+      usedPercent: Number(window.usedPercent), resetAt: window.resetAt as string | null }];
+  }) : [];
+  return { schema: CODEX_LOCAL_SUMMARY_SCHEMA, observedAt, accountDigest: raw.accountDigest, windows,
+    availableResetCount: raw.availableResetCount as number | null, estimates,
+    ...(resetCredits && resetCredits.availableCount === raw.availableResetCount ? { resetCredits: { ...resetCredits, source: "local_companion", accountVerified: raw.accountDigest !== null } } : {}),
+    ...(additionalWindows.length ? { additionalWindows } : {}) };
 }
 
 export async function fetchCodexLocalSummary(baseUrl: string, token: string, fetchImpl?: typeof fetch): Promise<LocalCompanionBridgeResult<CodexLocalSummary>> {

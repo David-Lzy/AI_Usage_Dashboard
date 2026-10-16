@@ -191,6 +191,12 @@ jobs:
           - Organizes Settings into five categories with responsive navigation, retained drafts and confirmed save/retry feedback.
           - Adds Default, Follow system, More and Reduced motion; existing settings and independent quota/notification thresholds are preserved.
           - Fixes motion-selection round trips, keyboard activation and right-to-left menu placement without changing Provider data or permissions."
+          elif [[ "${package_version}" == "0.2.3" ]]; then
+            release_summary="Stable Chrome package and unsigned Firefox local-beta package."
+            release_highlights="- Adapts newer usage pages with source-scoped reset credits, balances and independent model pools; unknown values remain unknown.
+          - Adds optional, default-off community reset reports with source attribution, freshness and a compact Popup summary.
+          - Separates community desktop alerts from verified account reset-card increases; forecasts never change personal quota or trigger alerts.
+          - Aligns notification selectors on wide pages and explains account-alert prerequisites without changing existing quota thresholds."
           else
             release_summary="Browser-specific packages for this version."
             release_highlights="- Review the repository documentation and changelog for version-specific changes."

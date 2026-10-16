@@ -26,6 +26,8 @@ import {
 } from "../../shared/provider-detail-localized-copy";
 import { hasVisibleProviderProgressItems } from "../../shared/provider-progress-item-selection";
 import { ProviderProgressItemList } from "../components/ProviderProgressItemList";
+import { ProviderSupplementalModules } from "../../shared/components/ProviderSupplementalModules";
+import { CommunityResetPanelSlot } from "../../shared/components/CommunityResetPanelSlot";
 import { StatusBadge } from "../components/StatusBadge";
 import { TopBar } from "../components/TopBar";
 import { UsageFactsList } from "../components/UsageFactsList";
@@ -472,6 +474,7 @@ export function ProviderDetailPage({
             provider={provider}
             resetTimeDisplayMode={resetTimeDisplayMode}
             surface={progressSurface}
+            showUsageInsights={visibleUsageHistoryModuleOrder.includes("quota_insights")}
           />
         ) : null}
 
@@ -539,6 +542,8 @@ export function ProviderDetailPage({
           </div>
         ) : null}
       </section>
+      <ProviderSupplementalModules provider={provider} i18n={i18n} surface={progressSurface} preferences={usageHistoryModulesBySurface} includeAccountSummary={!hasProviderProgressItems} />
+      {provider.providerId === "codex-personal-page" ? <CommunityResetPanelSlot i18n={i18n} /> : null}
       {provider.apiGatewayMetering ||
       provider.providerId === "codex-personal-page" ||
       (provider.providerId === "cursor-personal-page" &&

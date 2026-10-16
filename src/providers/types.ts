@@ -204,7 +204,10 @@ export type ProgressItemsBySurface = Record<
 >;
 export type ProviderUsageHistoryModuleId =
   | "personal_usage_by_surface"
-  | "turns_history";
+  | "turns_history"
+  | "quota_insights"
+  | "usage_composition"
+  | "community_resets";
 export type ProviderUsageHistoryModulePreference = {
   id: ProviderUsageHistoryModuleId;
   visible: boolean;
@@ -360,6 +363,7 @@ export type ProviderSnapshot = {
   cursorUsage?: CursorUsageBilling;
   apiGatewayMetering?: ApiGatewayMeteringSnapshot;
   codexLocal?: CodexLocalTelemetry;
+  usageInsights?: ProviderUsageInsights;
   tone: ProviderTone;
 };
 
@@ -367,6 +371,59 @@ export type CodexLocalTelemetry = {
   availableResetCount: number | null;
   accountVerified: boolean;
   estimates: CodexObservedEstimate[];
+};
+
+export type ProviderInsightCapture = {
+  source: "page" | "local_companion";
+  capturedAt: string;
+  accountVerified: boolean;
+};
+
+export type ProviderResetOffer = {
+  kind: "codex" | "full" | "rolling_5h" | "unknown";
+  available: boolean | null;
+  expiresAt: string | null;
+  expiryText?: string;
+};
+
+export type ProviderResetCredits = ProviderInsightCapture & {
+  availableCount: number | null;
+  offers: ProviderResetOffer[] | null;
+  detailsComplete: boolean | null;
+};
+
+export type ProviderScopedBalance = ProviderInsightCapture & {
+  id: "cloud_session" | "usage_credit";
+  remaining: number | null;
+  total: number | null;
+  unit: string;
+  expiresAt: string | null;
+  expiryText?: string;
+};
+
+export type ProviderUsageDistribution = ProviderInsightCapture & {
+  kind: "function" | "product";
+  unit: "percent";
+  rangeStart: string | null;
+  rangeEnd: string | null;
+  values: { id: string; label: string; value: number }[];
+};
+
+export type ProviderQuotaPool = ProviderInsightCapture & {
+  id: "cursor_models" | "other_models" | "grok_bot";
+  kind: "monthly" | "weekly";
+  usedPercent: number | null;
+  remainingPercent: number | null;
+  resetAt: string | null;
+  resetText?: string;
+};
+
+export type ProviderUsageInsights = {
+  quotaScope?: ProviderInsightCapture & { scope: "shared_plan" | "provider" };
+  resetCredits?: ProviderResetCredits;
+  balances?: ProviderScopedBalance[];
+  distribution?: ProviderUsageDistribution;
+  quotaPools?: ProviderQuotaPool[];
 };
 
 export type CodexObservedEstimate = {
@@ -573,6 +630,7 @@ export type ProviderUsageHistory = {
 };
 
 export type ProviderUsageWindow = {
+  id?: string;
   label: string;
   normalizedLabel: string;
   kind:

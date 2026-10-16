@@ -27,8 +27,11 @@ import { buildUsageHistoryLocalizedCopy } from "../../shared/usage-history-local
 import {
   createDefaultUsageHistoryModulesBySurface,
   resolveProviderUsageHistoryModules,
+  isUsageHistorySeriesModule,
+  isProviderUsageHistoryModuleVisible,
 } from "../../shared/usage-history-visibility";
 import { CursorUsageSummary } from "../../shared/components/CursorUsageSummary";
+import { ProviderSupplementalModules } from "../../shared/components/ProviderSupplementalModules";
 import { buildCursorUsageLocalizedCopy } from "../../shared/cursor-usage-localized-copy";
 import { ApiGatewayMeteringSummary } from "../../shared/components/ApiGatewayMeteringSummary";
 import { buildApiGatewayMeteringLocalizedCopy } from "../../shared/api-gateway-metering-localized-copy";
@@ -271,6 +274,7 @@ export function ProviderCard({
               accountId={accountId}
               resetTimeDisplayMode={resetTimeDisplayMode}
               surface={progressSurface}
+              showUsageInsights={isProviderUsageHistoryModuleVisible(usageHistoryModulesBySurface, progressSurface, provider.providerId, "quota_insights")}
             />
           </section>
         ) : null}
@@ -309,7 +313,7 @@ export function ProviderCard({
               usageHistoryModulesBySurface,
               progressSurface,
               provider.providerId,
-            ).map((preference) =>
+            ).filter((preference) => isUsageHistorySeriesModule(preference.id)).map((preference) =>
               preference.visible ? (
                 <UsageHistoryCompact
                   key={preference.id}
@@ -321,6 +325,7 @@ export function ProviderCard({
             )
           : null}
 
+        <ProviderSupplementalModules provider={provider} i18n={i18n} surface={progressSurface} preferences={usageHistoryModulesBySurface} compact includeAccountSummary={!hasProviderProgressItems} />
         {provider.cursorUsage ? (
           <CursorUsageSummary
             copy={cursorUsageCopy}

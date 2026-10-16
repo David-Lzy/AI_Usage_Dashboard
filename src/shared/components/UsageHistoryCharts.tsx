@@ -771,7 +771,7 @@ export function UsageHistoryDetail({
 
   return (
     <section className="usage-history-detail" aria-label={`${copy.personalUsage}, ${copy.turns}`}>
-      {moduleOrder.map((moduleId) =>
+      {moduleOrder.filter((moduleId) => moduleId === "personal_usage_by_surface" || moduleId === "turns_history").map((moduleId) =>
         moduleId === "personal_usage_by_surface" ? (
           <section key={moduleId} className="usage-history-detail__module">
             <header className="usage-history-detail__module-header">

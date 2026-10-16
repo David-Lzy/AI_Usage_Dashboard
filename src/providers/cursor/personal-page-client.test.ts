@@ -5,6 +5,8 @@ import usageBillingFixture from "../../../fixtures/cursor/usage-billing.fixture.
 import type { PageSessionClient, PageSessionResult } from "../page-session";
 import { createCursorPersonalPageClient } from "./personal-page-client";
 import { parseCursorPersonalUsageContract } from "./personal-page-parser";
+import poolFixture from "../../../fixtures/cursor/quota-pools-dom.fixture.json";
+import { buildUsageInsightsFromDom, type UsageInsightsDomCapture } from "../usage-insights-dom";
 import {
   CURSOR_FILTERED_USAGE_EVENTS_PATH,
   CURSOR_USAGE_SUMMARY_PATH,
@@ -51,6 +53,28 @@ function buildMatchedCursorResult(
 }
 
 describe("createCursorPersonalPageClient", () => {
+  it("enriches named pools without replacing or relabeling the legacy API contract", async () => {
+    const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
+    const result = parseCursorPersonalUsageContract({ usageSummary: fixture.usageSummary, planInfo: fixture.planInfo, hardLimit: fixture.hardLimit, usageEvents: null })!;
+    const usageInsights = buildUsageInsightsFromDom("cursor", poolFixture as UsageInsightsDomCapture, "2026-10-13T10:00:00.000Z")!;
+    const capture = vi.fn<PageSessionClient["capture"]>();
+    const client = createCursorPersonalPageClient({ source: "live", pageSessionClient: { capture },
+      sessionApiClient: { getUsageSnapshot: async () => ({ ok: true, result }) },
+      usageInsightsReader: async () => usageInsights });
+    const response = await client.getUsageSnapshot();
+    expect(response.result).toEqual(result);
+    expect(response.usageInsights?.quotaPools?.map((pool) => pool.usedPercent)).toEqual([32, 68, 0]);
+    expect(capture).not.toHaveBeenCalled();
+  });
+
+  it("does not fail a successful background summary when optional pool capture fails", async () => {
+    const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
+    const result = parseCursorPersonalUsageContract({ usageSummary: fixture.usageSummary, planInfo: fixture.planInfo, hardLimit: fixture.hardLimit, usageEvents: null })!;
+    const client = createCursorPersonalPageClient({ source: "live",
+      sessionApiClient: { getUsageSnapshot: async () => ({ ok: true, result }) },
+      usageInsightsReader: async () => { throw new Error("optional capture unavailable"); } });
+    expect(await client.getUsageSnapshot()).toMatchObject({ captureSource: "session_api", result: { status: "ok" } });
+  });
   it("uses the background session API without touching the page renderer", async () => {
     const fixture = usageBillingFixture as CursorUsageBillingContractFixture;
     const result = parseCursorPersonalUsageContract({

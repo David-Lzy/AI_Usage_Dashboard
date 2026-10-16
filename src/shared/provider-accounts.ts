@@ -1,5 +1,6 @@
 import { hasRegisteredProviderCapability } from "../providers/registry";
 import { normalizeSnapshotFreshness, normalizeSnapshotTimestamp } from "./snapshot-freshness";
+import { normalizeProviderUsageInsights } from "./provider-usage-insights";
 import type {
   ApiGatewayConnectionMetadata,
   ApiGatewayMeteringDisplayPreferences,
@@ -141,13 +142,16 @@ function normalizeInactiveSnapshot(
   const apiGatewayMetering = normalizeApiGatewayMeteringSnapshot(
     snapshot.apiGatewayMetering,
   );
+  const usageInsights = normalizeProviderUsageInsights(snapshot.usageInsights, snapshot.providerId);
   const {
     apiGatewayMetering: _apiGatewayMetering,
+    usageInsights: _usageInsights,
     ...snapshotWithoutGatewayMetering
   } = snapshot;
   return normalizeSnapshotFreshness({
     ...snapshotWithoutGatewayMetering,
     ...(apiGatewayMetering ? { apiGatewayMetering } : {}),
+    ...(usageInsights ? { usageInsights } : {}),
   });
 }
 

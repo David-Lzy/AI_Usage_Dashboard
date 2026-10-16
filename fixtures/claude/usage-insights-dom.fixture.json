@@ -1,0 +1,17 @@
+{
+  "provenance": "Synthetic aggregate values and dates; structure reviewed from Claude Settings Usage on 2026-10-13. New JSON payloads and product composition remain unverified.",
+  "sourceUrl": "https://claude.ai/new#settings/usage",
+  "rows": [
+    { "key": "quota.five_hour", "label": "Current session", "value": 25, "total": null, "unit": "percent", "direction": "used", "available": null, "expiresAt": null, "expiryText": null },
+    { "key": "quota.weekly", "label": "All models", "value": 40, "total": null, "unit": "percent", "direction": "used", "available": null, "expiresAt": null, "expiryText": null },
+    { "key": "reset.full", "label": "Full reset", "value": null, "total": null, "unit": null, "direction": null, "available": true, "expiresAt": null, "expiryText": "Expires October 31" },
+    { "key": "reset.five_hour", "label": "5-hour reset", "value": null, "total": null, "unit": null, "direction": null, "available": false, "expiresAt": null, "expiryText": null },
+    { "key": "balance.cloud", "label": "Included credits", "value": 80, "total": 100, "unit": "USD", "direction": "remaining", "available": null, "expiresAt": null, "expiryText": "Expires November 15" },
+    { "key": "balance.usage", "label": "Usage credits", "value": 0, "total": null, "unit": "USD", "direction": null, "available": null, "expiresAt": null, "expiryText": null },
+    { "key": "product.claude_code", "label": "Claude Code", "value": 85, "total": null, "unit": "percent", "direction": null, "available": null, "expiresAt": null, "expiryText": null }
+  ],
+  "rangeStart": null,
+  "rangeEnd": null,
+  "sharedPlan": false,
+  "loggedOut": false
+}
