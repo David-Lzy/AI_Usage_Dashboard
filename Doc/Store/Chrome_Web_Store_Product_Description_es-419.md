@@ -8,6 +8,12 @@ Las fuentes conectadas se identifican como lecturas exactas, información parcia
 
 No te pide pegar cookies ni headers brutos de autenticación del navegador. La configuración, credenciales API opcionales, vínculos de páginas, snapshots en caché, archivos de importación/exportación y datos de Chrome Sync se quedan en tu perfil de Chrome.
 
+Novedades de la versión 0.2.3
+
+Adaptación a las nuevas páginas de uso, con créditos de restablecimiento, saldos, cuotas independientes por grupo de modelos y composición del uso cuando la fuente los ofrece. Los datos faltantes siguen siendo desconocidos; la proporción de uso no es cuota restante.
+
+Los reportes comunitarios de restablecimiento son opcionales y están desactivados de forma predeterminada. Tras permitir acceso a los sitios elegidos, selecciona resúmenes en la extensión o alertas de escritorio. Los reportes conservan su fuente y estado de recopilación; las predicciones solo aparecen en los detalles y nunca generan alertas ni cambian tu cuota. Las alertas separadas de tarjetas de la cuenta requieren una fuente reciente y verificable de la misma cuenta; emparejar no basta. Un reporte comunitario no confirma que tu cuenta se haya restablecido o haya recibido tarjetas. Las alertas pueden demorarse con el navegador cerrado, el dispositivo en suspensión o las notificaciones silenciadas por el sistema. Las consultas públicas no envían credenciales de la cuenta ni uso personal.
+
 Qué te ayuda a ver
 
 • salud del provider y bloqueos de configuración
@@ -49,7 +55,7 @@ AI Usage Dashboard está diseñado de forma conservadora:
 
 • no pega cookies
 • no pega headers brutos de autenticación del navegador
-• permisos opcionales de host solo para orígenes de providers compatibles
+• acceso opcional a los orígenes de los providers elegidos, sitios públicos de la comunidad y endpoints personalizados aprobados
 • las fuentes JSON personalizadas consultan endpoints HTTP o HTTPS aprobados por el usuario, sin credenciales del navegador
 • las claves API de Sub2API solo se envían al origen exacto del gateway configurado; no se importan registros de solicitudes individuales
 • permiso favicon solo para la función opcional de icono de barra combinado con el provider

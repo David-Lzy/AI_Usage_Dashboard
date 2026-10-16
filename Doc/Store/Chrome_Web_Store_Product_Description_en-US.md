@@ -8,6 +8,12 @@ Connected sources are clearly labeled as exact readings, partial information, qu
 
 It does not ask you to paste cookies or raw browser auth headers. Settings, optional API credentials, page bindings, cached snapshots, import/export files, and Chrome Sync data stay in your Chrome profile.
 
+New in 0.2.3
+
+Newer usage pages expose more context: source-scoped reset credits and balances, independent model pools, and usage breakdowns where supported. Missing information stays unknown; usage shares are not remaining quota.
+
+Optional community reset reports are off by default. Choose in-app summaries or desktop alerts after granting the selected sites access. Reports keep their sources and freshness; forecasts appear only in details and never trigger alerts or change your quota. Separate account-card alerts require a fresh, verified same-account source; pairing alone is not enough. Community reports never mean that your account received a reset or card. Alerts may be delayed while the browser is closed, the device sleeps, or the system suppresses notifications. Public-feed requests omit account credentials and personal usage.
+
 What it helps you see
 
 • provider health and setup blockers
@@ -49,7 +55,7 @@ AI Usage Dashboard is conservative by design:
 
 • no cookie pasting
 • no raw browser auth header pasting
-• optional host permissions only for supported provider origins
+• optional host access for chosen provider origins, public community sites, and approved custom endpoints
 • custom JSON sources fetch user-approved HTTP or HTTPS endpoints with browser credentials omitted
 • Sub2API API keys are sent only to the exact configured gateway origin; raw request records are not imported
 • favicon permission only for the optional provider-matched toolbar icon feature

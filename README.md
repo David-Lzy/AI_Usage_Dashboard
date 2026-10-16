@@ -15,10 +15,10 @@ provider data to a project-owned server.
 · [Download a GitHub build](https://github.com/David-Lzy/AI_Usage_Dashboard/releases)
 · [Read the user documentation](./Doc/README.md)
 
-Version 0.2.2 is available on GitHub with the unified interface and four motion
-choices described below. The Chrome Web Store still serves 0.2.1; the 0.2.2
-update was resubmitted with corrected listing copy on October 4, 2026 and is
-not yet available from the Store.
+Version 0.2.2 is available from the Chrome Web Store and GitHub. Source version
+0.2.3 adds the provider insights and optional community notifications described
+below; its release is being prepared. Upload, review and public rollout are
+tracked separately.
 
 ![AI Usage Dashboard 0.2.2](./Doc/Assets/ai-usage-dashboard-dashboard-0.2.2.png)
 
@@ -53,8 +53,7 @@ panel use the same normalized provider state.
 
 1. Install the extension from the Chrome Web Store.
 2. Open the toolbar popup and choose **Settings**.
-3. Open **Accounts & Connections** to enable only the providers you use
-   (**Quick Setup** in the currently published Store version 0.2.1).
+3. Open **Accounts & Connections** to enable only the providers you use.
 4. Grant optional host access or add an API credential only when that source
    requires it.
 5. Return to the popup, side panel, or full-page dashboard for daily checks.
@@ -170,19 +169,32 @@ _The 0.2.2 interface shown with synthetic QA data, not live account usage.
 The [0.2.1 Settings image](./Doc/Assets/ai-usage-dashboard-settings-quick-setup.png)
 is retained as historical material. Store review and rollout are tracked separately._
 
-### Provider Insights In The Work Branch
+### Provider Insights In 0.2.3
 
-The unreleased provider-insights branch adds source-scoped reset credits and
+Source version 0.2.3 adds source-scoped reset credits and
 balances, separate Cursor model pools, optional usage composition and default-off
 [community reset context](./Doc/Product/Community_Reset_Insights.md). Usage &
 Notifications keeps community reports and verified account-card alerts separate;
 predictions are detail-only, never personal quota or an alert. The public feed
-does not require an account connection. These changes are not a statement that
-the published 0.2.2 Store package already contains them.
+does not require an account connection. Account-card notifications require a
+fresh, verified same-account source; pairing alone is not sufficient. Community
+access and both new notification subscriptions start off. These additions are
+not included in the published 0.2.2 Store package.
 
-![Work-branch notification settings with synthetic data](./Doc/Assets/provider-insights-settings-preview.png)
+![Provider insight notification settings with synthetic data](./Doc/Assets/provider-insights-settings-preview.png)
 
 ![Separate community conflict and forecast detail with synthetic data](./Doc/Assets/provider-insights-community-preview.png)
+
+The compact Popup keeps source credit and community/account boundaries visible,
+with exact collection times available in a tooltip. Wide settings pages align
+the two optional notification selectors; an explanation accompanies unavailable
+account-card alerts. These captures use synthetic data, not live accounts.
+
+<p align="center">
+  <img src="./Doc/Assets/ai-usage-dashboard-community-popup-0.2.3.png" width="360" alt="0.2.3 native Popup community summary with illustrative QA data">
+</p>
+
+![0.2.3 notification settings with synthetic data](./Doc/Assets/ai-usage-dashboard-settings-0.2.3.png)
 
 ## Extend It
 
@@ -257,16 +269,15 @@ In short, each version tag produces a GitHub Release with Chrome and Firefox pac
 ## Current Release State
 
 - The [Chrome Web Store listing](https://chromewebstore.google.com/detail/ai-usage-dashboard/mjfhaifoapcpbkffacidgjijcpiegjea)
-  displays `0.2.1`, verified on 2026-10-04 UTC. The authenticated Store API
-  reports manifest `0.2.1.0` as `PUBLISHED` at 100%, with no pending submission.
-- Source package version: `0.2.2`; Chrome manifest version: `0.2.2.0`.
+  displays `0.2.2`, verified on 2026-10-16. The authenticated Store API
+  reports manifest `0.2.2.0` as `PUBLISHED` at 100%, with no pending submission.
+- Source package version: `0.2.3`; Chrome manifest version: `0.2.3.0`.
 - GitHub Release [`v0.2.2`](https://github.com/David-Lzy/AI_Usage_Dashboard/releases/tag/v0.2.2)
   is stable and provides verified Chrome and unsigned Firefox local-beta
   packages plus `SHA256SUMS.txt`. Its tag workflow and downloaded hashes passed
   on 2026-10-04 UTC.
-- The Store API accepted the exact 0.2.2 tag package as a draft on 2026-10-04
-  UTC. Listing metadata and review submission remain pending; upload is not
-  submission or publication. The published 0.2.1 package remains the Store baseline.
+- The 0.2.3 release is being prepared; its tag, packages and Store submission
+  are not yet confirmed. The published 0.2.2 package remains the Store baseline.
 - Publication status is tracked in the
   [Chrome Web Store milestone](./Doc/Store/Chrome_Web_Store_Publication_Milestone.md).
 

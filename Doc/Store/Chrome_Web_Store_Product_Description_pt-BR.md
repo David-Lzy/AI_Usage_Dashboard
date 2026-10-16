@@ -8,6 +8,12 @@ As fontes conectadas são identificadas como leituras exatas, informações parc
 
 Ele não pede cookies nem headers brutos de autenticação do navegador. Configurações, credenciais API opcionais, vínculos de páginas, snapshots em cache, arquivos de importação/exportação e dados do Chrome Sync ficam no seu perfil do Chrome.
 
+Novidades da versão 0.2.3
+
+Adaptação às novas páginas de uso, com créditos de reset, saldos, cotas independentes por grupo de modelos e composição do uso quando a fonte oferece esses dados. Valores ausentes continuam desconhecidos; participação no uso não é cota restante.
+
+Os relatos comunitários de reset são opcionais e vêm desativados. Após permitir acesso aos sites escolhidos, selecione resumos na extensão ou alertas na área de trabalho. Cada relato mantém a fonte e o estado da coleta; previsões ficam apenas nos detalhes e nunca geram alertas nem alteram sua cota. Alertas separados de cartões da conta exigem uma fonte recente e verificável da mesma conta; apenas parear não basta. Um relato comunitário não confirma reset nem recebimento de cartões na sua conta. Alertas podem atrasar com o navegador fechado, o dispositivo em suspensão ou notificações silenciadas pelo sistema. Consultas públicas não enviam credenciais da conta nem uso pessoal.
+
 O que ele ajuda você a ver
 
 • saúde do provider e bloqueios de configuração
@@ -49,7 +55,7 @@ AI Usage Dashboard foi desenhado de forma conservadora:
 
 • não pede cookies
 • não pede headers brutos de autenticação do navegador
-• permissões opcionais de host apenas para origens de providers compatíveis
+• acesso opcional às origens dos providers escolhidos, sites públicos da comunidade e endpoints personalizados aprovados
 • fontes JSON personalizadas consultam endpoints HTTP ou HTTPS aprovados pelo usuário, sem credenciais do navegador
 • chaves API do Sub2API são enviadas somente à origem exata do gateway configurado; registros de solicitações individuais não são importados
 • permissão favicon apenas para o recurso opcional de ícone da barra combinado com o provider
